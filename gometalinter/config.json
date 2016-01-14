@@ -1,0 +1,28 @@
+{
+  "DisableAll": true,
+  "Enable": [
+    "vet",
+    "gofmt",
+    "goimports",
+    "gocyclo",
+    "ineffassign",
+    "misspell",
+    "staticcheck",
+    "goconst",
+    "golint",
+    "scope"
+  ],
+  "Exclude": [
+    "ignore",
+    "errcheck"
+  ],
+  "Linters": {
+    "scope": {
+      "Name": "scope",
+      "Command": "scopelint",
+      "Pattern": "^(?P<path>.*?\\.go):(?P<line>\\d+):(?P<col>\\d+):\\s*(?P<message>.*)$",
+      "InstallFrom": "github.com/kyoh86/scopelint"
+    }
+  },
+  "Vendor": true
+}

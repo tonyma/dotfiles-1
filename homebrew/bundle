@@ -1,0 +1,119 @@
+tap "osx-cross/avr"
+tap "homebrew/dupes"
+tap "homebrew/science"
+tap "homebrew/core"
+tap "homebrew/php"
+tap "homebrew/versions"
+tap "homebrew/bundle"
+tap "homebrew/services"
+tap "goreleaser/goreleaser"
+tap "caskroom/fonts"
+tap "caskroom/versions"
+tap "caskroom/cask"
+tap "kyoh86/tap"
+tap "argon/mas"
+tap "neovim/neovim"
+tap "mix3/ndenv"
+cask "java"
+cask "osxfuse"
+brew "gdbm"
+brew "openssl"
+brew "sqlite"
+brew "asciinema"
+brew "autoconf"
+brew "bindfs"
+brew "fontconfig"
+brew "cassandra", restart_service: true
+brew "coreutils"
+brew "git", args: ["with-pcre2"]
+brew "dep"
+brew "direnv"
+brew "doxygen"
+brew "exiftool"
+brew "findutils"
+brew "libtool"
+brew "fontforge"
+brew "fswatch"
+brew "fzf"
+brew "gd"
+brew "ghi"
+brew "gibo"
+brew "gnu-sed"
+brew "gnu-tar"
+brew "graphviz"
+brew "grep"
+brew "gzip"
+brew "hub"
+brew "jq"
+brew "mecab"
+brew "mecab-ipadic"
+brew "mercurial"
+brew "mongodb"
+brew "moreutils"
+brew "neovim"
+brew "nkf"
+brew "nodenv"
+brew "pyenv"
+brew "pyenv-virtualenv"
+brew "r"
+brew "rbenv"
+brew "reattach-to-user-namespace"
+brew "ripgrep"
+brew "sbt"
+brew "scala"
+brew "supervisor"
+brew "terraform"
+brew "tig"
+brew "tmux"
+brew "typesafe-activator"
+brew "vim", args: ["with-gettext", "with-lua", "with-override-system-vi", "with-python3", "with-tcl"]
+brew "wget"
+brew "zsh"
+brew "zsh-completions"
+brew "zsh-syntax-highlighting"
+brew "argon/mas/mas"
+brew "goreleaser/goreleaser/goreleaser"
+brew "kyoh86/tap/goimportssw"
+cask "1password"
+cask "adobe-creative-cloud"
+cask "alfred"
+cask "bartender"
+cask "docker"
+cask "flux"
+cask "google-chrome"
+cask "google-cloud-sdk"
+cask "google-japanese-ime"
+cask "gyazo"
+cask "iterm2"
+cask "keepingyouawake"
+cask "kindle"
+cask "ngrok"
+cask "postman"
+cask "virtualbox"
+cask "vlc"
+cask "caskroom/fonts/font-myrica"
+cask "caskroom/fonts/font-myricam"
+mas "Bear", id: 1091189122
+mas "Duplicate File Finder", id: 1032755628
+mas "ForkLift", id: 412448059
+mas "GarageBand", id: 682658836
+mas "iMage Tools", id: 493949693
+mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "LINE", id: 539883307
+mas "Magnet", id: 441258766
+mas "Markoff", id: 1084713122
+mas "Microsoft Remote Desktop", id: 715768417
+mas "Monosnap", id: 540348655
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "Pixel Perfect", id: 916097243
+mas "Pixy", id: 984002045
+mas "Slack", id: 803453959
+mas "The Unarchiver", id: 425424353
+mas "Todoist", id: 585829637
+mas "Trello", id: 1278508951
+mas "Typist", id: 415166115
+mas "WeatherBug", id: 1059074180
+mas "Xcode", id: 497799835
+mas "Yoink", id: 457622435

@@ -1,0 +1,72 @@
+[pull]
+	rebase = preserve
+[push]
+	default = simple
+[core]
+	excludesfile = ~/.config/git/ignore
+	attributesfile = ~/.config/git/attributes
+	quotepath = false
+	precomposeunicode = true
+	pager = less -r
+[user]
+	name = Kyoichiro Yamada
+	email = yamada@wacul.co.jp
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[alias]
+	pbcopy = !printf "$1" | pbcopy
+	conflicts = !git ls-files -u | cut -f 2 | sort -u
+[filter "lfs"]
+	clean = git lfs clean %f
+	smudge = git lfs smudge %f
+	required = true
+[credential]
+	helper = osxkeychain
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	ui = auto
+[merge]
+	ff = false
+	tool = vimdiff
+[fetch]
+	prune = true
+[http "https://gopkg.in"]
+	followRedirects = true
+[color "diff"]
+  context = dim
+  meta = white bold
+  frag = white black
+  old = red normal ul bold
+  new = green normal ul bold
+  commit = magenta
+	whitespace = normal normal
+[color "decorate"]
+	branch = green
+	remoteBranch = red
+	tag = red
+	stash = yellow
+[color "grep"]
+	filename = blue
+[color "status"]
+	added = green
+	changed = red
+	untracked = blue
+	unmerged = yellow
+[diff]
+  compactionHeuristic = true
+
+[pager]
+  log = diff-highlight | less
+  show = diff-highlight | less
+  diff = diff-highlight | less
+[commit]
+	verbose = true
+[rebase]
+	autosquash = true
+[github]
+	user = kyoh86
+[ghi]
+	token = !security find-internet-password -a kyoh86 -s github.com -l 'ghi token' -w

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>net.yamada.userjob</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>sh</string>
+    <string>/usr/local/opt/userjob</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StartInterval</key>
+	<integer>3600</integer>
+	<key>StandardErrorPath</key>
+	<string>/usr/local/var/userjob-err.log</string>
+	<key>StandardOutPath</key>
+	<string>/usr/local/var/userjob-log.log</string>
+	<key>UserName</key>
+	<string>yamada</string>
+</dict>
+</plist>

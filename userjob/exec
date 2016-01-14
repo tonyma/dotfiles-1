@@ -1,0 +1,42 @@
+#!env zsh
+
+rm -f /usr/local/var/userjob-log.log
+source /etc/zshenv
+source ${ZDOTDIR}/.zshenv
+
+error=""
+
+# Remove mongodb-caches:
+if [ -d /usr/local/var/mongodb ]; then
+  gfind /usr/local/var/mongodb -amin +60 -name 'aia-test-*' -exec rm -rf {} \; || error="1"
+fi
+
+# Bundle brew:
+if [ -f /usr/local/bin/brew ]; then
+  brew bundle dump --force --file=${HOME}/.config/homebrew/bundle || error="1"
+fi
+
+if [[ -n ${error} ]]; then
+	echo "var app = Application('System Events');
+app.includeStandardAdditions = true;
+var reply = app.displayDialog('Failed to process scheduled task', {
+	'withTitle': 'User Job',
+	'withIcon':'caution',
+
+	'givingUpAfter': 15,
+
+	'defaultButton': 'OK',
+	'buttons': ['Details', 'OK']
+});
+
+if (reply.buttonReturned === 'Details') {
+	var textEdit = Application('TextEdit');
+	textEdit.open('/usr/local/var/userjob-err.log');
+}
+" \
+    | osascript -l JavaScript -
+else
+  osascript -e 'display notification "Processed scheduled task" with title "User Job"'
+fi
+
+find $HOME/Documents/iTermLog -mtime +3 -exec rm {} \;
