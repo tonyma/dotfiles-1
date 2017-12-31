@@ -5,6 +5,8 @@ typeset -U PATH
 export LANG=ja_JP.UTF-8
 export ARCHFLAGS="-arch x86_64"
 export EDITOR="vim"
+export COLORTERM="xterm-256color"
+export TERM="xterm-256color"
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
 
 # Path環境変数の設定:

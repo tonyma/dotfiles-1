@@ -22,7 +22,13 @@ call plug#begin(s:dir)
     \     'left': [
     \       [ 'mode', 'paste' ],
     \       [ 'gitbranch', 'readonly', 'filename', 'modified' ],
+    \       [ 'ale_error', 'ale_warning', 'ale_ok' ]
     \     ],
+    \     'right': [
+    \       [ 'lineinfo' ],
+    \       [ 'percent' ],
+    \       [ 'fileformat', 'fileencoding', 'filetype' ]
+    \     ]
     \   },
     \   'component': {
     \     'filename': '%n:%f'
@@ -30,6 +36,11 @@ call plug#begin(s:dir)
     \   'component_function': {
     \     'gitbranch': 'fugitive#head',
     \   },
+    \   'component_expand': {
+    \     'ale_error': 'LightLineAleError',
+    \     'ale_warning': 'LightLineAleWarning',
+    \     'ale_ok': 'LightLineAleOk',
+    \   }
     \ }
   set laststatus=2  " statuslineは常に表示
   set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
@@ -59,12 +70,26 @@ call plug#begin(s:dir)
   Plug 'idanarye/vim-merginal'
   Plug 'w0rp/ale'  " Asynchronous Lint Engine
   let g:ale_enabled = 1
+  let g:ale_sign_error = '>'
+  let g:ale_sign_warning = '!'
   let g:ale_sign_column_always = 1
-  " Set this. Airline will handle the rest.
-  let b:ale_linters = {
+  let g:ale_go_gometalinter_options = "--config=" . $XDG_CONFIG_HOME . "/gometalinter/config.json"
+  let g:ale_linters = {
   \   'javascript': ['eslint'],
-  \   'go': ["gometalinter --config=" . $XDG_CONFIG_HOME . "/gometalinter/config.json"],
+  \   'go': ['gometalinter']
   \}
+
+  function! LightLineAleError() abort
+    return s:ale_string(0)
+  endfunction
+
+  function! LightLineAleWarning() abort
+    return s:ale_string(1)
+  endfunction
+
+  function! LightLineAleOk() abort
+    return s:ale_string(2)
+  endfunction
   " show ALE error messages in lightline
   function! s:ale_string(mode)
     if !exists('g:ale_buffer_info')
@@ -95,8 +120,9 @@ call plug#begin(s:dir)
   " Language supports
   Plug 'cespare/vim-toml', {'for': 'toml'}
 
+  let g:syntastic_go_checkers = ['golint', 'govet', 'go']
   Plug 'fatih/vim-go'
-  let g:syntastic_go_checkers = ['go', 'golint', 'govet']
+  let g:syntastic_go_checkers = ['golint', 'govet', 'go']
   let g:go_metalinter_command = "--config=" . $XDG_CONFIG_HOME . "/gometalinter/config.json"
   let g:go_fmt_command = "goimports"
   let g:go_highlight_string_spellcheck = 0
