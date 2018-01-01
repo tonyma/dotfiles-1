@@ -1,8 +1,10 @@
 "Colors-----------------------------------
 syntax enable
+set termguicolors
 set background=dark
 set hlsearch
-colorscheme srcery
+" set cursorcolumn
+colorscheme momiji
 
 "Indents
 set tabstop=2
@@ -13,15 +15,14 @@ set nowrap
 
 "Displays
 set number       " Show the line number
-" set cursorcolumn " Highlight cursor column
 set emo          " Show emoji characters
 
 " Show invisibles
 set list
 set listchars=tab:»\ ,trail:∙,eol:↵,extends:»,precedes:«,nbsp:∙
-hi NonText ctermfg=8 guifg=gray
-hi SpecialKey ctermfg=8 guifg=gray
-hi Whitespace ctermfg=7
+" highlight NonText ctermfg=8 guifg=gray
+" highlight SpecialKey ctermfg=8 guifg=gray
+" highlight Whitespace ctermfg=7
 
 " Change cursor shape in different modes
 if exists('$TMUX')
@@ -39,7 +40,7 @@ set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr
 
 " Change Cursorline style
 set cursorline   " Highlight cursor line
-highlight CursorLine cterm=underline ctermfg=None ctermbg=None
+" highlight CursorLine cterm=underline ctermfg=None ctermbg=None
 highlight Pmenu ctermfg=159 ctermbg=17
 
 set clipboard+=unnamedplus,unnamed

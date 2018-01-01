@@ -3,11 +3,12 @@
   "Enable": [
     "vet",
     "gofmt",
+    "unparam",
     "goimports",
     "gocyclo",
     "ineffassign",
     "misspell",
-    "staticcheck",
+    "megacheck",
     "goconst",
     "golint",
     "scope"

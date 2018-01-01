@@ -7,6 +7,7 @@ call plug#begin(s:dir)
   Plug 'thinca/vim-splash'
   let g:splash#path = $XDG_CONFIG_HOME . '/nvim/splash.txt'
   Plug 'roosta/vim-srcery'
+  Plug 'kyoh86/momiji', { 'rtp': 'vim' }
   Plug 'tyru/capture.vim'  " Show Ex command output in a buffer
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
@@ -17,30 +18,33 @@ call plug#begin(s:dir)
   Plug 'Chiel92/vim-autoformat'
   Plug 'itchyny/lightline.vim'
   let g:lightline = {
-    \   'colorscheme': 'jellybeans',
+    \   'colorscheme': 'momiji',
     \   'active': {
     \     'left': [
     \       [ 'mode', 'paste' ],
-    \       [ 'gitbranch', 'readonly', 'filename', 'modified' ],
-    \       [ 'ale_error', 'ale_warning', 'ale_ok' ]
+    \       [ 'gitbranch', 'readonly', 'filename', 'modified' ]
     \     ],
     \     'right': [
-    \       [ 'lineinfo' ],
-    \       [ 'percent' ],
-    \       [ 'fileformat', 'fileencoding', 'filetype' ]
+    \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
+    \       [ 'percent', 'lineinfo' ],
+    \       [ 'fileformat', 'fileencoding', 'filetype'],
     \     ]
     \   },
     \   'component': {
     \     'filename': '%n:%f'
     \   },
+    \   'component_expand': {
+    \     'linter_ok': 'lightline#ale#ok',
+    \     'linter_warnings': 'lightline#ale#warnings',
+    \     'linter_errors': 'lightline#ale#errors',
+    \   },
+    \   'component_type': {
+    \     'linter_warnings': 'warning',
+    \     'linter_errors': 'error',
+    \   },
     \   'component_function': {
     \     'gitbranch': 'fugitive#head',
     \   },
-    \   'component_expand': {
-    \     'ale_error': 'LightLineAleError',
-    \     'ale_warning': 'LightLineAleWarning',
-    \     'ale_ok': 'LightLineAleOk',
-    \   }
     \ }
   set laststatus=2  " statuslineは常に表示
   set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
@@ -72,46 +76,13 @@ call plug#begin(s:dir)
   let g:ale_enabled = 1
   let g:ale_sign_error = '>'
   let g:ale_sign_warning = '!'
-  let g:ale_sign_column_always = 1
   let g:ale_go_gometalinter_options = "--config=" . $XDG_CONFIG_HOME . "/gometalinter/config.json"
   let g:ale_linters = {
   \   'javascript': ['eslint'],
-  \   'go': ['gometalinter']
+  \   'go': ['gometalinter', 'go build']
   \}
 
-  function! LightLineAleError() abort
-    return s:ale_string(0)
-  endfunction
-
-  function! LightLineAleWarning() abort
-    return s:ale_string(1)
-  endfunction
-
-  function! LightLineAleOk() abort
-    return s:ale_string(2)
-  endfunction
-  " show ALE error messages in lightline
-  function! s:ale_string(mode)
-    if !exists('g:ale_buffer_info')
-      return ''
-    endif
-
-    let l:buffer = bufnr('%')
-    let [l:error_count, l:warning_count] = ale#statusline#Count(l:buffer)
-    let [l:error_format, l:warning_format, l:no_errors] = g:ale_statusline_format
-
-    if a:mode == 0 " Error
-      return l:error_count ? printf(l:error_format, l:error_count) : ''
-    elseif a:mode == 1 " Warning
-      return l:warning_count ? printf(l:warning_format, l:warning_count) : ''
-    endif
-
-    return l:error_count == 0 && l:warning_count == 0 ? l:no_errors : ''
-  endfunction
-  augroup LightLineOnALE
-    autocmd!
-    autocmd User ALELint call lightline#update()
-  augroup END
+  Plug 'maximbaz/lightline-ale'
 
   Plug 'simeji/winresizer'
   Plug 'thinca/vim-qfreplace'
@@ -119,12 +90,13 @@ call plug#begin(s:dir)
 
   " Language supports
   Plug 'cespare/vim-toml', {'for': 'toml'}
-
+  Plug 'pangloss/vim-javascript', {'for': 'javascript'}
   let g:syntastic_go_checkers = ['golint', 'govet', 'go']
   Plug 'fatih/vim-go'
   let g:syntastic_go_checkers = ['golint', 'govet', 'go']
   let g:go_metalinter_command = "--config=" . $XDG_CONFIG_HOME . "/gometalinter/config.json"
   let g:go_fmt_command = "goimports"
+  let g:go_highlight_functions = 1
   let g:go_highlight_string_spellcheck = 0
   let g:go_highlight_format_strings = 0
 
@@ -134,8 +106,6 @@ call plug#begin(s:dir)
   let g:jedi#completions_enabled = 0 " YouCompleteMeに任せる
   let g:jedi#show_call_signatures=0
 
-  Plug 'pangloss/vim-javascript'
-  Plug 'ryym/vim-riot' " riot.js
   Plug 'aklt/plantuml-syntax'
   augroup PlantUMLCmd
     autocmd FileType plantuml command! OpenUml :!open -a "Google Chrome" %
