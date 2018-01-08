@@ -15,6 +15,7 @@ call plug#begin(s:dir)
 
   Plug 'kana/vim-textobj-user'
   Plug 'kana/vim-textobj-entire'
+  Plug 'tpope/vim-surround'
   Plug 'Chiel92/vim-autoformat'
   Plug 'itchyny/lightline.vim'
   let g:lightline = {
@@ -86,7 +87,9 @@ call plug#begin(s:dir)
 
   Plug 'simeji/winresizer'
   Plug 'thinca/vim-qfreplace'
-  Plug 'jremmen/vim-ripgrep'
+  Plug 'kyoh86/vim-ripgrep', { 'branch': 'escape-vbars' }
+  let g:rg_command = 'rg --vimgrep --hidden'
+  let g:rg_escape_vbars = v:true
 
   " Language supports
   Plug 'cespare/vim-toml', {'for': 'toml'}
