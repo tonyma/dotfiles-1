@@ -53,7 +53,17 @@ call plug#begin(s:dir)
   Plug 'tpope/vim-dispatch'
   Plug 'romainl/vim-qf'
   let g:qf_auto_quit = 0  " disable `quit Vim if the last window is a location/quickfix window`
-  Plug 'Valloric/YouCompleteMe'
+  function! BuildYCM(info)
+    " info is a dictionary with 3 fields
+    " - name:   name of the plugin
+    " - status: 'installed', 'updated', or 'unchanged'
+    " - force:  set on PlugInstall! or PlugUpdate!
+    if a:info.status == 'installed' || a:info.force
+      !./install.py
+    endif
+  endfunction
+
+  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
   let g:ycm_filetype_blacklist = {
       \ 'tagbar' : 1,
       \ 'qf' : 1,
@@ -88,7 +98,7 @@ call plug#begin(s:dir)
   Plug 'simeji/winresizer'
   Plug 'thinca/vim-qfreplace'
   Plug 'kyoh86/vim-ripgrep', { 'branch': 'escape-vbars' }
-  let g:rg_command = 'rg --vimgrep --hidden'
+  let g:rg_command = 'rg --vimgrep'
   let g:rg_escape_vbars = v:true
 
   " Language supports

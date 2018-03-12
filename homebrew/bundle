@@ -24,7 +24,6 @@ brew "bindfs"
 brew "fontconfig"
 brew "cassandra", restart_service: true
 brew "coreutils"
-brew "git", args: ["with-pcre2"]
 brew "dep"
 brew "direnv"
 brew "doxygen"
@@ -37,6 +36,7 @@ brew "fzf"
 brew "gd"
 brew "ghi"
 brew "gibo"
+brew "git", args: ["with-pcre2"]
 brew "gnu-sed"
 brew "gnu-tar"
 brew "graphviz"
@@ -92,6 +92,7 @@ cask "virtualbox"
 cask "vlc"
 cask "caskroom/fonts/font-myrica"
 cask "caskroom/fonts/font-myricam"
+mas "AnyMP4 MP4 Converter", id: 633260587
 mas "Bear", id: 1091189122
 mas "Duplicate File Finder", id: 1032755628
 mas "ForkLift", id: 412448059
@@ -104,6 +105,7 @@ mas "Magnet", id: 441258766
 mas "Markoff", id: 1084713122
 mas "Microsoft Remote Desktop", id: 715768417
 mas "Monosnap", id: 540348655
+mas "Movist", id: 461788075
 mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Pixel Perfect", id: 916097243
