@@ -35,7 +35,6 @@ function cd-deject() {
 		return
 	fi
 	project=$(deject info -fprop:Path ${selected})
-	cd ${project}
 	BUFFER="cd ${project}"
 	zle accept-line
 	# redisplay the command line
@@ -154,11 +153,6 @@ alias grep="/usr/local/bin/ggrep --color=auto"
 alias pull="git pull"
 alias push="git push"
 
-
-## richgo:
-if which richgo >/dev/null 2>/dev/null ; then
-	alias go=richgo
-fi
 
 ## vim:
 alias vi=vim
@@ -297,9 +291,11 @@ rbenv() {
 
 autoload -Uz zmv
 
-alias zmv='noglob zmv -W'
-alias zcp='noglob zmv -W -p "cp -r"'
-alias zln='noglob zmv -W -L'
+alias mmv='noglob zmv -W'
+alias mcp='noglob zmv -W -p "cp -r"'
+alias mln='noglob zmv -W -L'
+alias zcp='zmv -p "cp -r"'
+alias zln='zmv -L'
 
 # ______________________________________________________________________________
 # conf_completions: 自動補完の設定

@@ -114,7 +114,7 @@ call plug#begin(s:dir)
   let g:go_highlight_format_strings = 0
 
   Plug 'Glench/Vim-Jinja2-Syntax'
-  Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+  Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.local/share/vim-plug/gocode/vim/symlink.sh' }
   Plug 'davidhalter/jedi-vim', {'for': 'python'}
   let g:jedi#completions_enabled = 0 " YouCompleteMeに任せる
   let g:jedi#show_call_signatures=0
