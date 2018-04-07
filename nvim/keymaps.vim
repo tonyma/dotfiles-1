@@ -13,9 +13,6 @@ nnoremap <C-x><C-g><C-s> :Gstatus<CR>
 " SwitchBranch
 nnoremap <C-x><C-g><C-b> :call SwitchBranch()<CR>
 
-" deject
-nmap <C-x><C-d> <Plug>(deject:switch)
-
 " go
 augroup GoDefCmd
   autocmd FileType go nmap <buffer> <leader>g <Plug>(go-def)

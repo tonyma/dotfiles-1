@@ -13,6 +13,7 @@ call plug#begin(s:dir)
   Plug 'junegunn/fzf.vim'
   set rtp+=/usr/local/opt/fzf
 
+  Plug 'editorconfig/editorconfig-vim'
   Plug 'kana/vim-textobj-user'
   Plug 'kana/vim-textobj-entire'
   Plug 'tpope/vim-surround'
@@ -89,9 +90,13 @@ call plug#begin(s:dir)
   let g:ale_sign_warning = '!'
   let g:ale_go_gometalinter_options = "--config=" . $XDG_CONFIG_HOME . "/gometalinter/config.json"
   let g:ale_linters = {
-  \   'javascript': ['eslint'],
-  \   'go': ['gometalinter', 'go build']
-  \}
+      \ 'javascript': ['eslint'],
+      \ 'go': ['gometalinter', 'go build']
+  \ }
+  let g:ale_fixers = {
+      \ 'javascript': ['eslint']
+  \ }
+  let g:ale_fix_on_save = 1
 
   Plug 'maximbaz/lightline-ale'
 
@@ -104,6 +109,7 @@ call plug#begin(s:dir)
   " Language supports
   Plug 'cespare/vim-toml', {'for': 'toml'}
   Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+  Plug 'briancollins/vim-jst'
   let g:syntastic_go_checkers = ['golint', 'govet', 'go']
   Plug 'fatih/vim-go'
   let g:syntastic_go_checkers = ['golint', 'govet', 'go']

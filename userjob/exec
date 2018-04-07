@@ -13,7 +13,7 @@ fi
 
 # Bundle brew:
 if [ -f /usr/local/bin/brew ]; then
-  brew bundle dump --force --file=${HOME}/.config/homebrew/bundle || error="1"
+  brew bundle dump --force --file=- | sort --reverse > ${HOME}/.config/homebrew/bundle || error="1"
 fi
 
 # 通知うるさいから削除

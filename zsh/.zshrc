@@ -23,24 +23,20 @@ function edit-file() {
 }
 zle -N edit-file
 
-function cd-deject() {
-	deject detect --check
+function cd-project() {
 	local selected
 	local project
-	selected=$(
-		deject list \
-			| fzf-select
-	)
+	selected=$(ghq list | fzf-select)
 	if [ -z "${selected}" ]; then
 		return
 	fi
-	project=$(deject info -fprop:Path ${selected})
+  project=$(ghq root)/${selected}
 	BUFFER="cd ${project}"
 	zle accept-line
 	# redisplay the command line
 	zle -R -c
 }
-zle -N cd-deject
+zle -N cd-project
 
 function checkout-git-branch() {
 	local selected
@@ -197,8 +193,8 @@ bindkey '^x^g^b' checkout-git-branch
 bindkey '^xf' edit-file
 bindkey '^x^f' edit-file
 
-bindkey '^xd' cd-deject
-bindkey '^x^d' cd-deject
+bindkey '^xp' cd-project
+bindkey '^x^p' cd-project
 
 ## 環境切替
 
