@@ -4,6 +4,7 @@ if len(findfile(".development.vim", getcwd())) > 0
   for plug in split(glob(getcwd() . "/*"), '\n')
     execute 'set runtimepath+=' . plug
   endfor
+  echom 'loading local plugin'
 endif
 
 ru ./xdg.vim

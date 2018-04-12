@@ -64,6 +64,8 @@ call plug#begin(s:dir)
     endif
   endfunction
 
+  Plug 'plasticboy/vim-markdown'
+  let g:vim_markdown_folding_disabled = 1
   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
   let g:ycm_filetype_blacklist = {
       \ 'tagbar' : 1,
@@ -91,7 +93,8 @@ call plug#begin(s:dir)
   let g:ale_go_gometalinter_options = "--config=" . $XDG_CONFIG_HOME . "/gometalinter/config.json"
   let g:ale_linters = {
       \ 'javascript': ['eslint'],
-      \ 'go': ['gometalinter', 'go build']
+      \ 'go': ['gometalinter', 'go build'],
+      \ 'vim': ['vint']
   \ }
   let g:ale_fixers = {
       \ 'javascript': ['eslint']

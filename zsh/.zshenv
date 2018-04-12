@@ -19,7 +19,8 @@ export PATH="${PATH}:/usr/sbin"
 
 ## Go:
 export GOPATH=${HOME}/go
-export PATH="/usr/local/go/bin:${PATH}:${HOME}/go/bin"
+export PATH="/usr/local/opt/go/libexec/bin:${PATH}:${HOME}/go/bin"
+export GOROOT=/usr/local/opt/go/libexec
 
 ## Python:
 export PYENV_ROOT="${HOME}/.pyenv"
