@@ -23,10 +23,10 @@ function edit-file() {
 }
 zle -N edit-file
 
-function cd-project() {
+function cd-project() { # {{{
 	local selected
 	local project
-	selected=$(ghq list | fzf-select)
+	selected=$(ghq list | fzf-select "github.com/kyoh86/")
 	if [ -z "${selected}" ]; then
 		return
 	fi
@@ -36,9 +36,9 @@ function cd-project() {
 	# redisplay the command line
 	zle -R -c
 }
-zle -N cd-project
+zle -N cd-project # }}}
 
-function checkout-git-branch() {
+function checkout-git-branch() { # {{{
 	local selected
 	selected=$(
 		git-branches --color --exclude-current \
@@ -53,7 +53,7 @@ function checkout-git-branch() {
 	# redisplay the command line
 	zle -R -c
 }
-zle -N checkout-git-branch
+zle -N checkout-git-branch # }}}
 
 function fzf-select() {
 	if [[ $# -gt 0 ]]; then
