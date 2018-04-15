@@ -5,7 +5,7 @@ set background=dark
 set hlsearch
 " set cursorcolumn
 colorscheme momiji
-
+set ambiwidth=double
 "Indents
 set tabstop=2
 set autoindent
