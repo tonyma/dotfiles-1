@@ -21,6 +21,14 @@ call plug#begin(s:dir)
   Plug 'itchyny/lightline.vim'
   let g:lightline = {
     \   'colorscheme': 'momiji',
+    \   'separator': {
+    \     'left': "\ue0b0",
+    \     'right': "\ue0b2"
+    \   },
+    \   'subseparator': {
+    \     'left': "\ue0b1",
+    \     'right': "\ue0b3"
+    \   },
     \   'active': {
     \     'left': [
     \       [ 'mode', 'paste' ],
@@ -28,11 +36,11 @@ call plug#begin(s:dir)
     \     ],
     \     'right': [
     \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
-    \       [ 'percent', 'lineinfo' ],
-    \       [ 'fileformat', 'fileencoding', 'filetype'],
+    \       [ 'fileformat', 'fileencoding', 'filetype', 'percent', 'lineinfo' ]
     \     ]
     \   },
     \   'component': {
+    \     'lineinfo': "\ue0a1%3l:%-2v",
     \     'filename': '%n:%f'
     \   },
     \   'component_expand': {
@@ -45,9 +53,20 @@ call plug#begin(s:dir)
     \     'linter_errors': 'error',
     \   },
     \   'component_function': {
-    \     'gitbranch': 'fugitive#head',
+    \     'readonly': 'LightlineReadonly',
+    \     'gitbranch': 'LightlineFugitive'
     \   },
     \ }
+  function! LightlineReadonly()
+    return &readonly ? "\ue0a2" : ''
+  endfunction
+  function! LightlineFugitive()
+    if exists('*fugitive#head')
+      let branch = fugitive#head()
+      return branch !=# '' ? "\ue0a0 ".branch : ''
+    endif
+    return ''
+  endfunction
   set laststatus=2  " statuslineは常に表示
   set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
 
