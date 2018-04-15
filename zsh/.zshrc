@@ -28,8 +28,11 @@ zle -N edit-file
 function cd-project() {
 	local selected
 	local project
-	selected=$(ghq list | fzf-select "github.com/kyoh86/")
-	if [ -z "${selected}" ]; then
+  selected=$(ghq list | fzf --query "github.com/kyoh86/" --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(ghq root)"/{} && echo -n " removed {}")+abort')
+	if [[ ${?} -ne 0 || -z "${selected}" ]]; then
+    zle accept-line
+    zle -R -c
+    echo ${selected}
 		return
 	fi
   project=$(ghq root)/${selected}
