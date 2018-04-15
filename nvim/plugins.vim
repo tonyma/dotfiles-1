@@ -1,24 +1,32 @@
-let s:dir = g:xdg_data_home . "/vim-plug"
+set encoding=utf-8
+scriptencoding utf-8
+
+let s:dir = g:xdg_data_home . '/vim-plug'
 if !isdirectory(s:dir)
   call mkdir(s:dir, 'p')
 endif
 
 call plug#begin(s:dir)
-  Plug 'thinca/vim-splash'
+  Plug 'thinca/vim-splash' " {{{
   let g:splash#path = $XDG_CONFIG_HOME . '/nvim/splash.txt'
+  " }}}
+
   Plug 'roosta/vim-srcery'
   Plug 'kyoh86/momiji', { 'rtp': 'vim' }
   Plug 'tyru/capture.vim'  " Show Ex command output in a buffer
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " {{{
   Plug 'junegunn/fzf.vim'
-  set rtp+=/usr/local/opt/fzf
+  set runtimepath+=/usr/local/opt/fzf
+  " }}}
 
   Plug 'editorconfig/editorconfig-vim'
   Plug 'kana/vim-textobj-user'
   Plug 'kana/vim-textobj-entire'
   Plug 'tpope/vim-surround'
   Plug 'Chiel92/vim-autoformat'
-  Plug 'itchyny/lightline.vim'
+
+  Plug 'itchyny/lightline.vim' " {{{
   let g:lightline = {
     \   'colorscheme': 'momiji',
     \   'separator': {
@@ -62,30 +70,35 @@ call plug#begin(s:dir)
   endfunction
   function! LightlineFugitive()
     if exists('*fugitive#head')
-      let branch = fugitive#head()
-      return branch !=# '' ? "\ue0a0 ".branch : ''
+      let l:branch = fugitive#head()
+      return l:branch !=# '' ? "\ue0a0 ".l:branch : ''
     endif
     return ''
   endfunction
   set laststatus=2  " statuslineは常に表示
   set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
+  " }}}
 
   Plug 'tpope/vim-dispatch'
-  Plug 'romainl/vim-qf'
+
+  Plug 'romainl/vim-qf' " {{{
   let g:qf_auto_quit = 0  " disable `quit Vim if the last window is a location/quickfix window`
   function! BuildYCM(info)
     " info is a dictionary with 3 fields
     " - name:   name of the plugin
     " - status: 'installed', 'updated', or 'unchanged'
     " - force:  set on PlugInstall! or PlugUpdate!
-    if a:info.status == 'installed' || a:info.force
+    if a:info.status ==# 'installed' || a:info.force
       !./install.py
     endif
   endfunction
+  " }}}
 
-  Plug 'plasticboy/vim-markdown'
+  Plug 'plasticboy/vim-markdown' " {{{
   let g:vim_markdown_folding_disabled = 1
-  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+  " }}}
+
+  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " {{{
   let g:ycm_filetype_blacklist = {
       \ 'tagbar' : 1,
       \ 'qf' : 1,
@@ -100,16 +113,18 @@ call plug#begin(s:dir)
       \}
   let g:ycm_auto_trigger = 0
   let g:ycm_key_invoke_completion = '<C-x><C-o>'
+  " }}}
 
   Plug 'tpope/vim-fugitive'
   Plug 'airblade/vim-gitgutter'
   Plug 'tpope/vim-rhubarb'
   Plug 'idanarye/vim-merginal'
-  Plug 'w0rp/ale'  " Asynchronous Lint Engine
+
+  Plug 'w0rp/ale'  " Asynchronous Lint Engine {{{
   let g:ale_enabled = 1
   let g:ale_sign_error = '>'
   let g:ale_sign_warning = '!'
-  let g:ale_go_gometalinter_options = "--config=" . $XDG_CONFIG_HOME . "/gometalinter/config.json"
+  let g:ale_go_gometalinter_options = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
   let g:ale_linters = {
       \ 'javascript': ['eslint'],
       \ 'go': ['gometalinter', 'go build'],
@@ -119,45 +134,51 @@ call plug#begin(s:dir)
       \ 'javascript': ['eslint']
   \ }
   let g:ale_fix_on_save = 1
+  " }}}
 
   Plug 'maximbaz/lightline-ale'
 
   Plug 'simeji/winresizer'
-  Plug 'thinca/vim-qfreplace'
-  Plug 'kyoh86/vim-ripgrep', { 'branch': 'escape-vbars' }
+  Plug 'kana/thinca-vim-qfreplace'
+
+  Plug 'kyoh86/vim-ripgrep', { 'branch': 'escape-vbars' } " {{{
   let g:rg_command = 'rg --vimgrep'
   let g:rg_escape_vbars = v:true
+  " }}}
 
-  " Language supports
   Plug 'cespare/vim-toml', {'for': 'toml'}
   Plug 'pangloss/vim-javascript', {'for': 'javascript'}
   Plug 'briancollins/vim-jst'
-  let g:syntastic_go_checkers = ['golint', 'govet', 'go']
-  Plug 'fatih/vim-go'
-  let g:syntastic_go_checkers = ['golint', 'govet', 'go']
-  let g:go_metalinter_command = "--config=" . $XDG_CONFIG_HOME . "/gometalinter/config.json"
-  let g:go_fmt_command = "goimports"
+
+  Plug 'fatih/vim-go' " {{{
+  let g:go_metalinter_command = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
+  let g:go_fmt_command = 'goimports'
   let g:go_highlight_functions = 1
   let g:go_highlight_string_spellcheck = 0
   let g:go_highlight_format_strings = 0
+  " }}}
 
   Plug 'Glench/Vim-Jinja2-Syntax'
   Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.local/share/vim-plug/gocode/vim/symlink.sh' }
-  Plug 'davidhalter/jedi-vim', {'for': 'python'}
+
+  Plug 'davidhalter/jedi-vim', {'for': 'python'} " {{{
   let g:jedi#completions_enabled = 0 " YouCompleteMeに任せる
   let g:jedi#show_call_signatures=0
+  " }}}
 
-  Plug 'aklt/plantuml-syntax'
+  Plug 'aklt/plantuml-syntax' " {{{
   augroup PlantUMLCmd
     autocmd FileType plantuml command! OpenUml :!open -a "Google Chrome" %
   augroup END
+  " }}}
+
   Plug 'elzr/vim-json'
   Plug 'syngan/vim-vimlint'
   Plug 'ynkdir/vim-vimlparser'
 call plug#end()
 
 let s:plug = {
-      \ "plugs": get(g:, 'plugs', {})
+      \ 'plugs': get(g:, 'plugs', {})
       \ }
 
 function! s:plug.is_installed(name)
@@ -169,21 +190,21 @@ function! s:plug.check_installation()
     return
   endif
 
-  let list = []
-  for [name, spec] in items(self.plugs)
-    if !isdirectory(spec.dir)
-      call add(list, spec.uri)
+  let l:list = []
+  for [l:name, l:spec] in items(self.plugs)
+    if !isdirectory(l:spec.dir)
+      call add(l:list, l:spec.uri)
     endif
   endfor
 
-  if len(list) > 0
-    let unplugged = map(list, 'substitute(v:val, "^.*github\.com/\\(.*/.*\\)\.git$", "\\1", "g")')
+  if len(l:list) > 0
+    let l:unplugged = map(l:list, 'substitute(v:val, "^.*github\.com/\\(.*/.*\\)\.git$", "\\1", "g")')
 
     " Ask whether installing plugs like NeoBundle
-    echomsg 'Not installed plugs: ' . string(unplugged)
+    echomsg 'Not installed plugs: ' . string(l:unplugged)
     if confirm('Install plugs now?', "yes\nNo", 2) == 1
       PlugInstall
-      echo "Pleaze restart vim"
+      echo 'Pleaze restart vim'
     endif
 
   endif

@@ -1,4 +1,4 @@
-" delete search highlight
+" Delete search highlight
 nnoremap <silent> <ESC><ESC> :nohl<CR><ESC>
 
 " FZFs
@@ -24,9 +24,6 @@ nmap <C-x><C-l><C-p> <Plug>(ale_previous)
 
 " Quickfix
 nnoremap <C-x><C-q> :copen<CR>
-augroup QfreplaceCmd
-  autocmd BufReadPost quickfix nnoremap <buffer> <C-x><C-s> :Qfreplace<CR>
-augroup END
 
 nnoremap Q <Nop>
 
