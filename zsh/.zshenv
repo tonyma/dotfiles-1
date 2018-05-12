@@ -23,6 +23,7 @@ export PATH="/usr/local/opt/go/libexec/bin:${PATH}:${HOME}/go/bin"
 export GOROOT=/usr/local/opt/go/libexec
 
 ## Python:
+export PYTHON_CONFIGURE_OPTS="--enable-framework"
 export PYENV_ROOT="${HOME}/.pyenv"
 export PATH="${PYENV_ROOT}/bin:${PATH}"
 
@@ -38,7 +39,7 @@ export PATH="/usr/local/opt/openssl/bin:${PATH}"
 
 ## FZF (https://github.com/junegunn/fzf):
 export FZF_DEFAULT_OPTS="--inline-info --no-mouse --extended --ansi --no-sort"
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --maxdepth 10 --glob "!.git/*" --glob "!*.egg-info/*" --glob "!__pycache__/*"'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --maxdepth 10 --glob "!.git/*" --glob "!*.egg-info/*" --glob "!*/__pycache__/*" --glob "!.mypy_cache/*"'
 
 ## AWS:
 export AWS_DEFAULT_PROFILE=default

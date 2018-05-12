@@ -17,6 +17,7 @@ set nowrap
 " Displays {{{
 set number       " Show the line number
 set emo          " Show emoji characters
+set conceallevel=0
 " }}}
 
 " Show invisibles {{{

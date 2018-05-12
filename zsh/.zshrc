@@ -28,7 +28,7 @@ zle -N edit-file
 function cd-project() {
 	local selected
 	local project
-  selected=$(ghq list | fzf --query "github.com/kyoh86/" --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(ghq root)"/{} && echo -n " removed {}")+abort')
+  selected=$( ghq list | ggrep -Pe 'kyoh86|wcl48|wacul' | fzf --query "github.com/" --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(ghq root)"/{} && echo -n " removed {}")+abort')
 	if [[ ${?} -ne 0 || -z "${selected}" ]]; then
     zle accept-line
     zle -R -c
@@ -272,26 +272,21 @@ PROMPT="%(?,,%F{red}[%?]%f
 export PYENV_ROOT="${HOME}/.pyenv"
 export PATH="${PYENV_ROOT}/bin:${PATH}"
 
-pyenv() {
-  eval "$(command pyenv init -)"
-  eval "$(command pyenv virtualenv-init -)"
-}
+eval "$(command pyenv init -)"
+eval "$(command pyenv virtualenv-init -)"
 ## }}}
 
 ## Node {{{
 export PATH="${PATH}:${HOME}/.nodenv/shims"
+export PATH="${PATH}:${HOME}/.nodenv/bin"
 
-nodenv() {
-  eval "$(command nodenv init -)"
-}
+eval "$(nodenv init -)"
 ## }}}
 
 ## Ruby {{{
 export PATH=${PATH}:${HOME}/.rbenv/bin
 
-rbenv() {
-  eval "$(command rbenv init -)"
-}
+eval "$(command rbenv init -)"
 ## }}}
 
 # }}}

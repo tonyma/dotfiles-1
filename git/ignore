@@ -1,6 +1,14 @@
-### pyenv ###
+### vim directory local ###
+.vimrc.local
+### end of vim directory local ###
 
+### pyenv ###
 .python-version
+### end of pyenv ###
+
+### Ripgrep ###
+.rgignore
+### end of Ripgrep ###
 
 # Created by https://www.gitignore.io
 
@@ -26,18 +34,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-
-# Created by https://www.gitignore.io/api/code
-
-### Code ###
-# Visual Studio Code - https://code.visualstudio.com/
-.settings/
-.vscode/
-tsconfig.json
-jsconfig.json
-
-# End of https://www.gitignore.io/api/code
-
 # Created by https://www.gitignore.io/api/vim
 
 ### Vim ###
@@ -58,5 +54,3 @@ tags
 
 # End of https://www.gitignore.io/api/vim
 
-### Ripgrep ###
-.rgignore

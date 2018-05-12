@@ -23,7 +23,7 @@ nmap <C-x><C-l><C-n> <Plug>(ale_next)
 nmap <C-x><C-l><C-p> <Plug>(ale_previous)
 
 " Quickfix
-nnoremap <C-x><C-q> :copen<CR>
+nnoremap <buffer> <C-x><C-q> :copen<CR>
 
 nnoremap Q <Nop>
 

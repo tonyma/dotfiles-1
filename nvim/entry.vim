@@ -6,8 +6,9 @@ if len(findfile(".development.vim", getcwd())) > 0
   endfor
   echom 'loading local plugin'
 endif
-
+"
 ru ./xdg.vim
 ru ./keymaps.vim
 ru ./plugins.vim
 ru ./others.vim
+ru ./local.vim

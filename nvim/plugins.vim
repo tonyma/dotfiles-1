@@ -96,6 +96,13 @@ call plug#begin(s:dir)
 
   Plug 'plasticboy/vim-markdown' " {{{
   let g:vim_markdown_folding_disabled = 1
+  let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'uml=plantuml']
+  let g:vim_markdown_math = 1
+  let g:vim_markdown_frontmatter = 1
+  let g:vim_markdown_toml_frontmatter = 1
+  let g:vim_markdown_json_frontmatter = 1
+  let g:vim_markdown_conceal = 0
+  let g:tex_conceal = ""
   " }}}
 
   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " {{{
@@ -119,19 +126,23 @@ call plug#begin(s:dir)
   Plug 'airblade/vim-gitgutter'
   Plug 'tpope/vim-rhubarb'
   Plug 'idanarye/vim-merginal'
+  Plug 'tell-k/vim-autoflake'
 
   Plug 'w0rp/ale'  " Asynchronous Lint Engine {{{
   let g:ale_enabled = 1
   let g:ale_sign_error = '>'
   let g:ale_sign_warning = '!'
   let g:ale_go_gometalinter_options = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
+  let g:ale_python_mypy_options = '--ignore-missing-imports --strict'
   let g:ale_linters = {
       \ 'javascript': ['eslint'],
       \ 'go': ['gometalinter', 'go build'],
-      \ 'vim': ['vint']
+      \ 'vim': ['vint'],
+      \ 'python': ['mypy', 'flask8', 'pylint']
   \ }
   let g:ale_fixers = {
-      \ 'javascript': ['eslint']
+      \ 'javascript': ['eslint'],
+      \ 'python': ['autopep8', 'yapf']
   \ }
   let g:ale_fix_on_save = 1
   " }}}
@@ -139,7 +150,12 @@ call plug#begin(s:dir)
   Plug 'maximbaz/lightline-ale'
 
   Plug 'simeji/winresizer'
-  Plug 'kana/thinca-vim-qfreplace'
+
+  Plug 'kyoh86/vim-qfreplace' " {{{
+  augroup Qfreplacer
+    autocmd BufReadPost quickfix nnoremap <buffer> <c-x><c-r> :Qfreplace<CR>
+  augroup END
+  " }}}
 
   Plug 'kyoh86/vim-ripgrep', { 'branch': 'escape-vbars' } " {{{
   let g:rg_command = 'rg --vimgrep'
@@ -172,7 +188,13 @@ call plug#begin(s:dir)
   augroup END
   " }}}
 
-  Plug 'elzr/vim-json'
+  Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
+  Plug 'tyru/open-browser.vim'
+
+  Plug 'elzr/vim-json' " {{{
+  let g:vim_json_syntax_conceal = 0
+  " }}}
+
   Plug 'syngan/vim-vimlint'
   Plug 'ynkdir/vim-vimlparser'
 call plug#end()
