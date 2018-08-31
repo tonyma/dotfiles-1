@@ -1,3 +1,4 @@
+tap "px4/px4"
 tap "osx-cross/avr"
 tap "neovim/neovim"
 tap "mix3/ndenv"
@@ -8,39 +9,31 @@ tap "homebrew/science"
 tap "homebrew/php"
 tap "homebrew/dupes"
 tap "homebrew/core"
+tap "homebrew/cask-versions"
+tap "homebrew/cask-fonts"
+tap "homebrew/cask"
 tap "homebrew/bundle"
 tap "goreleaser/goreleaser"
-tap "caskroom/versions"
-tap "caskroom/fonts"
-tap "caskroom/cask"
 tap "argon/mas"
 mas "iMovie", id: 408981434
 mas "iMage Tools", id: 493949693
 mas "Yoink", id: 457622435
 mas "Xcode", id: 497799835
-mas "WeatherBug", id: 1059074180
 mas "Typist", id: 415166115
-mas "Trello", id: 1278508951
 mas "Todoist", id: 585829637
 mas "The Unarchiver", id: 425424353
 mas "Slack", id: 803453959
-mas "Shazam", id: 897118787
-mas "Pixy", id: 984002045
 mas "Pixel Perfect", id: 916097243
 mas "Pages", id: 409201541
 mas "Numbers", id: 409203825
 mas "Movist", id: 461788075
-mas "Monosnap", id: 540348655
 mas "Microsoft Remote Desktop", id: 715768417
 mas "Markoff", id: 1084713122
 mas "Magnet", id: 441258766
 mas "LINE", id: 539883307
 mas "Keynote", id: 409183694
 mas "GarageBand", id: 682658836
-mas "ForkLift", id: 412448059
-mas "Duplicate File Finder", id: 1032755628
 mas "Bear", id: 1091189122
-mas "AnyMP4 MP4 Converter", id: 633260587
 cask "vlc"
 cask "virtualbox"
 cask "postman"
@@ -54,10 +47,10 @@ cask "gyazo"
 cask "google-japanese-ime"
 cask "google-cloud-sdk"
 cask "google-chrome"
+cask "font-myricam"
+cask "font-myrica"
 cask "flux"
 cask "docker"
-cask "caskroom/fonts/font-myricam"
-cask "caskroom/fonts/font-myrica"
 cask "bartender"
 cask "alfred"
 cask "adobe-creative-cloud"
@@ -65,6 +58,7 @@ cask "1password"
 brew "zsh-syntax-highlighting"
 brew "zsh-completions"
 brew "zsh"
+brew "yarn"
 brew "xz"
 brew "wget"
 brew "vim", args: ["with-gettext", "with-lua", "with-override-system-vi", "with-tcl"]
@@ -72,6 +66,7 @@ brew "typesafe-activator"
 brew "tmux"
 brew "tig"
 brew "terraform"
+brew "teensy_loader_cli"
 brew "supervisor"
 brew "sqlite"
 brew "scala"
@@ -80,13 +75,17 @@ brew "ripgrep"
 brew "reattach-to-user-namespace"
 brew "rbenv"
 brew "r"
+brew "q"
 brew "pyenv-virtualenv"
 brew "pyenv"
+brew "px4/px4/gcc-arm-none-eabi"
 brew "plantuml"
+brew "osx-cross/avr/avr-gcc@7"
 brew "openssl"
 brew "nodenv"
 brew "nkf"
 brew "neovim"
+brew "mysql"
 brew "moreutils"
 brew "mongodb"
 brew "mercurial"
@@ -117,11 +116,13 @@ brew "ffmpeg"
 brew "exiftool"
 brew "doxygen"
 brew "direnv"
+brew "dfu-programmer"
 brew "dep"
 brew "curl"
 brew "coreutils"
 brew "cassandra", restart_service: true
 brew "bindfs"
+brew "avrdude"
 brew "autoconf"
 brew "asciinema"
 brew "argon/mas/mas"

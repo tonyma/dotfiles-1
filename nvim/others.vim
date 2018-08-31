@@ -57,7 +57,7 @@ set cursorline   " Highlight cursor line
 highlight Pmenu ctermfg=159 ctermbg=17
 " }}}
 
-" Load Configurations {{{
+" Function: Load Configurations {{{
 let g:config_home = $HOME . '/.vim'
 function! Config(bang)
   execute 'edit'.a:bang g:config_home
@@ -74,7 +74,7 @@ command! -nargs=0 ConfigReload :call ConfigReload()
 command! -nargs=0 Reload :call ConfigReload()
 " }}}
 
-" Switch branch {{{
+" Function: Switch branch {{{
 function! SwitchBranch()
   let l:source = "git-branches --color --exclude-current"
   echo l:source

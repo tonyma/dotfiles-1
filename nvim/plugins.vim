@@ -7,7 +7,8 @@ if !isdirectory(s:dir)
 endif
 
 call plug#begin(s:dir)
-  Plug 'thinca/vim-splash' " {{{
+  " {{{ thinca/vim-splash
+  Plug 'thinca/vim-splash'
   let g:splash#path = $XDG_CONFIG_HOME . '/nvim/splash.txt'
   " }}}
 
@@ -15,18 +16,22 @@ call plug#begin(s:dir)
   Plug 'kyoh86/momiji', { 'rtp': 'vim' }
   Plug 'tyru/capture.vim'  " Show Ex command output in a buffer
 
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " {{{
+  " {{{ junegunn/fzf
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } 
   Plug 'junegunn/fzf.vim'
   set runtimepath+=/usr/local/opt/fzf
   " }}}
 
+  Plug 'justinmk/vim-dirvish'
+  Plug 'kristijanhusak/vim-dirvish-git'
   Plug 'editorconfig/editorconfig-vim'
   Plug 'kana/vim-textobj-user'
   Plug 'kana/vim-textobj-entire'
   Plug 'tpope/vim-surround'
   Plug 'Chiel92/vim-autoformat'
 
-  Plug 'itchyny/lightline.vim' " {{{
+  " {{{ itchyny/lightline.vim
+  Plug 'itchyny/lightline.vim'
   let g:lightline = {
     \   'colorscheme': 'momiji',
     \   'separator': {
@@ -79,10 +84,29 @@ call plug#begin(s:dir)
   set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
   " }}}
 
+  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
   Plug 'tpope/vim-dispatch'
 
-  Plug 'romainl/vim-qf' " {{{
+  " {{{ romainl/vim-qf
+  Plug 'romainl/vim-qf'
   let g:qf_auto_quit = 0  " disable `quit Vim if the last window is a location/quickfix window`
+  " }}}
+
+  " {{{ plasticboy/vim-markdown
+  Plug 'plasticboy/vim-markdown'
+  let g:vim_markdown_folding_disabled = 1
+  let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'uml=plantuml']
+  let g:vim_markdown_math = 1
+  let g:vim_markdown_frontmatter = 1
+  let g:vim_markdown_toml_frontmatter = 1
+  let g:vim_markdown_json_frontmatter = 1
+  let g:vim_markdown_conceal = 0
+  let g:tex_conceal = ''
+  " }}}
+
+  Plug 'kyoh86/vim-hugo'
+
+  " {{{ 'Valloric/YouCompleteMe'
   function! BuildYCM(info)
     " info is a dictionary with 3 fields
     " - name:   name of the plugin
@@ -92,20 +116,7 @@ call plug#begin(s:dir)
       !./install.py
     endif
   endfunction
-  " }}}
-
-  Plug 'plasticboy/vim-markdown' " {{{
-  let g:vim_markdown_folding_disabled = 1
-  let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'uml=plantuml']
-  let g:vim_markdown_math = 1
-  let g:vim_markdown_frontmatter = 1
-  let g:vim_markdown_toml_frontmatter = 1
-  let g:vim_markdown_json_frontmatter = 1
-  let g:vim_markdown_conceal = 0
-  let g:tex_conceal = ""
-  " }}}
-
-  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') } " {{{
+  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
   let g:ycm_filetype_blacklist = {
       \ 'tagbar' : 1,
       \ 'qf' : 1,
@@ -128,7 +139,8 @@ call plug#begin(s:dir)
   Plug 'idanarye/vim-merginal'
   Plug 'tell-k/vim-autoflake'
 
-  Plug 'w0rp/ale'  " Asynchronous Lint Engine {{{
+  " {{{ w0rp/ale (Asynchronous Lint Engine)
+  Plug 'w0rp/ale'  
   let g:ale_enabled = 1
   let g:ale_sign_error = '>'
   let g:ale_sign_warning = '!'
@@ -141,6 +153,7 @@ call plug#begin(s:dir)
       \ 'python': ['mypy', 'flask8', 'pylint']
   \ }
   let g:ale_fixers = {
+      \ 'typescript': ['tslint'],
       \ 'javascript': ['eslint'],
       \ 'python': ['autopep8', 'yapf']
   \ }
@@ -151,13 +164,15 @@ call plug#begin(s:dir)
 
   Plug 'simeji/winresizer'
 
-  Plug 'kyoh86/vim-qfreplace' " {{{
+  " {{{ kyoh86/vim-qfreplace
+  Plug 'kyoh86/vim-qfreplace'
   augroup Qfreplacer
     autocmd BufReadPost quickfix nnoremap <buffer> <c-x><c-r> :Qfreplace<CR>
   augroup END
   " }}}
 
-  Plug 'kyoh86/vim-ripgrep', { 'branch': 'escape-vbars' } " {{{
+   " {{{ kyoh86/vim-ripgrep
+  Plug 'kyoh86/vim-ripgrep', { 'branch': 'escape-vbars' }
   let g:rg_command = 'rg --vimgrep'
   let g:rg_escape_vbars = v:true
   " }}}
@@ -166,7 +181,8 @@ call plug#begin(s:dir)
   Plug 'pangloss/vim-javascript', {'for': 'javascript'}
   Plug 'briancollins/vim-jst'
 
-  Plug 'fatih/vim-go' " {{{
+  " {{{ fatih/vim-go
+  Plug 'fatih/vim-go'
   let g:go_metalinter_command = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
   let g:go_fmt_command = 'goimports'
   let g:go_highlight_functions = 1
@@ -177,12 +193,27 @@ call plug#begin(s:dir)
   Plug 'Glench/Vim-Jinja2-Syntax'
   Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.local/share/vim-plug/gocode/vim/symlink.sh' }
 
-  Plug 'davidhalter/jedi-vim', {'for': 'python'} " {{{
+  " {{{ davidhalter/jedi-vim
+  Plug 'davidhalter/jedi-vim', {'for': 'python'} 
   let g:jedi#completions_enabled = 0 " YouCompleteMeに任せる
-  let g:jedi#show_call_signatures=0
+  let g:jedi#show_call_signatures = 1
   " }}}
 
-  Plug 'aklt/plantuml-syntax' " {{{
+  " {{{ 'lambdalisue/vim-pyenv'
+  Plug 'lambdalisue/vim-pyenv', {'for': 'python'}
+
+  function! s:jedi_auto_force_py_version() abort
+    let g:jedi#force_py_version = pyenv#python#get_internal_major_version()
+  endfunction
+  augroup vim-pyenv-custom-augroup
+    autocmd! *
+    autocmd User vim-pyenv-activate-post   call s:jedi_auto_force_py_version()
+    autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
+  augroup END
+  " }}}
+
+  " {{{ aklt/plantuml-syntax
+  Plug 'aklt/plantuml-syntax'
   augroup PlantUMLCmd
     autocmd FileType plantuml command! OpenUml :!open -a "Google Chrome" %
   augroup END
@@ -191,7 +222,8 @@ call plug#begin(s:dir)
   Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
   Plug 'tyru/open-browser.vim'
 
-  Plug 'elzr/vim-json' " {{{
+  " {{{ elzr/vim-json
+  Plug 'elzr/vim-json'
   let g:vim_json_syntax_conceal = 0
   " }}}
 
@@ -204,16 +236,16 @@ let s:plug = {
       \ }
 
 function! s:plug.is_installed(name)
-  return has_key(self.plugs, a:name) ? isdirectory(self.plugs[a:name].dir) : 0
+  return has_key(l:self.plugs, a:name) ? isdirectory(l:self.plugs[a:name].dir) : 0
 endfunction
 
 function! s:plug.check_installation()
-  if empty(self.plugs)
+  if empty(l:self.plugs)
     return
   endif
 
   let l:list = []
-  for [l:name, l:spec] in items(self.plugs)
+  for [l:name, l:spec] in items(l:self.plugs)
     if !isdirectory(l:spec.dir)
       call add(l:list, l:spec.uri)
     endif

@@ -1,4 +1,7 @@
 /*
+!/.gitignore
+!/.richstyle
+!/24-bit-color.sh
 !/README.md
 !/flake8
 !/pycodestyle
@@ -8,6 +11,7 @@
 !/git
 !/gocode
 !/gometalinter
+!/googleinput
 !/homebrew
 !/nvim
 !/plist
