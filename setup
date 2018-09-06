@@ -32,6 +32,7 @@ else
 fi
 
 # userjob を配置
+mkdir -p /usr/local/opt/userjob
 ln -fs ${DOTFILES}/userjob/exec /usr/local/opt/userjob
 # link vimrc
 rm -rf ${HOME}/.vim
