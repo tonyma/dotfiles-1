@@ -46,7 +46,7 @@ cask "iterm2"
 cask "gyazo"
 cask "google-japanese-ime"
 cask "google-cloud-sdk"
-cask "google-chrome"
+cask "google-chrome" || :
 cask "font-myricam"
 cask "font-myrica"
 cask "flux"
