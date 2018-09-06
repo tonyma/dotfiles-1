@@ -1,4 +1,4 @@
-#!env zsh
+# zsh用スクリプト
 
 set -e
 
