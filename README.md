@@ -1,8 +1,8 @@
-# dotfiles
+e dotfiles
 
 ## installation
 
 ```sh
-eval "$(curl https://raw.githubusercontent.com/kyoh86/dotfiles/master/setup)"
+curl "https://raw.githubusercontent.com/kyoh86/dotfiles/master/setup" -o setup && chmod +x setup && setup
 ```
 

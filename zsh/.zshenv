@@ -1,5 +1,4 @@
 # zmodload zsh/zprof && zprof # プロファイリング (zshrcの末尾とセット)
-typeset -U PATH
 
 # 基本環境設定:
 export LANG=ja_JP.UTF-8
