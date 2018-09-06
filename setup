@@ -27,7 +27,7 @@ else
   curl -L https://github.com/kyoh86/dotfiles/archive/master.tar.gz | tar xv -
 
   mkdir -p ${DOTFILES}
-  cp -rf ${DOTTMP}/* ${DOTFILES}
+  cp -RPf ${DOTTMP}/* ${DOTFILES}
   rm -rf ${DOTTMP}
 fi
 
