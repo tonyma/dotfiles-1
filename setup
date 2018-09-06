@@ -1,6 +1,6 @@
 #!env zsh
 
-set -ex
+set -e
 
 sudo sh -c 'echo '"'"'export ZDOTDIR=${HOME}/.config/zsh'"'"' > /etc/zshenv'
 

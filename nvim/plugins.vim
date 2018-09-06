@@ -146,6 +146,7 @@ call plug#begin(s:dir)
   let g:ale_sign_warning = '!'
   let g:ale_go_gometalinter_options = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
   let g:ale_python_mypy_options = '--ignore-missing-imports --strict'
+  let g:ale_completion_enabled = 1
   let g:ale_linters = {
       \ 'javascript': ['eslint'],
       \ 'go': ['gometalinter', 'go build'],
