@@ -1,4 +1,4 @@
-# zsh用スクリプト
+#!env zsh
 
 set -e
 
@@ -33,7 +33,7 @@ fi
 
 # userjob を配置
 sudo mkdir -p /usr/local/opt/userjob
-sudo chown yamada /usr/local/opt/userjob
+sudo chown -R yamada /usr/local/opt/userjob
 
 ln -fs ${DOTFILES}/userjob/exec /usr/local/opt/userjob
 # link vimrc
