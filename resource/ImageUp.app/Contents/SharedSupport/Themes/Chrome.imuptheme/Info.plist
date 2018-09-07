@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IMUPThemeArtist</key>
+	<string>kanwa (lab.3fl.jp)</string>
+	<key>IMUPThemeIdentifier</key>
+	<string>jp.3fl.imageup.chrome</string>
+	<key>IMUPThemeName</key>
+	<string>Chrome</string>
+	<key>IMUPThemePreviewImage</key>
+	<string>Preview.png</string>
+	<key>IMUPThemeCompatible</key>
+	<dict>
+		<key>CursorMarker</key>
+		<true/>
+		<key>ColorBar</key>
+		<true/>
+		<key>ColorMenuBar</key>
+		<true/>
+		<key>DockIcon</key>
+		<true/>
+		<key>StatusIcon</key>
+		<true/>
+	</dict>
+</dict>
+</plist>
