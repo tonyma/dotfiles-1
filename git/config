@@ -10,7 +10,7 @@
 	pager = less -r
 [user]
 	name = Kyoichiro Yamada
-	email = yamada@wacul.co.jp
+	email = kyoh86@users.noreply.github.com
 [filter "media"]
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
@@ -70,3 +70,5 @@
 	user = kyoh86
 [ghi]
 	token = !security find-internet-password -a kyoh86 -s github.com -l 'ghi token' -w
+[ghq]
+	root = /Users/yamada/go/src

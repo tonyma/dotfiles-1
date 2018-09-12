@@ -153,7 +153,7 @@ alias vi=vim
 ## }}}
 
 ## tmux {{{
-alias tmux='TERM=xterm-256color tmux -f "${XDG_CONFIG_HOME:-${HOME}/.config}"/tmux/tmux.conf'
+alias tmux='tmux -f "${XDG_CONFIG_HOME:-${HOME}/.config}"/tmux/tmux.conf'
 ## }}}
 
 # }}}
@@ -351,7 +351,14 @@ fi
 ## }}}
 
 ## tmux起動{{{
-[[ -z "${TMUX}" && -z "${WINDOW}" && -n "${PS1}" ]] && tmux || :
+if [[ -z "${TMUX}" && -z "${WINDOW}" && -n "${PS1}" ]] ; then
+  if alias tmux >/dev/null ; then
+    TMUXCALL=$(which tmux)
+    eval "exec ${TMUXCALL#tmux: aliased to }" || :
+  else
+    exec tmux || :
+  fi
+fi
 # }}}
 
 # ZSHRC性能検査 (zshenvの先頭とセット)

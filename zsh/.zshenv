@@ -52,7 +52,7 @@ export PATH=${PATH}:${SCALA_HOME}/bin
 export ZPLUG_HOME=${HOME}/.zplug
 
 ## java:
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+export JAVA_HOME=`/usr/libexec/java_home`
 export PATH=${JAVA_HOME}/bin:$PATH
 
 ## perl:

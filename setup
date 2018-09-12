@@ -2,6 +2,7 @@
 
 set -e
 
+touch ~/.hushlogin
 sudo sh -c 'echo '"'"'export ZDOTDIR=${HOME}/.config/zsh'"'"' > /etc/zshenv'
 
 # env
