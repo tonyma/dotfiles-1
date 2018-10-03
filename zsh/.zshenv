@@ -67,7 +67,11 @@ export PATH=$PATH:/usr/local/share/git-core/contrib/diff-highlight
 # highlighters
 export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/usr/local/share/zsh-syntax-highlighting/highlighters
 
+# zlib
+export LDFLAGS="-L/usr/local/opt/zlib/lib"
+export CPPFLAGS="-I/usr/local/opt/zlib/include"
+export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
+
 ## dotfiles自体
 export DOTFILES=${HOME}/.config
 export DOTS=${HOME}/.config
-

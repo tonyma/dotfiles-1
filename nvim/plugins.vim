@@ -113,7 +113,7 @@ call plug#begin(s:dir)
     " - status: 'installed', 'updated', or 'unchanged'
     " - force:  set on PlugInstall! or PlugUpdate!
     if a:info.status ==# 'installed' || a:info.force
-      !./install.py
+      !./install.py --clang-completer --go-completer --java-completer --enable-coverage --clang-tidy
     endif
   endfunction
   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }

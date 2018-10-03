@@ -8,6 +8,7 @@
 	quotepath = false
 	precomposeunicode = true
 	pager = less -r
+	commentchar = ";"
 [user]
 	name = Kyoichiro Yamada
 	email = kyoh86@users.noreply.github.com
