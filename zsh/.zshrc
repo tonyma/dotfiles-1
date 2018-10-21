@@ -25,10 +25,15 @@ zle -N edit-file
 ## }}}
 
 ## プロジェクト管理 {{{
+
+typeset -a project_owners
+project_owners=(kyoh86 wcl48 wacul)
 function cd-project() {
 	local selected
 	local project
-  selected=$( ghq list | ggrep -Pe 'kyoh86|wcl48|wacul' | fzf --query "github.com/" --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(ghq root)"/{} && echo -n " removed {}")+abort')
+  local query
+  query="^github.com/ /${(j:/ | /:)project_owners}/ '/"
+  selected=$( ghq list | fzf --query "${query}" --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(ghq root)"/{} && echo -n " removed {}")+abort')
 	if [[ ${?} -ne 0 || -z "${selected}" ]]; then
     zle accept-line
     zle -R -c
@@ -42,6 +47,44 @@ function cd-project() {
 	zle -R -c
 }
 zle -N cd-project
+
+function new-project() {
+  local owner
+  owner=$( ( IFS=$'\n'; echo "${project_owners[*]}" ) | fzf --prompt "PROJECT OWNER? > " --reverse --height 30%)
+  if [[ -z "${owner}" ]]; then
+    return
+  fi
+
+  local project_name
+  autoload -Uz read-from-minibuffer
+  # vared -i '' -f '' -p "${fg_bold[blue]}PROJECT NAME? > ${reset_color}" -c project_name
+  echo -n "${fg_bold[blue]}"
+  read-from-minibuffer "PROJECT NAME? > "
+  zle -I
+  echo -n "${reset_color}"
+  project_name=${REPLY}
+  if [[ -z "${project_name}" ]]; then
+    return
+  fi
+
+  local project_dir
+  project_dir="$(ghq root)/github.com/${owner}/${project_name}"
+  if [[ -d ${project_dir} ]]; then
+    echo "${fg[red]}The project already exists${reset_color}"
+    return
+  fi
+  if [[ -e ${project_dir} ]]; then
+    echo "${fg[red]}An object already exists"
+    ls -lad --color=never "${project_dir}"
+    echo -n "${reset_color}"
+    return
+  fi
+	BUFFER="mkdir -p '${project_dir}' && cd '${project_dir}' && git init && hub create ${owner}/${project_name}"
+	zle accept-line
+	# redisplay the command line
+	zle -R -c
+}
+zle -N new-project
 ## }}}
 
 ## ブランチ切り替え {{{
@@ -202,6 +245,8 @@ bindkey '^x^f' edit-file
 ## Project管理 {{{
 bindkey '^xp' cd-project
 bindkey '^x^p' cd-project
+bindkey '^xn' new-project
+bindkey '^x^n' new-project
 ## }}}
 
 ## AWS環境切替 {{{
@@ -300,6 +345,11 @@ alias mcp='noglob zmv -W -p "cp -r"'
 alias mln='noglob zmv -W -L'
 alias zcp='zmv -p "cp -r"'
 alias zln='zmv -L'
+# }}}
+
+# 色名による指定を有効にする {{{
+autoload -Uz colors
+colors
 # }}}
 
 # 自動補完の設定 {{{

@@ -39,7 +39,7 @@ sudo chown -R yamada /usr/local/opt
 ln -fs ${DOTFILES}/userjob/exec /usr/local/opt/userjob
 # link vimrc
 rm -rf ${HOME}/.vim
-ln -s ${DOTFILES}/nvim ${HOME}/.vim
+ln -s ${DOTFILES}/vim ${HOME}/.vim
 
 # plist配下の各ファイルをシンボリックリンクとして配置してLaunchAgentsに登録する
 mkdir -p ${HOME}/Library/LaunchAgents

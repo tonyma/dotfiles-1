@@ -1,35 +1,142 @@
+" Load current directory as plugin if .development.vim exists. {{{
+
+if len(findfile('.development.vim', getcwd())) > 0
+  execute 'set runtimepath+=' . getcwd()
+  for g:plug in split(glob(getcwd() . '/*'), '\n')
+    execute 'set runtimepath+=' . g:plug
+  endfor
+  echom 'loading local plugin'
+endif
+let $PATH = '~/.pyenv/shims:'.$PATH
+" }}}
+
+" Setup XDG Home directory paths. {{{
+let g:xdg_config_home=$XDG_CONFIG_HOME
+if g:xdg_config_home ==# ''
+  let g:xdg_config_home = $HOME.'/.config'
+endif
+
+let g:xdg_data_home=$XDG_DATA_HOME
+if g:xdg_data_home ==# ''
+  let g:xdg_data_home = $HOME.'/.local/share'
+endif
+
+let s:cachedir=$XDG_CACHE_HOME
+if s:cachedir ==# ''
+  let s:cachedir = $HOME.'/.cache'
+endif
+
+let &directory = s:cachedir.'/vim/swap'
+if !isdirectory(&directory)
+  call mkdir(&directory, 'p')
+endif
+let &backupdir = s:cachedir.'/vim/backup'
+if !isdirectory(&backupdir)
+  call mkdir(&backupdir, 'p')
+endif
+" }}}
+
+" Setup Keymaps (for regular functions) {{{
+" Delete search highlight
+nnoremap <silent> <ESC><ESC> :nohl<CR><ESC>
+
+" Quickfix
+nnoremap <buffer> <C-x><C-q> :copen<CR>
+
+nnoremap Q <Nop>
+nnoremap <C-x> <Nop>
+" }}}
+
+" Setup encodings {{{
 set encoding=utf-8
 scriptencoding utf-8
+" }}}
 
+" Function: Load Configurations {{{
+let g:config_home = $HOME . '/.vim'
+function! Config(bang)
+  execute 'edit'.a:bang g:config_home
+endfunction
+command! -bang -nargs=0 Config :call Config('<bang>')
+
+if !exists("*ConfigReload")
+  function! ConfigReload()
+    " reload vimrc
+    execute 'source $MYVIMRC'
+  endfunction
+endif
+command! -nargs=0 ConfigReload :call ConfigReload()
+command! -nargs=0 Reload :call ConfigReload()
+" }}}
+
+" Function: Switch branch {{{
+function! SwitchBranch()
+  let l:source = "git-branches --color --exclude-current"
+  echo l:source
+  let l:selected = fzf#run({'source': l:source, 'options': ['--border']})
+  let l:selected = get(split(get(l:selected, 0, '')), 1, '')
+  if l:selected !=# ''
+    " change branch
+    call system("git checkout ".l:selected)
+  endif
+endfunction
+nnoremap <C-x><C-g><C-b> :call SwitchBranch()<CR>
+" }}}
+
+" Configure Plugins {{{
 let s:dir = g:xdg_data_home . '/vim-plug'
 if !isdirectory(s:dir)
   call mkdir(s:dir, 'p')
 endif
-
 call plug#begin(s:dir)
+  Plug 'Chiel92/vim-autoformat'
+  Plug 'Glench/Vim-Jinja2-Syntax'
+  Plug 'airblade/vim-gitgutter'
+  Plug 'briancollins/vim-jst'
+  Plug 'cespare/vim-toml', {'for': 'toml'}
+  Plug 'editorconfig/editorconfig-vim'
+  Plug 'idanarye/vim-merginal'
+  Plug 'justinmk/vim-dirvish'
+  Plug 'kana/vim-textobj-entire'
+  Plug 'kana/vim-textobj-user'
+  Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
+  Plug 'kristijanhusak/vim-dirvish-git'
+  Plug 'kyoh86/momiji', { 'rtp': 'vim' }
+  Plug 'kyoh86/vim-hugo'
+  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+  Plug 'maximbaz/lightline-ale'
+  Plug 'mdempsky/gocode', { 'rtp': 'vim', 'do': '~/.local/share/vim-plug/gocode/vim/symlink.sh' }
+  Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+  Plug 'roosta/vim-srcery'
+  Plug 'simeji/winresizer'
+  Plug 'syngan/vim-vimlint'
+  Plug 'tell-k/vim-autoflake'
+  Plug 'tpope/vim-dispatch'
+  Plug 'tpope/vim-rhubarb'  " fugitive.vim extension for GitHub
+  Plug 'tpope/vim-surround'  " Edit surrounders (like brackets, parentheses and quotes)
+  Plug 'tyru/capture.vim'  " Show Ex command output in a buffer
+  Plug 'tyru/open-browser-github.vim'
+  Plug 'tyru/open-browser.vim'
+  Plug 'ynkdir/vim-vimlparser'
+  " {{{ tpope/vim-fugitive
+  Plug 'tpope/vim-fugitive'
+  nnoremap <C-x><C-g><C-s> :Gstatus<CR>
+  " }}}
   " {{{ thinca/vim-splash
   Plug 'thinca/vim-splash'
   let g:splash#path = $XDG_CONFIG_HOME . '/nvim/splash.txt'
   " }}}
-
-  Plug 'roosta/vim-srcery'
-  Plug 'kyoh86/momiji', { 'rtp': 'vim' }
-  Plug 'tyru/capture.vim'  " Show Ex command output in a buffer
-
   " {{{ junegunn/fzf
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } 
   Plug 'junegunn/fzf.vim'
   set runtimepath+=/usr/local/opt/fzf
+  nnoremap <C-x><C-f> :Files<CR>
+  nnoremap <C-x><C-w> :Windows<CR>
+  nnoremap <C-x><C-b> :Buffers<CR>
+  nnoremap <C-x><C-i> :History<CR>
+  nnoremap <C-x><C-_> :Rg 
+
   " }}}
-
-  Plug 'justinmk/vim-dirvish'
-  Plug 'kristijanhusak/vim-dirvish-git'
-  Plug 'editorconfig/editorconfig-vim'
-  Plug 'kana/vim-textobj-user'
-  Plug 'kana/vim-textobj-entire'
-  Plug 'tpope/vim-surround'
-  Plug 'Chiel92/vim-autoformat'
-
   " {{{ itchyny/lightline.vim
   Plug 'itchyny/lightline.vim'
   let g:lightline = {
@@ -83,15 +190,10 @@ call plug#begin(s:dir)
   set laststatus=2  " statuslineは常に表示
   set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
   " }}}
-
-  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-  Plug 'tpope/vim-dispatch'
-
   " {{{ romainl/vim-qf
   Plug 'romainl/vim-qf'
   let g:qf_auto_quit = 0  " disable `quit Vim if the last window is a location/quickfix window`
   " }}}
-
   " {{{ plasticboy/vim-markdown
   Plug 'plasticboy/vim-markdown'
   let g:vim_markdown_folding_disabled = 1
@@ -103,17 +205,14 @@ call plug#begin(s:dir)
   let g:vim_markdown_conceal = 0
   let g:tex_conceal = ''
   " }}}
-
-  Plug 'kyoh86/vim-hugo'
-
-  " {{{ 'Valloric/YouCompleteMe'
+  " {{{ Valloric/YouCompleteMe
   function! BuildYCM(info)
     " info is a dictionary with 3 fields
     " - name:   name of the plugin
     " - status: 'installed', 'updated', or 'unchanged'
     " - force:  set on PlugInstall! or PlugUpdate!
     if a:info.status ==# 'installed' || a:info.force
-      !./install.py --clang-completer --go-completer --java-completer --enable-coverage --clang-tidy
+      !./install.py --clang-completer --go-completer --enable-coverage --clang-tidy
     endif
   endfunction
   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
@@ -132,13 +231,6 @@ call plug#begin(s:dir)
   let g:ycm_auto_trigger = 0
   let g:ycm_key_invoke_completion = '<C-x><C-o>'
   " }}}
-
-  Plug 'tpope/vim-fugitive'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'tpope/vim-rhubarb'
-  Plug 'idanarye/vim-merginal'
-  Plug 'tell-k/vim-autoflake'
-
   " {{{ w0rp/ale (Asynchronous Lint Engine)
   Plug 'w0rp/ale'  
   let g:ale_enabled = 1
@@ -159,50 +251,39 @@ call plug#begin(s:dir)
       \ 'python': ['autopep8', 'yapf']
   \ }
   let g:ale_fix_on_save = 1
+  nmap <C-x><C-l><C-n> <Plug>(ale_next)
+  nmap <C-x><C-l><C-p> <Plug>(ale_previous)
   " }}}
-
-  Plug 'maximbaz/lightline-ale'
-
-  Plug 'simeji/winresizer'
-
   " {{{ kyoh86/vim-qfreplace
   Plug 'kyoh86/vim-qfreplace'
   augroup Qfreplacer
     autocmd BufReadPost quickfix nnoremap <buffer> <c-x><c-r> :Qfreplace<CR>
   augroup END
   " }}}
-
-   " {{{ kyoh86/vim-ripgrep
-  Plug 'kyoh86/vim-ripgrep', { 'branch': 'escape-vbars' }
+   " {{{ jremmen/vim-ripgrep
+  Plug 'jremmen/vim-ripgrep'
   let g:rg_command = 'rg --vimgrep'
-  let g:rg_escape_vbars = v:true
   " }}}
-
-  Plug 'cespare/vim-toml', {'for': 'toml'}
-  Plug 'pangloss/vim-javascript', {'for': 'javascript'}
-  Plug 'briancollins/vim-jst'
-
   " {{{ fatih/vim-go
-  Plug 'fatih/vim-go'
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
   let g:go_metalinter_command = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
   let g:go_fmt_command = 'goimports'
   let g:go_highlight_functions = 1
   let g:go_highlight_string_spellcheck = 0
   let g:go_highlight_format_strings = 0
+  " go
+  augroup GoDefCmd
+    autocmd FileType go nmap <buffer> <leader>g <Plug>(go-def)
+  augroup END
+
   " }}}
-
-  Plug 'Glench/Vim-Jinja2-Syntax'
-  Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.local/share/vim-plug/gocode/vim/symlink.sh' }
-
   " {{{ davidhalter/jedi-vim
   Plug 'davidhalter/jedi-vim', {'for': 'python'} 
   let g:jedi#completions_enabled = 0 " YouCompleteMeに任せる
   let g:jedi#show_call_signatures = 1
   " }}}
-
-  " {{{ 'lambdalisue/vim-pyenv'
+  " {{{ lambdalisue/vim-pyenv
   Plug 'lambdalisue/vim-pyenv', {'for': 'python'}
-
   function! s:jedi_auto_force_py_version() abort
     let g:jedi#force_py_version = pyenv#python#get_internal_major_version()
   endfunction
@@ -212,26 +293,20 @@ call plug#begin(s:dir)
     autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
   augroup END
   " }}}
-
   " {{{ aklt/plantuml-syntax
   Plug 'aklt/plantuml-syntax'
   augroup PlantUMLCmd
     autocmd FileType plantuml command! OpenUml :!open -a "Google Chrome" %
   augroup END
   " }}}
-
-  Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
-  Plug 'tyru/open-browser.vim'
-
   " {{{ elzr/vim-json
   Plug 'elzr/vim-json'
   let g:vim_json_syntax_conceal = 0
   " }}}
-
-  Plug 'syngan/vim-vimlint'
-  Plug 'ynkdir/vim-vimlparser'
 call plug#end()
+" }}}
 
+" Auto-install plugins {{{
 let s:plug = {
       \ 'plugs': get(g:, 'plugs', {})
       \ }
@@ -244,24 +319,20 @@ function! s:plug.check_installation()
   if empty(l:self.plugs)
     return
   endif
-
   let l:list = []
   for [l:name, l:spec] in items(l:self.plugs)
     if !isdirectory(l:spec.dir)
       call add(l:list, l:spec.uri)
     endif
   endfor
-
   if len(l:list) > 0
     let l:unplugged = map(l:list, 'substitute(v:val, "^.*github\.com/\\(.*/.*\\)\.git$", "\\1", "g")')
-
     " Ask whether installing plugs like NeoBundle
     echomsg 'Not installed plugs: ' . string(l:unplugged)
     if confirm('Install plugs now?', "yes\nNo", 2) == 1
       PlugInstall
       echo 'Pleaze restart vim'
     endif
-
   endif
 endfunction
 
@@ -269,3 +340,77 @@ augroup CheckPlug
   autocmd!
   autocmd VimEnter * if !argc() | call s:plug.check_installation() | endif
 augroup END
+" }}}
+
+" Colors {{{
+syntax enable
+set termguicolors
+set background=dark
+set hlsearch
+colorscheme momiji
+" }}}
+
+" Indents {{{
+set tabstop=2
+set autoindent
+set shiftwidth=2
+set expandtab
+set nowrap
+" }}}
+
+" Displays {{{
+set number       " Show the line number
+set emo          " Show emoji characters
+set conceallevel=0
+" }}}
+
+" Show invisibles {{{
+set list
+set listchars=tab:»\ ,trail:∙,eol:↵,extends:»,precedes:«,nbsp:∙
+" }}}
+
+" Change cursor shape in different modes {{{
+if exists('$TMUX')
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+" }}}
+
+" Completion {{{
+set wildmode=longest:full,full
+set completeopt=menu,menuone
+let g:pymode_rope_complete_on_dot = 0
+" }}}
+
+" Other misc settings {{{
+set clipboard+=unnamedplus,unnamed
+set fixendofline
+set showcmd
+set ambiwidth=double
+set foldmethod=marker
+set backspace=2  
+set cursorline   " Highlight cursor line
+highlight Pmenu ctermfg=159 ctermbg=17
+" }}}
+
+" Load settings for each location. {{{
+augroup vimrc-local
+  autocmd!
+  autocmd BufNewFile,BufReadPost * call s:vimrc_local(expand('<afile>:p:h'))
+augroup END
+
+function! s:vimrc_local(loc)
+  let l:files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
+  for l:i in reverse(filter(l:files, 'filereadable(v:val)'))
+    source `=l:i`
+  endfor
+endfunction
+" }}}

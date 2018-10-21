@@ -18,8 +18,7 @@ export PATH="${PATH}:/usr/sbin"
 
 ## Go:
 export GOPATH=${HOME}/go
-export PATH="/usr/local/opt/go/libexec/bin:${PATH}:${HOME}/go/bin"
-export GOROOT=/usr/local/opt/go/libexec
+export PATH="/usr/local/opt/go/libexec/bin:${PATH}:/usr/local/go/bin:${HOME}/go/bin"
 
 ## Python:
 export PYTHON_CONFIGURE_OPTS="--enable-framework"
