@@ -218,7 +218,8 @@ setopt hist_verify            # ヒストリを呼び出してから実行する
 # キーバインド設定 {{{
 # ------------------------------------------------------------------------------
 
-bindkey -e
+bindkey -v
+
 
 ## git系 {{{
 bindkey '^xgb' checkout-git-branch
@@ -280,6 +281,25 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 alias ls="gls --color"
 # }}}
 
+# vi-modeのtext-objects設定 {{{
+# カッコの中
+autoload -U select-bracketed
+zle -N select-bracketed
+# クォーテーションの中
+autoload -U select-quoted
+zle -N select-quoted
+# surround.vim的なやつ
+autoload -Uz surround
+zle -N delete-surround surround
+zle -N change-surround surround
+zle -N add-surround surround
+bindkey -a cs change-surround
+bindkey -a ds delete-surround
+bindkey -a ys add-surround
+bindkey -M visual S add-surround
+
+# }}}
+
 # プロンプト設定 {{{
 # ------------------------------------------------------------------------------
 
@@ -305,9 +325,40 @@ function _update_git_info() {
 }
 add-zsh-hook precmd _update_git_info
 
-PROMPT="%(?,,%F{red}[%?]%f
-)
-%F{blue}$%f "
+function _col_ppt() {
+  echo $'\e['"${color[reverse]}m${fg[${1}]} ${2}${reset_color}${fg[${1}]}"$'\ue0b0'"${reset_color}"
+}
+function zle-keymap-select zle-line-init zle-line-finish {
+  case $KEYMAP in
+    main|viins)
+      # [[ $ZLE_STATE = *overwrite* ]] for replace mode
+      if [[ $ZLE_STATE = *overwrite* ]]; then
+        vi_mode=$(_col_ppt magenta R)
+      else
+        vi_mode=$(_col_ppt blue I)
+      fi
+      ;;
+    vicmd)
+      vi_mode=$(_col_ppt white N)
+      ;;
+    vivis)
+      vi_mode=$(_col_ppt yellow V)
+      ;;
+    vivil)
+      vi_mode=$(_col_ppt yellow L)
+      ;;
+  esac
+
+  PROMPT="%(?,,%F{red}[%?]%f
+
+)${vi_mode}  "
+  zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-line-finish
+zle -N zle-keymap-select
+zle -N edit-command-line
 # }}}
 
 # anyenv設定 {{{
@@ -378,6 +429,7 @@ done
 _source_exists \
 	~/.fzf.zsh \
 	${ZDOTDIR}/.zsh_secret \
+  ${ZDOTDIR}/vimode-visual/zsh-vimode-visual.zsh \
 	/usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # }}}
 
