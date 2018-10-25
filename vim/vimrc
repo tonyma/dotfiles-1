@@ -38,13 +38,19 @@ endif
 
 " Setup Keymaps (for regular functions) {{{
 " Delete search highlight
-nnoremap <silent> <ESC><ESC> :nohl<CR><ESC>
+nnoremap <ESC><ESC> :<C-u>nohl<CR><ESC>
 
 " Quickfix
-nnoremap <buffer> <C-x><C-q> :copen<CR>
+nnoremap <C-x>q :<C-u>copen<CR><ESC>
 
 nnoremap Q <Nop>
 nnoremap <C-x> <Nop>
+augroup TermEnter
+  " ターミナルで <C-\><C-n> による job <- -> normal モードの往復を可能にする
+  autocmd! TerminalOpen * nnoremap <buffer> <C-\><C-n> i
+augroup END
+
+nnoremap <C-t> :<C-u>tabnew<CR><ESC>
 " }}}
 
 " Setup encodings {{{
@@ -52,10 +58,14 @@ set encoding=utf-8
 scriptencoding utf-8
 " }}}
 
+" Function: Enter job mode (Terminal) {{{
+command! -nargs=0 EnterJobMode
+" }}}
+
 " Function: Load Configurations {{{
 let g:config_home = $HOME . '/.vim'
 function! Config(bang)
-  execute 'edit'.a:bang g:config_home
+  execute 'edit'.a:bang g:config_home.'/vimrc'
 endfunction
 command! -bang -nargs=0 Config :call Config('<bang>')
 
@@ -69,18 +79,32 @@ command! -nargs=0 ConfigReload :call ConfigReload()
 command! -nargs=0 Reload :call ConfigReload()
 " }}}
 
-" Function: Switch branch {{{
-function! SwitchBranch()
-  let l:source = "git-branches --color --exclude-current"
-  echo l:source
-  let l:selected = fzf#run({'source': l:source, 'options': ['--border']})
-  let l:selected = get(split(get(l:selected, 0, '')), 1, '')
-  if l:selected !=# ''
-    " change branch
-    call system("git checkout ".l:selected)
-  endif
+" Function: Switch Project {{{
+function! s:cd_project(gopath)
+  exec 'cd '.$GOPATH.'/src/'.a:gopath
 endfunction
-nnoremap <C-x><C-g><C-b> :call SwitchBranch()<CR>
+
+command! SwitchProject call fzf#run({
+    \ 'source': "ghq list",
+    \ 'sink': function('<SID>cd_project'),
+    \ 'options': ['--query', '^github.com/wacul | ^github.com/wcl48 | ^github.com/kyoh86 '],
+    \ 'down': '30%'
+    \ })
+nnoremap <C-x><C-p> :<C-u>SwitchProject<CR>
+" }}}
+
+" Function: Switch Branch {{{
+function! s:checkout(line)
+  let l:branch = get(split(a:line, 0, ''), 1, '')
+  exec 'Git checkout '.l:branch
+endfunction
+
+command! SwitchBranch call fzf#run({
+    \ 'source': "git-branches --color --exclude-current",
+    \ 'sink': function('<SID>checkout'),
+    \ 'down': '30%'
+    \ })
+nnoremap <C-x><C-g><C-b> :<C-u>SwitchBranch<CR>
 " }}}
 
 " Configure Plugins {{{
@@ -97,6 +121,7 @@ call plug#begin(s:dir)
   Plug 'editorconfig/editorconfig-vim'
   Plug 'idanarye/vim-merginal'
   Plug 'justinmk/vim-dirvish'
+  Plug 'kana/vim-tabpagecd'
   Plug 'kana/vim-textobj-entire'
   Plug 'kana/vim-textobj-user'
   Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
@@ -120,21 +145,21 @@ call plug#begin(s:dir)
   Plug 'ynkdir/vim-vimlparser'
   " {{{ tpope/vim-fugitive
   Plug 'tpope/vim-fugitive'
-  nnoremap <C-x><C-g><C-s> :Gstatus<CR>
+  nnoremap <C-x><C-g><C-s> :<C-u>Gstatus<CR>
   " }}}
   " {{{ thinca/vim-splash
   Plug 'thinca/vim-splash'
-  let g:splash#path = $XDG_CONFIG_HOME . '/nvim/splash.txt'
+  let g:splash#path = $XDG_CONFIG_HOME . '/vim/splash.txt'
   " }}}
   " {{{ junegunn/fzf
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } 
   Plug 'junegunn/fzf.vim'
   set runtimepath+=/usr/local/opt/fzf
-  nnoremap <C-x><C-f> :Files<CR>
-  nnoremap <C-x><C-w> :Windows<CR>
-  nnoremap <C-x><C-b> :Buffers<CR>
-  nnoremap <C-x><C-i> :History<CR>
-  nnoremap <C-x><C-_> :Rg 
+  nnoremap <C-x><C-f> :<C-u>Files<CR>
+  nnoremap <C-x><C-w> :<C-u>Windows<CR>
+  nnoremap <C-x><C-b> :<C-u>Buffers<CR>
+  nnoremap <C-x><C-i> :<C-u>History<CR>
+  nnoremap <C-x><C-_> :<C-u>Rg 
 
   " }}}
   " {{{ itchyny/lightline.vim
@@ -152,40 +177,153 @@ call plug#begin(s:dir)
     \   'active': {
     \     'left': [
     \       [ 'mode', 'paste' ],
-    \       [ 'gitbranch', 'readonly', 'filename', 'modified' ]
+    \       [ 'gitbranch', 'filename', 'readonly', 'modified', 'terminalinfo', 'gitstatus' ]
     \     ],
     \     'right': [
     \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
-    \       [ 'fileformat', 'fileencoding', 'filetype', 'percent', 'lineinfo' ]
+    \       [ 'fileformat', 'fileencoding', 'filetype', 'lineinfo' ]
     \     ]
     \   },
-    \   'component': {
-    \     'lineinfo': "\ue0a1%3l:%-2v",
-    \     'filename': '%n:%f'
+    \   'inactive': {
+    \     'left': [
+    \       [ 'mode', 'paste' ],
+    \       [ 'gitbranch', 'filename', 'readonly', 'modified' ]
+    \     ],
+    \     'right': [
+    \       [ 'filetype' ]
+    \     ]
+    \   },
+    \   'mode_map': {
+    \     'n': 'NORM', 'i': 'INS', 'R': 'REPL', 'v': 'VIS', 'V': 'VLNE', "\<C-v>": 'VBLK',
+    \     'c': 'COMM', 's': 'SLCT', 'S': 'SLNE', "\<C-s>": 'SBLK', 't': 'TERM'
     \   },
     \   'component_expand': {
-    \     'linter_ok': 'lightline#ale#ok',
-    \     'linter_warnings': 'lightline#ale#warnings',
-    \     'linter_errors': 'lightline#ale#errors',
+    \     'linter_ok': 'LightlineAleOK',
+    \     'linter_warnings': 'LightlineAleWarnings',
+    \     'linter_errors': 'LightlineAleErrors',
+    \     'gitstatus': 'LightlineGitStatus'
     \   },
     \   'component_type': {
     \     'linter_warnings': 'warning',
+    \     'gitstatus': 'warning',
     \     'linter_errors': 'error',
     \   },
     \   'component_function': {
-    \     'readonly': 'LightlineReadonly',
-    \     'gitbranch': 'LightlineFugitive'
+    \     'fileformat': 'LightlineFileFormat',
+    \     'fileencoding': 'LightlineFileEncoding',
+    \     'filetype': 'LightlineFileType',
+    \     'terminalinfo': 'LightlineTerminalInfo',
+    \     'readonly': 'LightlineReadonly', 
+    \     'gitbranch': 'LightlineFugitive',
+    \     'filename': 'LightlineFilename',
+    \     'lineinfo': 'LightlineLineInfo',
+    \     'modified': 'LightlineModified'
     \   },
     \ }
-  function! LightlineReadonly()
-    return &readonly ? "\ue0a2" : ''
+  function! LightlineAleOK() abort
+    return &buftype ==# 'terminal' ? '' : lightline#ale#ok()
   endfunction
-  function! LightlineFugitive()
+  function! LightlineAleWarnings() abort
+    return &buftype ==# 'terminal' ? '' : lightline#ale#warnings()
+  endfunction
+  function! LightlineAleErrors() abort
+    return &buftype ==# 'terminal' ? '' : lightline#ale#errors()
+  endfunction
+  function! LightlineModified() abort
+    return &buftype ==# 'terminal' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+  endfunction
+  function! LightlineFileFormat() abort
+    return &buftype ==# 'terminal' ? '' : &ff
+  endfunction
+  function! LightlineFileEncoding() abort
+    return &buftype ==# 'terminal' ? '' : &fenc !=# '' ? &fenc : &enc
+  endfunction
+  function! LightlineFileType() abort
+    return &buftype ==# 'terminal' ? '' : &ft !=# '' ? &ft : "no ft"
+  endfunction
+  function! LightlineLineInfo() abort
+    return &buftype ==# 'terminal' ? '' : "\ue0a1".line('.').":".col('.')
+  endfunction
+  function! LightlineTerminalInfo() abort
+    if &buftype !=# 'terminal'
+      return ''
+    endif
+    let l:ttl=term_gettitle('%')
+    let l:rel=fnamemodify(l:ttl, ':p:.')
+    if l:rel ==# ""
+      let l:rel=fnamemodify(l:ttl, ':t:.')
+    elseif l:rel[0] != '/'
+      let l:rel='./'.l:rel
+    endif
+    return bufnr('%').':'.l:rel
+  endfunction
+  function! LightlineFilename() abort
+    return &buftype ==# 'terminal' ? '' : bufnr('%') . ':' . (expand('%:t') !=# '' ? expand('%:t') : '[No Name]')
+  endfunction
+  function! LightlineReadonly() abort
+    return &buftype ==# 'terminal' ? '' : &readonly ? "\ue0a2" : ''
+  endfunction
+  function! LightlineFugitive() abort
     if exists('*fugitive#head')
       let l:branch = fugitive#head()
       return l:branch !=# '' ? "\ue0a0 ".l:branch : ''
     endif
     return ''
+  endfunction
+  function! LightlineGitStatus()
+    if &buftype !=# 'terminal'
+      return ''
+    endif
+    let l:ttl=term_gettitle('%')
+    let l:stat = s:getGitStatus(l:ttl)
+    let l:commit = s:statPart(l:stat, 'ahead', '⬆ ') . s:statPart(l:stat, 'behind', '⬇ ')
+    let l:merge = s:statPart(l:stat, 'unmerged', 'Unmerged:')
+    let l:stage = s:statPart(l:stat, 'staged', '+') . s:statPart(l:stat, 'unstaged', '-')
+    let l:warn = [ l:commit, l:merge, l:stage ]
+    let l:brch = s:statPart(l:stat, 'local-branch', "\ue0a0 ")
+    return [ [ l:brch ], l:warn, [] ]
+  endfunction
+  function! s:statPart(stat, key, pre)
+    if !has_key(a:stat, a:key) || a:stat[a:key] ==# ''
+      return ''
+    endif
+    return a:pre . a:stat[a:key]
+  endfunction
+  function! s:getGitStatus(path)
+    let l:info = {}
+    let l:res = system("git -C '" . a:path . "' status --porcelain --branch --untracked-files --ahead-behind --renames")
+    if l:res[0:6] ==# 'fatal: '
+      return l:info
+    endif
+    let [l:branch; l:files] = split(l:res, "\n")
+    let [l:info['local-branch'], l:info['remote-branch']; l:remain] = split(l:branch, '\.\.\.\|[ \[\],]')[1:]
+    let l:key = ''
+    for l:_ in l:remain
+      if l:key !=# ''
+        let l:info[l:key] = l:_
+        let l:key = ''
+      else
+        let l:key = l:_
+      endif
+    endfor
+    for l:file in l:files
+      if l:file[0] ==# 'U' || l:file[1] ==# 'U' || l:file[0:1] ==# 'AA' || l:file[0:1] ==# 'DD'
+        call s:inc(l:info, 'unmerged')
+      elseif l:file[0:1] ==# '??'
+        call s:inc(l:info, 'untracked')
+      else
+        if l:file[0] !=# ' '
+          call s:inc(l:info, 'staged')
+        endif
+        if l:file[1] !=# ' '
+          call s:inc(l:info, 'unstaged')
+        endif
+      endif
+    endfor
+    return l:info
+  endfunction
+  function! s:inc(info, key)
+    let a:info[a:key] = get(a:info, a:key, 0) + 1
   endfunction
   set laststatus=2  " statuslineは常に表示
   set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
@@ -390,14 +528,22 @@ set completeopt=menu,menuone
 let g:pymode_rope_complete_on_dot = 0
 " }}}
 
+" Terminal {{{
+nnoremap tt :<C-u>term ++curwin<CR>
+nnoremap ts :<C-u>term<CR>
+nnoremap tv :<C-u>vnew \| :term ++curwin<CR>
+" }}}
+
 " Other misc settings {{{
 set clipboard+=unnamedplus,unnamed
+set hidden              " able to edit without saving
 set fixendofline
 set showcmd
 set ambiwidth=double
 set foldmethod=marker
 set backspace=2  
 set cursorline   " Highlight cursor line
+set showtabline=2
 highlight Pmenu ctermfg=159 ctermbg=17
 " }}}
 

@@ -1,6 +1,12 @@
 ################################################################################
 
-# 関数定義 {{{
+# キーバインド設定 {{{
+# ------------------------------------------------------------------------------
+bindkey -e
+bindkey '^d' delete-char
+# }}}
+
+# 機能定義 {{{
 # ------------------------------------------------------------------------------
 
 ## FZF呼び出し(utility) {{{
@@ -14,16 +20,6 @@ function fzf-select() {
 zle -N fzf-select
 ## }}}
 
-## ファイル編集（vim） {{{
-function edit-file() {
-  file=$(eval "${FZF_DEFAULT_COMMAND} 2>/dev/null | fzf ${FZF_DEFAULT_OPTS}")
-  if [ -n "${file}" ]; then
-    sh -c '</dev/tty vim "'${file}'"'
-  fi
-}
-zle -N edit-file
-## }}}
-
 ## プロジェクト管理 {{{
 
 typeset -a project_owners
@@ -32,7 +28,7 @@ function cd-project() {
 	local selected
 	local project
   local query
-  query="^github.com/ /${(j:/ | /:)project_owners}/ '/"
+  query="^github.com/ /${(j:/ | /:)project_owners}/ /"
   selected=$( ghq list | fzf --query "${query}" --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(ghq root)"/{} && echo -n " removed {}")+abort')
 	if [[ ${?} -ne 0 || -z "${selected}" ]]; then
     zle accept-line
@@ -47,6 +43,8 @@ function cd-project() {
 	zle -R -c
 }
 zle -N cd-project
+bindkey '^xp' cd-project
+bindkey '^x^p' cd-project
 
 function new-project() {
   local owner
@@ -85,6 +83,8 @@ function new-project() {
 	zle -R -c
 }
 zle -N new-project
+bindkey '^xn' new-project
+bindkey '^x^n' new-project
 ## }}}
 
 ## ブランチ切り替え {{{
@@ -104,6 +104,10 @@ function checkout-git-branch() {
 	zle -R -c
 }
 zle -N checkout-git-branch
+bindkey '^xgb' checkout-git-branch
+bindkey '^xg^b' checkout-git-branch
+bindkey '^x^gb' checkout-git-branch
+bindkey '^x^g^b' checkout-git-branch
 ## }}}
 
 ## LaunchCtlジョブ選択 {{{
@@ -122,6 +126,8 @@ function insert-launchctl() {
 	zle -R -c
 }
 zle -N insert-launchctl
+bindkey '^xl' insert-launchctl
+bindkey '^x^l' insert-launchctl
 ## }}}
 
 ## コマンド履歴検索 {{{
@@ -140,6 +146,8 @@ function put-history() {
 	zle -R -c
 }
 zle -N put-history
+bindkey '^xi' put-history
+bindkey '^x^i' put-history
 ## }}}
 
 ## AWS環境切り替え {{{
@@ -159,6 +167,10 @@ function switch-awsenv() {
 	zle -R -c
 }
 zle -N switch-awsenv
+bindkey '^xva' switch-awsenv
+bindkey '^xv^a' switch-awsenv
+bindkey '^x^va' switch-awsenv
+bindkey '^x^v^a' switch-awsenv
 ## }}}
 
 ## Homebrew pyenv 衝突の回避 {{{
@@ -173,32 +185,16 @@ function revive-job() {
 	jobs | fzf | awk '{print $1}' | perl -pe 's/\[(\d+)\]/%$1/g' | xargs -n1 -r fg
 }
 zle -N revive-job
+bindkey '^Z' revive-job
 ## }}}
 
 # }}}
 
-# エイリアス設定 {{{
+# GNU commands {{{
 # ------------------------------------------------------------------------------
-
-## GNU commands {{{
 alias find=/usr/local/opt/findutils/bin/gfind
 alias xargs=/usr/local/opt/findutils/bin/gxargs
 alias grep="/usr/local/bin/ggrep --color=auto"
-## }}}
-
-## git {{{
-alias pull="git pull"
-alias push="git push"
-## }}}
-
-## vim {{{
-alias vi=vim
-## }}}
-
-## tmux {{{
-alias tmux='tmux -f "${XDG_CONFIG_HOME:-${HOME}/.config}"/tmux/tmux.conf'
-## }}}
-
 # }}}
 
 # コマンド履歴の設定 {{{
@@ -215,56 +211,9 @@ setopt hist_no_store          # historyコマンドは履歴に登録しない
 setopt hist_verify            # ヒストリを呼び出してから実行する間に一旦編集可能
 # }}}
 
-# キーバインド設定 {{{
-# ------------------------------------------------------------------------------
-
-bindkey -v
-
-
-## git系 {{{
-bindkey '^xgb' checkout-git-branch
-bindkey '^xg^b' checkout-git-branch
-bindkey '^x^gb' checkout-git-branch
-bindkey '^x^g^b' checkout-git-branch
-## }}}
-
-## コマンド履歴 {{{
-bindkey '^xi' put-history
-bindkey '^x^i' put-history
-## }}}
-
-## LaunchCtl {{{
-bindkey '^xl' insert-launchctl
-bindkey '^x^l' insert-launchctl
-## }}}
-
-## ファイル編集（vim） {{{
-bindkey '^xf' edit-file
-bindkey '^x^f' edit-file
-## }}}
-
-## Project管理 {{{
-bindkey '^xp' cd-project
-bindkey '^x^p' cd-project
-bindkey '^xn' new-project
-bindkey '^x^n' new-project
-## }}}
-
-## AWS環境切替 {{{
-bindkey '^xva' switch-awsenv
-bindkey '^xv^a' switch-awsenv
-bindkey '^x^va' switch-awsenv
-bindkey '^x^v^a' switch-awsenv
-## }}}
-
-## ジョブの復帰 {{{
-bindkey '^Z' revive-job
-## }}}
-
-## delete key {{{
-bindkey '^d' delete-char
-## }}}
-
+# 色名による指定を有効にする {{{
+autoload -Uz colors
+colors
 # }}}
 
 # lsの色設定 {{{
@@ -281,84 +230,49 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 alias ls="gls --color"
 # }}}
 
-# vi-modeのtext-objects設定 {{{
-# カッコの中
-autoload -U select-bracketed
-zle -N select-bracketed
-# クォーテーションの中
-autoload -U select-quoted
-zle -N select-quoted
-# surround.vim的なやつ
-autoload -Uz surround
-zle -N delete-surround surround
-zle -N change-surround surround
-zle -N add-surround surround
-bindkey -a cs change-surround
-bindkey -a ds delete-surround
-bindkey -a ys add-surround
-bindkey -M visual S add-surround
-
-# }}}
-
 # プロンプト設定 {{{
 # ------------------------------------------------------------------------------
 
 autoload -Uz add-zsh-hook
 
-function _update_git_info() {
-	if [[ -z "${TMUX}" ]]; then
-		status_string=$(git-prompt -s zsh)
-		if [ $? -ne 0 ]; then
-			# gitの情報を正しく取得できない場合は現在のパスを表示する
-			if [[ "${PWD:h}" == "/" ]]; then
-				RPROMPT="%F{blue}${PWD}%f"
-			else
-				RPROMPT="%F{blue}${PWD:h}%f%F{yellow}/${PWD:t}%f"
-			fi
-		else 
-			RPROMPT="${status_string}"
-		fi
-	else
-		RPROMPT=""
-		tmux refresh-client -S > /dev/null 2>&1
-	fi
-}
-add-zsh-hook precmd _update_git_info
-
-function _col_ppt() {
-  echo $'\e['"${color[reverse]}m${fg[${1}]} ${2}${reset_color}${fg[${1}]}"$'\ue0b0'"${reset_color}"
-}
-function zle-keymap-select zle-line-init zle-line-finish {
-  case $KEYMAP in
-    main|viins)
-      # [[ $ZLE_STATE = *overwrite* ]] for replace mode
-      if [[ $ZLE_STATE = *overwrite* ]]; then
-        vi_mode=$(_col_ppt magenta R)
+if [[ -z "${VIM_TERMINAL}" ]]; then
+  function _update_git_info() {
+    status_string=$(git-prompt -s zsh)
+    if [ $? -ne 0 ]; then
+      # gitの情報を正しく取得できない場合は現在のパスを表示する
+      if [[ "${PWD:h}" == "/" ]]; then
+        RPROMPT="%F{blue}${PWD}%f"
       else
-        vi_mode=$(_col_ppt blue I)
+        RPROMPT="%F{blue}${PWD:h}%f%F{yellow}/${PWD:t}%f"
       fi
-      ;;
-    vicmd)
-      vi_mode=$(_col_ppt white N)
-      ;;
-    vivis)
-      vi_mode=$(_col_ppt yellow V)
-      ;;
-    vivil)
-      vi_mode=$(_col_ppt yellow L)
-      ;;
-  esac
+    else 
+      RPROMPT="${status_string}"
+    fi
+  }
+  add-zsh-hook precmd _update_git_info
+fi
 
-  PROMPT="%(?,,%F{red}[%?]%f
+PROMPT="%(?,,%F{red}[%?]%f
 
-)${vi_mode}  "
-  zle reset-prompt
-}
+)%F{blue}$%f "
+# }}}
 
-zle -N zle-line-init
-zle -N zle-line-finish
-zle -N zle-keymap-select
-zle -N edit-command-line
+# vimとの連携設定 {{{
+if [[ -n "${VIM_TERMINAL}" ]]; then
+  # 現在のパスをタイトルとして渡す
+  function _update_term_title() {
+    # sets the tab title to current dir
+    echo -ne "\033]0;${PWD}\007"
+  }
+  add-zsh-hook precmd _update_term_title
+
+  # vimを置換える
+  function _drop_vim_file() {
+    echo -ne "\033]51;[\"drop\", \"${1}\"]\07"
+  }
+  alias vim=_drop_vim_file
+  alias vi=_drop_vim_file
+fi
 # }}}
 
 # anyenv設定 {{{
@@ -398,11 +312,6 @@ alias zcp='zmv -p "cp -r"'
 alias zln='zmv -L'
 # }}}
 
-# 色名による指定を有効にする {{{
-autoload -Uz colors
-colors
-# }}}
-
 # 自動補完の設定 {{{
 # ------------------------------------------------------------------------------
 fpath=(/usr/local/share/zsh-completions $fpath)
@@ -429,7 +338,6 @@ done
 _source_exists \
 	~/.fzf.zsh \
 	${ZDOTDIR}/.zsh_secret \
-  ${ZDOTDIR}/vimode-visual/zsh-vimode-visual.zsh \
 	/usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # }}}
 
@@ -446,22 +354,14 @@ stty eof ''
 # ------------------------------------------------------------------------------
 export PATH=".:${PATH}"
 
+if [[ -z "${VIM_TERMINAL}" ]]; then
+  exec vim || :
+fi
 ## ZSHRC コンパイル{{{
 if [ ! -e ${ZDOTDIR:-${HOME}}/.zshrc.zwc ] || [ ${ZDOTDIR:-${HOME}}/.zshrc -nt ${ZDOTDIR:-${HOME}}/.zshrc.zwc ]; then
 	zcompile ${ZDOTDIR:-${HOME}}/.zshrc
 fi
 ## }}}
-
-## tmux起動{{{
-if [[ -z "${TMUX}" && -z "${WINDOW}" && -n "${PS1}" ]] ; then
-  if alias tmux >/dev/null ; then
-    TMUXCALL=$(which tmux)
-    eval "exec ${TMUXCALL#tmux: aliased to }" || :
-  else
-    exec tmux || :
-  fi
-fi
-# }}}
 
 # ZSHRC性能検査 (zshenvの先頭とセット)
 # if (which zprof > /dev/null) ;then
