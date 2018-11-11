@@ -45,12 +45,20 @@ nnoremap <C-x>q :<C-u>copen<CR><ESC>
 
 nnoremap Q <Nop>
 nnoremap <C-x> <Nop>
-augroup TermEnter
+augroup TermSwitch
   " ターミナルで <C-\><C-n> による job <- -> normal モードの往復を可能にする
   autocmd! TerminalOpen * nnoremap <buffer> <C-\><C-n> i
 augroup END
+augroup TermNoNumber
+  autocmd! TerminalOpen * setlocal nonumber
+augroup END
 
-nnoremap <C-t> :<C-u>tabnew<CR><ESC>
+nnoremap tc :<C-u>tabnew<CR><ESC>
+nnoremap tp :<C-u>tabprevious<CR><ESC>
+nnoremap tn :<C-u>tabnext<CR><ESC>
+nnoremap tt :<C-u>term ++curwin<CR>
+nnoremap tx :<C-u>term<CR>
+nnoremap tv :<C-u>vnew \| :term ++curwin<CR>
 " }}}
 
 " Setup encodings {{{
@@ -87,7 +95,6 @@ endfunction
 command! SwitchProject call fzf#run({
     \ 'source': "ghq list",
     \ 'sink': function('<SID>cd_project'),
-    \ 'options': ['--query', '^github.com/wacul | ^github.com/wcl48 | ^github.com/kyoh86 '],
     \ 'down': '30%'
     \ })
 nnoremap <C-x><C-p> :<C-u>SwitchProject<CR>
@@ -143,6 +150,25 @@ call plug#begin(s:dir)
   Plug 'tyru/open-browser-github.vim'
   Plug 'tyru/open-browser.vim'
   Plug 'ynkdir/vim-vimlparser'
+  Plug 'direnv/direnv.vim'
+  
+  " {{{ Shougo/deoplete.nvim
+  if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+  endif
+  Plug 'zchee/deoplete-jedi'
+  Plug 'zchee/deoplete-go', { 'do': 'make' }
+
+  let g:python_host_prog = "/usr/bin/python2"
+  let g:python3_host_prog = "/Users/yamada/.pyenv/shims/python"
+  let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+  let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+  let g:deoplete#enable_at_startup = 1
+  " }}}
   " {{{ tpope/vim-fugitive
   Plug 'tpope/vim-fugitive'
   nnoremap <C-x><C-g><C-s> :<C-u>Gstatus<CR>
@@ -153,7 +179,7 @@ call plug#begin(s:dir)
   " }}}
   " {{{ junegunn/fzf
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } 
-  Plug 'junegunn/fzf.vim'
+  Plug 'kyoh86/fzf.vim'
   set runtimepath+=/usr/local/opt/fzf
   nnoremap <C-x><C-f> :<C-u>Files<CR>
   nnoremap <C-x><C-w> :<C-u>Windows<CR>
@@ -343,31 +369,6 @@ call plug#begin(s:dir)
   let g:vim_markdown_conceal = 0
   let g:tex_conceal = ''
   " }}}
-  " {{{ Valloric/YouCompleteMe
-  function! BuildYCM(info)
-    " info is a dictionary with 3 fields
-    " - name:   name of the plugin
-    " - status: 'installed', 'updated', or 'unchanged'
-    " - force:  set on PlugInstall! or PlugUpdate!
-    if a:info.status ==# 'installed' || a:info.force
-      !./install.py --clang-completer --go-completer --enable-coverage --clang-tidy
-    endif
-  endfunction
-  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
-  let g:ycm_filetype_blacklist = {
-      \ 'tagbar' : 1,
-      \ 'qf' : 1,
-      \ 'notes' : 1,
-      \ 'markdown' : 1,
-      \ 'unite' : 1,
-      \ 'text' : 1,
-      \ 'vimwiki' : 1,
-      \ 'pandoc' : 1,
-      \ 'infolog' : 1,
-      \ 'mail' : 1
-      \}
-  let g:ycm_auto_trigger = 0
-  let g:ycm_key_invoke_completion = '<C-x><C-o>'
   " }}}
   " {{{ w0rp/ale (Asynchronous Lint Engine)
   Plug 'w0rp/ale'  
@@ -417,7 +418,7 @@ call plug#begin(s:dir)
   " }}}
   " {{{ davidhalter/jedi-vim
   Plug 'davidhalter/jedi-vim', {'for': 'python'} 
-  let g:jedi#completions_enabled = 0 " YouCompleteMeに任せる
+  let g:jedi#completions_enabled = 0 " deoplete.nvimに任せる
   let g:jedi#show_call_signatures = 1
   " }}}
   " {{{ lambdalisue/vim-pyenv
@@ -529,9 +530,17 @@ let g:pymode_rope_complete_on_dot = 0
 " }}}
 
 " Terminal {{{
-nnoremap tt :<C-u>term ++curwin<CR>
-nnoremap ts :<C-u>term<CR>
-nnoremap tv :<C-u>vnew \| :term ++curwin<CR>
+function! Tapi_ChangeDirectory(bufnum, arglist)
+  if len(a:arglist) == 1
+    exec 'cd ' . fnameescape(a:arglist[0])
+  endif
+endfunction
+
+function! Tapi_UpdateStatus(bufnum, arglist)
+  if len(a:arglist) == 1
+    call lightline#update()
+  endif
+endfunction
 " }}}
 
 " Other misc settings {{{

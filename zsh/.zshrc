@@ -22,14 +22,10 @@ zle -N fzf-select
 
 ## プロジェクト管理 {{{
 
-typeset -a project_owners
-project_owners=(kyoh86 wcl48 wacul)
 function cd-project() {
 	local selected
 	local project
-  local query
-  query="^github.com/ /${(j:/ | /:)project_owners}/ /"
-  selected=$( ghq list | fzf --query "${query}" --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(ghq root)"/{} && echo -n " removed {}")+abort')
+  selected=$( ghq list | fzf --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(ghq root)"/{} && echo -n " removed {}")+abort')
 	if [[ ${?} -ne 0 || -z "${selected}" ]]; then
     zle accept-line
     zle -R -c
@@ -47,17 +43,11 @@ bindkey '^xp' cd-project
 bindkey '^x^p' cd-project
 
 function new-project() {
-  local owner
-  owner=$( ( IFS=$'\n'; echo "${project_owners[*]}" ) | fzf --prompt "PROJECT OWNER? > " --reverse --height 30%)
-  if [[ -z "${owner}" ]]; then
-    return
-  fi
-
   local project_name
   autoload -Uz read-from-minibuffer
-  # vared -i '' -f '' -p "${fg_bold[blue]}PROJECT NAME? > ${reset_color}" -c project_name
+  # vared -i '' -f '' -p "${fg_bold[blue]}PROJECT OWNER/NAME? > ${reset_color}" -c project_name
   echo -n "${fg_bold[blue]}"
-  read-from-minibuffer "PROJECT NAME? > "
+  read-from-minibuffer "PROJECT OWNER/NAME? > "
   zle -I
   echo -n "${reset_color}"
   project_name=${REPLY}
@@ -66,7 +56,7 @@ function new-project() {
   fi
 
   local project_dir
-  project_dir="$(ghq root)/github.com/${owner}/${project_name}"
+  project_dir="$(ghq root)/github.com/${project_name}"
   if [[ -d ${project_dir} ]]; then
     echo "${fg[red]}The project already exists${reset_color}"
     return
@@ -258,20 +248,46 @@ PROMPT="%(?,,%F{red}[%?]%f
 # }}}
 
 # vimとの連携設定 {{{
+# 現在のパスをタイトルとして渡す
+function _update_term_title() {
+  # sets the tab title to current dir
+  echo -ne "\033]0;${PWD}\007"
+  echo -ne "\033]51;[\"call\", \"Tapi_UpdateStatus\", [\"${PWD}\"]]\07"
+}
 if [[ -n "${VIM_TERMINAL}" ]]; then
-  # 現在のパスをタイトルとして渡す
-  function _update_term_title() {
-    # sets the tab title to current dir
-    echo -ne "\033]0;${PWD}\007"
-  }
   add-zsh-hook precmd _update_term_title
+fi
 
-  # vimを置換える
-  function _drop_vim_file() {
-    echo -ne "\033]51;[\"drop\", \"${1}\"]\07"
+  # vimのcdを呼び出す {{{
+  function vcd() {
+    local dir=""
+    case "${1}" in
+      "-")
+        if [[ -z "${OLDPWD}" ]]; then
+          return
+        fi
+        dir="${OLDPWD}"
+        ;;
+      "")
+        dir="${PWD}"
+        ;;
+      *)
+        dir=$(cd "${1}" && pwd)
+        ;;
+    esac
+    if [[ -z "${dir}" ]]; then
+      return
+    fi
+    echo -ne "\033]51;[\"call\", \"Tapi_ChangeDirectory\", [\"${dir}\"]]\07"
   }
-  alias vim=_drop_vim_file
-  alias vi=_drop_vim_file
+  # }}}
+
+# vimを置換える
+function vvim() {
+  echo -ne "\033]51;[\"drop\", \"${1}\"]\07"
+}
+if [[ -n "${VIM_TERMINAL}" ]]; then
+  export EDITOR=vvim
 fi
 # }}}
 
@@ -348,6 +364,10 @@ setopt extended_glob
 stty eof ''
 # }}}
 
+# direnv {{{
+eval "$(direnv hook zsh)"
+# }}}
+
 ################################################################################
 
 # ZSHRC 終了処理 {{{
@@ -355,7 +375,7 @@ stty eof ''
 export PATH=".:${PATH}"
 
 if [[ -z "${VIM_TERMINAL}" ]]; then
-  exec vim || :
+  vim && exit
 fi
 ## ZSHRC コンパイル{{{
 if [ ! -e ${ZDOTDIR:-${HOME}}/.zshrc.zwc ] || [ ${ZDOTDIR:-${HOME}}/.zshrc -nt ${ZDOTDIR:-${HOME}}/.zshrc.zwc ]; then
