@@ -11,13 +11,10 @@
     "megacheck",
     "goconst",
     "golint",
-    "scope"
-  ],
-  "Deadline": "1m",
-  "Exclude": [
-    "ignore",
+    "scope",
     "errcheck"
   ],
+  "Deadline": "1m",
   "Linters": {
     "scope": {
       "Name": "scope",

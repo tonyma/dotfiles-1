@@ -282,13 +282,6 @@ fi
   }
   # }}}
 
-# vimを置換える
-function vvim() {
-  echo -ne "\033]51;[\"drop\", \"${1}\"]\07"
-}
-if [[ -n "${VIM_TERMINAL}" ]]; then
-  export EDITOR=vvim
-fi
 # }}}
 
 # anyenv設定 {{{
@@ -366,6 +359,10 @@ stty eof ''
 
 # direnv {{{
 eval "$(direnv hook zsh)"
+# }}}
+
+# gogh {{{
+eval "$(gogh setup)"
 # }}}
 
 ################################################################################

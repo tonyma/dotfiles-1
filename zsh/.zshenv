@@ -18,6 +18,7 @@ export PATH="${PATH}:/usr/sbin"
 
 ## Go:
 export GOPATH=${HOME}/go
+export GO111MODULE=on
 export PATH="/usr/local/opt/go/libexec/bin:${PATH}:/usr/local/go/bin:${HOME}/go/bin"
 
 ## Python:

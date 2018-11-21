@@ -369,7 +369,7 @@ call plug#begin(s:dir)
   let g:vim_markdown_conceal = 0
   let g:tex_conceal = ''
   " }}}
-  " }}}
+  Plug 'kyoh86/vim-wipeout'
   " {{{ w0rp/ale (Asynchronous Lint Engine)
   Plug 'w0rp/ale'  
   let g:ale_enabled = 1
@@ -406,7 +406,8 @@ call plug#begin(s:dir)
   " {{{ fatih/vim-go
   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
   let g:go_metalinter_command = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
-  let g:go_fmt_command = 'goimports'
+  let g:go_fmt_autosave = 1
+  let g:go_fmt_command = "goimportssw"
   let g:go_highlight_functions = 1
   let g:go_highlight_string_spellcheck = 0
   let g:go_highlight_format_strings = 0
