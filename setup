@@ -70,6 +70,25 @@ which brew >/dev/null 2>&1 || {
 brew bundle -v --file=${DOTFILES}/homebrew/bundle
 brew cleanup
 
+# replace dotfiles
+if [[ -d ${DOTFILES}/.git ]]; then
+  :
+else
+  rm -rf ${DOTFILES}
+  git clone https://github.com/kyoh86/dotfiles ${DOTFILES}
+fi
+
+if [[ -d /usr/local/share ]]; then
+  chmod 0755 /usr/local/share
+fi
+
+# poweline with MyricaM
+cp ${DOTFILES}/Myrica* ~/Library/Fonts
+
+# install "neovim" python library
+pyenv shell system
+pyenv exec pip install neovim
+
 # use zsh
 if [[ -x /usr/local/bin/zsh ]]; then
   echo '/usr/local/bin/zsh' | sudo tee /etc/shells > /dev/null
@@ -78,20 +97,6 @@ else
   echo 'failed to find zsh on /usr/local/bin/zsh'
   exit 1
 fi
-
-if [[ -d /usr/local/share ]]; then
-  chmod 0755 /usr/local/share
-fi
-
-# nerd fonts with MyricaM
-git clone https://github.com/ryanoasis/nerd-fonts
-cd nerd-fonts
-fontforge -script ./font-patcher ~/Library/Fonts/MyricaM.TTC --fontawesome --fontlinux --octicons --pomicons --powerline --powerlineextra
-
-pyenv install 3.7.1
-pyenv global 3.7.1
-pyenv shell 3.7.1
-pyenv exec pip install neovim
 
 # defaults
 if which 'defaults' ; then
