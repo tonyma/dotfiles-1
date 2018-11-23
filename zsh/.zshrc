@@ -25,14 +25,14 @@ zle -N fzf-select
 function cd-project() {
 	local selected
 	local project
-  selected=$( ghq list | fzf --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(ghq root)"/{} && echo -n " removed {}")+abort')
+  selected=$( gogh list | fzf --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(gogh root)"/{} && echo -n " removed {}")+abort')
 	if [[ ${?} -ne 0 || -z "${selected}" ]]; then
     zle accept-line
     zle -R -c
     echo ${selected}
 		return
 	fi
-  project=$(ghq root)/${selected}
+  project=$(gogh root)/${selected}
 	BUFFER="cd ${project}"
 	zle accept-line
 	# redisplay the command line
@@ -56,7 +56,7 @@ function new-project() {
   fi
 
   local project_dir
-  project_dir="$(ghq root)/github.com/${project_name}"
+  project_dir="$(gogh root)/github.com/${project_name}"
   if [[ -d ${project_dir} ]]; then
     echo "${fg[red]}The project already exists${reset_color}"
     return
