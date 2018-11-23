@@ -67,7 +67,7 @@ which brew >/dev/null 2>&1 || {
 }
 
 # 記録していたBrewfileに基いてbrew installを走らせる
-brew bundle --file=${DOTFILES}/homebrew/bundle
+brew bundle -v --file=${DOTFILES}/homebrew/bundle
 brew cleanup
 
 # use zsh
