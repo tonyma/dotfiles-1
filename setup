@@ -86,10 +86,7 @@ fi
 # nerd fonts with MyricaM
 git clone https://github.com/ryanoasis/nerd-fonts
 cd nerd-fonts
-pyenv shell system
-pyenv exec pip install configparser
-pyenv exec ./font-patcher ~/Library/Fonts/MyricaM.TTC
-cd -
+fontforge -script ./font-patcher ~/Library/Fonts/MyricaM.TTC --fontawesome --fontlinux --octicons --pomicons --powerline --powerlineextra
 
 pyenv install 3.7.1
 pyenv global 3.7.1
