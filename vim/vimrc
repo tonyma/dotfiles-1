@@ -93,7 +93,7 @@ function! s:cd_project(gopath)
 endfunction
 
 command! SwitchProject call fzf#run({
-    \ 'source': "ghq list",
+    \ 'source': "gogh list",
     \ 'sink': function('<SID>cd_project'),
     \ 'down': '30%'
     \ })

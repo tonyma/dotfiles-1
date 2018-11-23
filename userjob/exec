@@ -6,14 +6,11 @@ source ${ZDOTDIR}/.zshenv
 
 error=""
 
-# Remove mongodb-caches:
-if [ -d /usr/local/var/mongodb ]; then
-  gfind /usr/local/var/mongodb -amin +60 -name 'aia-test-*' -exec rm -rf {} \; || error="1"
-fi
-
 # Bundle brew:
 if [ -f /usr/local/bin/brew ]; then
-  brew bundle dump --force --file=- | sort --reverse > ${HOME}/.config/homebrew/bundle || error="1"
+  file=${HOME}/.config/homebrew/bundle
+  brew bundle dump --force --file=${file} || error="1"
+  cat ${file} | sort --reverse | sponge ${file} || error="1"
 fi
 
 # 通知うるさいから削除
@@ -39,5 +36,3 @@ fi
 # else
 #   osascript -e 'display notification "Processed scheduled task" with title "User Job"'
 # fi
-
-find $HOME/Documents/iTermLog -mtime +3 -exec rm {} \; || :
