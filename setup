@@ -71,8 +71,13 @@ brew bundle --file=${DOTFILES}/homebrew/bundle
 brew cleanup
 
 # use zsh
-echo '/usr/local/bin/zsh' | sudo tee /etc/shells > /dev/null
-chpass -s /usr/local/bin/zsh
+if [[ -x /usr/local/bin/zsh ]]; then
+  echo '/usr/local/bin/zsh' | sudo tee /etc/shells > /dev/null
+  chpass -s /usr/local/bin/zsh
+else
+  echo 'failed to find zsh on /usr/local/bin/zsh'
+  exit 1
+fi
 
 # defaults
 if which 'defaults' ; then
