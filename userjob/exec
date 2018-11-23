@@ -40,4 +40,4 @@ fi
 #   osascript -e 'display notification "Processed scheduled task" with title "User Job"'
 # fi
 
-find $HOME/Documents/iTermLog -mtime +3 -exec rm {} \;
+find $HOME/Documents/iTermLog -mtime +3 -exec rm {} \; || :
