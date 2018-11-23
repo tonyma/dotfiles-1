@@ -84,7 +84,9 @@ if [[ -d /usr/local/share ]]; then
 fi
 
 pyenv install 3.7.1
-pyenv system 3.7.1
+pyenv global 3.7.1
+pyenv shell 3.7.1
+pyenv exec pip install neovim
 
 # defaults
 if which 'defaults' ; then
