@@ -20,7 +20,7 @@ fi
 DOTFILES=${HOME}/.config
 
 # get dot files
-if [[ -d ${DOTFILES}/setup ]]; then
+if [[ -f ${DOTFILES}/setup ]]; then
   :
 else
   DOTTMP=${HOME}/dotfiles-master
