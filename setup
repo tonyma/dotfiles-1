@@ -79,6 +79,13 @@ else
   exit 1
 fi
 
+if [[ -d /usr/local/share ]]; then
+  chmod 0755 /usr/local/share
+fi
+
+pyenv install 3.7.1
+pyenv system 3.7.1
+
 # defaults
 if which 'defaults' ; then
   # キー入力の間隔短縮
