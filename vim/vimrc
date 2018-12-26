@@ -151,7 +151,10 @@ call plug#begin(s:dir)
   Plug 'tyru/open-browser.vim'
   Plug 'ynkdir/vim-vimlparser'
   Plug 'direnv/direnv.vim'
-  
+  Plug 'jez/vim-github-hub'
+  " {{{ 'qpkorr/vim-bufkill'
+  Plug 'qpkorr/vim-bufkill'
+  " }}}
   " {{{ Shougo/deoplete.nvim
   if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
