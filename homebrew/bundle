@@ -15,6 +15,7 @@ mas "iMage Tools", id: 493949693
 mas "Yoink", id: 457622435
 mas "Xcode", id: 497799835
 mas "Typist", id: 415166115
+mas "TweetDeck", id: 485812721
 mas "Todoist", id: 585829637
 mas "The Unarchiver", id: 425424353
 mas "Slack", id: 803453959
@@ -29,9 +30,11 @@ mas "LINE", id: 539883307
 mas "Keynote", id: 409183694
 mas "GarageBand", id: 682658836
 mas "Fantastical 2", id: 975937182
+mas "Debookee Tools", id: 1110355801
 mas "Cyberduck", id: 409222199
 mas "Bear", id: 1091189122
 mas "1Password 7", id: 1333542190
+cask "yt-music"
 cask "vlc"
 cask "virtualbox"
 cask "postman"
@@ -60,11 +63,12 @@ brew "zlib"
 brew "yarn"
 brew "xz"
 brew "wget"
-brew "vim", args: ["with-gettext", "with-lua", "with-override-system-vi", "with-tcl"]
+brew "vim"
 brew "typesafe-activator"
 brew "tig"
 brew "terraform"
 brew "teensy_loader_cli"
+brew "swig"
 brew "supervisor"
 brew "sqlite"
 brew "scala"
@@ -96,8 +100,10 @@ brew "kyoh86/tap/goimportssw"
 brew "kyoh86/tap/gogh"
 brew "kyoh86/tap/git-prompt"
 brew "jq"
+brew "influxdb"
 brew "hugo"
 brew "hub"
+brew "httpie"
 brew "gzip"
 brew "grep"
 brew "graphviz"
@@ -113,7 +119,7 @@ brew "fontconfig"
 brew "findutils"
 brew "ffmpeg"
 brew "exiftool"
-brew "docker"
+brew "docker", link: false
 brew "direnv"
 brew "dfu-programmer"
 brew "dep"
@@ -127,3 +133,80 @@ brew "awscli"
 brew "autoconf"
 brew "asciinema"
 brew "alecthomas/tap/gometalinter"
+# Yet another part-of-speech and morphological analyzer
+# XML-based font configuration API for X Windows
+# Work on GitHub issues on the command-line
+# Watch defaults and show command when they&#39;re changed.
+# Vi 'workalike' with many additional features
+# User-friendly cURL replacement (command-line HTTP client)
+# UNIX shell (command interpreter)
+# Treat text as a database
+# Tools for working with Lightbend Reactive Platform
+# Tool to build, change, and version infrastructure
+# Time series, events, and metrics database
+# Text interface for Git repositories
+# Software environment for statistical computing
+# Show ps output as a tree
+# Shorthand for gofmt -s -w $@ && goimports -w $@
+# Search tool like grep and The Silver Searcher
+# SSL/TLS cryptography library
+# Ruby version manager
+# Record and share terminal sessions
+# Reattach process (e.g., tmux) to background
+# Python version management
+# Pyenv plugin to manage virtualenv
+# Process Control System
+# Popular GNU data compression program
+# Play, record, convert, and stream audio and video
+# Perl lib for reading and writing EXIF metadata
+# Pack, ship and run any application as a lightweight container
+# Open source relational database management system
+# Official Amazon AWS command-line interface
+# Network Kanji code conversion Filter (NKF)
+# Monitor a directory for changes and run a shell command
+# Manage multiple NodeJS versions
+# Mac App Store command-line interface
+# Load/unload environment variables based on $PWD
+# Lightweight and flexible command-line JSON processor
+# JavaScript package manager
+# JVM-based programming language
+# Interpreted, interactive, object-oriented programming language
+# Internet file retriever
+# IPA dictionary compiled for MeCab
+# High-performance, schema-free, document-oriented database
+# Graphics library to dynamically manipulate images
+# Graph visualization software from AT&T and Bell Labs
+# Go dependency management tool
+# Get a file from an HTTP, HTTPS or FTP server
+# Generic library support script
+# Generate scripting interfaces to C/C++ code
+# General-purpose lossless data-compression library
+# General-purpose data compression with high compression ratio
+# GO GitHub project manager
+# GNU version of the tar archiving utility
+# GNU implementation of the famous stream editor
+# GNU grep, egrep and fgrep
+# GNU File, Shell, and Text utilities
+# Fish shell like syntax highlighting for zsh
+# FUSE file system for mounting to another location
+# Eventually consistent, distributed key-value store
+# Enables you to reproduce the CircleCI environment locally
+# Draw UML diagrams
+# Distributed revision control system
+# Device firmware update based USB programmer for Atmel chips
+# Deliver Go binaries as fast and easily as possible
+# Cross-platform make
+# Cross platform, open source .NET development framework
+# Configurable static site generator
+# Concurrently run Go lint tools and normalise their output.
+# Command-line interface for SQLite
+# Command-line integration for Teensy USB development boards
+# Command-line fuzzy finder written in Go
+# Collection of tools that nobody wrote when UNIX was young
+# Collection of GNU find, xargs, and locate
+# Build tool for Scala projects
+# Automatic configure script builder
+# Ambitious Vim-fork focused on extensibility and agility
+# Additional completion definitions for zsh
+# Add GitHub support to git on the command-line
+# A tool for Prompting git informations

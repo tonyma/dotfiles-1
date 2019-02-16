@@ -84,12 +84,56 @@ if !exists("*ConfigReload")
   endfunction
 endif
 command! -nargs=0 ConfigReload :call ConfigReload()
+command! -nargs=0 ReloadConfig :call ConfigReload()
 command! -nargs=0 Reload :call ConfigReload()
 " }}}
 
+" Function: Go Stringer {{{
+function! GoStringer(count, line1, line2)
+  if a:line2 == 0
+    " 0レンジ指定
+    return
+  endif
+
+  if a:count
+    " 範囲指定がある
+    let l:first_line = max([a:line1, 1])
+    let l:last_line = max([a:line2, 1])
+  else
+    " 範囲指定がないので現在行を対象とする
+    let l:first_line = a:line1
+    let l:last_line = a:line1
+  endif
+
+  let l:type_name = s:capitalize(input('type name: '))
+  if l:type_name == ''
+    return
+  endif
+
+  let l:lines = getline(l:first_line, l:last_line)
+  let l:i = 0
+  let l:l = l:first_line
+  while l:l <= l:last_line
+    let l:raw = l:lines[l:i]
+    let l:capital = s:capitalize(l:raw)
+    call setline(l:l, "\t".l:type_name.l:capital.' = '.l:type_name.'("'.l:raw.'")')
+    let l:i += 1
+    let l:l += 1
+  endwhile
+endfunction
+
+function! s:capitalize(v)
+  return substitute(a:v, '\(^\|[^A-Za-z]\)\([a-z]\)', '\u\2', 'g')
+endfunction
+
+command! -range=0 GoStringer call GoStringer(<count>,<line1>,<line2>)
+" }}}
+
 " Function: Switch Project {{{
-function! s:cd_project(gopath)
-  exec 'cd '.$GOPATH.'/src/'.a:gopath
+function! s:cd_project(project_key)
+  let l:cmd = 'cd '.substitute(system('gogh where '.a:project_key), '[\n\r]\+$', '', '')
+  echo l:cmd
+  exec l:cmd
 endfunction
 
 command! SwitchProject call fzf#run({
@@ -102,7 +146,9 @@ nnoremap <C-x><C-p> :<C-u>SwitchProject<CR>
 
 " Function: Switch Branch {{{
 function! s:checkout(line)
-  let l:branch = get(split(a:line, 0, ''), 1, '')
+  " echom a:line
+  let l:branch = get(split(a:line), 1, '')
+  " echom l:branch
   exec 'Git checkout '.l:branch
 endfunction
 
@@ -120,6 +166,9 @@ if !isdirectory(s:dir)
   call mkdir(s:dir, 'p')
 endif
 call plug#begin(s:dir)
+  let g:formatterpath = ['/Users/yamada/.pyenv/shims']
+  Plug 'sodapopcan/vim-twiggy'
+  Plug 'Quramy/tsuquyomi'
   Plug 'Chiel92/vim-autoformat'
   Plug 'Glench/Vim-Jinja2-Syntax'
   Plug 'airblade/vim-gitgutter'
@@ -128,7 +177,6 @@ call plug#begin(s:dir)
   Plug 'editorconfig/editorconfig-vim'
   Plug 'idanarye/vim-merginal'
   Plug 'justinmk/vim-dirvish'
-  Plug 'kana/vim-tabpagecd'
   Plug 'kana/vim-textobj-entire'
   Plug 'kana/vim-textobj-user'
   Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
@@ -152,6 +200,22 @@ call plug#begin(s:dir)
   Plug 'ynkdir/vim-vimlparser'
   Plug 'direnv/direnv.vim'
   Plug 'jez/vim-github-hub'
+
+  " 'honza/vim-snippets' {{{
+  " Snippets are separated from the engine. Add this if you want them:
+  Plug 'honza/vim-snippets'
+
+  " Track the engine.
+  Plug 'SirVer/ultisnips'
+
+  " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+  let g:UltiSnipsExpandTrigger="<c-x>"
+  let g:UltiSnipsJumpForwardTrigger="<c-b>"
+  let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+  " If you want :UltiSnipsEdit to split your window.
+  " let g:UltiSnipsEditSplit="vertical"
+  " }}}
   " {{{ 'qpkorr/vim-bufkill'
   Plug 'qpkorr/vim-bufkill'
   " }}}
@@ -175,6 +239,19 @@ call plug#begin(s:dir)
   " {{{ tpope/vim-fugitive
   Plug 'tpope/vim-fugitive'
   nnoremap <C-x><C-g><C-s> :<C-u>Gstatus<CR>
+  function! FugitiveReDetect(cmd)
+    unlet! b:git_dir
+    call fugitive#detect(getcwd())
+  endfunction
+
+  augroup fugitive-ov
+    au BufNew * call FugitiveReDetect('BufNew')
+    au BufNewFile * call FugitiveReDetect('BufNewFile')
+    au BufRead * call FugitiveReDetect('BufRead')
+    au CmdwinEnter * call FugitiveReDetect('CmdwinWnter')
+    au DirChanged * bufdo call FugitiveReDetect('DirChanged')
+    au VimEnter * call FugitiveReDetect('VimEnter')
+  augroup END
   " }}}
   " {{{ thinca/vim-splash
   Plug 'thinca/vim-splash'
@@ -206,7 +283,7 @@ call plug#begin(s:dir)
     \   'active': {
     \     'left': [
     \       [ 'mode', 'paste' ],
-    \       [ 'gitbranch', 'filename', 'readonly', 'modified', 'terminalinfo', 'gitstatus' ]
+    \       [ 'gitbranch', 'relativepath', 'readonly', 'modified', 'terminalinfo', 'gitstatus' ]
     \     ],
     \     'right': [
     \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
@@ -216,7 +293,7 @@ call plug#begin(s:dir)
     \   'inactive': {
     \     'left': [
     \       [ 'mode', 'paste' ],
-    \       [ 'gitbranch', 'filename', 'readonly', 'modified' ]
+    \       [ 'gitbranch', 'relativepath', 'readonly', 'modified' ]
     \     ],
     \     'right': [
     \       [ 'filetype' ]
@@ -385,12 +462,12 @@ call plug#begin(s:dir)
       \ 'javascript': ['eslint'],
       \ 'go': ['gometalinter', 'go build'],
       \ 'vim': ['vint'],
-      \ 'python': ['mypy', 'flask8', 'pylint']
+      \ 'python': ['mypy', 'flake8', 'pyflalkes']
   \ }
   let g:ale_fixers = {
       \ 'typescript': ['tslint'],
       \ 'javascript': ['eslint'],
-      \ 'python': ['autopep8', 'yapf']
+      \ 'python': ['black']
   \ }
   let g:ale_fix_on_save = 1
   nmap <C-x><C-l><C-n> <Plug>(ale_next)
@@ -556,7 +633,7 @@ set ambiwidth=double
 set foldmethod=marker
 set backspace=2  
 set cursorline   " Highlight cursor line
-set showtabline=2
+set showtabline=1
 highlight Pmenu ctermfg=159 ctermbg=17
 " }}}
 

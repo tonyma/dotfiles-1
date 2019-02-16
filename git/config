@@ -2,6 +2,7 @@
 	rebase = preserve
 [push]
 	default = simple
+	followTags = true
 [core]
 	excludesfile = ~/.config/git/ignore
 	attributesfile = ~/.config/git/attributes
@@ -75,3 +76,7 @@
 	root = /Users/yamada/go/src
 [hub]
 	protocol = https
+[gogh]
+	root = /Users/yamada/Projects
+	root = /Users/yamada/go/src
+	user = kyoh86

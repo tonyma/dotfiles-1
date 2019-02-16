@@ -86,8 +86,10 @@ fi
 cp ${DOTFILES}/Myrica* ~/Library/Fonts
 
 # install "neovim" python library
-pyenv shell system
-pyenv exec pip install neovim
+pyenv install 3.7.2
+pyenv global 3.7.2
+pyenv exec pip install --upgrade pip
+pyenv exec pip install -r ${DOTFILES}/requirements.txt
 
 # use zsh
 if [[ -x /usr/local/bin/zsh ]]; then

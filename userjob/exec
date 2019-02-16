@@ -9,7 +9,7 @@ error=""
 # Bundle brew:
 if [ -f /usr/local/bin/brew ]; then
   file=${HOME}/.config/homebrew/bundle
-  brew bundle dump --force --file=${file} || error="1"
+  brew bundle dump --force --file=${file} --describe || error="1"
   cat ${file} | sort --reverse | sponge ${file} || error="1"
 fi
 

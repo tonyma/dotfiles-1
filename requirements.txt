@@ -1,0 +1,6 @@
+flake8
+black
+mypy
+mypy-extensions
+neovim
+pynvim
