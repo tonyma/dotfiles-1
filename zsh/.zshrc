@@ -11,11 +11,11 @@ bindkey '^d' delete-char
 
 ## FZF呼び出し(utility) {{{
 function fzf-select() {
-	if [[ $# -gt 0 ]]; then
-		fzf --query "$@"
-	else
-		fzf
-	fi
+  if [[ $# -gt 0 ]]; then
+    fzf --query "$@"
+  else
+    fzf
+  fi
 }
 zle -N fzf-select
 ## }}}
@@ -23,20 +23,20 @@ zle -N fzf-select
 ## プロジェクト管理 {{{
 
 function cd-project() {
-	local selected
-	local project
-  selected=$( gogh list | fzf --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(gogh root)"/{} && echo -n " removed {}")+abort')
-	if [[ ${?} -ne 0 || -z "${selected}" ]]; then
+  local selected
+  local project
+  selected=$( gogh list | fzf --bind 'ctrl-x:execute(read -sq "REPLY?remove {}?" < /dev/tty ; echo -ne "\e[2K" ; [[ "${REPLY}" == "y" ]] && rm -r "$(gogh where {})" && echo -n " removed {}")+abort')
+  if [[ ${?} -ne 0 || -z "${selected}" ]]; then
     zle accept-line
     zle -R -c
     echo ${selected}
-		return
-	fi
-  project=$(gogh root)/${selected}
-	BUFFER="cd ${project}"
-	zle accept-line
-	# redisplay the command line
-	zle -R -c
+    return
+  fi
+  project=$(gogh where ${selected})
+  BUFFER="cd ${project}"
+  zle accept-line
+  # redisplay the command line
+  zle -R -c
 }
 zle -N cd-project
 bindkey '^xp' cd-project
@@ -67,10 +67,10 @@ function new-project() {
     echo -n "${reset_color}"
     return
   fi
-	BUFFER="mkdir -p '${project_dir}' && cd '${project_dir}' && git init && hub create ${owner}/${project_name}"
-	zle accept-line
-	# redisplay the command line
-	zle -R -c
+  BUFFER="mkdir -p '${project_dir}' && cd '${project_dir}' && git init && hub create ${owner}/${project_name}"
+  zle accept-line
+  # redisplay the command line
+  zle -R -c
 }
 zle -N new-project
 bindkey '^xn' new-project
@@ -79,19 +79,19 @@ bindkey '^x^n' new-project
 
 ## ブランチ切り替え {{{
 function checkout-git-branch() {
-	local selected
-	selected=$(
-		git-branches --color --exclude-current \
-			| fzf -0 -n 2..3 \
-			| awk '{print $2}' \
-	)
-	if [ -z "${selected}" ]; then
-		return
-	fi
-	BUFFER="git checkout $selected"
-	zle accept-line
-	# redisplay the command line
-	zle -R -c
+  local selected
+  selected=$(
+    git-branches --color --exclude-current \
+      | fzf -0 -n 2..3 \
+      | awk '{print $2}' \
+  )
+  if [ -z "${selected}" ]; then
+    return
+  fi
+  BUFFER="git checkout $selected"
+  zle accept-line
+  # redisplay the command line
+  zle -R -c
 }
 zle -N checkout-git-branch
 bindkey '^xgb' checkout-git-branch
@@ -102,18 +102,18 @@ bindkey '^x^g^b' checkout-git-branch
 
 ## LaunchCtlジョブ選択 {{{
 function insert-launchctl() {
-	local selected
-	selected=$(
-		launchctl list | tail -n +2 | awk '{print $3}' \
-			| fzf-select
-	)
-	if [ -z "${selected}" ]; then
-		return
-	fi
-	LBUFFER+="$selected"
-	CURSOR=$#LBUFFER
-	# redisplay the command line
-	zle -R -c
+  local selected
+  selected=$(
+    launchctl list | tail -n +2 | awk '{print $3}' \
+      | fzf-select
+  )
+  if [ -z "${selected}" ]; then
+    return
+  fi
+  LBUFFER+="$selected"
+  CURSOR=$#LBUFFER
+  # redisplay the command line
+  zle -R -c
 }
 zle -N insert-launchctl
 bindkey '^xl' insert-launchctl
@@ -122,18 +122,18 @@ bindkey '^x^l' insert-launchctl
 
 ## コマンド履歴検索 {{{
 function put-history() {
-	local selected
-	selected=$(
-		history -n 1 | grep -v '.\{200,\}' | awk '!a[$0]++' \
-			| fzf-select --no-sort --query="$LBUFFER"
-	)
-	if [ -z "${selected}" ]; then
-		return
-	fi
-	BUFFER="$selected"
-	CURSOR=$#BUFFER
-	# redisplay the command line
-	zle -R -c
+  local selected
+  selected=$(
+    history -n 1 | grep -v '.\{200,\}' | awk '!a[$0]++' \
+      | fzf-select --no-sort --query="$LBUFFER"
+  )
+  if [ -z "${selected}" ]; then
+    return
+  fi
+  BUFFER="$selected"
+  CURSOR=$#BUFFER
+  # redisplay the command line
+  zle -R -c
 }
 zle -N put-history
 bindkey '^xi' put-history
@@ -142,19 +142,19 @@ bindkey '^x^i' put-history
 
 ## AWS環境切り替え {{{
 function switch-awsenv() {
-	local selected
-	selected=$(
-		cat ~/.aws/credentials |
-			perl -ne'print $1."\n" if(/^\[(?!default\])([^\]]+)\]/)' |
-			fzf-select
-	)
-	if [ -z "${selected}" ]; then
-		return
-	fi
-	BUFFER="export AWS_DEFAULT_PROFILE=${selected}"
-	zle accept-line
-	# redisplay the command line
-	zle -R -c
+  local selected
+  selected=$(
+    cat ~/.aws/credentials |
+      perl -ne'print $1."\n" if(/^\[(?!default\])([^\]]+)\]/)' |
+      fzf-select
+  )
+  if [ -z "${selected}" ]; then
+    return
+  fi
+  BUFFER="export AWS_DEFAULT_PROFILE=${selected}"
+  zle accept-line
+  # redisplay the command line
+  zle -R -c
 }
 zle -N switch-awsenv
 bindkey '^xva' switch-awsenv
@@ -165,14 +165,14 @@ bindkey '^x^v^a' switch-awsenv
 
 ## Homebrew pyenv 衝突の回避 {{{
 function brew() {
-	env PATH=${PATH/${HOME}\/\.pyenv\/shims:/} command brew $@
+  env PATH=${PATH/${HOME}\/\.pyenv\/shims:/} command brew $@
 }
 zle -N brew
 ## }}}
 
 ## 中断ジョブの復帰 {{{
 function revive-job() {
-	jobs | fzf | awk '{print $1}' | perl -pe 's/\[(\d+)\]/%$1/g' | xargs -n1 -r fg
+  jobs | fzf | awk '{print $1}' | perl -pe 's/\[(\d+)\]/%$1/g' | xargs -n1 -r fg
 }
 zle -N revive-job
 bindkey '^Z' revive-job
@@ -331,11 +331,11 @@ compinit -C
 # 各種サービスの読み込み {{{
 # ------------------------------------------------------------------------------
 function _source_exists() {
-	for file in "${(Oa)@}"; do
-		if [ -f ${file} ]; then
-			source ${file}
-		fi
-	done
+  for file in "${(Oa)@}"; do
+    if [ -f ${file} ]; then
+      source ${file}
+    fi
+  done
 }
 
 for f in $(find ${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR} -name "*.zsh"); do
@@ -345,9 +345,9 @@ for f in $(find ${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR} -name "*.zsh"); do
 done
 
 _source_exists \
-	~/.fzf.zsh \
-	${ZDOTDIR}/.zsh_secret \
-	/usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  ~/.fzf.zsh \
+  ${ZDOTDIR}/.zsh_secret \
+  /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # }}}
 
 # その他の設定 {{{
@@ -376,7 +376,7 @@ if [[ -z "${VIM_TERMINAL}" ]]; then
 fi
 ## ZSHRC コンパイル{{{
 if [ ! -e ${ZDOTDIR:-${HOME}}/.zshrc.zwc ] || [ ${ZDOTDIR:-${HOME}}/.zshrc -nt ${ZDOTDIR:-${HOME}}/.zshrc.zwc ]; then
-	zcompile ${ZDOTDIR:-${HOME}}/.zshrc
+  zcompile ${ZDOTDIR:-${HOME}}/.zshrc
 fi
 ## }}}
 

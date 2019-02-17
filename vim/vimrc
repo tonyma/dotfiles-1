@@ -66,6 +66,12 @@ set encoding=utf-8
 scriptencoding utf-8
 " }}}
 
+" Set MacVim options {{{
+set guifont=MyricaM\ M\ for\ Powerline:h14
+set linespace=3
+set titlestring=vim\(%{substitute(getcwd(),\ $HOME,\ '~',\ '')}\)
+" }}}
+
 " Function: Enter job mode (Terminal) {{{
 command! -nargs=0 EnterJobMode
 " }}}
@@ -287,7 +293,7 @@ call plug#begin(s:dir)
     \     ],
     \     'right': [
     \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
-    \       [ 'fileformat', 'fileencoding', 'filetype', 'lineinfo' ]
+    \       [ 'fileformat', 'fileencoding', 'filetype', 'lineinfo', 'percent' ]
     \     ]
     \   },
     \   'inactive': {
@@ -321,11 +327,15 @@ call plug#begin(s:dir)
     \     'terminalinfo': 'LightlineTerminalInfo',
     \     'readonly': 'LightlineReadonly', 
     \     'gitbranch': 'LightlineFugitive',
+    \     'relativepath': 'LightlineRelativePath',
     \     'filename': 'LightlineFilename',
     \     'lineinfo': 'LightlineLineInfo',
     \     'modified': 'LightlineModified'
     \   },
     \ }
+  function! LightlinePercent() abort
+    return &buftype ==# 'terminal' ? '' : '%3p%%'
+  endfunction
   function! LightlineAleOK() abort
     return &buftype ==# 'terminal' ? '' : lightline#ale#ok()
   endfunction
@@ -362,6 +372,9 @@ call plug#begin(s:dir)
       let l:rel='./'.l:rel
     endif
     return bufnr('%').':'.l:rel
+  endfunction
+  function! LightlineRelativePath() abort
+    return &buftype ==# 'terminal' ? '' : bufnr('%') . ':' . (expand('%') !=# '' ? expand('%') : '[No Name]')
   endfunction
   function! LightlineFilename() abort
     return &buftype ==# 'terminal' ? '' : bufnr('%') . ':' . (expand('%:t') !=# '' ? expand('%:t') : '[No Name]')
