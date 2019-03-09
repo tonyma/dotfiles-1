@@ -72,6 +72,33 @@ set linespace=3
 set titlestring=vim\(%{substitute(getcwd(),\ $HOME,\ '~',\ '')}\)
 " }}}
 
+" Pyenv {{{
+" PATHの自動更新関数
+" | 指定された path が $PATH に存在せず、ディレクトリとして存在している場合
+" | のみ $PATH に加える
+let $PYTHON_CONFIGURE_OPTS="--enable-framework"
+let $PYENV_DEFAULT_PACKAGES=$XDG_CONFIG_HOME."/pyenv/default-packages"
+let $PYENV_ROOT=$HOME."/.pyenv"
+let $PATH=$PYENV_ROOT."/bin:".$PATH
+
+function! IncludePath(path)
+  " define delimiter depends on platform
+  if has('win16') || has('win32') || has('win64')
+    let delimiter = ";"
+  else
+    let delimiter = ":"
+  endif
+  let pathlist = split($PATH, delimiter)
+  if isdirectory(a:path) && index(pathlist, a:path) == -1
+    let $PATH=a:path.delimiter.$PATH
+  endif
+endfunction
+
+" ~/.pyenv/shims を $PATH に追加する
+" これを行わないとpythonが正しく検索されない
+call IncludePath(expand($PYENV_ROOT."/shims"))
+" }}}
+
 " Function: Enter job mode (Terminal) {{{
 command! -nargs=0 EnterJobMode
 " }}}
@@ -173,41 +200,120 @@ if !isdirectory(s:dir)
 endif
 call plug#begin(s:dir)
   let g:formatterpath = ['/Users/yamada/.pyenv/shims']
-  Plug 'sodapopcan/vim-twiggy'
-  Plug 'Quramy/tsuquyomi'
-  Plug 'Chiel92/vim-autoformat'
-  Plug 'Glench/Vim-Jinja2-Syntax'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'briancollins/vim-jst'
-  Plug 'cespare/vim-toml', {'for': 'toml'}
-  Plug 'editorconfig/editorconfig-vim'
-  Plug 'idanarye/vim-merginal'
-  Plug 'justinmk/vim-dirvish'
-  Plug 'kana/vim-textobj-entire'
-  Plug 'kana/vim-textobj-user'
-  Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
-  Plug 'kristijanhusak/vim-dirvish-git'
-  Plug 'kyoh86/momiji', { 'rtp': 'vim' }
-  Plug 'kyoh86/vim-hugo'
-  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-  Plug 'maximbaz/lightline-ale'
-  Plug 'mdempsky/gocode', { 'rtp': 'vim', 'do': '~/.local/share/vim-plug/gocode/vim/symlink.sh' }
-  Plug 'pangloss/vim-javascript', {'for': 'javascript'}
-  Plug 'roosta/vim-srcery'
-  Plug 'simeji/winresizer'
-  Plug 'syngan/vim-vimlint'
-  Plug 'tell-k/vim-autoflake'
-  Plug 'tpope/vim-dispatch'
-  Plug 'tpope/vim-rhubarb'  " fugitive.vim extension for GitHub
-  Plug 'tpope/vim-surround'  " Edit surrounders (like brackets, parentheses and quotes)
-  Plug 'tyru/capture.vim'  " Show Ex command output in a buffer
-  Plug 'tyru/open-browser-github.vim'
-  Plug 'tyru/open-browser.vim'
-  Plug 'ynkdir/vim-vimlparser'
-  Plug 'direnv/direnv.vim'
-  Plug 'jez/vim-github-hub'
 
-  " 'honza/vim-snippets' {{{
+  " {{{ prabirshrestha/vim-lsp
+  Plug 'prabirshrestha/async.vim'
+  Plug 'prabirshrestha/vim-lsp'
+  Plug 'prabirshrestha/asyncomplete.vim'
+  Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  let g:lsp_async_completion = 1
+  let g:lsp_signs_enabled = 1           " enable signs
+  let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+  " 何故か上手くFormat on Saveが動かないので、この処理はvim-goなどに任せる
+  " augroup Lsp.format
+  "   au!
+  "   autocmd BufWritePre <buffer> LspDocumentFormatSync
+  " augroup END
+
+  nmap <Leader>ld <Plug>(lsp-definition)
+  nmap <Leader>lh <Plug>(lsp-hover)
+  nmap <Leader>ln <Plug>(lsp-next-error)
+  nmap <Leader>lp <Plug>(lsp-previous-error)
+  nmap <Leader>lr <Plug>(lsp-rename)
+  nmap <Leader>lf <Plug>(lsp-document-format)
+
+  " nmap <Leader> <Plug>(lsp-references)
+  " nmap <Leader> <Plug>(lsp-code-action)
+  " nmap <Leader> <Plug>(lsp-declaration)
+  " nmap <Leader> <Plug>(lsp-document-symbol)
+  " nmap <Leader> <Plug>(lsp-document-diagnostics)
+  " nmap <Leader> <Plug>(lsp-workspace-symbol)
+  " nmap <Leader> <Plug>(lsp-implementation)
+  " nmap <Leader> <Plug>(lsp-type-definition)
+  " nmap <Leader> <Plug>(lsp-status)
+
+  " for golang
+  if executable('bingo')
+    augroup Lsp.go
+      au!
+      autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'go-lang',
+          \ 'cmd': {server_info->['bingo', '-mode', 'stdio', '-format-style', 'goimports']},
+          \ 'whitelist': ['go'],
+          \ })
+      autocmd FileType go setlocal omnifunc=lsp#complete
+    augroup END
+  endif
+
+  " for python
+  if executable('pyls')
+    augroup Lsp.python
+      au!
+      " pip install python-language-server
+      au User lsp_setup call lsp#register_server({
+          \ 'name': 'pyls',
+          \ 'cmd': {server_info->['pyls']},
+          \ 'whitelist': ['python'],
+          \ })
+      autocmd FileType python setlocal omnifunc=lsp#complete
+    augroup END
+  endif
+
+  " for TypeScript (using tsuquyomi)
+  " if executable('typescript-language-server')
+  "   augroup Lsp.typescript
+  "     au!
+  "     au User lsp_setup call lsp#register_server({
+  "         \ 'name': 'typescript-language-server',
+  "         \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+  "         \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+  "         \ 'whitelist': ['typescript'],
+  "         \ })
+  "   augroup END
+  " endif
+
+  " 'javascript': ['eslint'],
+  " 'go': ['gometalinter', 'go build'],
+  " 'vim': ['vint'],
+  " 'yaml': ['yamllint'],
+  " 'python': ['mypy', 'flake8']
+
+  " let g:ale_linters = {
+  "     \ 'javascript': ['eslint'],
+  "     \ 'go': ['gometalinter', 'go build'],
+  "     \ 'vim': ['vint'],
+  "     \ 'yaml': ['yamllint'],
+  "     \ 'python': ['mypy', 'flake8']
+  " \ }
+  " let g:ale_python_mypy_executable = 'pyenv'
+  " let g:ale_python_mypy_options = 'exec mypy --ignore-missing-imports --strict'
+
+  " let g:ale_python_flake8_executable = 'pyenv'
+  " let g:ale_python_flake8_options = 'exec flake8 --ignore=E501'
+
+  " let g:ale_python_black_executable = 'pyenv'
+  " let g:ale_python_black_options = 'exec black'
+
+  " let g:ale_go_gometalinter_options = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
+  " let g:ale_fixers = {
+  "     \ 'typescript': ['tslint'],
+  "     \ 'javascript': ['eslint'],
+  "     \ 'python': ['black']
+  " \ }
+
+  " " }}}
+  " {{{ airblade/vim-gitgutter
+  Plug 'airblade/vim-gitgutter'
+  let g:gitgutter_map_keys = 0   " suppress mapping
+  " }}}
+  " {{{ Quramy/tsuquyomi
+  Plug 'Quramy/tsuquyomi'
+  augroup TsuquyomiCmd
+    autocmd FileType typescript nmap <buffer> <leader>g <Plug>(TsuquyomiDefinition)
+    autocmd FileType typescript nmap <buffer> <leader>d <Plug>(TsuquyomiDefinition)
+  augroup END
+  " }}}
+  " {{{ honza/vim-snippets
   " Snippets are separated from the engine. Add this if you want them:
   Plug 'honza/vim-snippets'
 
@@ -221,26 +327,6 @@ call plug#begin(s:dir)
 
   " If you want :UltiSnipsEdit to split your window.
   " let g:UltiSnipsEditSplit="vertical"
-  " }}}
-  " {{{ 'qpkorr/vim-bufkill'
-  Plug 'qpkorr/vim-bufkill'
-  " }}}
-  " {{{ Shougo/deoplete.nvim
-  if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-  endif
-  Plug 'zchee/deoplete-jedi'
-  Plug 'zchee/deoplete-go', { 'do': 'make' }
-
-  let g:python_host_prog = "/usr/bin/python2"
-  let g:python3_host_prog = "/Users/yamada/.pyenv/shims/python"
-  let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
-  let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-  let g:deoplete#enable_at_startup = 1
   " }}}
   " {{{ tpope/vim-fugitive
   Plug 'tpope/vim-fugitive'
@@ -271,8 +357,6 @@ call plug#begin(s:dir)
   nnoremap <C-x><C-w> :<C-u>Windows<CR>
   nnoremap <C-x><C-b> :<C-u>Buffers<CR>
   nnoremap <C-x><C-i> :<C-u>History<CR>
-  nnoremap <C-x><C-_> :<C-u>Rg 
-
   " }}}
   " {{{ itchyny/lightline.vim
   Plug 'itchyny/lightline.vim'
@@ -336,15 +420,19 @@ call plug#begin(s:dir)
   function! LightlinePercent() abort
     return &buftype ==# 'terminal' ? '' : '%3p%%'
   endfunction
-  function! LightlineAleOK() abort
-    return &buftype ==# 'terminal' ? '' : lightline#ale#ok()
-  endfunction
-  function! LightlineAleWarnings() abort
-    return &buftype ==# 'terminal' ? '' : lightline#ale#warnings()
-  endfunction
-  function! LightlineAleErrors() abort
-    return &buftype ==# 'terminal' ? '' : lightline#ale#errors()
-  endfunction
+
+  "TODO: port lightline-ale to lightline-LSP
+  "Plug 'maximbaz/lightline-ale'
+  "function! LightlineAleOK() abort
+  "  return &buftype ==# 'terminal' ? '' : lightline#ale#ok()
+  "endfunction
+  "function! LightlineAleWarnings() abort
+  "  return &buftype ==# 'terminal' ? '' : lightline#ale#warnings()
+  "endfunction
+  "function! LightlineAleErrors() abort
+  "  return &buftype ==# 'terminal' ? '' : lightline#ale#errors()
+  "endfunction
+
   function! LightlineModified() abort
     return &buftype ==# 'terminal' ? '' : &modified ? '+' : &modifiable ? '' : '-'
   endfunction
@@ -462,32 +550,6 @@ call plug#begin(s:dir)
   let g:vim_markdown_conceal = 0
   let g:tex_conceal = ''
   " }}}
-  Plug 'kyoh86/vim-wipeout'
-  " {{{ w0rp/ale (Asynchronous Lint Engine)
-  Plug 'w0rp/ale'  
-  let g:ale_enabled = 1
-  let g:ale_sign_error = '>'
-  let g:ale_sign_warning = '!'
-  let g:ale_completion_enabled = 1
-  let g:ale_fix_on_save = 1
-
-  let g:ale_linters = {
-      \ 'javascript': ['eslint'],
-      \ 'go': ['gometalinter', 'go build'],
-      \ 'vim': ['vint'],
-      \ 'python': ['mypy', 'flake8']
-  \ }
-  let g:ale_python_mypy_options = '--ignore-missing-imports --strict'
-  let g:ale_python_flake8_options = '--ignore=E501'
-  let g:ale_go_gometalinter_options = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
-  let g:ale_fixers = {
-      \ 'typescript': ['tslint'],
-      \ 'javascript': ['eslint'],
-      \ 'python': ['black']
-  \ }
-  nmap <C-x><C-l><C-n> <Plug>(ale_next)
-  nmap <C-x><C-l><C-p> <Plug>(ale_previous)
-  " }}}
   " {{{ kyoh86/vim-qfreplace
   Plug 'kyoh86/vim-qfreplace'
   augroup Qfreplacer
@@ -500,16 +562,18 @@ call plug#begin(s:dir)
   " }}}
   " {{{ fatih/vim-go
   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
-  let g:go_metalinter_command = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
-  let g:go_fmt_autosave = 1
-  let g:go_fmt_command = "goimportssw"
   let g:go_highlight_functions = 1
   let g:go_highlight_string_spellcheck = 0
   let g:go_highlight_format_strings = 0
-  " go
-  augroup GoDefCmd
-    autocmd FileType go nmap <buffer> <leader>g <Plug>(go-def)
-  augroup END
+
+  " LSPに任せる機能をOFFにする
+  let g:go_gocode_unimported_packages = 0
+  let g:go_gocode_propose_source = 0
+  let g:go_fmt_autosave = 1 "with vim-lsp TODO: vim-lspのformat on saveが使えるようになったら切る
+  let g:go_fmt_command = "goimportssw"
+  let g:go_gocode_propose_builtins = 0 "with vim-lsp
+  let g:go_def_mapping_enabled = 0
+  let g:go_doc_keywordprg_enabled = 0
 
   " }}}
   " {{{ davidhalter/jedi-vim
@@ -518,7 +582,7 @@ call plug#begin(s:dir)
   let g:jedi#show_call_signatures = 1
   " }}}
   " {{{ lambdalisue/vim-pyenv
-  Plug 'lambdalisue/vim-pyenv', {'for': 'python'}
+  Plug 'lambdalisue/vim-pyenv'
   function! s:jedi_auto_force_py_version() abort
     let g:jedi#force_py_version = pyenv#python#get_internal_major_version()
   endfunction
@@ -538,6 +602,41 @@ call plug#begin(s:dir)
   Plug 'elzr/vim-json'
   let g:vim_json_syntax_conceal = 0
   " }}}
+  " {{{ qpkorr/vim-bufkill
+  Plug 'qpkorr/vim-bufkill'
+  let g:BufKillCreateMappings = 0
+  " }}}
+  Plug 'kyoh86/vim-wipeout'
+  Plug 'sodapopcan/vim-twiggy'
+  Plug 'Chiel92/vim-autoformat'
+  Plug 'Glench/Vim-Jinja2-Syntax'
+  Plug 'briancollins/vim-jst'
+  Plug 'cespare/vim-toml', {'for': 'toml'}
+  Plug 'editorconfig/editorconfig-vim'
+  Plug 'idanarye/vim-merginal'
+  Plug 'justinmk/vim-dirvish'
+  Plug 'kana/vim-textobj-entire'
+  Plug 'kana/vim-textobj-user'
+  Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
+  Plug 'kristijanhusak/vim-dirvish-git'
+  Plug 'kyoh86/momiji', { 'rtp': 'vim' }
+  Plug 'kyoh86/vim-hugo'
+  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+  Plug 'mdempsky/gocode', { 'rtp': 'vim', 'do': '~/.local/share/vim-plug/gocode/vim/symlink.sh' }
+  Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+  Plug 'roosta/vim-srcery'
+  Plug 'simeji/winresizer'
+  Plug 'syngan/vim-vimlint'
+  Plug 'tell-k/vim-autoflake'
+  Plug 'tpope/vim-dispatch'
+  Plug 'tpope/vim-rhubarb'  " fugitive.vim extension for GitHub
+  Plug 'tpope/vim-surround'  " Edit surrounders (like brackets, parentheses and quotes)
+  Plug 'tyru/capture.vim'  " Show Ex command output in a buffer
+  Plug 'tyru/open-browser-github.vim'
+  Plug 'tyru/open-browser.vim'
+  Plug 'ynkdir/vim-vimlparser'
+  Plug 'direnv/direnv.vim'
+  Plug 'jez/vim-github-hub'
 call plug#end()
 " }}}
 

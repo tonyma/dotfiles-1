@@ -19,9 +19,11 @@ export PATH="${PATH}:/usr/sbin"
 ## Go:
 export GOPATH=${HOME}/go
 export PATH="/usr/local/opt/go/libexec/bin:${PATH}:/usr/local/go/bin:${HOME}/go/bin"
+export GO_PROJECT_ROOT=${HOME}/Projects # for kyoh86/generator-go-project
 
 ## Python:
 export PYTHON_CONFIGURE_OPTS="--enable-framework"
+export PYENV_DEFAULT_PACKAGES="${XDG_CONFIG_HOME}/pyenv/default-packages"
 export PYENV_ROOT="${HOME}/.pyenv"
 export PATH="${PYENV_ROOT}/bin:${PATH}"
 

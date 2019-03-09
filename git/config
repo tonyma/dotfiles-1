@@ -79,4 +79,5 @@
 [gogh]
 	root = /Users/yamada/Projects
 	root = /Users/yamada/go/src
+[gogh "github"]
 	user = kyoh86

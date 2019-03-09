@@ -284,32 +284,6 @@ fi
 
 # }}}
 
-# anyenv設定 {{{
-# ------------------------------------------------------------------------------
-
-## Python {{{
-export PYENV_ROOT="${HOME}/.pyenv"
-export PATH="${PYENV_ROOT}/bin:${PATH}"
-
-eval "$(command pyenv init -)"
-eval "$(command pyenv virtualenv-init -)"
-## }}}
-
-## Node {{{
-export PATH="${PATH}:${HOME}/.nodenv/shims"
-export PATH="${PATH}:${HOME}/.nodenv/bin"
-
-eval "$(nodenv init -)"
-## }}}
-
-## Ruby {{{
-export PATH=${PATH}:${HOME}/.rbenv/bin
-
-eval "$(command rbenv init -)"
-## }}}
-
-# }}}
-
 # zmv パターンマッチリネームの設定 {{{
 # ------------------------------------------------------------------------------
 autoload -Uz zmv
@@ -365,15 +339,38 @@ eval "$(direnv hook zsh)"
 eval "$(gogh setup)"
 # }}}
 
+# anyenv設定 {{{
+# ------------------------------------------------------------------------------
+
+## Python {{{
+eval "$(command pyenv init -)"
+eval "$(command pyenv virtualenv-init -)"
+## }}}
+
+## Node {{{
+export PATH="${PATH}:${HOME}/.nodenv/shims"
+export PATH="${PATH}:${HOME}/.nodenv/bin"
+
+eval "$(nodenv init -)"
+## }}}
+
+## Ruby {{{
+export PATH=${PATH}:${HOME}/.rbenv/bin
+
+eval "$(command rbenv init -)"
+## }}}
+
+# }}}
+
 ################################################################################
 
 # ZSHRC 終了処理 {{{
 # ------------------------------------------------------------------------------
 export PATH=".:${PATH}"
 
-if [[ -z "${VIM_TERMINAL}" ]]; then
-  vim && exit
-fi
+# if [[ -z "${VIM_TERMINAL}" ]]; then
+#   vim && exit
+# fi
 ## ZSHRC コンパイル{{{
 if [ ! -e ${ZDOTDIR:-${HOME}}/.zshrc.zwc ] || [ ${ZDOTDIR:-${HOME}}/.zshrc -nt ${ZDOTDIR:-${HOME}}/.zshrc.zwc ]; then
   zcompile ${ZDOTDIR:-${HOME}}/.zshrc
