@@ -1,3 +1,8 @@
+" Setup encodings {{{
+set encoding=utf-8
+scriptencoding utf-8
+" }}}
+
 " Load current directory as plugin if .development.vim exists. {{{
 
 if len(findfile('.development.vim', getcwd())) > 0
@@ -61,11 +66,6 @@ nnoremap tx :<C-u>term<CR>
 nnoremap tv :<C-u>vnew \| :term ++curwin<CR>
 " }}}
 
-" Setup encodings {{{
-set encoding=utf-8
-scriptencoding utf-8
-" }}}
-
 " Set MacVim options {{{
 set guifont=MyricaM\ M\ for\ Powerline:h14
 set linespace=3
@@ -99,12 +99,8 @@ endfunction
 call IncludePath(expand($PYENV_ROOT."/shims"))
 " }}}
 
-" Function: Enter job mode (Terminal) {{{
-command! -nargs=0 EnterJobMode
-" }}}
-
-" Function: Load Configurations {{{
-let g:config_home = $HOME . '/.vim'
+" Function: Edit Configurations {{{
+let g:config_home = g:xdg_config_home . '/vim'
 function! Config(bang)
   execute 'edit'.a:bang g:config_home.'/vimrc'
 endfunction
@@ -534,12 +530,6 @@ call plug#begin(s:dir)
   let g:vim_markdown_conceal = 0
   let g:tex_conceal = ''
   " }}}
-  " {{{ kyoh86/vim-qfreplace
-  Plug 'kyoh86/vim-qfreplace'
-  augroup Qfreplacer
-    autocmd BufReadPost quickfix nnoremap <buffer> <c-x><c-r> :Qfreplace<CR>
-  augroup END
-  " }}}
    " {{{ jremmen/vim-ripgrep
   Plug 'jremmen/vim-ripgrep'
   let g:rg_command = 'rg --vimgrep'
@@ -596,6 +586,7 @@ call plug#begin(s:dir)
   nmap <C-x><C-g><C-p> <Plug>(gogh-switch-project)
   nmap <C-x><C-g><C-g> <Plug>(gogh-get-repository)
   " }}}
+  Plug 'stefandtw/quickfix-reflector.vim'
   Plug 'kyoh86/vim-wipeout'
   Plug 'sodapopcan/vim-twiggy'
   Plug 'Chiel92/vim-autoformat'
