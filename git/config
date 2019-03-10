@@ -72,12 +72,5 @@
 	user = kyoh86
 [ghi]
 	token = !security find-internet-password -a kyoh86 -s github.com -l 'ghi token' -w
-[ghq]
-	root = /Users/yamada/go/src
 [hub]
 	protocol = https
-[gogh]
-	root = /Users/yamada/Projects
-	root = /Users/yamada/go/src
-[gogh "github"]
-	user = kyoh86

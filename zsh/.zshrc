@@ -320,7 +320,6 @@ done
 
 _source_exists \
   ~/.fzf.zsh \
-  ${ZDOTDIR}/.zsh_secret \
   /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # }}}
 

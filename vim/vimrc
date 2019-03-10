@@ -162,21 +162,6 @@ endfunction
 command! -range=0 GoStringer call GoStringer(<count>,<line1>,<line2>)
 " }}}
 
-" Function: Switch Project {{{
-function! s:cd_project(project_key)
-  let l:cmd = 'cd '.substitute(system('gogh where '.a:project_key), '[\n\r]\+$', '', '')
-  echo l:cmd
-  exec l:cmd
-endfunction
-
-command! SwitchProject call fzf#run({
-    \ 'source': "gogh list",
-    \ 'sink': function('<SID>cd_project'),
-    \ 'down': '30%'
-    \ })
-nnoremap <C-x><C-p> :<C-u>SwitchProject<CR>
-" }}}
-
 " Function: Switch Branch {{{
 function! s:checkout(line)
   " echom a:line
@@ -350,9 +335,8 @@ call plug#begin(s:dir)
   let g:splash#path = $XDG_CONFIG_HOME . '/vim/splash.txt'
   " }}}
   " {{{ junegunn/fzf
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } 
+  Plug '/usr/local/opt/fzf'
   Plug 'kyoh86/fzf.vim'
-  set runtimepath+=/usr/local/opt/fzf
   nnoremap <C-x><C-f> :<C-u>Files<CR>
   nnoremap <C-x><C-w> :<C-u>Windows<CR>
   nnoremap <C-x><C-b> :<C-u>Buffers<CR>
@@ -606,6 +590,12 @@ call plug#begin(s:dir)
   Plug 'qpkorr/vim-bufkill'
   let g:BufKillCreateMappings = 0
   " }}}
+  " {{{ kyoh86/vim-gogh
+  Plug 'kyoh86/vim-gogh'
+  " let g:gogh_params_list_primary = 1  TODO: wacul, wcl48 to modules
+  nmap <C-x><C-g><C-p> <Plug>(gogh-switch-project)
+  nmap <C-x><C-g><C-g> <Plug>(gogh-get-repository)
+  " }}}
   Plug 'kyoh86/vim-wipeout'
   Plug 'sodapopcan/vim-twiggy'
   Plug 'Chiel92/vim-autoformat'
@@ -620,7 +610,6 @@ call plug#begin(s:dir)
   Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
   Plug 'kristijanhusak/vim-dirvish-git'
   Plug 'kyoh86/momiji', { 'rtp': 'vim' }
-  Plug 'kyoh86/vim-hugo'
   Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
   Plug 'mdempsky/gocode', { 'rtp': 'vim', 'do': '~/.local/share/vim-plug/gocode/vim/symlink.sh' }
   Plug 'pangloss/vim-javascript', {'for': 'javascript'}

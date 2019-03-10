@@ -99,6 +99,7 @@ brew "mas"
 brew "macvim", link: false
 brew "libtool"
 brew "kyoh86/tap/wefaults"
+brew "kyoh86/tap/richgo"
 brew "kyoh86/tap/goimportssw"
 brew "kyoh86/tap/gogh"
 brew "kyoh86/tap/git-vertag"
@@ -138,7 +139,6 @@ brew "coreutils"
 brew "cmake"
 brew "circleci"
 brew "cassandra", restart_service: true
-brew "bindfs"
 brew "awscli"
 brew "autoconf"
 brew "asciinema"
@@ -200,7 +200,6 @@ brew "alecthomas/tap/gometalinter"
 # GNU File, Shell, and Text utilities
 # Fish shell like syntax highlighting for zsh
 # Fast linters runner for Go.
-# FUSE file system for mounting to another location
 # Eventually consistent, distributed key-value store
 # Enables you to reproduce the CircleCI environment locally
 # Draw UML diagrams
@@ -216,6 +215,7 @@ brew "alecthomas/tap/gometalinter"
 # Command-line fuzzy finder written in Go
 # Collection of tools that nobody wrote when UNIX was young
 # Collection of GNU find, xargs, and locate
+# Checks for unpinned variables in go programs.
 # Build tool for Scala projects
 # Banner-like program prints strings as ASCII art
 # Automatic configure script builder

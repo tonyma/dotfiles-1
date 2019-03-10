@@ -19,6 +19,10 @@ export PATH="${PATH}:/usr/sbin"
 ## Go:
 export GOPATH=${HOME}/go
 export PATH="/usr/local/opt/go/libexec/bin:${PATH}:/usr/local/go/bin:${HOME}/go/bin"
+
+## gogh:
+export GOGH_ROOT=${HOME}/Projects:${GOPATH}/src
+export GOGH_GITHUB_USER=kyoh86
 export GO_PROJECT_ROOT=${HOME}/Projects # for kyoh86/generator-go-project
 
 ## Python:
@@ -76,3 +80,7 @@ export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
 ## dotfiles自体
 export DOTFILES=${HOME}/.config
 export DOTS=${HOME}/.config
+
+if [ -f ${ZDOTDIR}/.zsh_secret ]; then
+  source ${ZDOTDIR}/.zsh_secret
+fi
