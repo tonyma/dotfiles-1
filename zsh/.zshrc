@@ -45,7 +45,7 @@ PROMPT="%(?,,%F{red}[%?]%f
 # 自動補完の設定 {{{
 fpath=(/usr/local/share/zsh-completions $fpath)
 autoload -U compinit
-# compinit -C
+compinit -C
 # }}}
 
 # 色名による指定を有効にする {{{

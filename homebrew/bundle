@@ -1,4 +1,3 @@
-tap "neovim/neovim"
 tap "mix3/ndenv"
 tap "kyoh86/tap"
 tap "kyoh86/pyenv"
@@ -69,17 +68,13 @@ brew "wget"
 brew "typesafe-activator"
 brew "tig"
 brew "terraform"
-brew "teensy_loader_cli"
-brew "swig"
 brew "supervisor"
 brew "sqlite"
 brew "scala"
 brew "sbt"
 brew "ripgrep"
-brew "reattach-to-user-namespace"
 brew "rbenv"
 brew "r"
-brew "q"
 brew "python"
 brew "pyenv-virtualenv"
 brew "pyenv"
@@ -88,7 +83,6 @@ brew "plantuml"
 brew "openssl"
 brew "nodenv"
 brew "nkf"
-brew "neovim"
 brew "mysql"
 brew "moreutils"
 brew "mono"
@@ -98,7 +92,6 @@ brew "mecab"
 brew "mas"
 brew "macvim", link: false
 brew "libtool"
-brew "kyoh86/tap/wefaults"
 brew "kyoh86/tap/richgo"
 brew "kyoh86/tap/goimportssw"
 brew "kyoh86/tap/gogh"
@@ -129,10 +122,8 @@ brew "fontconfig"
 brew "findutils"
 brew "figlet"
 brew "ffmpeg"
-brew "exiftool"
 brew "docker", link: false
 brew "direnv"
-brew "dfu-programmer"
 brew "dep"
 brew "curl"
 brew "coreutils"
@@ -146,10 +137,8 @@ brew "alecthomas/tap/gometalinter"
 # Yet another part-of-speech and morphological analyzer
 # XML-based font configuration API for X Windows
 # Work on GitHub issues on the command-line
-# Watch defaults and show command when they&#39;re changed.
 # User-friendly cURL replacement (command-line HTTP client)
 # UNIX shell (command interpreter)
-# Treat text as a database
 # Tools for working with Lightbend Reactive Platform
 # Tool to build, change, and version infrastructure
 # Time series, events, and metrics database
@@ -161,13 +150,11 @@ brew "alecthomas/tap/gometalinter"
 # SSL/TLS cryptography library
 # Ruby version manager
 # Record and share terminal sessions
-# Reattach process (e.g., tmux) to background
 # Python version management
 # Pyenv plugin to manage virtualenv
 # Process Control System
 # Popular GNU data compression program
 # Play, record, convert, and stream audio and video
-# Perl lib for reading and writing EXIF metadata
 # Pack, ship and run any application as a lightweight container
 # Open source relational database management system
 # Open source programming language to build simple/reliable/efficient software
@@ -189,7 +176,6 @@ brew "alecthomas/tap/gometalinter"
 # Go dependency management tool
 # Get a file from an HTTP, HTTPS or FTP server
 # Generic library support script
-# Generate scripting interfaces to C/C++ code
 # General-purpose lossless data-compression library
 # General-purpose data compression with high compression ratio
 # GUI for vim, made for macOS
@@ -204,14 +190,12 @@ brew "alecthomas/tap/gometalinter"
 # Enables you to reproduce the CircleCI environment locally
 # Draw UML diagrams
 # Distributed revision control system
-# Device firmware update based USB programmer for Atmel chips
 # Deliver Go binaries as fast and easily as possible
 # Cross-platform make
 # Cross platform, open source .NET development framework
 # Configurable static site generator
 # Concurrently run Go lint tools and normalise their output.
 # Command-line interface for SQLite
-# Command-line integration for Teensy USB development boards
 # Command-line fuzzy finder written in Go
 # Collection of tools that nobody wrote when UNIX was young
 # Collection of GNU find, xargs, and locate
@@ -219,7 +203,6 @@ brew "alecthomas/tap/gometalinter"
 # Build tool for Scala projects
 # Banner-like program prints strings as ASCII art
 # Automatic configure script builder
-# Ambitious Vim-fork focused on extensibility and agility
 # Additional completion definitions for zsh
 # Add GitHub support to git on the command-line
 # Access GitHub's .gitignore boilerplates
