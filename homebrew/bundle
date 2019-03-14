@@ -59,7 +59,6 @@ cask "bartender"
 cask "alfred"
 cask "adobe-creative-cloud"
 brew "zsh-syntax-highlighting"
-brew "zsh-completions"
 brew "zsh"
 brew "zlib"
 brew "yarn"
@@ -119,6 +118,7 @@ brew "gd"
 brew "fzf"
 brew "fswatch"
 brew "fontconfig"
+brew "fish"
 brew "findutils"
 brew "figlet"
 brew "ffmpeg"
@@ -137,6 +137,7 @@ brew "alecthomas/tap/gometalinter"
 # Yet another part-of-speech and morphological analyzer
 # XML-based font configuration API for X Windows
 # Work on GitHub issues on the command-line
+# User-friendly command-line shell for UNIX-like operating systems
 # User-friendly cURL replacement (command-line HTTP client)
 # UNIX shell (command interpreter)
 # Tools for working with Lightbend Reactive Platform
@@ -203,7 +204,6 @@ brew "alecthomas/tap/gometalinter"
 # Build tool for Scala projects
 # Banner-like program prints strings as ASCII art
 # Automatic configure script builder
-# Additional completion definitions for zsh
 # Add GitHub support to git on the command-line
 # Access GitHub's .gitignore boilerplates
 # A tool to manage version-tag with the semantic versioning specification.

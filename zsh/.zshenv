@@ -70,7 +70,7 @@ export PATH=${PATH}:${HOME}/.loginitems
 export PATH=$PATH:/usr/local/share/git-core/contrib/diff-highlight
 
 # highlighters
-export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/usr/local/share/zsh-syntax-highlighting/highlighters
+# export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/usr/local/share/zsh-syntax-highlighting/highlighters
 
 # zlib
 export LDFLAGS="-L/usr/local/opt/zlib/lib"

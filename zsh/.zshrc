@@ -18,24 +18,24 @@ setopt hist_verify            # ヒストリを呼び出してから実行する
 # }}}
 
 # プロンプト設定 {{{
-autoload -Uz add-zsh-hook
-
-if [[ -z "${VIM_TERMINAL}" ]]; then
-  function _update_git_info() {
-    status_string=$(git-prompt -s zsh)
-    if [ $? -ne 0 ]; then
-      # gitの情報を正しく取得できない場合は現在のパスを表示する
-      if [[ "${PWD:h}" == "/" ]]; then
-        RPROMPT="%F{blue}${PWD}%f"
-      else
-        RPROMPT="%F{blue}${PWD:h}%f%F{yellow}/${PWD:t}%f"
-      fi
-    else 
-      RPROMPT="${status_string}"
-    fi
-  }
-  add-zsh-hook precmd _update_git_info
-fi
+# autoload -Uz add-zsh-hook
+# 
+# if [[ -z "${VIM_TERMINAL}" ]]; then
+#   function _update_git_info() {
+#     status_string=$(git-prompt -s zsh)
+#     if [ $? -ne 0 ]; then
+#       # gitの情報を正しく取得できない場合は現在のパスを表示する
+#       if [[ "${PWD:h}" == "/" ]]; then
+#         RPROMPT="%F{blue}${PWD}%f"
+#       else
+#         RPROMPT="%F{blue}${PWD:h}%f%F{yellow}/${PWD:t}%f"
+#       fi
+#     else 
+#       RPROMPT="${status_string}"
+#     fi
+#   }
+#   add-zsh-hook precmd _update_git_info
+# fi
 
 PROMPT="%(?,,%F{red}[%?]%f
 
@@ -44,8 +44,8 @@ PROMPT="%(?,,%F{red}[%?]%f
 
 # 自動補完の設定 {{{
 fpath=(/usr/local/share/zsh-completions $fpath)
-autoload -U compinit
-compinit -C
+# autoload -U compinit
+# compinit -C
 # }}}
 
 # 色名による指定を有効にする {{{
@@ -118,10 +118,29 @@ _source_if ~/.fzf.zsh
 
 # anyenv {{{
 eval "$( command direnv hook zsh )"
-eval "$( command nodenv init - )"
-eval "$( command rbenv  init - )"
-eval "$( command pyenv  init - )"
-eval "$( command pyenv  virtualenv-init - )"
+
+if type nodenv > /dev/null; then
+    function nodenv() {
+        unset -f nodenv
+        eval "$(command nodenv init -)"
+        nodenv $@
+    }
+fi
+if type rbenv > /dev/null; then
+    function rbenv() {
+        unset -f rbenv
+        eval "$(command rbenv init -)"
+        rbenv $@
+    }
+fi
+if type pyenv > /dev/null; then
+    function pyenv() {
+        unset -f pyenv
+        eval "$(command pyenv init -)"
+        eval "$(command pyenv  virtualenv-init -)"
+        pyenv $@
+    }
+fi
 # }}}
 
 # Homebrew pyenv 衝突の回避 {{{
@@ -132,7 +151,7 @@ zle -N brew
 # }}}
 
 # gogh {{{
-eval "$(gogh setup)"
+# eval "$(gogh setup)"
 # }}}
 
 # vimとの連携設定 {{{
