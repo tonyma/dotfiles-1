@@ -1,4 +1,4 @@
-# zmodload zsh/zprof && zprof # プロファイリング (zshrcの末尾とセット)
+# zmodload zsh/zprof && zprof # プロファイリングをしたいときは、コメントを外す
 
 # 基本環境設定:
 export LANG=ja_JP.UTF-8
