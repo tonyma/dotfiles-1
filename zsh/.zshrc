@@ -44,8 +44,8 @@ PROMPT="%(?,,%F{red}[%?]%f
 
 # 自動補完の設定 {{{
 fpath=(/usr/local/share/zsh-completions $fpath)
-# autoload -U compinit
-# compinit -C
+autoload -U compinit
+compinit -C
 # }}}
 
 # 色名による指定を有効にする {{{
@@ -59,7 +59,7 @@ bindkey '^d' delete-char
 # }}}
 
 # ZSHコマンドハイライト設定 {{{
-for f in $(find ${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR} -name "*.zsh"); do
+for f in $(gfind ${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR} -name "*.zsh"); do
   if [ ! -e "${f}.zwc" ] || [ "${f}" -nt "${f}.zwc" ]; then
     zcompile $f
   fi

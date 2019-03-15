@@ -59,6 +59,7 @@ cask "bartender"
 cask "alfred"
 cask "adobe-creative-cloud"
 brew "zsh-syntax-highlighting"
+brew "zsh-completions"
 brew "zsh"
 brew "zlib"
 brew "yarn"
@@ -204,6 +205,7 @@ brew "alecthomas/tap/gometalinter"
 # Build tool for Scala projects
 # Banner-like program prints strings as ASCII art
 # Automatic configure script builder
+# Additional completion definitions for zsh
 # Add GitHub support to git on the command-line
 # Access GitHub's .gitignore boilerplates
 # A tool to manage version-tag with the semantic versioning specification.
