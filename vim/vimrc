@@ -3,6 +3,82 @@ set encoding=utf-8
 scriptencoding utf-8
 " }}}
 
+" Setup Environment Variables {{{
+" ZSHとVIM両方に効かせる環境変数はここで設定する
+" ZSHだけでいい場合は.zshenvで設定すればよい
+
+" 基本環境設定:
+let $LANG='ja_JP.UTF-8'
+let $ARCHFLAGS='-arch x86_64'
+let $EDITOR='vim'
+let $COLORTERM='xterm-256color'
+let $TERM='xterm-256color'
+if ($XDG_CONFIG_HOME == '')
+  let $XDG_CONFIG_HOME=$HOME.'/.config'
+end
+
+" Path環境変数の設定:
+let $PATH='/usr/local/bin:'.$PATH
+let $PATH='/usr/local/sbin:'.$PATH
+let $PATH=$PATH.':/bin'
+let $PATH=$PATH.':/usr/bin'
+let $PATH=$PATH.':/sbin'
+let $PATH=$PATH.':/usr/sbin'
+
+" Zsh:
+let $ZDOTDIR=$HOME.'/.config/zsh'
+
+" Go:
+let $GOPATH=$HOME.'/go'
+let $PATH='/usr/local/opt/go/libexec/bin:'.$PATH.':/usr/local/go/bin:'.$HOME.'/go/bin'
+
+" Gogh:
+let $GOGH_ROOT=$HOME.'/Projects:'.$GOPATH.'/src'
+let $GOGH_GITHUB_USER='kyoh86'
+" Generator-go-project:
+let $GO_PROJECT_ROOT=$HOME.'/Projects'
+
+" Python:
+let $PYTHON_CONFIGURE_OPTS='--enable-framework'
+let $PYENV_DEFAULT_PACKAGES=$XDG_CONFIG_HOME.'/pyenv/default-packages'
+let $PYENV_ROOT=$HOME.'/.pyenv'
+let $PATH=$PYENV_ROOT.'/bin:'.$PATH
+
+" Node:
+let $PATH=$PATH.':'.$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin:./node_modules/.bin'
+
+" Ruby:
+let $PATH=$PATH.':'.$HOME.'/.rbenv/bin'
+
+" GNU commands:
+let $PATH='/usr/local/opt/gzip/bin:'.$PATH
+let $PATH='/usr/local/opt/openssl/bin:'.$PATH
+
+" FZF (https://github.com/junegunn/fzf):
+let $FZF_DEFAULT_OPTS='--inline-info --no-mouse --extended --ansi --no-sort'
+let $FZF_DEFAULT_COMMAND='rg --files --hidden --follow --maxdepth 10 --glob "!.git/*" --glob "!*.egg-info/*" --glob "!*/__pycache__/*" --glob "!.mypy_cache/*"'
+
+" AWS:
+let $AWS_DEFAULT_PROFILE='default'
+let $AWS_DEFAULT_REGION='us-east-1'
+
+" Scala:
+let $SCALA_HOME='/usr/local/bin/scala'
+let $PATH=$PATH.':'.$SCALA_HOME.'/bin'
+
+" Java:
+let $JAVA_HOME=system('/usr/libexec/java_home')
+let $PATH=$JAVA_HOME.'/bin:'.$PATH
+
+" Perl:
+let $PATH=$PATH.':'.$HOME.'/perl5/bin'
+
+" dotfiles自体
+let $DOTFILES=$HOME.'/.config'
+let $DOTS=$DOTFILES
+
+" }}}
+
 " Load current directory as plugin if .development.vim exists. {{{
 
 if len(findfile('.development.vim', getcwd())) > 0
@@ -58,16 +134,14 @@ augroup TermNoNumber
   silent! autocmd! TerminalOpen * setlocal nonumber
 augroup END
 
-nnoremap tc :<C-u>tabnew<CR><ESC>
-nnoremap tp :<C-u>tabprevious<CR><ESC>
-nnoremap tn :<C-u>tabnext<CR><ESC>
-nnoremap tt :<C-u>term ++curwin<CR>
-nnoremap tx :<C-u>term<CR>
-nnoremap tv :<C-u>vnew \| :term ++curwin<CR>
+nnoremap <silent> tt :<C-u>term ++curwin ++close /usr/local/bin/zsh<CR>
+nnoremap <silent> tx :<C-u>term ++close /usr/local/bin/zsh<CR>
+nnoremap <silent> tv :<C-u>vertical terminal ++close /usr/local/bin/zsh<CR>
 " }}}
 
 " Set MacVim options {{{
 set guifont=MyricaM\ M\ for\ Powerline:h14
+set guioptions=egmrL!
 set linespace=3
 set titlestring=vim\(%{substitute(getcwd(),\ $HOME,\ '~',\ '')}\)
 " }}}
@@ -77,9 +151,6 @@ set titlestring=vim\(%{substitute(getcwd(),\ $HOME,\ '~',\ '')}\)
 " | 指定された path が $PATH に存在せず、ディレクトリとして存在している場合
 " | のみ $PATH に加える
 let $PYTHON_CONFIGURE_OPTS="--enable-framework"
-let $PYENV_DEFAULT_PACKAGES=$XDG_CONFIG_HOME."/pyenv/default-packages"
-let $PYENV_ROOT=$HOME."/.pyenv"
-let $PATH=$PYENV_ROOT."/bin:".$PATH
 
 function! IncludePath(path)
   " define delimiter depends on platform
@@ -321,7 +392,7 @@ call plug#begin(s:dir)
     autocmd BufNew * call FugitiveReDetect('BufNew')
     autocmd BufNewFile * call FugitiveReDetect('BufNewFile')
     autocmd BufRead * call FugitiveReDetect('BufRead')
-    autocmd CmdwinEnter * call FugitiveReDetect('CmdwinWnter')
+    autocmd CmdwinEnter * call FugitiveReDetect('CmdwinEnter')
     silent! autocmd DirChanged * bufdo call FugitiveReDetect('DirChanged')
     autocmd VimEnter * call FugitiveReDetect('VimEnter')
   augroup END
@@ -353,7 +424,7 @@ call plug#begin(s:dir)
     \   'active': {
     \     'left': [
     \       [ 'mode', 'paste' ],
-    \       [ 'gitbranch', 'relativepath', 'readonly', 'modified', 'terminalinfo', 'gitstatus' ]
+    \       [ 'gitbranch', 'relativepath', 'readonly', 'modified', 'terminalinfo', 'gitstatus', 'gitgutter' ]
     \     ],
     \     'right': [
     \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
@@ -393,6 +464,7 @@ call plug#begin(s:dir)
     \     'gitbranch': 'LightlineFugitive',
     \     'relativepath': 'LightlineRelativePath',
     \     'filename': 'LightlineFilename',
+    \     'gitgutter': 'LightlineGitGutter',
     \     'lineinfo': 'LightlineLineInfo',
     \     'modified': 'LightlineModified'
     \   },
@@ -462,7 +534,8 @@ call plug#begin(s:dir)
       return ''
     endif
     let l:ttl=term_gettitle('%')
-    let l:stat = s:getGitStatus(l:ttl)
+
+    let l:stat = "" " s:getGitStatus(l:ttl)
     let l:commit = s:statPart(l:stat, 'ahead', '⬆ ') . s:statPart(l:stat, 'behind', '⬇ ')
     let l:merge = s:statPart(l:stat, 'unmerged', 'Unmerged:')
     let l:stage = s:statPart(l:stat, 'staged', '+') . s:statPart(l:stat, 'unstaged', '-')
@@ -470,6 +543,28 @@ call plug#begin(s:dir)
     let l:brch = s:statPart(l:stat, 'local-branch', "\ue0a0 ")
     return [ [ l:brch ], l:warn, [] ]
   endfunction
+
+  function! LightlineGitGutter()
+    if ! exists('*GitGutterGetHunkSummary')
+          \ || ! get(g:, 'gitgutter_enabled', 0)
+          \ || winwidth('.') <= 90
+      return ''
+    endif
+    let l:symbols = [
+          \ g:gitgutter_sign_added . ' ',
+          \ g:gitgutter_sign_modified . ' ',
+          \ g:gitgutter_sign_removed . ' '
+          \ ]
+    let l:hunks = GitGutterGetHunkSummary()
+    let l:ret = []
+    for i in [0, 1, 2]
+      if l:hunks[i] > 0
+        call add(l:ret, l:symbols[i] . l:hunks[i])
+      endif
+    endfor
+    return join(l:ret, ' ')
+  endfunction
+
   function! s:statPart(stat, key, pre)
     if !has_key(a:stat, a:key) || a:stat[a:key] ==# ''
       return ''
@@ -587,6 +682,7 @@ call plug#begin(s:dir)
   nmap <C-x><C-g><C-g> <Plug>(gogh-get-repository)
   " }}}
   Plug 'vim-scripts/sudo.vim'
+  Plug 'iberianpig/tig-explorer.vim'
   Plug 'stefandtw/quickfix-reflector.vim'
   Plug 'kyoh86/vim-wipeout'
   Plug 'sodapopcan/vim-twiggy'

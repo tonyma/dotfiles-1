@@ -41,7 +41,6 @@ cask "virtualbox"
 cask "postman"
 cask "nosqlbooster-for-mongodb"
 cask "ngrok"
-cask "macvim"
 cask "kindle"
 cask "keepingyouawake"
 cask "java"
@@ -65,6 +64,7 @@ brew "zlib"
 brew "yarn"
 brew "xz"
 brew "wget"
+brew "vim"
 brew "typesafe-activator"
 brew "tig"
 brew "terraform"
@@ -79,6 +79,7 @@ brew "python"
 brew "pyenv-virtualenv"
 brew "pyenv"
 brew "pstree"
+brew "postgresql"
 brew "plantuml"
 brew "openssl"
 brew "nodenv"
@@ -90,7 +91,6 @@ brew "mongodb"
 brew "mecab-ipadic"
 brew "mecab"
 brew "mas"
-brew "macvim", link: false
 brew "libtool"
 brew "kyoh86/tap/richgo"
 brew "kyoh86/tap/goimportssw"
@@ -138,6 +138,7 @@ brew "alecthomas/tap/gometalinter"
 # Yet another part-of-speech and morphological analyzer
 # XML-based font configuration API for X Windows
 # Work on GitHub issues on the command-line
+# Vi 'workalike' with many additional features
 # User-friendly command-line shell for UNIX-like operating systems
 # User-friendly cURL replacement (command-line HTTP client)
 # UNIX shell (command interpreter)
@@ -161,6 +162,7 @@ brew "alecthomas/tap/gometalinter"
 # Open source relational database management system
 # Open source programming language to build simple/reliable/efficient software
 # Official Amazon AWS command-line interface
+# Object-relational database system
 # Network Kanji code conversion Filter (NKF)
 # Monitor a directory for changes and run a shell command
 # Manage multiple NodeJS versions
@@ -180,7 +182,6 @@ brew "alecthomas/tap/gometalinter"
 # Generic library support script
 # General-purpose lossless data-compression library
 # General-purpose data compression with high compression ratio
-# GUI for vim, made for macOS
 # GO GitHub project manager
 # GNU version of the tar archiving utility
 # GNU implementation of the famous stream editor

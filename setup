@@ -2,20 +2,6 @@
 
 set -e
 
-touch ~/.hushlogin
-sudo sh -c 'echo '"'"'export ZDOTDIR=${HOME}/.config/zsh'"'"' > /etc/zshenv'
-
-# env
-date_hash=$(date +'%Y-%m-%d_%H-%M-%S')
-env_url="https://raw.github.com/kyoh86/dotfiles/master/zsh/.zshenv#${date_hash}"
-eval "$(curl -L ${env_url})"
-
-# check env
-if [ -z "${GOPATH}" ]; then
-  echo "invalid enironment: GOPATH is not set"
-  exit 1
-fi
-
 ## DotFiles:
 DOTFILES=${HOME}/.config
 
@@ -31,10 +17,11 @@ else
   cp -RPf ${DOTTMP}/* ${DOTFILES}
   rm -rf ${DOTTMP}
 fi
+source ${DOTFILES}/zsh/.zshenv
 
 # userjob を配置
 sudo mkdir -p /usr/local/opt/userjob
-sudo chown -R yamada /usr/local/opt
+sudo chown -R ${USER} /usr/local/opt
 
 ln -fs ${DOTFILES}/userjob/exec /usr/local/opt/userjob
 # link vimrc
@@ -85,20 +72,16 @@ fi
 # poweline with MyricaM
 cp ${DOTFILES}/Myrica* ~/Library/Fonts
 
-# install "neovim" python library
-pyenv install 3.7.2
-pyenv global 3.7.2
+# install python
+py_latest=$(pyenv install --list | grep -Pe '^ *\d\.\d\.\d$' | sort -r | head -n1)
+pyenv install $py_latest
+pyenv global $py_latest
 pyenv exec pip install --upgrade pip
-pyenv exec pip install -r ${DOTFILES}/requirements.txt
+pyenv exec pip install -r ${DOTFILES}/pyenv/default-packages
 
-# use zsh
-if [[ -x /usr/local/bin/zsh ]]; then
-  echo '/usr/local/bin/zsh' | sudo tee /etc/shells > /dev/null
-  chpass -s /usr/local/bin/zsh
-else
-  echo 'failed to find zsh on /usr/local/bin/zsh'
-  exit 1
-fi
+# bashの起動時にdotfiles配下のbashrcを読ませる
+# bashrcでは、vimを起動する設定になっている
+echo '[ -f $HOME/.config/bash/bashrc ] && . $HOME/.config/bash/bashrc' > ${HOME}/.bash_profile
 
 # defaults
 if which 'defaults' ; then

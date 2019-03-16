@@ -1,0 +1,10 @@
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
+if [[ $- =~ i ]]; then                  # 対話シェルの場合
+  if [[ -z "${VIM_TERMINAL}" ]]; then   # VIM の Terminal でない場合、vimを起動
+    vim && exit
+  fi
+fi
+
