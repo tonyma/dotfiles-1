@@ -1,1 +1,0 @@
-/Users/yamada/.local/share/vim-plug/gocode/vim/autoload/gocomplete.vim

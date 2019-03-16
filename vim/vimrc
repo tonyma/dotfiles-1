@@ -139,13 +139,6 @@ nnoremap <silent> tx :<C-u>term ++close /usr/local/bin/zsh<CR>
 nnoremap <silent> tv :<C-u>vertical terminal ++close /usr/local/bin/zsh<CR>
 " }}}
 
-" Set MacVim options {{{
-set guifont=MyricaM\ M\ for\ Powerline:h14
-set guioptions=egmrL!
-set linespace=3
-set titlestring=vim\(%{substitute(getcwd(),\ $HOME,\ '~',\ '')}\)
-" }}}
-
 " Pyenv {{{
 " PATHの自動更新関数
 " | 指定された path が $PATH に存在せず、ディレクトリとして存在している場合
@@ -699,7 +692,6 @@ call plug#begin(s:dir)
   Plug 'kristijanhusak/vim-dirvish-git'
   Plug 'kyoh86/momiji', { 'rtp': 'vim' }
   Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-  Plug 'mdempsky/gocode', { 'rtp': 'vim', 'do': '~/.local/share/vim-plug/gocode/vim/symlink.sh' }
   Plug 'pangloss/vim-javascript', {'for': 'javascript'}
   Plug 'roosta/vim-srcery'
   Plug 'simeji/winresizer'
