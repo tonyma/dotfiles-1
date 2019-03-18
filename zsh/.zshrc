@@ -143,6 +143,16 @@ if type pyenv > /dev/null; then
   # pip とか python とか呼び出すときもコレやったほうが良いのかな
 fi
 # }}}
+# Java {{{
+
+function java() {
+  unset -f java
+  eval "export JAVA_HOME=system('/usr/libexec/java_home')"
+  eval "export PATH=\$JAVA_HOME.'/bin:'.\$PATH"
+  java $@
+}
+
+# }}}
 
 # Homebrew pyenv 衝突の回避 {{{
 # Homebrew が Python を管理対象にしろ、とAlert出してくるので

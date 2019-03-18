@@ -66,10 +66,6 @@ let $AWS_DEFAULT_REGION='us-east-1'
 let $SCALA_HOME='/usr/local/bin/scala'
 let $PATH=$PATH.':'.$SCALA_HOME.'/bin'
 
-" Java:
-let $JAVA_HOME=system('/usr/libexec/java_home')
-let $PATH=$JAVA_HOME.'/bin:'.$PATH
-
 " Perl:
 let $PATH=$PATH.':'.$HOME.'/perl5/bin'
 
@@ -317,42 +313,13 @@ call plug#begin(s:dir)
   "   augroup END
   " endif
 
-  " 'javascript': ['eslint'],
-  " 'go': ['gometalinter', 'go build'],
-  " 'vim': ['vint'],
-  " 'yaml': ['yamllint'],
-  " 'python': ['mypy', 'flake8']
-
-  " let g:ale_linters = {
-  "     \ 'javascript': ['eslint'],
-  "     \ 'go': ['gometalinter', 'go build'],
-  "     \ 'vim': ['vint'],
-  "     \ 'yaml': ['yamllint'],
-  "     \ 'python': ['mypy', 'flake8']
-  " \ }
-  " let g:ale_python_mypy_executable = 'pyenv'
-  " let g:ale_python_mypy_options = 'exec mypy --ignore-missing-imports --strict'
-
-  " let g:ale_python_flake8_executable = 'pyenv'
-  " let g:ale_python_flake8_options = 'exec flake8 --ignore=E501'
-
-  " let g:ale_python_black_executable = 'pyenv'
-  " let g:ale_python_black_options = 'exec black'
-
-  " let g:ale_go_gometalinter_options = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
-  " let g:ale_fixers = {
-  "     \ 'typescript': ['tslint'],
-  "     \ 'javascript': ['eslint'],
-  "     \ 'python': ['black']
-  " \ }
-
   " " }}}
   " {{{ airblade/vim-gitgutter
   Plug 'airblade/vim-gitgutter'
   let g:gitgutter_map_keys = 0   " suppress mapping
   " }}}
   " {{{ Quramy/tsuquyomi
-  Plug 'Quramy/tsuquyomi'
+  Plug 'Quramy/tsuquyomi', {'for': 'typescript'}
   augroup TsuquyomiCmd
     autocmd FileType typescript nmap <buffer> <leader>g <Plug>(TsuquyomiDefinition)
     autocmd FileType typescript nmap <buffer> <leader>d <Plug>(TsuquyomiDefinition)
@@ -391,7 +358,7 @@ call plug#begin(s:dir)
   augroup END
   " }}}
   " {{{ thinca/vim-splash
-  Plug 'thinca/vim-splash'
+  " Plug 'thinca/vim-splash'  " blackout bug (https://github.com/thinca/vim-splash/issues/3)
   let g:splash#path = $XDG_CONFIG_HOME . '/vim/splash.txt'
   " }}}
   " {{{ junegunn/fzf
@@ -411,13 +378,13 @@ call plug#begin(s:dir)
     \     'right': "\ue0c7"
     \   },
     \   'subseparator': {
-    \     'left': "\ue0c4",
-    \     'right': "\ue0c5"
+    \     'left': "\ue0d2",
+    \     'right': "\ue0d4"
     \   },
     \   'active': {
     \     'left': [
     \       [ 'mode', 'paste' ],
-    \       [ 'gitbranch', 'relativepath', 'readonly', 'modified', 'terminalinfo', 'gitstatus', 'gitgutter' ]
+    \       [ 'gitbranch', 'relativepath', 'readonly', 'modified', 'terminalinfo', 'gitstatus' ]
     \     ],
     \     'right': [
     \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
@@ -480,7 +447,7 @@ call plug#begin(s:dir)
     return &buftype ==# 'terminal' ? '' : &fenc !=# '' ? &fenc : &enc
   endfunction
   function! LightlineLineInfo() abort
-    return &buftype ==# 'terminal' ? '' : "\ue0a1".line('.').":".col('.')
+    return &buftype ==# 'terminal' ? '' : "\ue0a1".line('.').":".printf('%03d', col('.'))
   endfunction
   function! LightlineTerminalInfo() abort
     if &buftype !=# 'terminal'
@@ -512,12 +479,12 @@ call plug#begin(s:dir)
     return ''
   endfunction
   function! LightlineGitStatus()
-    if &buftype !=# 'terminal'
-      return ''
+    let l:location = getcwd()
+    if &buftype ==# 'terminal'
+      let l:location = term_gettitle('%')
     endif
-    let l:ttl=term_gettitle('%')
 
-    let l:stat = "" " s:getGitStatus(l:ttl)
+    let l:stat = s:getGitStatus(l:location)
     let l:commit = s:statPart(l:stat, 'ahead', '⬆ ') . s:statPart(l:stat, 'behind', '⬇ ')
     let l:merge = s:statPart(l:stat, 'unmerged', 'Unmerged:')
     let l:stage = s:statPart(l:stat, 'staged', '+') . s:statPart(l:stat, 'unstaged', '-')
@@ -639,7 +606,7 @@ call plug#begin(s:dir)
   let g:qf_auto_quit = 0  " disable `quit Vim if the last window is a location/quickfix window`
   " }}}
   " {{{ plasticboy/vim-markdown
-  Plug 'plasticboy/vim-markdown'
+  Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
   let g:vim_markdown_folding_disabled = 1
   let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'uml=plantuml']
   let g:vim_markdown_math = 1
@@ -686,13 +653,13 @@ call plug#begin(s:dir)
   augroup END
   " }}}
   " {{{ aklt/plantuml-syntax
-  Plug 'aklt/plantuml-syntax'
+  Plug 'aklt/plantuml-syntax', {'for': 'plantuml'}
   augroup PlantUMLCmd
     autocmd FileType plantuml command! OpenUml :!open -a "Google Chrome" %
   augroup END
   " }}}
   " {{{ elzr/vim-json
-  Plug 'elzr/vim-json'
+  Plug 'elzr/vim-json', {'for': 'json'}
   let g:vim_json_syntax_conceal = 0
   " }}}
   " {{{ qpkorr/vim-bufkill
@@ -715,7 +682,7 @@ call plug#begin(s:dir)
   Plug 'Glench/Vim-Jinja2-Syntax'
   Plug 'briancollins/vim-jst'
   Plug 'cespare/vim-toml', {'for': 'toml'}
-  Plug 'editorconfig/editorconfig-vim'
+  " Plug 'editorconfig/editorconfig-vim'
   Plug 'idanarye/vim-merginal'
   Plug 'justinmk/vim-dirvish'
   Plug 'kana/vim-textobj-entire'
@@ -727,8 +694,8 @@ call plug#begin(s:dir)
   Plug 'pangloss/vim-javascript', {'for': 'javascript'}
   Plug 'roosta/vim-srcery'
   Plug 'simeji/winresizer'
-  Plug 'syngan/vim-vimlint'
-  Plug 'tell-k/vim-autoflake'
+  Plug 'syngan/vim-vimlint', {'for': 'vim'}
+  Plug 'tell-k/vim-autoflake', {'for': 'python'}
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-rhubarb'  " fugitive.vim extension for GitHub
   Plug 'tpope/vim-surround'  " Edit surrounders (like brackets, parentheses and quotes)
@@ -782,7 +749,7 @@ syntax enable
 if ($TERM_PROGRAM != "Apple_Terminal")
   set termguicolors
 end
-set background=dark
+" set background=dark
 set hlsearch
 colorscheme momiji
 " }}}
