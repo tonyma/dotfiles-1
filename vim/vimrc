@@ -407,12 +407,12 @@ call plug#begin(s:dir)
   let g:lightline = {
     \   'colorscheme': 'momiji',
     \   'separator': {
-    \     'left': "\ue0b0",
-    \     'right': "\ue0b2"
+    \     'left': "\ue0c6",
+    \     'right': "\ue0c7"
     \   },
     \   'subseparator': {
-    \     'left': "\ue0b1",
-    \     'right': "\ue0b3"
+    \     'left': "\ue0c4",
+    \     'right': "\ue0c5"
     \   },
     \   'active': {
     \     'left': [
@@ -449,9 +449,9 @@ call plug#begin(s:dir)
     \     'linter_errors': 'error',
     \   },
     \   'component_function': {
-    \     'fileformat': 'LightlineFileFormat',
+    \     'fileformat': 'LightlineDevFileformat',
     \     'fileencoding': 'LightlineFileEncoding',
-    \     'filetype': 'LightlineFileType',
+    \     'filetype': 'LightlineDevFiletype',
     \     'terminalinfo': 'LightlineTerminalInfo',
     \     'readonly': 'LightlineReadonly', 
     \     'gitbranch': 'LightlineFugitive',
@@ -465,30 +465,19 @@ call plug#begin(s:dir)
   function! LightlinePercent() abort
     return &buftype ==# 'terminal' ? '' : '%3p%%'
   endfunction
-
-  "TODO: port lightline-ale to lightline-LSP
-  "Plug 'maximbaz/lightline-ale'
-  "function! LightlineAleOK() abort
-  "  return &buftype ==# 'terminal' ? '' : lightline#ale#ok()
-  "endfunction
-  "function! LightlineAleWarnings() abort
-  "  return &buftype ==# 'terminal' ? '' : lightline#ale#warnings()
-  "endfunction
-  "function! LightlineAleErrors() abort
-  "  return &buftype ==# 'terminal' ? '' : lightline#ale#errors()
-  "endfunction
-
+  function! LightlineDevFiletype()
+    return &buftype ==# 'terminal' ? '' : strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft'
+  endfunction
+  
+  function! LightlineDevFileformat()
+    return &buftype ==# 'terminal' ? '' : &fileformat . ' ' . WebDevIconsGetFileFormatSymbol()
+  endfunction
+<
   function! LightlineModified() abort
     return &buftype ==# 'terminal' ? '' : &modified ? '+' : &modifiable ? '' : '-'
   endfunction
-  function! LightlineFileFormat() abort
-    return &buftype ==# 'terminal' ? '' : &ff
-  endfunction
   function! LightlineFileEncoding() abort
     return &buftype ==# 'terminal' ? '' : &fenc !=# '' ? &fenc : &enc
-  endfunction
-  function! LightlineFileType() abort
-    return &buftype ==# 'terminal' ? '' : &ft !=# '' ? &ft : "no ft"
   endfunction
   function! LightlineLineInfo() abort
     return &buftype ==# 'terminal' ? '' : "\ue0a1".line('.').":".col('.')
@@ -603,6 +592,48 @@ call plug#begin(s:dir)
   set laststatus=2  " statuslineは常に表示
   set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
   " }}}
+  " {{{ maximbaz/lightline-ale
+  Plug 'maximbaz/lightline-ale'
+  function! LightlineAleOK() abort
+    return &buftype ==# 'terminal' ? '' : lightline#ale#ok()
+  endfunction
+  function! LightlineAleWarnings() abort
+    return &buftype ==# 'terminal' ? '' : lightline#ale#warnings()
+  endfunction
+  function! LightlineAleErrors() abort
+    return &buftype ==# 'terminal' ? '' : lightline#ale#errors()
+  endfunction
+  " }}}
+  " {{{ w0rp/ale (Asynchronous Lint Engine)
+  Plug 'w0rp/ale'
+  let g:ale_completion_enabled = 0
+  let g:ale_lint_on_text_changed = 0
+  let g:ale_lint_on_insert_leave = 0
+  let g:ale_lint_on_enter = 1
+  let g:ale_lint_on_save = 1
+  let g:ale_lint_on_filetype_changed = 0
+
+  let g:ale_enabled = 1
+  let g:ale_sign_error = '>'
+  let g:ale_sign_warning = '!'
+  let g:ale_fix_on_save = 1
+  let g:ale_linters = {
+      \ 'javascript': ['eslint'],
+      \ 'go': ['golangci-lint'],
+      \ 'vim': ['vint'],
+      \ 'python': ['mypy', 'flake8']
+  \ }
+  let g:ale_python_mypy_options = '--ignore-missing-imports --strict'
+  let g:ale_python_flake8_options = '--ignore=E501'
+  let g:ale_go_gometalinter_options = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
+  let g:ale_fixers = {
+      \ 'typescript': ['tslint'],
+      \ 'javascript': ['eslint'],
+      \ 'python': ['black']
+  \ }
+  nmap <C-x><C-l><C-n> <Plug>(ale_next)
+  nmap <C-x><C-l><C-p> <Plug>(ale_previous)
+  " }}}
   " {{{ romainl/vim-qf
   Plug 'romainl/vim-qf'
   let g:qf_auto_quit = 0  " disable `quit Vim if the last window is a location/quickfix window`
@@ -674,6 +705,7 @@ call plug#begin(s:dir)
   nmap <C-x><C-g><C-p> <Plug>(gogh-switch-project)
   nmap <C-x><C-g><C-g> <Plug>(gogh-get-repository)
   " }}}
+  Plug 'ryanoasis/vim-devicons'
   Plug 'vim-scripts/sudo.vim'
   Plug 'iberianpig/tig-explorer.vim'
   Plug 'stefandtw/quickfix-reflector.vim'
@@ -747,7 +779,9 @@ augroup END
 
 " Colors {{{
 syntax enable
-set termguicolors
+if ($TERM_PROGRAM != "Apple_Terminal")
+  set termguicolors
+end
 set background=dark
 set hlsearch
 colorscheme momiji

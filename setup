@@ -70,7 +70,7 @@ if [[ -d /usr/local/share ]]; then
 fi
 
 # poweline with MyricaM
-cp ${DOTFILES}/Myrica* ~/Library/Fonts
+cp ${DOTFILES}/fonts/* ~/Library/Fonts
 
 # install python
 py_latest=$(pyenv install --list | grep -Pe '^ *\d\.\d\.\d$' | sort -r | head -n1)
