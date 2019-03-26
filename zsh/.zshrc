@@ -177,6 +177,7 @@ function _update_term_title() {
 if [[ -n "${VIM_TERMINAL}" ]]; then
   add-zsh-hook precmd _update_term_title
 fi
+
 # }}}
 
 # }}}

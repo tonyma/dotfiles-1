@@ -42,7 +42,7 @@ let $GO_PROJECT_ROOT=$HOME.'/Projects'
 let $PYTHON_CONFIGURE_OPTS='--enable-framework'
 let $PYENV_DEFAULT_PACKAGES=$XDG_CONFIG_HOME.'/pyenv/default-packages'
 let $PYENV_ROOT=$HOME.'/.pyenv'
-let $PATH=$PYENV_ROOT.'/bin:'.$PATH
+let $PATH=$PYENV_ROOT.'/bin:'.$PYENV_ROOT.'/shims:'.$PATH
 
 " Node:
 let $PATH=$PATH.':'.$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin:./node_modules/.bin'
@@ -75,18 +75,6 @@ let $DOTS=$DOTFILES
 
 " }}}
 
-" Load current directory as plugin if .development.vim exists. {{{
-
-if len(findfile('.development.vim', getcwd())) > 0
-  execute 'set runtimepath+=' . getcwd()
-  for g:plug in split(glob(getcwd() . '/*'), '\n')
-    execute 'set runtimepath+=' . g:plug
-  endfor
-  echom 'loading local plugin'
-endif
-let $PATH = '~/.pyenv/shims:'.$PATH
-" }}}
-
 " Setup XDG Home directory paths. {{{
 let g:xdg_config_home=$XDG_CONFIG_HOME
 if g:xdg_config_home ==# ''
@@ -113,56 +101,11 @@ if !isdirectory(&backupdir)
 endif
 " }}}
 
-" Setup Keymaps (for regular functions) {{{
-" Delete search highlight
-nnoremap <ESC><ESC> :<C-u>nohl<CR><ESC>
-
-" Quickfix
-nnoremap <C-x>q :<C-u>copen<CR><ESC>
-
-nnoremap Q <Nop>
-nnoremap <C-x> <Nop>
-augroup TermSwitch
-  " ターミナルで <C-\><C-n> による job <- -> normal モードの往復を可能にする
-  silent! autocmd! TerminalOpen * nnoremap <buffer> <C-\><C-n> i
-augroup END
-augroup TermNoNumber
-  silent! autocmd! TerminalOpen * setlocal nonumber
-augroup END
-
-nnoremap <silent> tt :<C-u>term ++curwin ++close /usr/local/bin/zsh<CR>
-nnoremap <silent> tx :<C-u>term ++close /usr/local/bin/zsh<CR>
-nnoremap <silent> tv :<C-u>vertical terminal ++close /usr/local/bin/zsh<CR>
-" }}}
-
-" Pyenv {{{
-" PATHの自動更新関数
-" | 指定された path が $PATH に存在せず、ディレクトリとして存在している場合
-" | のみ $PATH に加える
-let $PYTHON_CONFIGURE_OPTS="--enable-framework"
-
-function! IncludePath(path)
-  " define delimiter depends on platform
-  if has('win16') || has('win32') || has('win64')
-    let delimiter = ";"
-  else
-    let delimiter = ":"
-  endif
-  let pathlist = split($PATH, delimiter)
-  if isdirectory(a:path) && index(pathlist, a:path) == -1
-    let $PATH=a:path.delimiter.$PATH
-  endif
-endfunction
-
-" ~/.pyenv/shims を $PATH に追加する
-" これを行わないとpythonが正しく検索されない
-call IncludePath(expand($PYENV_ROOT."/shims"))
-" }}}
-
+" Functions {{{
 " Function: Edit Configurations {{{
 let g:config_home = g:xdg_config_home . '/vim'
 function! Config(bang)
-  execute 'edit'.a:bang g:config_home.'/vimrc'
+  execute 'edit'.a:bang $MYVIMRC
 endfunction
 command! -bang -nargs=0 Config :call Config('<bang>')
 
@@ -172,57 +115,11 @@ if !exists("*ConfigReload")
     execute 'source $MYVIMRC'
   endfunction
 endif
-command! -nargs=0 ConfigReload :call ConfigReload()
-command! -nargs=0 ReloadConfig :call ConfigReload()
-command! -nargs=0 Reload :call ConfigReload()
-" }}}
-
-" Function: Go Stringer {{{
-function! GoStringer(count, line1, line2)
-  if a:line2 == 0
-    " 0レンジ指定
-    return
-  endif
-
-  if a:count
-    " 範囲指定がある
-    let l:first_line = max([a:line1, 1])
-    let l:last_line = max([a:line2, 1])
-  else
-    " 範囲指定がないので現在行を対象とする
-    let l:first_line = a:line1
-    let l:last_line = a:line1
-  endif
-
-  let l:type_name = s:capitalize(input('type name: '))
-  if l:type_name == ''
-    return
-  endif
-
-  let l:lines = getline(l:first_line, l:last_line)
-  let l:i = 0
-  let l:l = l:first_line
-  while l:l <= l:last_line
-    let l:raw = l:lines[l:i]
-    let l:capital = s:capitalize(l:raw)
-    call setline(l:l, "\t".l:type_name.l:capital.' = '.l:type_name.'("'.l:raw.'")')
-    let l:i += 1
-    let l:l += 1
-  endwhile
-endfunction
-
-function! s:capitalize(v)
-  return substitute(a:v, '\(^\|[^A-Za-z]\)\([a-z]\)', '\u\2', 'g')
-endfunction
-
-command! -range=0 GoStringer call GoStringer(<count>,<line1>,<line2>)
 " }}}
 
 " Function: Switch Branch {{{
 function! s:checkout(line)
-  " echom a:line
   let l:branch = get(split(a:line), 1, '')
-  " echom l:branch
   exec 'Git checkout '.l:branch
 endfunction
 
@@ -232,6 +129,15 @@ command! SwitchBranch call fzf#run({
     \ 'down': '30%'
     \ })
 nnoremap <C-x><C-g><C-b> :<C-u>SwitchBranch<CR>
+" }}}
+
+" Function: Update Terminal Window Title {{{
+function! Tapi_UpdateStatus(bufnum, arglist)
+  if len(a:arglist) == 1
+    call lightline#update()
+  endif
+endfunction
+" }}}
 " }}}
 
 " Configure Plugins {{{
@@ -253,7 +159,7 @@ call plug#begin(s:dir)
   " 何故か上手くFormat on Saveが動かないので、この処理はvim-goなどに任せる
   " augroup Lsp.format
   "   autocmd!
-  "   autocmd BufWritePre <buffer> LspDocumentFormatSync
+  "   autocmd BufWritePre *.go LspDocumentFormatSync
   " augroup END
 
   nmap <Leader>ld <Plug>(lsp-definition)
@@ -313,7 +219,7 @@ call plug#begin(s:dir)
   "   augroup END
   " endif
 
-  " " }}}
+  " }}}
   " {{{ airblade/vim-gitgutter
   Plug 'airblade/vim-gitgutter'
   let g:gitgutter_map_keys = 0   " suppress mapping
@@ -353,22 +259,56 @@ call plug#begin(s:dir)
     autocmd BufNewFile * call FugitiveReDetect('BufNewFile')
     autocmd BufRead * call FugitiveReDetect('BufRead')
     autocmd CmdwinEnter * call FugitiveReDetect('CmdwinEnter')
-    silent! autocmd DirChanged * bufdo call FugitiveReDetect('DirChanged')
+    silent! autocmd DirChanged * call FugitiveReDetect('DirChanged')
     autocmd VimEnter * call FugitiveReDetect('VimEnter')
   augroup END
   " }}}
   " {{{ thinca/vim-splash
   " Plug 'thinca/vim-splash'  " blackout bug (https://github.com/thinca/vim-splash/issues/3)
-  let g:splash#path = $XDG_CONFIG_HOME . '/vim/splash.txt'
+  " let g:splash#path = $XDG_CONFIG_HOME . '/vim/splash.txt'
   " }}}
   " {{{ junegunn/fzf
   Plug '/usr/local/opt/fzf'
   Plug 'kyoh86/fzf.vim'
-  nnoremap <C-x><C-f> :<C-u>Files<CR>
-  nnoremap <C-x><C-w> :<C-u>Windows<CR>
-  nnoremap <C-x><C-b> :<C-u>Buffers<CR>
-  nnoremap <C-x><C-i> :<C-u>History<CR>
+  let g:fzf_command_prefix = 'Fzf'
+  nnoremap <C-x><C-f> :<C-u>FzfFiles<CR>
+  nnoremap <C-x><C-w> :<C-u>FzfWindows<CR>
+  nnoremap <C-x><C-b><C-b> :<C-u>FzfBuffers<CR>
+  nnoremap <C-x><C-b><C-w> :<C-u>FzfWipeouts<CR>
+  nnoremap <C-x><C-i> :<C-u>FzfHistory<CR>
+  nnoremap q: :<C-u>FzfHistory :<CR>
+  nnoremap q/ :<C-u>FzfHistory /<CR>
   " }}}
+  " {{{ w0rp/ale (Asynchronous Lint Engine)
+  Plug 'w0rp/ale'
+  let g:ale_completion_enabled = 0
+  let g:ale_lint_on_text_changed = 0
+  let g:ale_lint_on_insert_leave = 0
+  let g:ale_lint_on_enter = 1
+  let g:ale_lint_on_save = 1
+  let g:ale_lint_on_filetype_changed = 1
+
+  let g:ale_enabled = 1
+  let g:ale_sign_error = '>'
+  let g:ale_sign_warning = '!'
+  let g:ale_fix_on_save = 1
+  let g:ale_linters = {
+      \ 'javascript': ['eslint'],
+      \ 'go': ['golangci-lint'],
+      \ 'vim': ['vint'],
+      \ 'python': ['mypy', 'flake8']
+  \ }
+  let g:ale_go_golangci_lint_options = ''
+  let g:ale_python_mypy_options = '--ignore-missing-imports --strict'
+  let g:ale_python_flake8_options = '--ignore=E501'
+  let g:ale_fixers = {
+      \ 'typescript': ['tslint'],
+      \ 'javascript': ['eslint'],
+      \ 'python': ['black']
+  \ }
+  nmap <C-x><C-l><C-n> <Plug>(ale_next)
+  nmap <C-x><C-l><C-p> <Plug>(ale_previous)
+" }}}
   " {{{ itchyny/lightline.vim
   Plug 'itchyny/lightline.vim'
   let g:lightline = {
@@ -384,7 +324,7 @@ call plug#begin(s:dir)
     \   'active': {
     \     'left': [
     \       [ 'mode', 'paste' ],
-    \       [ 'gitbranch', 'relativepath', 'readonly', 'modified', 'terminalinfo', 'gitstatus' ]
+    \       [ 'gitstatus', 'relativepath', 'readonly', 'modified', 'terminalinfo' ]
     \     ],
     \     'right': [
     \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
@@ -435,16 +375,17 @@ call plug#begin(s:dir)
   function! LightlineDevFiletype()
     return &buftype ==# 'terminal' ? '' : strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft'
   endfunction
-  
+
   function! LightlineDevFileformat()
-    return &buftype ==# 'terminal' ? '' : &fileformat . ' ' . WebDevIconsGetFileFormatSymbol()
+    return &buftype ==# 'terminal' ? '' : (&fileformat ==# 'unix' ? '' : &fileformat . ' ' . WebDevIconsGetFileFormatSymbol())
   endfunction
-<
+
   function! LightlineModified() abort
     return &buftype ==# 'terminal' ? '' : &modified ? '+' : &modifiable ? '' : '-'
   endfunction
   function! LightlineFileEncoding() abort
-    return &buftype ==# 'terminal' ? '' : &fenc !=# '' ? &fenc : &enc
+    let l:enc = &fenc !=# '' ? &fenc : &enc
+    return &buftype ==# 'terminal' ? '' : (l:enc ==# 'utf-8' ? '' : l:enc)
   endfunction
   function! LightlineLineInfo() abort
     return &buftype ==# 'terminal' ? '' : "\ue0a1".line('.').":".printf('%03d', col('.'))
@@ -463,7 +404,20 @@ call plug#begin(s:dir)
     return bufnr('%').':'.l:rel
   endfunction
   function! LightlineRelativePath() abort
-    return &buftype ==# 'terminal' ? '' : bufnr('%') . ':' . (expand('%') !=# '' ? expand('%') : '[No Name]')
+    if expand('%') ==# ''
+      let l:name = '[No Name]'
+    else
+      let l:max = winwidth(0) - 100
+      let l:name = expand('%:t')
+      if len(l:name) < l:max
+        let l:name = expand('%')
+        if len(l:name) > l:max
+          let l:name = '…' . l:name[-l:max:]
+        endif
+      endif
+    endif
+
+    return &buftype ==# 'terminal' ? '' : bufnr('%') . ':' . l:name
   endfunction
   function! LightlineFilename() abort
     return &buftype ==# 'terminal' ? '' : bufnr('%') . ':' . (expand('%:t') !=# '' ? expand('%:t') : '[No Name]')
@@ -571,38 +525,8 @@ call plug#begin(s:dir)
     return &buftype ==# 'terminal' ? '' : lightline#ale#errors()
   endfunction
   " }}}
-  " {{{ w0rp/ale (Asynchronous Lint Engine)
-  Plug 'w0rp/ale'
-  let g:ale_completion_enabled = 0
-  let g:ale_lint_on_text_changed = 0
-  let g:ale_lint_on_insert_leave = 0
-  let g:ale_lint_on_enter = 1
-  let g:ale_lint_on_save = 1
-  let g:ale_lint_on_filetype_changed = 0
-
-  let g:ale_enabled = 1
-  let g:ale_sign_error = '>'
-  let g:ale_sign_warning = '!'
-  let g:ale_fix_on_save = 1
-  let g:ale_linters = {
-      \ 'javascript': ['eslint'],
-      \ 'go': ['golangci-lint'],
-      \ 'vim': ['vint'],
-      \ 'python': ['mypy', 'flake8']
-  \ }
-  let g:ale_python_mypy_options = '--ignore-missing-imports --strict'
-  let g:ale_python_flake8_options = '--ignore=E501'
-  let g:ale_go_gometalinter_options = '--config=' . $XDG_CONFIG_HOME . '/gometalinter/config.json'
-  let g:ale_fixers = {
-      \ 'typescript': ['tslint'],
-      \ 'javascript': ['eslint'],
-      \ 'python': ['black']
-  \ }
-  nmap <C-x><C-l><C-n> <Plug>(ale_next)
-  nmap <C-x><C-l><C-p> <Plug>(ale_previous)
-  " }}}
   " {{{ romainl/vim-qf
-  Plug 'romainl/vim-qf'
+  Plug 'romainl/vim-qf'  " this shuffles windows on GoTest
   let g:qf_auto_quit = 0  " disable `quit Vim if the last window is a location/quickfix window`
   " }}}
   " {{{ plasticboy/vim-markdown
@@ -629,11 +553,16 @@ call plug#begin(s:dir)
   " LSPに任せる機能をOFFにする
   let g:go_gocode_unimported_packages = 0
   let g:go_gocode_propose_source = 0
-  let g:go_fmt_autosave = 1 "with vim-lsp TODO: vim-lspのformat on saveが使えるようになったら切る
-  let g:go_fmt_command = "goimportssw"
   let g:go_gocode_propose_builtins = 0 "with vim-lsp
+  let g:go_metalinter_enabled = 0
+  let g:go_metalinter_autosave = 0
   let g:go_def_mapping_enabled = 0
   let g:go_doc_keywordprg_enabled = 0
+
+  " with vim-lsp TODO: vim-lspのformat on saveが使えるようになったら切る
+  let g:go_fmt_autosave = 1 
+  let g:go_fmt_command = "goimports"
+  let g:go_fmt_fail_silently = 1
 
   " }}}
   " {{{ davidhalter/jedi-vim
@@ -673,8 +602,12 @@ call plug#begin(s:dir)
   nmap <C-x><C-g><C-g> <Plug>(gogh-get-repository)
   " }}}
   Plug 'ryanoasis/vim-devicons'
+  Plug 'kyoh86/momiji', { 'rtp': 'vim' }
+  Plug 'mopp/autodirmake.vim'
+  Plug 'kyoh86/vim-editerm'
   Plug 'vim-scripts/sudo.vim'
   Plug 'iberianpig/tig-explorer.vim'
+  Plug 'vim-scripts/FavEx'
   Plug 'stefandtw/quickfix-reflector.vim'
   Plug 'kyoh86/vim-wipeout'
   Plug 'sodapopcan/vim-twiggy'
@@ -682,17 +615,14 @@ call plug#begin(s:dir)
   Plug 'Glench/Vim-Jinja2-Syntax'
   Plug 'briancollins/vim-jst'
   Plug 'cespare/vim-toml', {'for': 'toml'}
-  " Plug 'editorconfig/editorconfig-vim'
   Plug 'idanarye/vim-merginal'
   Plug 'justinmk/vim-dirvish'
   Plug 'kana/vim-textobj-entire'
   Plug 'kana/vim-textobj-user'
   Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
   Plug 'kristijanhusak/vim-dirvish-git'
-  Plug 'kyoh86/momiji', { 'rtp': 'vim' }
   Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
   Plug 'pangloss/vim-javascript', {'for': 'javascript'}
-  Plug 'roosta/vim-srcery'
   Plug 'simeji/winresizer'
   Plug 'syngan/vim-vimlint', {'for': 'vim'}
   Plug 'tell-k/vim-autoflake', {'for': 'python'}
@@ -706,7 +636,6 @@ call plug#begin(s:dir)
   Plug 'direnv/direnv.vim'
   Plug 'jez/vim-github-hub'
 call plug#end()
-" }}}
 
 " Auto-install plugins {{{
 let s:plug = {
@@ -744,12 +673,13 @@ augroup CheckPlug
 augroup END
 " }}}
 
+" }}}
+
+" Settings {{{
 " Colors {{{
 syntax enable
-if ($TERM_PROGRAM != "Apple_Terminal")
-  set termguicolors
-end
-" set background=dark
+set termguicolors
+set background=dark
 set hlsearch
 colorscheme momiji
 " }}}
@@ -764,7 +694,7 @@ set nowrap
 
 " Displays {{{
 set number       " Show the line number
-set emo          " Show emoji characters
+set emoji        " Show emoji characters
 set conceallevel=0
 " }}}
 
@@ -774,38 +704,17 @@ set listchars=tab:»\ ,trail:∙,eol:↵,extends:»,precedes:«,nbsp:∙
 " }}}
 
 " Change cursor shape in different modes {{{
-if exists('$TMUX')
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+" let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+" set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 " }}}
 
 " Completion {{{
 set wildmode=longest:full,full
 set completeopt=menu,menuone
-let g:pymode_rope_complete_on_dot = 0
-" }}}
-
-" Terminal {{{
-function! Tapi_ChangeDirectory(bufnum, arglist)
-  if len(a:arglist) == 1
-    exec 'cd ' . fnameescape(a:arglist[0])
-  endif
-endfunction
-
-function! Tapi_UpdateStatus(bufnum, arglist)
-  if len(a:arglist) == 1
-    call lightline#update()
-  endif
-endfunction
 " }}}
 
 " Other misc settings {{{
@@ -815,22 +724,48 @@ set fixendofline
 set showcmd
 set ambiwidth=double
 set foldmethod=marker
-set backspace=2  
+set backspace=2
 set cursorline   " Highlight cursor line
 set showtabline=1
 highlight Pmenu ctermfg=159 ctermbg=17
 " }}}
 
-" Load settings for each location. {{{
-augroup vimrc-local
-  autocmd!
-  autocmd BufNewFile,BufReadPost * call s:vimrc_local(expand('<afile>:p:h'))
+" Setup Keymaps (for regular functions) {{{
+" Delete search highlight
+nnoremap <ESC><ESC> :<C-u>nohl<CR><ESC>
+
+" Quickfix
+nnoremap <C-x>q :<C-u>copen<CR><ESC>
+
+nnoremap Q <Nop>
+nnoremap <C-x> <Nop>
+augroup TermMap
+  " ターミナルで
+  "   * <C-\><C-n> による job <- -> normal モードの往復を可能にする
+  "   * q によるmacro記録を禁止する
+  "   * 行番号を表示しない
+  autocmd! TerminalOpen *
+      \ nnoremap <buffer> <C-\><C-n> i|
+      \ nnoremap <buffer> q <Nop>|
+      \ setlocal nonumber
 augroup END
 
-function! s:vimrc_local(loc)
-  let l:files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
-  for l:i in reverse(filter(l:files, 'filereadable(v:val)'))
-    source `=l:i`
-  endfor
-endfunction
+nnoremap <silent> tt :<C-u>term ++curwin ++close /usr/local/bin/zsh<CR>
+nnoremap <silent> tx :<C-u>term ++close /usr/local/bin/zsh<CR>
+nnoremap <silent> tv :<C-u>vertical terminal ++close /usr/local/bin/zsh<CR>
+" }}}
+" }}}
+
+" Load settings for each location. {{{
+" augroup vimrc-local
+"   autocmd!
+"   autocmd BufNewFile,BufReadPost * call s:vimrc_local(expand('<afile>:p:h'))
+" augroup END
+" 
+" function! s:vimrc_local(loc)
+"   let l:files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
+"   for l:i in reverse(filter(l:files, 'filereadable(v:val)'))
+"     source `=l:i`
+"   endfor
+" endfunction
 " }}}
