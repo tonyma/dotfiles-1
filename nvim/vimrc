@@ -231,23 +231,10 @@ call plug#begin(s:dir)
     autocmd FileType typescript nmap <buffer> <leader>d <Plug>(TsuquyomiDefinition)
   augroup END
   " }}}
-  " {{{ honza/vim-snippets
-  " Snippets are separated from the engine. Add this if you want them:
-  Plug 'honza/vim-snippets'
-
-  " Track the engine.
-  Plug 'SirVer/ultisnips'
-
-  " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-  let g:UltiSnipsExpandTrigger="<c-x>"
-  let g:UltiSnipsJumpForwardTrigger="<c-b>"
-  let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-  " If you want :UltiSnipsEdit to split your window.
-  " let g:UltiSnipsEditSplit="vertical"
-  " }}}
   " {{{ tpope/vim-fugitive
   Plug 'tpope/vim-fugitive'
+  Plug 'idanarye/vim-merginal'
+  Plug 'tpope/vim-rhubarb'  " fugitive.vim extension for GitHub
   nnoremap <C-x><C-g><C-s> :<C-u>Gstatus<CR>
   function! FugitiveReDetect(cmd)
     unlet! b:git_dir
@@ -526,7 +513,7 @@ call plug#begin(s:dir)
   endfunction
   " }}}
   " {{{ romainl/vim-qf
-  Plug 'romainl/vim-qf'  " this shuffles windows on GoTest
+  Plug 'romainl/vim-qf', {'for': 'qf'}  " this shuffles windows on GoTest
   let g:qf_auto_quit = 0  " disable `quit Vim if the last window is a location/quickfix window`
   " }}}
   " {{{ plasticboy/vim-markdown
@@ -541,7 +528,7 @@ call plug#begin(s:dir)
   let g:tex_conceal = ''
   " }}}
    " {{{ jremmen/vim-ripgrep
-  Plug 'jremmen/vim-ripgrep'
+  Plug 'jremmen/vim-ripgrep', {'on': ['Rg', 'RgRoot']}
   let g:rg_command = 'rg --vimgrep'
   " }}}
   " {{{ fatih/vim-go
@@ -607,34 +594,30 @@ call plug#begin(s:dir)
   Plug 'kyoh86/vim-editerm'
   Plug 'vim-scripts/sudo.vim'
   Plug 'iberianpig/tig-explorer.vim'
-  Plug 'vim-scripts/FavEx'
-  Plug 'stefandtw/quickfix-reflector.vim'
-  Plug 'kyoh86/vim-wipeout'
+  Plug 'stefandtw/quickfix-reflector.vim', {'for': 'qf'}
+  Plug 'kyoh86/vim-wipeout', {'on': 'Wipeout'}
   Plug 'sodapopcan/vim-twiggy'
-  Plug 'Chiel92/vim-autoformat'
-  Plug 'Glench/Vim-Jinja2-Syntax'
-  Plug 'briancollins/vim-jst'
+  Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
+  Plug 'briancollins/vim-jst', {'for': 'jst'}
   Plug 'cespare/vim-toml', {'for': 'toml'}
-  Plug 'idanarye/vim-merginal'
   Plug 'justinmk/vim-dirvish'
+  Plug 'kristijanhusak/vim-dirvish-git'
   Plug 'kana/vim-textobj-entire'
   Plug 'kana/vim-textobj-user'
   Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
-  Plug 'kristijanhusak/vim-dirvish-git'
   Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
   Plug 'pangloss/vim-javascript', {'for': 'javascript'}
   Plug 'simeji/winresizer'
   Plug 'syngan/vim-vimlint', {'for': 'vim'}
+  Plug 'vim-jp/vim-vimlparser', {'for': 'vim'}
   Plug 'tell-k/vim-autoflake', {'for': 'python'}
   Plug 'tpope/vim-dispatch'
-  Plug 'tpope/vim-rhubarb'  " fugitive.vim extension for GitHub
   Plug 'tpope/vim-surround'  " Edit surrounders (like brackets, parentheses and quotes)
-  Plug 'tyru/capture.vim'  " Show Ex command output in a buffer
+  Plug 'tyru/capture.vim', {'on': 'Capture'}  " Show Ex command output in a buffer
   Plug 'tyru/open-browser-github.vim'
   Plug 'tyru/open-browser.vim'
-  Plug 'ynkdir/vim-vimlparser'
   Plug 'direnv/direnv.vim'
-  Plug 'jez/vim-github-hub'
+  Plug 'jez/vim-github-hub', {'for': 'ghhub'}
 call plug#end()
 
 " Auto-install plugins {{{
