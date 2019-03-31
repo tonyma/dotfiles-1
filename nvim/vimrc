@@ -32,9 +32,6 @@ let $ZDOTDIR=$HOME.'/.config/zsh'
 let $GOPATH=$HOME.'/go'
 let $PATH='/usr/local/opt/go/libexec/bin:'.$PATH.':/usr/local/go/bin:'.$HOME.'/go/bin'
 
-" Gogh:
-let $GOGH_ROOT=$HOME.'/Projects:'.$GOPATH.'/src'
-let $GOGH_GITHUB_USER='kyoh86'
 " Generator-go-project:
 let $GO_PROJECT_ROOT=$HOME.'/Projects'
 
@@ -72,6 +69,8 @@ let $PATH=$PATH.':'.$HOME.'/perl5/bin'
 " dotfiles自体
 let $DOTFILES=$HOME.'/.config'
 let $DOTS=$DOTFILES
+
+silent! ru ./secret.vim
 
 " }}}
 
@@ -305,8 +304,8 @@ call plug#begin(s:dir)
     \     'right': "\ue0c7"
     \   },
     \   'subseparator': {
-    \     'left': "\ue0d2",
-    \     'right': "\ue0d4"
+    \     'left': "\ue0b5",
+    \     'right': "\ue0b7"
     \   },
     \   'active': {
     \     'left': [
@@ -343,6 +342,7 @@ call plug#begin(s:dir)
     \     'linter_errors': 'error',
     \   },
     \   'component_function': {
+    \     'percent': 'LightlinePercent',
     \     'fileformat': 'LightlineDevFileformat',
     \     'fileencoding': 'LightlineFileEncoding',
     \     'filetype': 'LightlineDevFiletype',
@@ -357,7 +357,9 @@ call plug#begin(s:dir)
     \   },
     \ }
   function! LightlinePercent() abort
-    return &buftype ==# 'terminal' ? '' : '%3p%%'
+    let l:last = line('$')
+    let l:cur = line('.')
+    return &buftype ==# 'terminal' ? '' : printf('%3d%% of %d', l:cur * 100 / l:last, l:last)
   endfunction
   function! LightlineDevFiletype()
     return &buftype ==# 'terminal' ? '' : strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft'
