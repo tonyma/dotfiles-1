@@ -127,7 +127,7 @@ command! SwitchBranch call fzf#run({
     \ 'sink': function('<SID>checkout'),
     \ 'down': '30%'
     \ })
-nnoremap <C-x><C-g><C-b> :<C-u>SwitchBranch<CR>
+nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
 " }}}
 
 " Function: Update Terminal Window Title {{{
@@ -234,7 +234,7 @@ call plug#begin(s:dir)
   Plug 'tpope/vim-fugitive'
   Plug 'idanarye/vim-merginal'
   Plug 'tpope/vim-rhubarb'  " fugitive.vim extension for GitHub
-  nnoremap <C-x><C-g><C-s> :<C-u>Gstatus<CR>
+  nnoremap <Leader><C-g><C-s> :<C-u>Gstatus<CR>
   function! FugitiveReDetect(cmd)
     unlet! b:git_dir
     call fugitive#detect(getcwd())
@@ -252,18 +252,6 @@ call plug#begin(s:dir)
   " {{{ thinca/vim-splash
   " Plug 'thinca/vim-splash'  " blackout bug (https://github.com/thinca/vim-splash/issues/3)
   " let g:splash#path = $XDG_CONFIG_HOME . '/vim/splash.txt'
-  " }}}
-  " {{{ junegunn/fzf
-  Plug '/usr/local/opt/fzf'
-  Plug 'kyoh86/fzf.vim'
-  let g:fzf_command_prefix = 'Fzf'
-  nnoremap <C-x><C-f> :<C-u>FzfFiles<CR>
-  nnoremap <C-x><C-w> :<C-u>FzfWindows<CR>
-  nnoremap <C-x><C-b><C-b> :<C-u>FzfBuffers<CR>
-  nnoremap <C-x><C-b><C-w> :<C-u>FzfWipeouts<CR>
-  nnoremap <C-x><C-i> :<C-u>FzfHistory<CR>
-  nnoremap q: :<C-u>FzfHistory :<CR>
-  nnoremap q/ :<C-u>FzfHistory /<CR>
   " }}}
   " {{{ w0rp/ale (Asynchronous Lint Engine)
   Plug 'w0rp/ale'
@@ -292,8 +280,8 @@ call plug#begin(s:dir)
       \ 'javascript': ['eslint'],
       \ 'python': ['black']
   \ }
-  nmap <C-x><C-l><C-n> <Plug>(ale_next)
-  nmap <C-x><C-l><C-p> <Plug>(ale_previous)
+  nmap <Leader><C-l><C-n> <Plug>(ale_next)
+  nmap <Leader><C-l><C-p> <Plug>(ale_previous)
 " }}}
   " {{{ itchyny/lightline.vim
   Plug 'itchyny/lightline.vim'
@@ -584,20 +572,13 @@ call plug#begin(s:dir)
   Plug 'qpkorr/vim-bufkill'
   let g:BufKillCreateMappings = 0
   " }}}
-  " {{{ kyoh86/vim-gogh
-  Plug 'kyoh86/vim-gogh'
-  " let g:gogh_params_list_primary = 1  TODO: wacul, wcl48 to modules
-  nmap <C-x><C-g><C-p> <Plug>(gogh-switch-project)
-  nmap <C-x><C-g><C-g> <Plug>(gogh-get-repository)
-  " }}}
+  Plug 'vim-jp/vital.vim', {'on': 'Vitalize'}
+  Plug 'kana/vim-metarw'
   Plug 'ryanoasis/vim-devicons'
-  Plug 'kyoh86/momiji', { 'rtp': 'vim' }
   Plug 'mopp/autodirmake.vim'
-  Plug 'kyoh86/vim-editerm'
   Plug 'vim-scripts/sudo.vim'
   Plug 'iberianpig/tig-explorer.vim'
   Plug 'stefandtw/quickfix-reflector.vim', {'for': 'qf'}
-  Plug 'kyoh86/vim-wipeout', {'on': 'Wipeout'}
   Plug 'sodapopcan/vim-twiggy'
   Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
   Plug 'briancollins/vim-jst', {'for': 'jst'}
@@ -620,6 +601,33 @@ call plug#begin(s:dir)
   Plug 'tyru/open-browser.vim'
   Plug 'direnv/direnv.vim'
   Plug 'jez/vim-github-hub', {'for': 'ghhub'}
+
+  " My Plugins {{{
+  " {{{ kyoh86/vim-gogh
+  Plug 'kyoh86/vim-gogh', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-gogh'}
+  " let g:gogh_params_list_primary = 1  TODO: wacul, wcl48 to modules
+  let g:gogh_edit_project_command = 'vnew'
+  nmap <Leader>ge <Plug>(gogh-edit-project)
+  nmap <Leader>gp <Plug>(gogh-switch-project)
+  nmap <Leader>gg <Plug>(gogh-get-repository)
+  " }}}
+  " {{{ junegunn/fzf
+  Plug '/usr/local/opt/fzf'
+  Plug 'kyoh86/fzf.vim', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/fzf.vim'}
+  let g:fzf_command_prefix = 'Fzf'
+  nnoremap <Leader>f  :<C-u>FzfFiles<CR>
+  nnoremap <Leader>w  :<C-u>FzfWindows<CR>
+  nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
+  nnoremap <Leader>bw :<C-u>FzfWipeouts<CR>
+  nnoremap <Leader>i  :<C-u>FzfHistory<CR>
+  nnoremap q:         :<C-u>FzfHistory :<CR>
+  nnoremap q/         :<C-u>FzfHistory /<CR>
+  " }}}
+  Plug 'kyoh86/vim-wipeout', {'on': 'Wipeout', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-wipeout'}
+  Plug 'kyoh86/vim-editerm', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-editerm'}
+  Plug 'kyoh86/momiji', {'rtp': 'vim', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/momiji'}
+  Plug 'kyoh86/vim-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-docbase'}
+  " }}}
 call plug#end()
 
 " Auto-install plugins {{{
@@ -720,10 +728,9 @@ highlight Pmenu ctermfg=159 ctermbg=17
 nnoremap <ESC><ESC> :<C-u>nohl<CR><ESC>
 
 " Quickfix
-nnoremap <C-x>q :<C-u>copen<CR><ESC>
+nnoremap <Leader>q :<C-u>copen<CR><ESC>
 
 nnoremap Q <Nop>
-nnoremap <C-x> <Nop>
 augroup TermMap
   " ターミナルで
   "   * <C-\><C-n> による job <- -> normal モードの往復を可能にする
