@@ -532,11 +532,6 @@ call plug#begin(s:dir)
   Plug 'jremmen/vim-ripgrep', {'on': ['Rg', 'RgRoot']}
   let g:rg_command = 'rg --vimgrep'
   " }}}
-  " {{{ davidhalter/jedi-vim
-  Plug 'davidhalter/jedi-vim', {'for': 'python'}
-  let g:jedi#completions_enabled = 0 " vim-lspに任せる
-  let g:jedi#show_call_signatures = 0
-  " }}}
   " {{{ lambdalisue/vim-pyenv
   Plug 'lambdalisue/vim-pyenv'
   function! s:jedi_auto_force_py_version() abort
