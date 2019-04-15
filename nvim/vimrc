@@ -201,6 +201,10 @@ call plug#begin(s:dir)
       autocmd User lsp_setup call lsp#register_server({
           \ 'name': 'pyls',
           \ 'cmd': {server_info->['pyls']},
+          \ 'workspace_config': {'pyls': {
+          \   'configurationSources': ['flake8'],
+          \   'plugins': {'black': v:true},
+          \ }},
           \ 'whitelist': ['python'],
           \ })
       autocmd FileType python setlocal omnifunc=lsp#complete
@@ -576,6 +580,7 @@ call plug#begin(s:dir)
   Plug 'tell-k/vim-autoflake', {'for': 'python'}
   Plug 'jez/vim-github-hub', {'for': 'ghhub'}
   Plug 'syngan/vim-vimlint', {'for': 'vim'}
+  Plug 'lambdalisue/vim-pyenv'
   Plug 'vim-jp/vim-vimlparser'
   Plug 'robertbasic/vim-hugo-helper'
   Plug 'vim-jp/vimdoc-ja'
