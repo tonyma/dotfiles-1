@@ -13,7 +13,7 @@ let $ARCHFLAGS='-arch x86_64'
 let $EDITOR='vim'
 let $COLORTERM='xterm-256color'
 let $TERM='xterm-256color'
-if ($XDG_CONFIG_HOME == '')
+if ($XDG_CONFIG_HOME ==# '')
   let $XDG_CONFIG_HOME=$HOME.'/.config'
 end
 
@@ -108,7 +108,7 @@ function! Config(bang)
 endfunction
 command! -bang -nargs=0 Config :call Config('<bang>')
 
-if !exists("*ConfigReload")
+if !exists('*ConfigReload')
   function! ConfigReload()
     " reload vimrc
     execute 'source $MYVIMRC'
@@ -180,7 +180,7 @@ call plug#begin(s:dir)
   " nmap <Leader> <Plug>(lsp-status)
 
   " for golang
-  if executable('bingo')
+  if executable('gopls')
     augroup Lsp.go
       autocmd!
 
@@ -362,11 +362,11 @@ call plug#begin(s:dir)
     return &buftype ==# 'terminal' ? '' : &modified ? '+' : &modifiable ? '' : '-'
   endfunction
   function! LightlineFileEncoding() abort
-    let l:enc = &fenc !=# '' ? &fenc : &enc
+    let l:enc = &fileencoding !=# '' ? &fileencoding : &encoding
     return &buftype ==# 'terminal' ? '' : (l:enc ==# 'utf-8' ? '' : l:enc)
   endfunction
   function! LightlineLineInfo() abort
-    return &buftype ==# 'terminal' ? '' : "\ue0a1".line('.').":".printf('%03d', col('.'))
+    return &buftype ==# 'terminal' ? '' : "\ue0a1".line('.').':'.printf('%03d', col('.'))
   endfunction
   function! LightlineTerminalInfo() abort
     if &buftype !=# 'terminal'
@@ -374,9 +374,9 @@ call plug#begin(s:dir)
     endif
     let l:ttl=term_gettitle('%')
     let l:rel=fnamemodify(l:ttl, ':p:.')
-    if l:rel ==# ""
+    if l:rel ==# ''
       let l:rel=fnamemodify(l:ttl, ':t:.')
-    elseif l:rel[0] != '/'
+    elseif l:rel[0] !=# '/'
       let l:rel='./'.l:rel
     endif
     return bufnr('%').':'.l:rel
@@ -390,7 +390,7 @@ call plug#begin(s:dir)
       if len(l:name) < l:max
         let l:name = expand('%')
         if len(l:name) > l:max
-          let l:name = '…' . l:name[-l:max:]
+          let l:name = '…' . l:name[-l:max :]
         endif
       endif
     endif
@@ -522,30 +522,10 @@ call plug#begin(s:dir)
   Plug 'jremmen/vim-ripgrep', {'on': ['Rg', 'RgRoot']}
   let g:rg_command = 'rg --vimgrep'
   " }}}
-  " {{{ fatih/vim-go
-  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
-  let g:go_highlight_functions = 1
-  let g:go_highlight_string_spellcheck = 0
-  let g:go_highlight_format_strings = 0
-
-  " LSPに任せる機能をOFFにする
-  let g:go_gocode_unimported_packages = 0
-  let g:go_gocode_propose_source = 0
-  let g:go_gocode_propose_builtins = 0 "with vim-lsp
-  let g:go_metalinter_enabled = 0
-  let g:go_metalinter_autosave = 0
-  let g:go_def_mapping_enabled = 0
-  let g:go_doc_keywordprg_enabled = 0
-  let g:go_fmt_autosave = 0
-
-  let g:go_fmt_command = "goimports"
-  let g:go_fmt_fail_silently = 1
-
-  " }}}
   " {{{ davidhalter/jedi-vim
-  Plug 'davidhalter/jedi-vim', {'for': 'python'} 
-  let g:jedi#completions_enabled = 0 " lsp.nvimに任せる
-  let g:jedi#show_call_signatures = 1
+  Plug 'davidhalter/jedi-vim', {'for': 'python'}
+  let g:jedi#completions_enabled = 0 " vim-lspに任せる
+  let g:jedi#show_call_signatures = 0
   " }}}
   " {{{ lambdalisue/vim-pyenv
   Plug 'lambdalisue/vim-pyenv'
@@ -572,6 +552,27 @@ call plug#begin(s:dir)
   Plug 'qpkorr/vim-bufkill'
   let g:BufKillCreateMappings = 0
   " }}}
+  " {{{ fatih/vim-go
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
+  let g:go_highlight_functions = 1
+  let g:go_highlight_string_spellcheck = 0
+  let g:go_highlight_format_strings = 0
+
+  " LSPに任せる機能をOFFにする
+  let g:go_gocode_unimported_packages = 0
+  let g:go_gocode_propose_source = 0
+  let g:go_gocode_propose_builtins = 0 "with vim-lsp
+  let g:go_metalinter_enabled = 0
+  let g:go_metalinter_autosave = 0
+  let g:go_def_mapping_enabled = 0
+  let g:go_doc_keywordprg_enabled = 0
+  let g:go_fmt_autosave = 0
+
+  let g:go_fmt_command = 'goimports'
+  let g:go_fmt_fail_silently = 1
+
+  " }}}
+  Plug 'robertbasic/vim-hugo-helper'
   Plug 'vim-jp/vimdoc-ja'
   Plug 'vim-jp/vital.vim', {'on': 'Vitalize'}
   Plug 'kana/vim-metarw'
@@ -710,6 +711,7 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 " }}}
 
 " Completion {{{
+set wildmenu
 set wildmode=longest:full,full
 set completeopt=menu,menuone
 " }}}
@@ -719,6 +721,7 @@ set clipboard+=unnamedplus,unnamed
 set hidden              " able to edit without saving
 set fixendofline        " <EOL> at the end of file will be restored if missing
 set showcmd             " 
+set textwidth=0         " never limit length of each line
 set ambiwidth=double
 set foldmethod=marker
 set backspace=2
