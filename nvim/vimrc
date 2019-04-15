@@ -572,6 +572,15 @@ call plug#begin(s:dir)
   let g:go_fmt_fail_silently = 1
 
   " }}}
+  Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
+  Plug 'briancollins/vim-jst', {'for': 'jst'}
+  Plug 'cespare/vim-toml', {'for': 'toml'}
+  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+  Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+  Plug 'tell-k/vim-autoflake', {'for': 'python'}
+  Plug 'jez/vim-github-hub', {'for': 'ghhub'}
+  Plug 'syngan/vim-vimlint', {'for': 'vim'}
+  Plug 'vim-jp/vim-vimlparser'
   Plug 'robertbasic/vim-hugo-helper'
   Plug 'vim-jp/vimdoc-ja'
   Plug 'vim-jp/vital.vim', {'on': 'Vitalize'}
@@ -582,27 +591,18 @@ call plug#begin(s:dir)
   Plug 'iberianpig/tig-explorer.vim'
   Plug 'stefandtw/quickfix-reflector.vim', {'for': 'qf'}
   Plug 'sodapopcan/vim-twiggy'
-  Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
-  Plug 'briancollins/vim-jst', {'for': 'jst'}
-  Plug 'cespare/vim-toml', {'for': 'toml'}
   Plug 'justinmk/vim-dirvish'
   Plug 'kristijanhusak/vim-dirvish-git'
   Plug 'kana/vim-textobj-entire'
   Plug 'kana/vim-textobj-user'
   Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
-  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-  Plug 'pangloss/vim-javascript', {'for': 'javascript'}
   Plug 'simeji/winresizer'
-  Plug 'syngan/vim-vimlint', {'for': 'vim'}
-  Plug 'vim-jp/vim-vimlparser', {'for': 'vim'}
-  Plug 'tell-k/vim-autoflake', {'for': 'python'}
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-surround'  " Edit surrounders (like brackets, parentheses and quotes)
   Plug 'tyru/capture.vim', {'on': 'Capture'}  " Show Ex command output in a buffer
   Plug 'tyru/open-browser-github.vim'
   Plug 'tyru/open-browser.vim'
   Plug 'direnv/direnv.vim'
-  Plug 'jez/vim-github-hub', {'for': 'ghhub'}
 
   " My Plugins {{{
   " {{{ kyoh86/vim-gogh
