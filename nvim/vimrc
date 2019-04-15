@@ -251,10 +251,6 @@ call plug#begin(s:dir)
     autocmd VimEnter * call FugitiveReDetect('VimEnter')
   augroup END
   " }}}
-  " {{{ thinca/vim-splash
-  " Plug 'thinca/vim-splash'  " blackout bug (https://github.com/thinca/vim-splash/issues/3)
-  " let g:splash#path = $XDG_CONFIG_HOME . '/vim/splash.txt'
-  " }}}
   " {{{ w0rp/ale (Asynchronous Lint Engine)
   Plug 'w0rp/ale'
   let g:ale_completion_enabled = 0
