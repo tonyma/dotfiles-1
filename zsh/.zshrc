@@ -119,29 +119,29 @@ _source_if ~/.fzf.zsh
 # anyenv {{{
 eval "$( command direnv hook zsh )"
 
-if type nodenv > /dev/null; then
-  function nodenv() {
-    unset -f nodenv
+# if type nodenv > /dev/null; then
+#   function nodenv() {
+#     unset -f nodenv
     eval "$(command nodenv init -)"
-    nodenv $@
-  }
-fi
-if type rbenv > /dev/null; then
-  function rbenv() {
-    unset -f rbenv
+#     nodenv $@
+#   }
+# fi
+# if type rbenv > /dev/null; then
+#   function rbenv() {
+#     unset -f rbenv
     eval "$(command rbenv init -)"
-    rbenv $@
-  }
-fi
-if type pyenv > /dev/null; then
-  function pyenv() {
-    unset -f pyenv
+#     rbenv $@
+#   }
+# fi
+# if type pyenv > /dev/null; then
+#   function pyenv() {
+#     unset -f pyenv
     eval "$(command pyenv init -)"
-    eval "$(command pyenv  virtualenv-init -)"
-    pyenv $@
-  }
+    eval "$(command pyenv virtualenv-init -)"
+#     pyenv $@
+#   }
   # pip とか python とか呼び出すときもコレやったほうが良いのかな
-fi
+# fi
 # }}}
 # Java {{{
 
