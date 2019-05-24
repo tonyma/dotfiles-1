@@ -115,33 +115,28 @@ alias zln='zmv -L'
 # fzf {{{
 _source_if ~/.fzf.zsh
 # }}}
-
 # anyenv {{{
+
+source ${DOTFILES}/lazyenv/lazyenv.bash
+
 eval "$( command direnv hook zsh )"
 
-# if type nodenv > /dev/null; then
-#   function nodenv() {
-#     unset -f nodenv
-    eval "$(command nodenv init -)"
-#     nodenv $@
-#   }
-# fi
-# if type rbenv > /dev/null; then
-#   function rbenv() {
-#     unset -f rbenv
-    eval "$(command rbenv init -)"
-#     rbenv $@
-#   }
-# fi
-# if type pyenv > /dev/null; then
-#   function pyenv() {
-#     unset -f pyenv
-    eval "$(command pyenv init -)"
-    eval "$(command pyenv virtualenv-init -)"
-#     pyenv $@
-#   }
-  # pip とか python とか呼び出すときもコレやったほうが良いのかな
-# fi
+_nodenv_init() {
+  eval "$(command nodenv init -)"
+}
+eval "$(lazyenv.load _nodenv_init `gls --color=never ~/.nodenv/shims`)"
+
+_rbenv_init() {
+  eval "$(command rbenv init -)"
+}
+eval "$(lazyenv.load _rbenv_init `gls --color=never ~/.rbenv/shims`)"
+
+_pyenv_init() {
+  eval "$(command pyenv init -)"
+  eval "$(command pyenv virtualenv-init -)"
+}
+eval "$(lazyenv.load _pyenv_init `gls --color=never ~/.pyenv/shims`)"
+
 # }}}
 # Java {{{
 
