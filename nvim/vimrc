@@ -222,17 +222,17 @@ call plug#begin(s:dir)
   endif
 
   " for TypeScript (using tsuquyomi)
-  " if executable('typescript-language-server')
-  "   augroup Lsp.typescript
-  "     autocmd!
-  "     autocmd User lsp_setup call lsp#register_server({
-  "         \ 'name': 'typescript-language-server',
-  "         \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-  "         \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-  "         \ 'whitelist': ['typescript'],
-  "         \ })
-  "   augroup END
-  " endif
+  if executable('typescript-language-server')
+    augroup Lsp.typescript
+      autocmd!
+      autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'typescript-language-server',
+          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+          \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+          \ 'whitelist': ['typescript'],
+          \ })
+    augroup END
+  endif
 
   " }}}
   " {{{ airblade/vim-gitgutter
@@ -240,11 +240,11 @@ call plug#begin(s:dir)
   let g:gitgutter_map_keys = 0   " suppress mapping
   " }}}
   " {{{ Quramy/tsuquyomi
-  Plug 'Quramy/tsuquyomi', {'for': 'typescript'}
-  augroup TsuquyomiCmd
-    autocmd FileType typescript nmap <buffer> <leader>g <Plug>(TsuquyomiDefinition)
-    autocmd FileType typescript nmap <buffer> <leader>d <Plug>(TsuquyomiDefinition)
-  augroup END
+  " Plug 'Quramy/tsuquyomi', {'for': 'typescript'}
+  " augroup TsuquyomiCmd
+  "   autocmd FileType typescript nmap <buffer> <leader>g <Plug>(TsuquyomiDefinition)
+  "   autocmd FileType typescript nmap <buffer> <leader>d <Plug>(TsuquyomiDefinition)
+  " augroup END
   " }}}
   " {{{ tpope/vim-fugitive
   Plug 'tpope/vim-fugitive'
@@ -548,6 +548,22 @@ call plug#begin(s:dir)
   let g:go_fmt_fail_silently = 1
 
   " }}}
+  " {{{ thinca/vim-quickrun
+  Plug 'thinca/vim-quickrun', {'on': 'QuickRun'}
+  let g:quickrun_config = {
+        \ '_': {
+        \   'runner': 'terminal'
+        \   }
+        \ }
+  " }}}
+  " {{{ osyo-manga/vim-operator-jump_side
+  Plug 'osyo-manga/vim-operator-jump_side'
+  " textobj の先頭へ移動する
+  nmap <Leader>h <Plug>(operator-jump-head)
+  " textobj の末尾へ移動する
+  nmap <Leader>l <Plug>(operator-jump-tail)
+  " }}}
+  Plug 'kana/vim-operator-user'
   Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
   Plug 'briancollins/vim-jst', {'for': 'jst'}
   Plug 'cespare/vim-toml', {'for': 'toml'}
