@@ -1,5 +1,3 @@
-[pull]
-	rebase = preserve
 [push]
 	default = simple
 	followTags = true
@@ -74,3 +72,5 @@
 	token = !security find-internet-password -a kyoh86 -s github.com -l 'ghi token' -w
 [hub]
 	protocol = https
+[pull]
+	rebase = true
