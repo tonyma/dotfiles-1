@@ -42,7 +42,7 @@ let $PYENV_ROOT=$HOME.'/.pyenv'
 let $PATH=$PYENV_ROOT.'/bin:'.$PYENV_ROOT.'/shims:'.$PATH
 
 " Node:
-let $PATH=$PATH.':'.$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin:./node_modules/.bin'
+let $PATH=$PATH.':'.$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin'
 
 " Ruby:
 let $PATH=$PATH.':'.$HOME.'/.rbenv/bin'
@@ -54,10 +54,6 @@ let $PATH='/usr/local/opt/openssl/bin:'.$PATH
 " FZF (https://github.com/junegunn/fzf):
 let $FZF_DEFAULT_OPTS='--inline-info --no-mouse --extended --ansi --no-sort'
 let $FZF_DEFAULT_COMMAND='rg --files --hidden --follow --maxdepth 10 --glob "!.git/*" --glob "!*.egg-info/*" --glob "!*/__pycache__/*" --glob "!.mypy_cache/*"'
-
-" AWS:
-let $AWS_DEFAULT_PROFILE='default'
-let $AWS_DEFAULT_REGION='us-east-1'
 
 " Scala:
 let $SCALA_HOME='/usr/local/bin/scala'
@@ -155,11 +151,12 @@ call plug#begin(s:dir)
   let g:lsp_async_completion = 1
   let g:lsp_signs_enabled = 1           " enable signs
   let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+  let g:lsp_highlight_references_enabled = 0 " disable references highlighting
 
   " 保存時に自動でフォーマット
   augroup Lsp.format
     autocmd!
-    autocmd BufWritePre *.go,*.py LspDocumentFormatSync
+    autocmd BufWritePre *.go,*.py silent LspDocumentFormatSync
   augroup END
 
   nmap <Leader>ld <Plug>(lsp-definition)
@@ -529,7 +526,7 @@ call plug#begin(s:dir)
   let g:BufKillCreateMappings = 0
   " }}}
   " {{{ fatih/vim-go
-  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
+  Plug 'fatih/vim-go', { 'for': 'go' }
   let g:go_highlight_functions = 1
   let g:go_highlight_string_spellcheck = 0
   let g:go_highlight_format_strings = 0
