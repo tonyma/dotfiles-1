@@ -58,7 +58,7 @@ brew bundle -v --file=${DOTFILES}/homebrew/bundle
 
 # replace dotfiles
 if [[ -d ${DOTFILES}/.git ]]; then
-  git pull -C ${DOTFILES}
+  git -C ${DOTFILES} pull
 else
   rm -rf ${DOTFILES}
   git clone https://github.com/kyoh86/dotfiles ${DOTFILES}
