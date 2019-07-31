@@ -5,6 +5,7 @@
 !/README.md
 !/flake8
 !/pycodestyle
+!/pyenv
 !/setup
 !/lazyenv
 !/deject

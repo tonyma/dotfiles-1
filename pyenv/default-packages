@@ -1,0 +1,8 @@
+flake8
+mypy
+neovim
+pipdeptree
+pyls-black
+pyls-mypy
+pyls-isort
+vim-vint
