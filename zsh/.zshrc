@@ -176,6 +176,9 @@ if [[ -n "${VIM_TERMINAL}" ]]; then
   }
 fi
 
+# :q で exit
+alias :q='exit'
+
 # }}}
 
 # }}}

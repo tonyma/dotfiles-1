@@ -7,7 +7,7 @@
 	quotepath = false
 	precomposeunicode = true
 	pager = less -r
-	commentchar = ";"
+	commentChar = %
 [user]
 	name = Kyoichiro Yamada
 	email = master@kyoh86.dev

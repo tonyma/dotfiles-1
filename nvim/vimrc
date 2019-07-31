@@ -40,6 +40,7 @@ let $PYTHON_CONFIGURE_OPTS='--enable-framework'
 let $PYENV_DEFAULT_PACKAGES=$XDG_CONFIG_HOME.'/pyenv/default-packages'
 let $PYENV_ROOT=$HOME.'/.pyenv'
 let $PATH=$PYENV_ROOT.'/bin:'.$PYENV_ROOT.'/shims:'.$PATH
+let $PIP_REQUIRE_VIRTUALENV='true'
 
 " Node:
 let $PATH=$PATH.':'.$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin'
@@ -210,11 +211,15 @@ call plug#begin(s:dir)
           \ 'cmd': {server_info->['pyls']},
           \ 'workspace_config': {'pyls': {
           \   'configurationSources': ['flake8'],
-          \   'plugins': {'black': v:true},
+          \   'plugins': {
+          \     'black': {'enabled': v:true},
+          \     'pycodestyle': {'enabled': v:false},
+          \   },
           \ }},
           \ 'whitelist': ['python'],
           \ })
       autocmd FileType python setlocal omnifunc=lsp#complete
+      autocmd BufWinEnter *.py :call lsp#enable()
     augroup END
   endif
 
@@ -243,24 +248,9 @@ call plug#begin(s:dir)
   "   autocmd FileType typescript nmap <buffer> <leader>d <Plug>(TsuquyomiDefinition)
   " augroup END
   " }}}
-  " {{{ tpope/vim-fugitive
-  Plug 'tpope/vim-fugitive'
-  Plug 'idanarye/vim-merginal'
-  Plug 'tpope/vim-rhubarb'  " fugitive.vim extension for GitHub
-  nnoremap <Leader><C-g><C-s> :<C-u>Gstatus<CR>
-  function! FugitiveReDetect(cmd)
-    unlet! b:git_dir
-    call fugitive#detect(getcwd())
-  endfunction
-
-  augroup fugitive-ov
-    autocmd BufNew * call FugitiveReDetect('BufNew')
-    autocmd BufNewFile * call FugitiveReDetect('BufNewFile')
-    autocmd BufRead * call FugitiveReDetect('BufRead')
-    autocmd CmdwinEnter * call FugitiveReDetect('CmdwinEnter')
-    silent! autocmd DirChanged * call FugitiveReDetect('DirChanged')
-    autocmd VimEnter * call FugitiveReDetect('VimEnter')
-  augroup END
+  " {{{ lambdalisue/gina.vim
+  Plug 'lambdalisue/gina.vim'
+  nnoremap <Leader><C-g><C-s> :<C-u>Gina status<CR>
   " }}}
   " {{{ itchyny/lightline.vim
   Plug 'itchyny/lightline.vim'
@@ -281,7 +271,7 @@ call plug#begin(s:dir)
     \     ],
     \     'right': [
     \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
-    \       [ 'fileformat', 'fileencoding', 'filetype', 'lineinfo', 'percent' ]
+    \       [ 'fileformat', 'fileencoding', 'filetype', 'lineinfo' ]
     \     ]
     \   },
     \   'inactive': {
@@ -315,7 +305,7 @@ call plug#begin(s:dir)
     \     'filetype': 'LightlineDevFiletype',
     \     'terminalinfo': 'LightlineTerminalInfo',
     \     'readonly': 'LightlineReadonly', 
-    \     'gitbranch': 'LightlineFugitive',
+    \     'gitbranch': 'LightlineGitBranch',
     \     'relativepath': 'LightlineRelativePath',
     \     'filename': 'LightlineFilename',
     \     'gitgutter': 'LightlineGitGutter',
@@ -381,14 +371,19 @@ call plug#begin(s:dir)
   function! LightlineReadonly() abort
     return &buftype ==# 'terminal' ? '' : &readonly ? "\ue0a2" : ''
   endfunction
-  function! LightlineFugitive() abort
-    if exists('*fugitive#head')
-      let l:branch = fugitive#head()
+  function! LightlineGitBranch() abort
+    if exists('*gina#component#repo#branch')
+      let l:branch = gina#component#repo#branch()
+      echom l:branch
       return l:branch !=# '' ? "\ue0a0 ".l:branch : ''
+    else
+      echom 'no method'
     endif
     return ''
   endfunction
   function! LightlineGitStatus()
+    let l:brch = ''
+    let l:warn = ''
     let l:location = getcwd()
     if &buftype ==# 'terminal'
       let l:location = term_gettitle('%')
@@ -436,19 +431,20 @@ call plug#begin(s:dir)
     if l:res[0:6] ==# 'fatal: '
       return l:info
     endif
-    let [l:branch; l:files] = split(l:res, "\n")
-    let [l:info['local-branch'], l:info['remote-branch']; l:remain] = split(l:branch, '\.\.\.\|[ \[\],]')[1:]
-    let l:key = ''
-    for l:_ in l:remain
-      if l:key !=# ''
-        let l:info[l:key] = l:_
+    for l:file in split(l:res, "\n")
+      if l:file[0:1] ==# '##'
+        " ブランチ名を取得する
+        let [l:info['local-branch'], l:info['remote-branch']; l:remain] = split(l:file, '\.\.\.\|[ \[\],]')[1:]
         let l:key = ''
-      else
-        let l:key = l:_
-      endif
-    endfor
-    for l:file in l:files
-      if l:file[0] ==# 'U' || l:file[1] ==# 'U' || l:file[0:1] ==# 'AA' || l:file[0:1] ==# 'DD'
+        for l:_ in l:remain
+          if l:key !=# ''
+            let l:info[l:key] = l:_
+            let l:key = ''
+          else
+            let l:key = l:_
+          endif
+        endfor
+      elseif l:file[0] ==# 'U' || l:file[1] ==# 'U' || l:file[0:1] ==# 'AA' || l:file[0:1] ==# 'DD'
         call s:inc(l:info, 'unmerged')
       elseif l:file[0:1] ==# '??'
         call s:inc(l:info, 'untracked')
@@ -560,6 +556,7 @@ call plug#begin(s:dir)
   " textobj の末尾へ移動する
   nmap <Leader>l <Plug>(operator-jump-tail)
   " }}}
+  Plug 'posva/vim-vue'
   Plug 'kana/vim-operator-user'
   Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
   Plug 'briancollins/vim-jst', {'for': 'jst'}
@@ -576,7 +573,6 @@ call plug#begin(s:dir)
   Plug 'vim-jp/vital.vim', {'on': 'Vitalize'}
   Plug 'kana/vim-metarw'
   Plug 'ryanoasis/vim-devicons'
-  Plug 'mopp/autodirmake.vim'
   Plug 'vim-scripts/sudo.vim'
   Plug 'iberianpig/tig-explorer.vim'
   Plug 'stefandtw/quickfix-reflector.vim', {'for': 'qf'}
@@ -593,6 +589,7 @@ call plug#begin(s:dir)
   Plug 'tyru/open-browser-github.vim'
   Plug 'tyru/open-browser.vim'
   Plug 'direnv/direnv.vim'
+  Plug 'jmcantrell/vim-virtualenv'
 
   " My Plugins {{{
   " {{{ kyoh86/vim-gogh
