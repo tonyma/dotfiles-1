@@ -6,9 +6,7 @@
 !/flake8
 !/pycodestyle
 !/setup
-!/Myrica*
 !/lazyenv
-
 !/deject
 !/alacritty
 !/fonts
