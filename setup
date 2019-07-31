@@ -74,7 +74,7 @@ cp ${DOTFILES}/fonts/* ~/Library/Fonts
 # install python
 py_latest=$(pyenv install --list | ggrep -Pe '^ *\d\.\d\.\d$' | sort -r | head -n1)
 py_latest=${py_latest##* }
-pyenv install $py_latest
+pyenv install --skip-existing $py_latest
 pyenv global $py_latest
 pyenv exec pip install --upgrade pip
 pyenv exec pip install -r ${DOTFILES}/pyenv/default-packages
