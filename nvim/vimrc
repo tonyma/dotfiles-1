@@ -35,6 +35,11 @@ let $PATH=$PATH.':/usr/local/go/bin:'.$HOME.'/go/bin'
 " Generator-go-project:
 let $GO_PROJECT_ROOT=$HOME.'/Projects'
 
+" Python: (support sqlite3 and mysql library (used by mypy, etc...))
+let $LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/sqlite/lib"
+let $CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/sqlite/include"
+let $LIBRARY_PATH=$LIBRARY_PATH.':/usr/local/opt/openssl/lib/'
+
 " Python:
 let $PYTHON_CONFIGURE_OPTS='--enable-framework'
 let $PYENV_DEFAULT_PACKAGES=$XDG_CONFIG_HOME.'/pyenv/default-packages'
@@ -239,7 +244,6 @@ call plug#begin(s:dir)
   " }}}
   " {{{ airblade/vim-gitgutter
   Plug 'airblade/vim-gitgutter'
-  let g:gitgutter_map_keys = 0   " suppress mapping
   " }}}
   " {{{ Quramy/tsuquyomi
   " Plug 'Quramy/tsuquyomi', {'for': 'typescript'}

@@ -10,6 +10,10 @@
 .python-version
 ### end of pyenv ###
 
+### mypy ###
+.mypy_cache/
+### end of mypy ###
+
 ### Ripgrep ###
 .rgignore
 ### end of Ripgrep ###
