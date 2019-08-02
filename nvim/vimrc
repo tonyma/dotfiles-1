@@ -193,6 +193,8 @@ call plug#begin(s:dir)
           \ 'whitelist': ['go'],
           \ })
       autocmd FileType go setlocal omnifunc=lsp#complete
+    else
+      echoerr 'gopls not found'
     endif
 
     if executable('efm-langserver')
@@ -202,14 +204,15 @@ call plug#begin(s:dir)
           \ 'whitelist': ['go'],
           \ })
     else
-      echoerr 'failed to find efm-langserver'
+      echoerr 'efm-langserver not found'
     endif
   augroup END
 
   " for python
-  if executable('pyls')
-    augroup Lsp.python
-      autocmd!
+  augroup Lsp.python
+    autocmd!
+
+    if executable('pyls')
       " pip install python-language-server
       autocmd User lsp_setup call lsp#register_server({
           \ 'name': 'pyls',
@@ -225,21 +228,47 @@ call plug#begin(s:dir)
           \ })
       autocmd FileType python setlocal omnifunc=lsp#complete
       autocmd BufWinEnter *.py :call lsp#enable()
-    augroup END
-  endif
+    else
+      echoerr 'pyls not found'
+    endif
+  augroup END
+
+  " for viml
+  augroup Lsp.viml
+    autocmd!
+    if executable('vim-language-server')
+      autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'vim-language-server',
+          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'vim-language-server --stdio']},
+          \ 'whitelist': ['vim'],
+          \ 'workspace_config': {
+          \   "iskeyword": "vim iskeyword option",
+          \   "vimruntime": $VIMRUNTIME,
+          \   "runtimepath": $VIM,
+          \   "diagnostic": {
+          \     "enable": v:true
+          \   }
+          \ },
+          \ })
+    else
+      echoerr 'vim-language-server is not found'
+    endif
+  augroup END
 
   " for TypeScript (using tsuquyomi)
-  if executable('typescript-language-server')
-    augroup Lsp.typescript
-      autocmd!
+  augroup Lsp.typescript
+    autocmd!
+    if executable('typescript-language-server')
       autocmd User lsp_setup call lsp#register_server({
           \ 'name': 'typescript-language-server',
           \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
           \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
           \ 'whitelist': ['typescript'],
           \ })
-    augroup END
-  endif
+    else
+      echoerr 'typescript-language-server not found'
+    endif
+  augroup END
 
   " }}}
   " {{{ airblade/vim-gitgutter
