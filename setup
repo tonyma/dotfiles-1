@@ -72,12 +72,20 @@ fi
 cp ${DOTFILES}/fonts/* ~/Library/Fonts
 
 # install python
-py_latest=$(pyenv install --list | ggrep -Pe '^ *\d\.\d\.\d$' | sort -r | head -n1)
+py_latest=$(pyenv install --list | ggrep -Pe '^ *\d\.\d\.\d$' | sort -t. -k 1,1nr -k 2,2nr -k 3,3nr -k 4,4nr | head -n1)
 py_latest=${py_latest##* }
 pyenv install --skip-existing $py_latest
 pyenv global $py_latest
 pyenv exec pip install --upgrade pip
 pyenv exec pip install -r ${DOTFILES}/pyenv/default-packages
+
+# install node
+nod_latest=$(nodenv install --list | ggrep -Pe '^ *\d+(\.\d+)*$' | sort -t. -k 1,1nr -k 2,2nr -k 3,3nr -k 4,4nr | head -n1)
+nod_latest=${nod_latest##* }
+nodenv install --skip-existing $nod_latest
+nodenv global $nod_latest
+## 注意: yarnはHomebrewで管理している
+yarn global add typescript typescript-language-server vim-language-server yo
 
 # bashの起動時にdotfiles配下のbashrcを読ませる
 # bashrcでは、vimを起動する設定になっている

@@ -380,8 +380,6 @@ call plug#begin(s:dir)
       let l:branch = gina#component#repo#branch()
       echom l:branch
       return l:branch !=# '' ? "\ue0a0 ".l:branch : ''
-    else
-      echom 'no method'
     endif
     return ''
   endfunction
