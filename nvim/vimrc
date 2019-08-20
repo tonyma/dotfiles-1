@@ -119,14 +119,14 @@ endif
 " }}}
 
 " Function: Switch Branch {{{
-function! s:checkout(line)
+function! s:git_switch(line)
   let l:branch = get(split(a:line), 1, '')
-  exec 'Git checkout '.l:branch
+  exec 'Gina switch '.l:branch
 endfunction
 
 command! SwitchBranch call fzf#run({
     \ 'source': "git-branches --color --exclude-current",
-    \ 'sink': function('<SID>checkout'),
+    \ 'sink': function('<SID>git_switch'),
     \ 'down': '30%'
     \ })
 nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
@@ -180,7 +180,7 @@ call plug#begin(s:dir)
   " nmap <Leader> <Plug>(lsp-workspace-symbol)
   " nmap <Leader> <Plug>(lsp-implementation)
   " nmap <Leader> <Plug>(lsp-type-definition)
-  " nmap <Leader> <Plug>(lsp-status)
+  nmap <Leader>ls <Plug>(lsp-status)
 
   " for golang
   augroup Lsp.go
@@ -196,12 +196,17 @@ call plug#begin(s:dir)
     else
       echoerr 'gopls not found'
     endif
+  augroup END
+
+  " for some linters
+  augroup Lsp.lint
+    autocmd!
 
     if executable('efm-langserver')
       autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'efm-langserver-go',
+          \ 'name': 'efm-langserver',
           \ 'cmd': {server_info->['efm-langserver']},
-          \ 'whitelist': ['go'],
+          \ 'whitelist': ['go', 'vim', 'markdown'],
           \ })
     else
       echoerr 'efm-langserver not found'
@@ -508,10 +513,6 @@ call plug#begin(s:dir)
     return &buftype ==# 'terminal' ? '' : lightline#ale#errors()
   endfunction
   " }}}
-  " {{{ romainl/vim-qf
-  Plug 'romainl/vim-qf', {'for': 'qf'}  " this shuffles windows on GoTest
-  let g:qf_auto_quit = 0  " disable `quit Vim if the last window is a location/quickfix window`
-  " }}}
   " {{{ plasticboy/vim-markdown
   Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
   let g:vim_markdown_folding_disabled = 1
@@ -528,7 +529,8 @@ call plug#begin(s:dir)
   let g:rg_command = 'rg --vimgrep'
   " }}}
   " {{{ lambdalisue/vim-pyenv
-  Plug 'lambdalisue/vim-pyenv'
+  Plug 'lambdalisue/vim-pyenv', {'for': 'python'}
+  Plug 'jmcantrell/vim-virtualenv', {'for': 'python'}
   function! s:jedi_auto_force_py_version() abort
     let g:jedi#force_py_version = pyenv#python#get_internal_major_version()
   endfunction
@@ -553,24 +555,27 @@ call plug#begin(s:dir)
   let g:BufKillCreateMappings = 0
   " }}}
   " {{{ fatih/vim-go
-  Plug 'fatih/vim-go', { 'for': 'go' }
-  let g:go_highlight_functions = 1
-  let g:go_highlight_string_spellcheck = 0
-  let g:go_highlight_format_strings = 0
+  " Plug 'fatih/vim-go', { 'for': 'go' }
+  " let g:go_highlight_functions = 1
+  " let g:go_highlight_string_spellcheck = 0
+  " let g:go_highlight_format_strings = 0
 
-  " LSPに任せる機能をOFFにする
-  let g:go_gocode_unimported_packages = 0
-  let g:go_gocode_propose_source = 0
-  let g:go_gocode_propose_builtins = 0 "with vim-lsp
-  let g:go_metalinter_enabled = 0
-  let g:go_metalinter_autosave = 0
-  let g:go_def_mapping_enabled = 0
-  let g:go_doc_keywordprg_enabled = 0
-  let g:go_fmt_autosave = 0
+  " " LSPに任せる機能をOFFにする
+  " let g:go_gocode_unimported_packages = 0
+  " let g:go_gocode_propose_source = 0
+  " let g:go_gocode_propose_builtins = 0 "with vim-lsp
+  " let g:go_metalinter_enabled = 0
+  " let g:go_metalinter_autosave = 0
+  " let g:go_def_mapping_enabled = 0
+  " let g:go_doc_keywordprg_enabled = 0
+  " let g:go_fmt_autosave = 0
 
-  let g:go_fmt_command = 'goimports'
-  let g:go_fmt_fail_silently = 1
+  " let g:go_fmt_command = 'goimports'
+  " let g:go_fmt_fail_silently = 1
 
+  " }}}
+  " {{{ arp242/gopher.vim
+  Plug 'arp242/gopher.vim'
   " }}}
   " {{{ thinca/vim-quickrun
   Plug 'thinca/vim-quickrun', {'on': 'QuickRun'}
@@ -596,8 +601,6 @@ call plug#begin(s:dir)
   Plug 'pangloss/vim-javascript', {'for': 'javascript'}
   Plug 'tell-k/vim-autoflake', {'for': 'python'}
   Plug 'jez/vim-github-hub', {'for': 'ghhub'}
-  Plug 'syngan/vim-vimlint', {'for': 'vim'}
-  Plug 'lambdalisue/vim-pyenv'
   Plug 'vim-jp/vim-vimlparser'
   Plug 'robertbasic/vim-hugo-helper'
   Plug 'vim-jp/vimdoc-ja'
@@ -615,12 +618,13 @@ call plug#begin(s:dir)
   Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
   Plug 'simeji/winresizer'
   Plug 'tpope/vim-dispatch'
-  Plug 'tpope/vim-surround'  " Edit surrounders (like brackets, parentheses and quotes)
+  Plug 'machakann/vim-sandwich'  " Edit surrounders (like brackets, parentheses and quotes)
+  Plug 'sgur/vim-textobj-parameter'
+  Plug 'machakann/vim-swap'
   Plug 'tyru/capture.vim', {'on': 'Capture'}  " Show Ex command output in a buffer
   Plug 'tyru/open-browser-github.vim'
   Plug 'tyru/open-browser.vim'
   Plug 'direnv/direnv.vim'
-  Plug 'jmcantrell/vim-virtualenv'
 
   " My Plugins {{{
   " {{{ kyoh86/vim-gogh
@@ -696,7 +700,6 @@ augroup END
 syntax enable
 set termguicolors
 set background=dark
-set hlsearch
 colorscheme momiji
 " }}}
 
@@ -745,6 +748,8 @@ set foldmethod=marker
 set backspace=2
 set cursorline   " Highlight cursor line
 set showtabline=1
+set hlsearch
+set incsearch
 highlight Pmenu ctermfg=159 ctermbg=17
 " }}}
 

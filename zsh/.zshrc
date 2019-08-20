@@ -171,9 +171,11 @@ function _update_term_title() {
 }
 if [[ -n "${VIM_TERMINAL}" ]]; then
   add-zsh-hook precmd _update_term_title
-  function vim() {
-    $EDITOR $@
-  }
+fi
+
+# vim-editerm用の設定
+if [[ "${VIM_EDITERM_SETUP}" != "" ]]; then
+  source "${VIM_EDITERM_SETUP}" 
 fi
 
 # :q で exit
