@@ -413,7 +413,7 @@ call plug#begin(s:dir)
     if exists('*gina#component#repo#branch')
       let l:branch = gina#component#repo#branch()
       echom l:branch
-      return l:branch !=# '' ? "\ue0a0 ".l:branch : ''
+      return l:branch !=# '' ? "\ue0a0".l:branch : ''
     endif
     return ''
   endfunction
@@ -766,17 +766,33 @@ augroup TermMap
   " ターミナルで
   "   * <C-\><C-n> による job <- -> normal モードの往復を可能にする
   "   * q によるmacro記録を禁止する
-  "   * 行番号を表示しない
   autocmd! TerminalOpen *
       \ nnoremap <buffer> <C-\><C-n> i|
       \ nnoremap <buffer> q <Nop>|
-      \ setlocal nonumber
 augroup END
 
-nnoremap <silent> tt :<C-u>term ++curwin ++close /usr/local/bin/zsh<CR>
-nnoremap <silent> tx :<C-u>term ++close /usr/local/bin/zsh<CR>
-nnoremap <silent> tv :<C-u>vertical terminal ++close /usr/local/bin/zsh<CR>
+nnoremap <silent> tt :<C-u>terminal++curwin <CR>
+nnoremap <silent> tx :<C-u>terminal         <CR>
+nnoremap <silent> tv :<C-u>vertical terminal<CR>
+
 " }}}
+
+" Setup terminal {{{
+set shell=/usr/local/bin/zsh
+
+augroup TermSetting
+  " ターミナルで
+  "   * 行番号を表示しない
+  "   * wrapする（と、なぜかWrapしなくなる）
+  autocmd! TerminalOpen *
+      \ setlocal nonumber wrap
+augroup END
+" }}}
+
+" Default Plugins {{{
+let g:is_posix = 1
+" }}}
+
 " }}}
 
 " Load settings for each location. {{{
