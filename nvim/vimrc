@@ -206,7 +206,7 @@ call plug#begin(s:dir)
       autocmd User lsp_setup call lsp#register_server({
           \ 'name': 'efm-langserver',
           \ 'cmd': {server_info->['efm-langserver']},
-          \ 'whitelist': ['go', 'vim', 'markdown'],
+          \ 'whitelist': ['go', 'vim', 'markdown', 'sh'],
           \ })
     else
       echoerr 'efm-langserver not found'
@@ -593,6 +593,7 @@ call plug#begin(s:dir)
   nmap <Leader>l <Plug>(operator-jump-tail)
   " }}}
   Plug 'posva/vim-vue'
+  Plug 'AndrewRadev/linediff.vim'
   Plug 'kana/vim-operator-user'
   Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
   Plug 'briancollins/vim-jst', {'for': 'jst'}
