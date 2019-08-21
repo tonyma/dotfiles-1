@@ -4,6 +4,7 @@
 !/24-bit-color.sh
 !/README.md
 !/flake8
+!/efm-langserver
 !/pycodestyle
 !/pyenv
 !/setup

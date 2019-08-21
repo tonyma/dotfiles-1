@@ -1,0 +1,19 @@
+languages:
+  vim:
+    lint-command: vimt -
+    lint-stdin: true
+
+  markdown:
+    lint-command: markdownlint -s
+    lint-stdin: true
+    lint-formats:
+      - '%f: %l: %m'
+  go:
+    lint-command: golangci-lint
+    lint-stdin: false
+
+  sh:
+    lint-command: shellcheck -f gcc -
+    lint-stdin: true
+    lint-formats:
+      - '%f:%l:%c: %m'
