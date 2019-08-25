@@ -619,6 +619,13 @@ call _plug_begin()
   let g:winresizer_start_key = '<C-W><C-E>'
   Plug 'simeji/winresizer'
   "}}}
+  "{{{'machakann/vim-sandwich'
+  Plug 'machakann/vim-sandwich'  " Edit surrounders (like brackets, parentheses and quotes)
+  nnoremap s <Nop>   " ignore s instead of the cl
+  xnoremap s <Nop>   " ignore s instead of the cl
+  silent! nmap <unique><silent> sc <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
+  silent! nmap <unique><silent> scb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+  "}}}
   Plug 'AndrewRadev/linediff.vim'
   Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
   Plug 'bps/vim-textobj-python'
@@ -635,7 +642,6 @@ call _plug_begin()
   Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
   Plug 'kristijanhusak/vim-dirvish-git'
   Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-  Plug 'machakann/vim-sandwich'  " Edit surrounders (like brackets, parentheses and quotes)
   Plug 'machakann/vim-swap'
   Plug 'pangloss/vim-javascript', {'for': 'javascript'}
   Plug 'posva/vim-vue'
