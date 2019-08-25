@@ -142,13 +142,15 @@ endfunction
 " }}}
 
 " Configure Plugins {{{
-let s:dir = g:xdg_data_home . '/vim-plug'
-if !isdirectory(s:dir)
-  call mkdir(s:dir, 'p')
-endif
-call plug#begin(s:dir)
-  let g:formatterpath = ['/Users/yamada/.pyenv/shims']
+function! _plug_begin()
+  let l:dir = g:xdg_data_home . '/vim-plug'
+  if !isdirectory(l:dir)
+    call mkdir(l:dir, 'p')
+  endif
+  call plug#begin(l:dir)
+endfunction
 
+call _plug_begin()
   " {{{ prabirshrestha/vim-lsp
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
@@ -279,13 +281,6 @@ call plug#begin(s:dir)
   " {{{ airblade/vim-gitgutter
   Plug 'airblade/vim-gitgutter'
   " }}}
-  " {{{ Quramy/tsuquyomi
-  " Plug 'Quramy/tsuquyomi', {'for': 'typescript'}
-  " augroup TsuquyomiCmd
-  "   autocmd FileType typescript nmap <buffer> <leader>g <Plug>(TsuquyomiDefinition)
-  "   autocmd FileType typescript nmap <buffer> <leader>d <Plug>(TsuquyomiDefinition)
-  " augroup END
-  " }}}
   " {{{ lambdalisue/gina.vim
   Plug 'lambdalisue/gina.vim'
   nnoremap <Leader><C-g><C-s> :<C-u>Gina status<CR>
@@ -305,7 +300,7 @@ call plug#begin(s:dir)
     \   'active': {
     \     'left': [
     \       [ 'mode', 'paste' ],
-    \       [ 'gitstatus', 'relativepath', 'readonly', 'modified', 'terminalinfo' ]
+    \       [ 'pwd', 'gitstatus', 'relativepath', 'readonly', 'modified', 'terminalinfo' ]
     \     ],
     \     'right': [
     \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
@@ -326,9 +321,9 @@ call plug#begin(s:dir)
     \     'c': 'COMM', 's': 'SLCT', 'S': 'SLNE', "\<C-s>": 'SBLK', 't': 'TERM'
     \   },
     \   'component_expand': {
-    \     'linter_ok': 'LightlineAleOK',
-    \     'linter_warnings': 'LightlineAleWarnings',
-    \     'linter_errors': 'LightlineAleErrors',
+    \     'linter_ok': 'LightlineLspOK',
+    \     'linter_warnings': 'LightlineLspWarnings',
+    \     'linter_errors': 'LightlineLspErrors',
     \     'gitstatus': 'LightlineGitStatus'
     \   },
     \   'component_type': {
@@ -337,6 +332,7 @@ call plug#begin(s:dir)
     \     'linter_errors': 'error',
     \   },
     \   'component_function': {
+    \     'pwd': 'LightlinePwd',
     \     'percent': 'LightlinePercent',
     \     'fileformat': 'LightlineDevFileformat',
     \     'fileencoding': 'LightlineFileEncoding',
@@ -351,6 +347,9 @@ call plug#begin(s:dir)
     \     'modified': 'LightlineModified'
     \   },
     \ }
+  function! LightlinePwd() abort
+    return fnamemodify(getcwd(), ':t')
+  endfunction
   function! LightlinePercent() abort
     let l:last = line('$')
     let l:cur = line('.')
@@ -381,7 +380,7 @@ call plug#begin(s:dir)
     let l:ttl=term_gettitle('%')
     let l:rel=fnamemodify(l:ttl, ':p:.')
     if l:rel ==# ''
-      let l:rel=fnamemodify(l:ttl, ':t:.')
+      let l:rel='.'
     elseif l:rel[0] !=# '/'
       let l:rel='./'.l:rel
     endif
@@ -394,7 +393,13 @@ call plug#begin(s:dir)
       let l:max = winwidth(0) - 100
       let l:name = expand('%:t')
       if len(l:name) < l:max
-        let l:name = expand('%')
+        let l:name = expand('%:.')
+        if l:name ==# ''
+          let l:name = '.'
+        elseif l:name[0] !=# '/'
+          let l:name='./'.l:name
+        endif
+
         if len(l:name) > l:max
           let l:name = '…' . l:name[-l:max :]
         endif
@@ -500,17 +505,35 @@ call plug#begin(s:dir)
   endfunction
   set laststatus=2  " statuslineは常に表示
   set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
-  " }}}
-  " {{{ maximbaz/lightline-ale
-  Plug 'maximbaz/lightline-ale'
-  function! LightlineAleOK() abort
-    return &buftype ==# 'terminal' ? '' : lightline#ale#ok()
+  function! LightlineLspOK() abort
+    if &buftype ==# 'terminal'
+      return ''
+    endif
+    let l:counts = lsp#get_buffer_diagnostics_counts()    " *vim-lsp-get_buffer_diagnostics_counts*
+    if l:counts['error'] == 0 && l:counts['warning'] == 0
+      return 'OK'
+    endif
+    return ''
   endfunction
-  function! LightlineAleWarnings() abort
-    return &buftype ==# 'terminal' ? '' : lightline#ale#warnings()
+  function! LightlineLspWarnings() abort
+    if &buftype ==# 'terminal'
+      return ''
+    endif
+    let l:counts = lsp#get_buffer_diagnostics_counts()    " *vim-lsp-get_buffer_diagnostics_counts*
+    if l:counts['warning'] == 0
+      return ''
+    endif
+    return 'W:' . l:counts['warning']
   endfunction
-  function! LightlineAleErrors() abort
-    return &buftype ==# 'terminal' ? '' : lightline#ale#errors()
+  function! LightlineLspErrors() abort
+    if &buftype ==# 'terminal'
+      return ''
+    endif
+    let l:counts = lsp#get_buffer_diagnostics_counts()    " *vim-lsp-get_buffer_diagnostics_counts*
+    if l:counts['error'] == 0
+      return ''
+    endif
+    return 'E:' . l:counts['error']
   endfunction
   " }}}
   " {{{ plasticboy/vim-markdown
@@ -592,40 +615,44 @@ call plug#begin(s:dir)
   " textobj の末尾へ移動する
   nmap <Leader>l <Plug>(operator-jump-tail)
   " }}}
-  Plug 'posva/vim-vue'
+  "{{{ 'simeji/winresizer'
+  let g:winresizer_start_key = '<C-W><C-E>'
+  Plug 'simeji/winresizer'
+  "}}}
   Plug 'AndrewRadev/linediff.vim'
-  Plug 'kana/vim-operator-user'
   Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
+  Plug 'bps/vim-textobj-python'
   Plug 'briancollins/vim-jst', {'for': 'jst'}
   Plug 'cespare/vim-toml', {'for': 'toml'}
-  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-  Plug 'pangloss/vim-javascript', {'for': 'javascript'}
-  Plug 'tell-k/vim-autoflake', {'for': 'python'}
-  Plug 'jez/vim-github-hub', {'for': 'ghhub'}
-  Plug 'vim-jp/vim-vimlparser'
-  Plug 'robertbasic/vim-hugo-helper'
-  Plug 'vim-jp/vimdoc-ja'
-  Plug 'vim-jp/vital.vim', {'on': 'Vitalize'}
-  Plug 'kana/vim-metarw'
-  Plug 'ryanoasis/vim-devicons'
-  Plug 'vim-scripts/sudo.vim'
+  Plug 'direnv/direnv.vim'
   Plug 'iberianpig/tig-explorer.vim'
-  Plug 'stefandtw/quickfix-reflector.vim', {'for': 'qf'}
-  Plug 'sodapopcan/vim-twiggy'
+  Plug 'jez/vim-github-hub', {'for': 'ghhub'}
   Plug 'justinmk/vim-dirvish'
-  Plug 'kristijanhusak/vim-dirvish-git'
+  Plug 'kana/vim-metarw'
+  Plug 'kana/vim-operator-user'
   Plug 'kana/vim-textobj-entire'
   Plug 'kana/vim-textobj-user'
   Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
-  Plug 'simeji/winresizer'
-  Plug 'tpope/vim-dispatch'
+  Plug 'kristijanhusak/vim-dirvish-git'
+  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
   Plug 'machakann/vim-sandwich'  " Edit surrounders (like brackets, parentheses and quotes)
-  Plug 'sgur/vim-textobj-parameter'
   Plug 'machakann/vim-swap'
+  Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+  Plug 'posva/vim-vue'
+  Plug 'robertbasic/vim-hugo-helper'
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'sgur/vim-textobj-parameter'
+  Plug 'sodapopcan/vim-twiggy'
+  Plug 'stefandtw/quickfix-reflector.vim', {'for': 'qf'}
+  Plug 'tell-k/vim-autoflake', {'for': 'python'}
+  Plug 'tpope/vim-dispatch'
   Plug 'tyru/capture.vim', {'on': 'Capture'}  " Show Ex command output in a buffer
   Plug 'tyru/open-browser-github.vim'
   Plug 'tyru/open-browser.vim'
-  Plug 'direnv/direnv.vim'
+  Plug 'vim-jp/vim-vimlparser'
+  Plug 'vim-jp/vimdoc-ja'
+  Plug 'vim-jp/vital.vim', {'on': 'Vitalize'}
+  Plug 'vim-scripts/sudo.vim'
 
   " My Plugins {{{
   " {{{ kyoh86/vim-gogh
