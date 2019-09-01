@@ -195,9 +195,21 @@ call _plug_begin()
           \ 'whitelist': ['go'],
           \ })
       autocmd FileType go setlocal omnifunc=lsp#complete
+      autocmd BufWritePre *.go LspDocumentFormatSync
     else
       echoerr 'gopls not found'
     endif
+    " if executable('go-langserver')
+    "   au User lsp_setup call lsp#register_server({
+    "     \ 'name': 'go-langserver',
+    "     \ 'cmd': {server_info->['go-langserver', '-gocodecompletion']},
+    "     \ 'whitelist': ['go'],
+    "     \ })
+    "   autocmd FileType go setlocal omnifunc=lsp#complete
+    "   autocmd BufWritePre *.go LspDocumentFormatSync
+    " else
+    "   echoerr 'go-langserver not found'
+    " endif
   augroup END
 
   " for some linters
@@ -626,6 +638,7 @@ call _plug_begin()
   silent! nmap <unique><silent> sc <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
   silent! nmap <unique><silent> scb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
   "}}}
+  Plug 'AndrewRadev/quickpeek.vim'
   Plug 'AndrewRadev/linediff.vim'
   Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
   Plug 'bps/vim-textobj-python'

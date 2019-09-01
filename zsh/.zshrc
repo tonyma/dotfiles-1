@@ -188,6 +188,37 @@ alias :q='exit'
 # 自作関数 {{{
 # ------------------------------------------------------------------------------
 
+# メール添付ファイルとかよく圧縮するのダルいの回避 {{{
+function encrypt() {
+  if [ $# -lt 2 ]; then
+    echo "Not enough arguments" >&2
+    echo "Usage: $0 <zip filename> <source files...>" >&2
+    return 1
+  fi
+
+  if [[ ! "$1" =~ "\.zip$" ]]; then
+    echo "Invalid argument(1): zip filename must end with '.zip'." >&2
+    echo "Usage: $0 <zip filename> <source files...>" >&2
+    return 1
+  fi
+
+  if ! command -v pwgen >/dev/null 2>&1; then
+    echo "Command not found: pwgen" >&2
+    echo "brew install pwgen" >&2
+    return 1
+  fi
+
+  echo "Encrypting files..." >&2
+  local pw="$(pwgen -s 8)"
+  echo -n "Copied a password to the clipboard: "; echo -n "${pw}" | tee >(pbcopy); echo ""
+
+  local -a args=(-erP "$pw" "$@")
+  command zip $args
+
+  echo "Files are encrypted to $1"
+}
+# }}}
+
 # プロジェクト管理 {{{
 function cd-project() {
   local selected

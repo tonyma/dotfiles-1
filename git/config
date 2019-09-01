@@ -10,7 +10,7 @@
 	commentChar = %
 [user]
 	name = Kyoichiro Yamada
-	email = master@kyoh86.dev
+	email = me@kyoh86.dev
 [filter "media"]
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
