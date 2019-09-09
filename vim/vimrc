@@ -68,6 +68,9 @@ let $PATH=$PATH.':'.$SCALA_HOME.'/bin'
 " Perl:
 let $PATH=$PATH.':'.$HOME.'/perl5/bin'
 
+" Gigamoji:
+let $GIGAMOJI_BG=':space:'
+
 " dotfiles自体
 let $DOTFILES=$HOME.'/.config'
 let $DOTS=$DOTFILES
@@ -193,6 +196,9 @@ call _plug_begin()
           \ 'name': 'go-lang',
           \ 'cmd': {server_info->['gopls']},
           \ 'whitelist': ['go'],
+          \ 'workspace_config': {'gopls': {
+          \    'source.organizeImports': 'true',
+          \ }},
           \ })
       autocmd FileType go setlocal omnifunc=lsp#complete
       autocmd BufWritePre *.go LspDocumentFormatSync
@@ -293,10 +299,6 @@ call _plug_begin()
   " {{{ airblade/vim-gitgutter
   Plug 'airblade/vim-gitgutter'
   " }}}
-  " {{{ lambdalisue/gina.vim
-  Plug 'lambdalisue/gina.vim'
-  nnoremap <Leader><C-g><C-s> :<C-u>Gina status<CR>
-  " }}}
   " {{{ itchyny/lightline.vim
   Plug 'itchyny/lightline.vim'
   let g:lightline = {
@@ -322,7 +324,7 @@ call _plug_begin()
     \   'inactive': {
     \     'left': [
     \       [ 'mode', 'paste' ],
-    \       [ 'gitbranch', 'relativepath', 'readonly', 'modified' ]
+    \       [ 'relativepath', 'readonly', 'modified' ]
     \     ],
     \     'right': [
     \       [ 'filetype' ]
@@ -351,7 +353,6 @@ call _plug_begin()
     \     'filetype': 'LightlineDevFiletype',
     \     'terminalinfo': 'LightlineTerminalInfo',
     \     'readonly': 'LightlineReadonly', 
-    \     'gitbranch': 'LightlineGitBranch',
     \     'relativepath': 'LightlineRelativePath',
     \     'filename': 'LightlineFilename',
     \     'gitgutter': 'LightlineGitGutter',
@@ -425,14 +426,6 @@ call _plug_begin()
   endfunction
   function! LightlineReadonly() abort
     return &buftype ==# 'terminal' ? '' : &readonly ? "\ue0a2" : ''
-  endfunction
-  function! LightlineGitBranch() abort
-    if exists('*gina#component#repo#branch')
-      let l:branch = gina#component#repo#branch()
-      echom l:branch
-      return l:branch !=# '' ? "\ue0a0".l:branch : ''
-    endif
-    return ''
   endfunction
   function! LightlineGitStatus()
     let l:brch = ''
@@ -589,26 +582,6 @@ call _plug_begin()
   Plug 'qpkorr/vim-bufkill'
   let g:BufKillCreateMappings = 0
   " }}}
-  " {{{ fatih/vim-go
-  " Plug 'fatih/vim-go', { 'for': 'go' }
-  " let g:go_highlight_functions = 1
-  " let g:go_highlight_string_spellcheck = 0
-  " let g:go_highlight_format_strings = 0
-
-  " " LSPに任せる機能をOFFにする
-  " let g:go_gocode_unimported_packages = 0
-  " let g:go_gocode_propose_source = 0
-  " let g:go_gocode_propose_builtins = 0 "with vim-lsp
-  " let g:go_metalinter_enabled = 0
-  " let g:go_metalinter_autosave = 0
-  " let g:go_def_mapping_enabled = 0
-  " let g:go_doc_keywordprg_enabled = 0
-  " let g:go_fmt_autosave = 0
-
-  " let g:go_fmt_command = 'goimports'
-  " let g:go_fmt_fail_silently = 1
-
-  " }}}
   " {{{ arp242/gopher.vim
   Plug 'arp242/gopher.vim'
   " }}}
@@ -638,7 +611,7 @@ call _plug_begin()
   silent! nmap <unique><silent> sc <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
   silent! nmap <unique><silent> scb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
   "}}}
-  Plug 'AndrewRadev/quickpeek.vim'
+  " Plug 'AndrewRadev/quickpeek.vim'
   Plug 'AndrewRadev/linediff.vim'
   Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
   Plug 'bps/vim-textobj-python'
@@ -661,7 +634,6 @@ call _plug_begin()
   Plug 'robertbasic/vim-hugo-helper'
   Plug 'ryanoasis/vim-devicons'
   Plug 'sgur/vim-textobj-parameter'
-  Plug 'sodapopcan/vim-twiggy'
   Plug 'stefandtw/quickfix-reflector.vim', {'for': 'qf'}
   Plug 'tell-k/vim-autoflake', {'for': 'python'}
   Plug 'tpope/vim-dispatch'
