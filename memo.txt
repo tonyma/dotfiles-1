@@ -1,0 +1,24 @@
+## Wi-Fi
+
+not setup wpa_supplicant.conf
+never use netctl enable {profile}
+create /etc/netctl/{profile} ( from /etc/netctl/examples/wireless-wpa-configsection )
+use netctl-ifplugd@{interface} and netctl-auto@{interface}
+
+ref:  https://wiki.archlinux.jp/index.php/NetCtl
+
+## Locale
+
+set LANG=en_US.UTF-8 in /etc/locale.conf
+change locale with the Desktop Environment. (like LXQt)
+like below (in ~/.config/lxqt/lxqt-config-locale.conf)
+```
+[General]
+__userfile__=true
+
+[Formats]
+LANG=ja_JP.UTF-8
+```
+
+## ime
+fcitx + Mozc
