@@ -1,0 +1,23 @@
+# TODO: judge distributions (command -v pacman?)
+sudo pacman -S yarn \
+          zsh-syntax-highlighting \
+          zsh-completions \
+          wget \
+          vim \
+          tig \
+          terraform \
+          sqlite \
+          ripgrep \
+          postgresql \
+          mysql \
+          jq \
+          inotify-tools \
+          hub \
+          httpie \
+          go \
+          git \
+          fzf \
+          docker \
+          aws-cli \
+          asciinema
+

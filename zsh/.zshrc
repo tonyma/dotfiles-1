@@ -20,7 +20,7 @@ setopt hist_verify            # ヒストリを呼び出してから実行する
 # プロンプト設定 {{{
 autoload -Uz add-zsh-hook
 
-if [[ -z "${VIM_TERMINAL}" ]]; then
+if [ -z "${VIM_TERMINAL}" ] && which git-prompt > /dev/null 2>&1; then
   function _update_git_info() {
     status_string=$(git-prompt -s zsh)
     if [ $? -ne 0 ]; then
@@ -59,12 +59,14 @@ bindkey '^d' delete-char
 # }}}
 
 # ZSHコマンドハイライト設定 {{{
-for f in $(gfind ${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR} -name "*.zsh"); do
-  if [ ! -e "${f}.zwc" ] || [ "${f}" -nt "${f}.zwc" ]; then
-    zcompile $f
-  fi
-done
-_source_if /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ -d "${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR}" ]; then
+  for f in $(find ${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR} -name "*.zsh"); do
+    if [ ! -e "${f}.zwc" ] || [ "${f}" -nt "${f}.zwc" ]; then
+      zcompile $f
+    fi
+  done
+  _source_if /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 # }}}
 
 # その他の設定 {{{
@@ -88,13 +90,6 @@ export ZLS_COLORS=$LS_COLORS
 export CLICOLOR=true
 # 補完候補に色を付ける
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-alias ls="gls --color"
-# }}}
-
-# GNU commands {{{
-alias find=/usr/local/opt/findutils/bin/gfind
-alias xargs=/usr/local/opt/findutils/bin/gxargs
-alias grep="/usr/local/bin/ggrep --color=auto"
 # }}}
 
 # zmv パターンマッチリネームの設定 {{{
@@ -115,29 +110,32 @@ alias zln='zmv -L'
 # fzf {{{
 _source_if ~/.fzf.zsh
 # }}}
+
 # anyenv {{{
 
-source ${DOTFILES}/lazyenv/lazyenv.bash
-
-eval "$( command direnv hook zsh )"
-
-_nodenv_init() {
-  eval "$(command nodenv init -)"
-}
-eval "$(lazyenv.load _nodenv_init `gls --color=never ~/.nodenv/shims`)"
-
-_rbenv_init() {
-  eval "$(command rbenv init -)"
-}
-eval "$(lazyenv.load _rbenv_init `gls --color=never ~/.rbenv/shims`)"
-
-_pyenv_init() {
-  eval "$(command pyenv init -)"
-  eval "$(command pyenv virtualenv-init -)"
-}
-eval "$(lazyenv.load _pyenv_init `gls --color=never ~/.pyenv/shims`)"
-
+if [[ -f ${DOTFILES}/lazyenv/lazyenv.bash ]]; then
+  source ${DOTFILES}/lazyenv/lazyenv.bash
+  
+  eval "$( command direnv hook zsh )"
+  
+  _nodenv_init() {
+    eval "$(command nodenv init -)"
+  }
+  eval "$(lazyenv.load _nodenv_init `ls --color=never ~/.nodenv/shims`)"
+  
+  _rbenv_init() {
+    eval "$(command rbenv init -)"
+  }
+  eval "$(lazyenv.load _rbenv_init `ls --color=never ~/.rbenv/shims`)"
+  
+  _pyenv_init() {
+    eval "$(command pyenv init -)"
+    eval "$(command pyenv virtualenv-init -)"
+  }
+  eval "$(lazyenv.load _pyenv_init `ls --color=never ~/.pyenv/shims`)"
+fi
 # }}}
+
 # Java {{{
 
 function java() {
@@ -149,37 +147,29 @@ function java() {
 
 # }}}
 
-# Homebrew pyenv 衝突の回避 {{{
-# Homebrew が Python を管理対象にしろ、とAlert出してくるので
-# Homebrew には pyenv 配下の Python の存在を隠す
-function brew() {
-  env PATH=${PATH/${HOME}\/\.pyenv\/shims:/} command brew $@
-}
-zle -N brew
-# }}}
-
 # gogh {{{
-eval "$(gogh setup)"
+if which gogh >/dev/null 2>&1; then
+  eval "$(gogh setup)"
+fi
 # }}}
 
 # vimとの連携設定 {{{
 # 現在のパスをタイトルとして渡す
-function _update_term_title() {
-  # sets the tab title to current dir
-  echo -ne "\033]0;${PWD}\007"
-  echo -ne "\033]51;[\"call\", \"Tapi_UpdateStatus\", [\"${PWD}\"]]\07"
-}
 if [[ -n "${VIM_TERMINAL}" ]]; then
+  function _update_term_title() {
+    # sets the tab title to current dir
+    echo -ne "\033]0;${PWD}\007"
+    echo -ne "\033]51;[\"call\", \"Tapi_UpdateStatus\", [\"${PWD}\"]]\07"
+  }
   add-zsh-hook precmd _update_term_title
+  # vim-editerm用の設定
+  if [[ "${VIM_EDITERM_SETUP}" != "" ]]; then
+    source "${VIM_EDITERM_SETUP}" 
+  fi
+  
+  # :q で exit
+  alias :q='exit'
 fi
-
-# vim-editerm用の設定
-if [[ "${VIM_EDITERM_SETUP}" != "" ]]; then
-  source "${VIM_EDITERM_SETUP}" 
-fi
-
-# :q で exit
-alias :q='exit'
 
 # }}}
 
@@ -300,26 +290,6 @@ bindkey '^x^gb' checkout-git-branch
 bindkey '^x^g^b' checkout-git-branch
 # }}}
 
-# LaunchCtlジョブ選択 {{{
-function insert-launchctl() {
-  local selected
-  selected=$(
-    launchctl list | tail -n +2 | awk '{print $3}' \
-      | fzf
-  )
-  if [ -z "${selected}" ]; then
-    return
-  fi
-  LBUFFER+="$selected"
-  CURSOR=$#LBUFFER
-  # redisplay the command line
-  zle -R -c
-}
-zle -N insert-launchctl
-bindkey '^xl' insert-launchctl
-bindkey '^x^l' insert-launchctl
-# }}}
-
 # コマンド履歴検索 {{{
 function put-history() {
   local selected
@@ -371,6 +341,10 @@ zle -N revive-job
 bindkey '^Z' revive-job
 # }}}
 
+# }}}
+
+# 環境別の設定 {{{
+[ -f $ZDOTDIR/.zshrc_`uname` ] && . $ZDOTDIR/.zshrc_`uname`
 # }}}
 
 # ZSHRC 終了処理 {{{

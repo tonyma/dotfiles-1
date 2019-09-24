@@ -3,6 +3,14 @@ set encoding=utf-8
 scriptencoding utf-8
 " }}}
 
+" Setup XDG_HOME {{{
+set undodir=$XDG_CACHE_HOME/vim/undo
+set directory=$XDG_CACHE_HOME/vim/swap
+set backupdir=$XDG_CACHE_HOME/vim/backup
+set viminfo+='1000,n$XDG_CACHE_HOME/vim/viminfo
+set runtimepath=$XDG_CONFIG_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
+" }}}
+
 " Setup Environment Variables {{{
 " ZSHとVIM両方に効かせる環境変数はここで設定する
 " ZSHだけでいい場合は.zshenvで設定すればよい
@@ -628,7 +636,10 @@ call _plug_begin()
   Plug 'bps/vim-textobj-python'
   Plug 'briancollins/vim-jst', {'for': 'jst'}
   Plug 'cespare/vim-toml', {'for': 'toml'}
+
+if executable('direnv')
   Plug 'direnv/direnv.vim'
+endif
   Plug 'iberianpig/tig-explorer.vim'
   Plug 'jez/vim-github-hub', {'for': 'ghhub'}
   Plug 'justinmk/vim-dirvish'
@@ -703,7 +714,9 @@ function! s:plug.check_installation()
   let l:list = []
   for [l:name, l:spec] in items(l:self.plugs)
     if !isdirectory(l:spec.dir)
-      call add(l:list, l:spec.uri)
+      if has_key(l:spec, 'uri')
+        call add(l:list, l:spec.uri)
+      endif
     endif
   endfor
   if len(l:list) > 0
@@ -807,7 +820,11 @@ nnoremap <silent> tv :<C-u>vertical terminal<CR>
 " }}}
 
 " Setup terminal {{{
-set shell=/usr/local/bin/zsh
+if executable('/usr/local/bin/zsh')
+  set shell=/usr/local/bin/zsh
+elseif executable('/usr/bin/zsh')
+  set shell=/usr/bin/zsh
+endif
 
 augroup TermSetting
   " ターミナルで
