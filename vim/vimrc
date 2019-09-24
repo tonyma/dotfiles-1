@@ -124,7 +124,7 @@ endif
 " Function: Switch Branch {{{
 function! s:git_switch(line)
   let l:branch = get(split(a:line), 1, '')
-  exec 'Gina switch '.l:branch
+  exec '!git switch '.l:branch
 endfunction
 
 command! SwitchBranch call fzf#run({
@@ -157,8 +157,15 @@ call _plug_begin()
   " {{{ prabirshrestha/vim-lsp
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
+
   Plug 'prabirshrestha/asyncomplete.vim'
+  let g:asyncomplete_auto_completeopt = 1  " Set default `completeopt` options. These are `menuone,noinsert,noselect`
+  inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+  inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+  inoremap <expr> <C-y> pumvisible() ? asyncomplete#close_popup() : "\<C-y>"
+  inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() : "\<cr>"
   Plug 'prabirshrestha/asyncomplete-lsp.vim'
+
   let g:lsp_async_completion = 1
   let g:lsp_signs_enabled = 1           " enable signs
   let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
@@ -360,6 +367,10 @@ call _plug_begin()
     \     'modified': 'LightlineModified'
     \   },
     \ }
+  augroup LightLineUpdate
+    autocmd!
+    autocmd DirChanged * call lightline#update()
+  augroup END
   function! LightlinePwd() abort
     return fnamemodify(getcwd(), ':t')
   endfunction
@@ -753,7 +764,7 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 " Completion {{{
 set wildmenu
 set wildmode=longest:full,full
-set completeopt=menu,menuone
+" set completeopt=menuone,preview,noinsert,noselect  " set by asyncomplete.vim
 " }}}
 
 " Other misc settings {{{
@@ -809,6 +820,7 @@ augroup END
 
 " Default Plugins {{{
 let g:is_posix = 1
+let g:vim_json_conceal = 0
 " }}}
 
 " }}}

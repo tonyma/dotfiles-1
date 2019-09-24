@@ -189,7 +189,7 @@ alias :q='exit'
 # ------------------------------------------------------------------------------
 
 # メール添付ファイルとかよく圧縮するのダルいの回避 {{{
-function encrypt() {
+function mailarch() {
   if [ $# -lt 2 ]; then
     echo "Not enough arguments" >&2
     echo "Usage: $0 <zip filename> <source files...>" >&2
