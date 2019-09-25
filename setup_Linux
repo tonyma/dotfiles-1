@@ -19,5 +19,5 @@ sudo pacman -S yarn \
           fzf \
           docker \
           aws-cli \
-          asciinema
-
+          asciinema \
+          gnome-keyring seahorse libgnome-keyring

@@ -21,8 +21,8 @@
 	clean = git lfs clean %f
 	smudge = git lfs smudge %f
 	required = true
-[credential]
-	helper = osxkeychain
+[include]
+  path = config_os
 [color]
 	diff = auto
 	status = auto
