@@ -58,9 +58,6 @@ let $PIP_REQUIRE_VIRTUALENV='true'
 " Node:
 let $PATH=$PATH.':'.$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin'
 
-" Ruby:
-let $PATH=$PATH.':'.$HOME.'/.rbenv/bin'
-
 " GNU commands:
 let $PATH='/usr/local/opt/gzip/bin:'.$PATH
 let $PATH='/usr/local/opt/openssl/bin:'.$PATH
