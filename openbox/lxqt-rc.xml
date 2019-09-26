@@ -295,26 +295,6 @@
       </action>
     </keybind>
     <!-- Keybindings for window switching with the arrow keys -->
-    <keybind key="W-S-Right">
-      <action name="DirectionalCycleWindows">
-        <direction>right</direction>
-      </action>
-    </keybind>
-    <keybind key="W-S-Left">
-      <action name="DirectionalCycleWindows">
-        <direction>left</direction>
-      </action>
-    </keybind>
-    <keybind key="W-S-Up">
-      <action name="DirectionalCycleWindows">
-        <direction>up</direction>
-      </action>
-    </keybind>
-    <keybind key="W-S-Down">
-      <action name="DirectionalCycleWindows">
-        <direction>down</direction>
-      </action>
-    </keybind>
     <!-- Keybindings for running applications.
    Commented out as application shortcuts should be handled by lxqt-globalkeys in LXQt sessions.
   <keybind key="W-q">
@@ -326,6 +306,23 @@
       <command>qupzilla</command>
     </action>
   </keybind> -->
+
+    <keybind key="W-Left">
+        <action name="UnmaximizeFull"/>
+        <action name="MoveResizeTo">
+            <width>50%</width>
+            <height>100%</height>
+        </action>
+        <action name="MoveToEdge"><direction>west</direction></action>
+    </keybind>
+    <keybind key="W-Right">
+        <action name="UnmaximizeFull"/>
+        <action name="MoveResizeTo">
+            <width>50%</width>
+            <height>100%</height>
+        </action>
+        <action name="MoveToEdge"><direction>east</direction></action>
+    </keybind>
     <keybind key="W-F9">
       <action name="Reconfigure" />
     </keybind>
