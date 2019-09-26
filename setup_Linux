@@ -16,7 +16,6 @@ sudo pacman -S yarn \
           httpie \
           go \
           git \
-          fzf \
           docker \
           aws-cli \
           asciinema \
