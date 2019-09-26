@@ -38,6 +38,10 @@ function link_os() {
 }
 link_os "${DOTFILES}/git/config"
 
+yarn global add \
+          typescript-language-server \
+          vim-language-server
+
 # replace dotfiles
 if [[ -d ${DOTFILES}/.git ]]; then
   git -C ${DOTFILES} pull

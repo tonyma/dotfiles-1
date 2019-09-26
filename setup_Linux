@@ -20,4 +20,5 @@ sudo pacman -S yarn \
           aws-cli \
           asciinema \
           gnome-keyring seahorse libgnome-keyring \
-          diff-so-fancy
+          diff-so-fancy \
+          python-language-server

@@ -70,6 +70,9 @@ let $FZF_DEFAULT_COMMAND='rg --files --hidden --follow --maxdepth 10 --glob "!.g
 let $SCALA_HOME='/usr/local/bin/scala'
 let $PATH=$PATH.':'.$SCALA_HOME.'/bin'
 
+" Yarn:
+let $PATH=$PATH.':'.$HOME.'/.yarn/bin'
+
 " Perl:
 let $PATH=$PATH.':'.$HOME.'/perl5/bin'
 
