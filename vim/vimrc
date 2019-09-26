@@ -113,15 +113,16 @@ endif
 " Functions {{{
 " Function: Edit Configurations {{{
 let g:config_home = g:xdg_config_home . '/vim'
+let g:vimrc_file = g:config_home . '/vimrc'
 function! Config(bang)
-  execute 'edit'.a:bang $MYVIMRC
+  execute 'edit' . a:bang . ' ' . g:vimrc_file
 endfunction
 command! -bang -nargs=0 Config :call Config('<bang>')
 
 if !exists('*ConfigReload')
   function! ConfigReload()
     " reload vimrc
-    execute 'source $MYVIMRC'
+    execute 'source ' . g:vimrc_file
   endfunction
 endif
 " }}}
