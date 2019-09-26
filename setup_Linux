@@ -20,4 +20,5 @@ sudo pacman -S yarn \
           docker \
           aws-cli \
           asciinema \
-          gnome-keyring seahorse libgnome-keyring
+          gnome-keyring seahorse libgnome-keyring \
+          diff-so-fancy
