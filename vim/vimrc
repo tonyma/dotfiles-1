@@ -782,7 +782,7 @@ set wildmode=longest:full,full
 " }}}
 
 " Other misc settings {{{
-set clipboard+=unnamedplus,unnamed
+set clipboard=unnamedplus,unnamed
 set hidden              " able to edit without saving
 set fixendofline        " <EOL> at the end of file will be restored if missing
 set showcmd             " 
