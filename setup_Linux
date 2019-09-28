@@ -3,7 +3,7 @@ sudo pacman -S yarn \
           zsh-syntax-highlighting \
           zsh-completions \
           wget \
-          vim \
+          gvim \
           tig \
           terraform \
           sqlite \
