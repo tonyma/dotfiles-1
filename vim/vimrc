@@ -845,3 +845,10 @@ let g:vim_json_conceal = 0
 " }}}
 
 " }}}
+
+" GVim Settings {{{
+set columns=200
+set lines=50
+set guioptions=cei
+set guifont=Cica\ 14
+" }}}
