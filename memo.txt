@@ -21,4 +21,21 @@ LANG=ja_JP.UTF-8
 ```
 
 ## ime
+
 fcitx + Mozc
+
+## Tethering
+
+Android
+ref: https://wiki.archlinux.jp/index.php/Android_%E3%83%86%E3%82%B6%E3%83%AA%E3%83%B3%E3%82%B0#Bluetooth_.E3.81.A7.E3.83.86.E3.82.B6.E3.83.AA.E3.83.B3.E3.82.B0
+
+Bluetooth でテザリング
+Android (4.0 以降。前のバージョンでも出来ることあり) はアクセスポイントモードの Bluetooth パーソナルエリアネットワーク (PAN) に対応しています。
+
+NetworkManager がこのアクションを実行できネットワークの初期化を処理します。詳しくはドキュメントを見て下さい。
+
+もしくは: Bluetooth の記事の記述に従って、ペアリングをしてコンピュータと Android デバイスを接続できるようにしてから、次を実行 (デバイスのアドレス (AA_BB_CC_DD_EE_FF) は置き換えて下さい):
+
+$ dbus-send --system --type=method_call --dest=org.bluez /org/bluez/hci0/dev_AA_BB_CC_DD_EE_FF org.bluez.Network1.Connect string:'nap'
+
+これでネットワークインターフェース bnep0 が作成されます。最後に、このインターフェースでネットワーク接続を設定してください。Android はデフォルトで DHCP を提供します。 
