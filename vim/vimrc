@@ -79,6 +79,9 @@ let $PATH=$PATH.':'.$HOME.'/perl5/bin'
 " Gigamoji:
 let $GIGAMOJI_BG=':space:'
 
+" Fzf:
+let $PATH=$PATH.':'.$HOME.'/.fzf/bin'
+
 " dotfiles自体
 let $DOTFILES=$HOME.'/.config'
 let $DOTS=$DOTFILES
