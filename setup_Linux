@@ -30,5 +30,6 @@ yarn global add \
 GO111MODULE=on go get golang.org/x/tools/gopls@latest
 go get github.com/mattn/efm-langserver
 
+ln -s "${DOTFILES}/vim" "${HOME}/.vim"
 rm "${HOME}/.bash_profile" && ln -s "${DOTFILES}/bash/bash_profile" "${HOME}/.bash_profile"
 rm "${HOME}/.xinitrc" && ln -s "${DOTFILES}/X11/xinitrc" "${HOME}/.xinitrc"
