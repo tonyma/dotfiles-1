@@ -3,6 +3,7 @@
 !/README.md
 !/alacritty
 !/autostart
+!/bash
 !/efm-langserver
 !/fcitx
 !/flake8
@@ -27,6 +28,7 @@
 !/userjob
 !/vim
 !/vm-sierra
+!/X11
 !/zsh
 !/memo.txt
 !requirements.txt
