@@ -26,7 +26,7 @@ fcitx + Mozc
 
 ## Tethering
 
-Android
+Androidだけど、iPhoneでもこれだった
 ref: https://wiki.archlinux.jp/index.php/Android_%E3%83%86%E3%82%B6%E3%83%AA%E3%83%B3%E3%82%B0#Bluetooth_.E3.81.A7.E3.83.86.E3.82.B6.E3.83.AA.E3.83.B3.E3.82.B0
 
 Bluetooth でテザリング
