@@ -307,6 +307,14 @@
     </action>
   </keybind> -->
 
+    <keybind key="W-Up">
+        <action name="UnmaximizeFull"/>
+        <action name="MoveResizeTo">
+            <width>100%</width>
+            <height>100%</height>
+        </action>
+        <action name="MoveToEdge"><direction>west</direction></action>
+    </keybind>
     <keybind key="W-Left">
         <action name="UnmaximizeFull"/>
         <action name="MoveResizeTo">
