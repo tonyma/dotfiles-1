@@ -30,6 +30,15 @@ yarn global add \
 GO111MODULE=on go get golang.org/x/tools/gopls@latest
 go get github.com/mattn/efm-langserver
 
+# link configurations
 ln -s "${DOTFILES}/vim" "${HOME}/.vim"
 rm "${HOME}/.bash_profile" && ln -s "${DOTFILES}/bash/bash_profile" "${HOME}/.bash_profile"
 rm "${HOME}/.xinitrc" && ln -s "${DOTFILES}/X11/xinitrc" "${HOME}/.xinitrc"
+
+# register userjobs
+mkdir -p ~/.local/share/systemd/user/
+find ${DOTFILES}/userjob -maxdepth 1 -name 'userjob.*' | while read source; do
+  ln -sf "${source}" "${HOME}/.local/share/systemd/user/${source##*/}"
+done
+systemctl --user daemon-reload
+systemctl --user enable userjob.timer
