@@ -1,5 +1,13 @@
 # TODO: judge distributions (command -v pacman?)
 sudo pacman -S yarn \
+          xorg-font-util \
+          xorg-fonts-100dpi \
+          xorg-fonts-75dpi \
+          xorg-fonts-alias \
+          xorg-fonts-cyrillic \
+          xorg-fonts-encodings \
+          xorg-fonts-misc \
+          xorg-fonts-type1 \
           zsh-syntax-highlighting \
           zsh-completions \
           wget \
@@ -22,6 +30,7 @@ sudo pacman -S yarn \
           gnome-keyring seahorse libgnome-keyring \
           diff-so-fancy \
           python-language-server \
+          lxqt sddm \
           autorandr xorg-xdpyinfo
 
 yarn global add \
@@ -43,3 +52,4 @@ find ${DOTFILES}/userjob -maxdepth 1 -name 'userjob.*' | while read source; do
 done
 systemctl --user daemon-reload
 systemctl --user enable userjob.timer
+systemctl enable sddm
