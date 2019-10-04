@@ -10,6 +10,7 @@ sudo pacman -S yarn \
           xorg-fonts-type1 \
           zsh-syntax-highlighting \
           zsh-completions \
+          linux-headers \
           wget \
           gvim \
           tig \

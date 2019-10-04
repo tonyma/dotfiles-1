@@ -306,33 +306,38 @@
       <command>qupzilla</command>
     </action>
   </keybind> -->
-
     <keybind key="W-Up">
-        <action name="UnmaximizeFull"/>
-        <action name="MoveResizeTo">
-            <width>100%</width>
-            <height>100%</height>
-        </action>
-        <action name="MoveToEdge"><direction>west</direction></action>
+      <action name="UnmaximizeFull"/>
+      <action name="MoveResizeTo">
+        <width>100%</width>
+        <height>100%</height>
+      </action>
+      <action name="MoveToEdge">
+        <direction>west</direction>
+      </action>
     </keybind>
     <keybind key="W-Left">
-        <action name="UnmaximizeFull"/>
-        <action name="MoveResizeTo">
-            <width>50%</width>
-            <height>100%</height>
-        </action>
-        <action name="MoveToEdge"><direction>west</direction></action>
+      <action name="UnmaximizeFull"/>
+      <action name="MoveResizeTo">
+        <width>50%</width>
+        <height>100%</height>
+      </action>
+      <action name="MoveToEdge">
+        <direction>west</direction>
+      </action>
     </keybind>
     <keybind key="W-Right">
-        <action name="UnmaximizeFull"/>
-        <action name="MoveResizeTo">
-            <width>50%</width>
-            <height>100%</height>
-        </action>
-        <action name="MoveToEdge"><direction>east</direction></action>
+      <action name="UnmaximizeFull"/>
+      <action name="MoveResizeTo">
+        <width>50%</width>
+        <height>100%</height>
+      </action>
+      <action name="MoveToEdge">
+        <direction>east</direction>
+      </action>
     </keybind>
     <keybind key="W-F9">
-      <action name="Reconfigure" />
+      <action name="Reconfigure"/>
     </keybind>
     <keybind key="W-space">
       <action name="Execute">
