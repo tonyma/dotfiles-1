@@ -21,7 +21,8 @@ sudo pacman -S yarn \
           asciinema \
           gnome-keyring seahorse libgnome-keyring \
           diff-so-fancy \
-          python-language-server
+          python-language-server \
+          autorandr xorg-xdpyinfo
 
 yarn global add \
           typescript-language-server \
