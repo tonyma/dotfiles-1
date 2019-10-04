@@ -370,7 +370,7 @@ shell:
   program: /usr/bin/zsh
   args:
     - -c
-    - VIMINIT=":source $XDG_CONFIG_HOME"/vim/vimrc vim
+    - vim
 
 # Startup directory
 #
