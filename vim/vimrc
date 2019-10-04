@@ -850,5 +850,5 @@ let g:vim_json_conceal = 0
 set columns=200
 set lines=50
 set guioptions=cei
-set guifont=Cica\ 14
+set guifont=Cica\ 11
 " }}}
