@@ -31,9 +31,9 @@ TriggerKey=CTRL_SPACE ZENKAKUHANKAKU
 # カスタム切り替えキー
 #CustomSwitchKey=
 # 入力メソッドをオンに
-#ActivateKey=
+ActivateKey=HANGUL
 # 入力メソッドをオフに
-#InactivateKey=
+InactivateKey=HANGULHANJA
 # 入力メソッドの切換をホットキーで
 # 可能な値:
 # True False
