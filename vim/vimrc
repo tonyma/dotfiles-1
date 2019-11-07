@@ -3,6 +3,14 @@ set encoding=utf-8
 scriptencoding utf-8
 " }}}
 
+" Setup XDG_HOME {{{
+set undodir=$XDG_CACHE_HOME/vim/undo
+set directory=$XDG_CACHE_HOME/vim/swap
+set backupdir=$XDG_CACHE_HOME/vim/backup
+set viminfo+='1000,n$XDG_CACHE_HOME/vim/viminfo
+set runtimepath=$XDG_CONFIG_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
+" }}}
+
 " Setup Environment Variables {{{
 " ZSHとVIM両方に効かせる環境変数はここで設定する
 " ZSHだけでいい場合は.zshenvで設定すればよい
@@ -50,9 +58,6 @@ let $PIP_REQUIRE_VIRTUALENV='true'
 " Node:
 let $PATH=$PATH.':'.$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin'
 
-" Ruby:
-let $PATH=$PATH.':'.$HOME.'/.rbenv/bin'
-
 " GNU commands:
 let $PATH='/usr/local/opt/gzip/bin:'.$PATH
 let $PATH='/usr/local/opt/openssl/bin:'.$PATH
@@ -65,11 +70,17 @@ let $FZF_DEFAULT_COMMAND='rg --files --hidden --follow --maxdepth 10 --glob "!.g
 let $SCALA_HOME='/usr/local/bin/scala'
 let $PATH=$PATH.':'.$SCALA_HOME.'/bin'
 
+" Yarn:
+let $PATH=$PATH.':'.$HOME.'/.yarn/bin'
+
 " Perl:
 let $PATH=$PATH.':'.$HOME.'/perl5/bin'
 
 " Gigamoji:
 let $GIGAMOJI_BG=':space:'
+
+" Fzf:
+let $PATH=$PATH.':'.$HOME.'/.fzf/bin'
 
 " dotfiles自体
 let $DOTFILES=$HOME.'/.config'
@@ -108,15 +119,16 @@ endif
 " Functions {{{
 " Function: Edit Configurations {{{
 let g:config_home = g:xdg_config_home . '/vim'
+let g:vimrc_file = g:config_home . '/vimrc'
 function! Config(bang)
-  execute 'edit'.a:bang $MYVIMRC
+  execute 'edit' . a:bang . ' ' . g:vimrc_file
 endfunction
 command! -bang -nargs=0 Config :call Config('<bang>')
 
 if !exists('*ConfigReload')
   function! ConfigReload()
     " reload vimrc
-    execute 'source $MYVIMRC'
+    execute 'source ' . g:vimrc_file
   endfunction
 endif
 " }}}
@@ -628,7 +640,10 @@ call _plug_begin()
   Plug 'bps/vim-textobj-python'
   Plug 'briancollins/vim-jst', {'for': 'jst'}
   Plug 'cespare/vim-toml', {'for': 'toml'}
+
+if executable('direnv')
   Plug 'direnv/direnv.vim'
+endif
   Plug 'iberianpig/tig-explorer.vim'
   Plug 'jez/vim-github-hub', {'for': 'ghhub'}
   Plug 'justinmk/vim-dirvish'
@@ -670,7 +685,7 @@ call _plug_begin()
   let g:docbase_domain = 'wacul'
   " }}}
   " {{{ junegunn/fzf
-  Plug '/usr/local/opt/fzf'
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'kyoh86/fzf.vim', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/fzf.vim'}
   let g:fzf_command_prefix = 'Fzf'
   nnoremap <Leader>f  :<C-u>FzfFiles<CR>
@@ -703,7 +718,9 @@ function! s:plug.check_installation()
   let l:list = []
   for [l:name, l:spec] in items(l:self.plugs)
     if !isdirectory(l:spec.dir)
-      call add(l:list, l:spec.uri)
+      if has_key(l:spec, 'uri')
+        call add(l:list, l:spec.uri)
+      endif
     endif
   endfor
   if len(l:list) > 0
@@ -768,7 +785,7 @@ set wildmode=longest:full,full
 " }}}
 
 " Other misc settings {{{
-set clipboard+=unnamedplus,unnamed
+set clipboard=unnamedplus,unnamed
 set hidden              " able to edit without saving
 set fixendofline        " <EOL> at the end of file will be restored if missing
 set showcmd             " 
@@ -807,7 +824,11 @@ nnoremap <silent> tv :<C-u>vertical terminal<CR>
 " }}}
 
 " Setup terminal {{{
-set shell=/usr/local/bin/zsh
+if executable('/usr/local/bin/zsh')
+  set shell=/usr/local/bin/zsh
+elseif executable('/usr/bin/zsh')
+  set shell=/usr/bin/zsh
+endif
 
 augroup TermSetting
   " ターミナルで
@@ -823,4 +844,11 @@ let g:is_posix = 1
 let g:vim_json_conceal = 0
 " }}}
 
+" }}}
+
+" GVim Settings {{{
+set columns=200
+set lines=50
+set guioptions=cei
+set guifont=Cica\ 11
 " }}}

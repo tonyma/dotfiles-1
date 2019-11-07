@@ -1,37 +1,41 @@
 #!env zsh
 
-rm -f /usr/local/var/userjob-log.log
-source /etc/zshenv
+[ -f /usr/local/var/userjob-log.log ] && rm -f /usr/local/var/userjob-log.log
+[ -f /etc/zshenv ] && source /etc/zshenv
 source ${ZDOTDIR}/.zshenv
 
 error=""
 
 # Bundle brew:
-if [ -f /usr/local/bin/brew ]; then
+if command -v brew >/dev/null 2>&1 ; then
   file=${HOME}/.config/homebrew/bundle
   brew bundle dump --force --file=${file} --describe || error="1"
 fi
 
+# dump gogh
+if command -v gogh >/dev/null 2>&1 ; then
+  gogh dump --public kyoh86 > ${DOTFILES}/gogh/list.txt
+fi
+
 if [[ -n ${error} ]]; then
-	echo "var app = Application('System Events');
-app.includeStandardAdditions = true;
-var reply = app.displayDialog('Failed to process scheduled task', {
-	'withTitle': 'User Job',
-	'withIcon':'caution',
+  if command -v osascript >/dev/null 2>&1 ; then
+    echo "var app = Application('System Events');
+  app.includeStandardAdditions = true;
+  var reply = app.displayDialog('Failed to process scheduled task', {
+    'withTitle': 'User Job',
+    'withIcon':'caution',
 
-	'givingUpAfter': 15,
+    'givingUpAfter': 15,
 
-	'defaultButton': 'OK',
-	'buttons': ['Details', 'OK']
-});
+    'defaultButton': 'OK',
+    'buttons': ['Details', 'OK']
+  });
 
-if (reply.buttonReturned === 'Details') {
-	var textEdit = Application('TextEdit');
-	textEdit.open('/usr/local/var/userjob-err.log');
-}
-" \
-    | osascript -l JavaScript -
-# 通知うるさいから削除
-# else
-#   osascript -e 'display notification "Processed scheduled task" with title "User Job"'
+  if (reply.buttonReturned === 'Details') {
+    var textEdit = Application('TextEdit');
+    textEdit.open('/usr/local/var/userjob-err.log');
+  }
+  " \
+      | osascript -l JavaScript -
+  fi
 fi

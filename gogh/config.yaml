@@ -1,5 +1,5 @@
 root:
-- /Users/yamada/Projects
-- /Users/yamada/go/src
+- ~/Projects
+- ~/go/src
 github:
   user: kyoh86
