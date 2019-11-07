@@ -43,6 +43,10 @@
       <property name="&lt;Super&gt;space" type="string" value="xfce4-appfinder">
         <property name="startup-notify" type="bool" value="true"/>
       </property>
+      <property name="AudioRaiseVolume" type="string" value="sh -c &quot;pactl set-sink-mute 0 false ; pactl set-sink-volume 0 +5%&quot;"/>
+      <property name="AudioLowerVolume" type="string" value="sh -c &quot;pactl set-sink-mute 0 false ; pactl -- set-sink-volume 0 -5%&quot;"/>
+      <property name="AudioMute" type="string" value="pactl set-sink-mute 0 toggle"/>
+      <property name="AudioMicMute" type="string" value="pactl set-source-mute 1 toggle"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
