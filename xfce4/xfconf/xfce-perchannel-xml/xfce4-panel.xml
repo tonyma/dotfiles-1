@@ -68,10 +68,6 @@
         <value type="string" value="blueman-tray"/>
       </property>
     </property>
-    <property name="plugin-7" type="string" value="statusnotifier">
-      <property name="square-icons" type="bool" value="true"/>
-      <property name="symbolic-icons" type="bool" value="true"/>
-    </property>
     <property name="plugin-8" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
       <property name="show-notifications" type="bool" value="true"/>
@@ -90,7 +86,7 @@
     <property name="plugin-16" type="string" value="separator"/>
     <property name="plugin-17" type="string" value="launcher">
       <property name="items" type="array">
-        <value type="string" value="15702501191.desktop"/>
+        <value type="string" value="15731355611.desktop"/>
       </property>
     </property>
     <property name="plugin-18" type="string" value="launcher">
