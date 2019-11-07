@@ -1,38 +1,22 @@
 # TODO: judge distributions (command -v pacman?)
-sudo pacman -S yarn \
-          xorg-font-util \
-          xorg-fonts-100dpi \
-          xorg-fonts-75dpi \
-          xorg-fonts-alias \
-          xorg-fonts-cyrillic \
-          xorg-fonts-encodings \
-          xorg-fonts-misc \
-          xorg-fonts-type1 \
-          zsh-syntax-highlighting \
-          zsh-completions \
+sudo pacman -S \
           linux-headers \
-          wget \
-          gvim \
-          tig \
-          terraform \
-          sqlite \
-          ripgrep \
-          postgresql \
-          mysql \
-          jq \
-          inotify-tools \
-          hub \
-          httpie \
-          go \
-          git \
-          docker \
-          aws-cli \
-          asciinema \
+          \
           gnome-keyring seahorse libgnome-keyring \
+          \
+          zsh-syntax-highlighting zsh-completions \
           diff-so-fancy \
-          python-language-server \
-          lxqt sddm \
-          autorandr xorg-xdpyinfo
+          inotify-tools \
+          \
+          wget \
+          ripgrep \
+          gvim \
+          \
+          jq httpie asciinema \
+          git hub tig \
+          sqlite postgresql mysql \
+          yarn go python-language-server \
+          docker aws-cli \
 
 yarn global add \
           typescript-language-server \
@@ -51,6 +35,7 @@ mkdir -p ~/.local/share/systemd/user/
 find ${DOTFILES}/userjob -maxdepth 1 -name 'userjob.*' | while read source; do
   ln -sf "${source}" "${HOME}/.local/share/systemd/user/${source##*/}"
 done
+
 systemctl --user daemon-reload
 systemctl --user enable userjob.timer
 systemctl enable sddm
