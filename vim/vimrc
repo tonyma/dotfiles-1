@@ -184,9 +184,15 @@ call _plug_begin()
   let g:lsp_highlight_references_enabled = 0 " disable references highlighting
 
   " 保存時に自動でフォーマット
+  let g:kyoh86_auto_format = v:true
+  function! s:autoFormatSync()
+    if g:kyoh86_auto_format
+      LspDocumentFormatSync
+    endif
+  endfunction
   augroup Lsp.format
     autocmd!
-    autocmd BufWritePre *.go,*.py silent LspDocumentFormatSync
+    autocmd BufWritePre *.go,*.py call s:autoFormatSync()
   augroup END
 
   nmap <Leader>ld <Plug>(lsp-definition)
@@ -220,7 +226,6 @@ call _plug_begin()
           \ }},
           \ })
       autocmd FileType go setlocal omnifunc=lsp#complete
-      autocmd BufWritePre *.go LspDocumentFormatSync
     else
       echoerr 'gopls not found'
     endif
@@ -266,6 +271,7 @@ call _plug_begin()
           \   'plugins': {
           \     'black': {'enabled': v:true},
           \     'pycodestyle': {'enabled': v:false},
+          \     'pyls_mypy': {'enabled': v:true, 'live_mode': v:false},
           \   },
           \ }},
           \ 'whitelist': ['python'],

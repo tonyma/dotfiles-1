@@ -21,6 +21,7 @@
 !/lazyenv
 !/locale.conf
 !/memo.txt
+!/mypy
 !/plist
 !/pycodestyle
 !/pyenv
