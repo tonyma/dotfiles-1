@@ -30,6 +30,9 @@
 !/tig
 !/userjob
 !/vim
+!/xfce4
+/xfce4/desktop/icons.*.rc
+/xfce4/**/*.scm
 !/zsh
 
 !requirements.txt
