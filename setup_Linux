@@ -3,6 +3,7 @@ sudo pacman -S \
           linux-headers \
           \
           gnome-keyring seahorse libgnome-keyring \
+          networkmanager network-manager-applet xfce4-notifyd \
           \
           zsh-syntax-highlighting zsh-completions \
           diff-so-fancy \
@@ -39,3 +40,4 @@ done
 systemctl --user daemon-reload
 systemctl --user enable userjob.timer
 systemctl enable sddm
+systemctl enable NetworkManager.service

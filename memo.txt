@@ -1,12 +1,3 @@
-## Wi-Fi
-
-not setup wpa_supplicant.conf
-never use netctl enable {profile}
-create /etc/netctl/{profile} ( from /etc/netctl/examples/wireless-wpa-configsection )
-use netctl-ifplugd@{interface} and netctl-auto@{interface}
-
-ref:  https://wiki.archlinux.jp/index.php/NetCtl
-
 ## Locale
 
 set LANG=en_US.UTF-8 in /etc/locale.conf
@@ -39,3 +30,23 @@ NetworkManager がこのアクションを実行できネットワークの初�
 $ dbus-send --system --type=method_call --dest=org.bluez /org/bluez/hci0/dev_AA_BB_CC_DD_EE_FF org.bluez.Network1.Connect string:'nap'
 
 これでネットワークインターフェース bnep0 が作成されます。最後に、このインターフェースでネットワーク接続を設定してください。Android はデフォルトで DHCP を提供します。 
+
+-> XFCEならNetworkManagerがいい感じ
+
+## Wi-Fi
+
+not setup wpa_supplicant.conf
+never use netctl enable {profile}
+create /etc/netctl/{profile} ( from /etc/netctl/examples/wireless-wpa-configsection )
+use netctl-ifplugd@{interface} and netctl-auto@{interface}
+
+ref:  https://wiki.archlinux.jp/index.php/NetCtl
+
+-> XFCEならNetworkManagerがいい感じ
+
+```
+$ sudo pacman -S networkmanager network-manager-applet xfce4-notifyd gnome-keyring
+$ sudo systemctl enable NetworkManager.service
+```
+
+ref: http://grainrigi.hatenablog.com/entry/2017/12/02/222955
