@@ -36,6 +36,14 @@ if [[ -d /usr/local/share ]]; then
   chmod 0755 /usr/local/share
 fi
 
+# setup linters
+yarn global add \
+          typescript-language-server \
+          vim-language-server
+
+GO111MODULE=on go get golang.org/x/tools/gopls@latest
+go get github.com/mattn/efm-langserver
+
 # setup fonts
 cp ${DOTFILES}/fonts/* ~/Library/Fonts
 
