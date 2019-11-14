@@ -1,210 +1,231 @@
-tap "mix3/ndenv"
-tap "kyoh86/tap"
-tap "kyoh86/pyenv"
-tap "homebrew/services"
-tap "homebrew/core"
-tap "homebrew/cask-versions"
-tap "homebrew/cask-fonts"
-tap "homebrew/cask"
-tap "homebrew/bundle"
-tap "goreleaser/goreleaser"
-tap "golangci/tap"
-tap "argon/mas"
 tap "alecthomas/tap"
-mas "iMovie", id: 408981434
-mas "iMage Tools", id: 493949693
-mas "Yoink", id: 457622435
-mas "Xcode", id: 497799835
-mas "Typist", id: 415166115
-mas "TweetDeck", id: 485812721
-mas "Todoist", id: 585829637
-mas "The Unarchiver", id: 425424353
-mas "Slack", id: 803453959
-mas "Pixel Perfect", id: 916097243
-mas "Pages", id: 409201541
-mas "Numbers", id: 409203825
-mas "Movist", id: 461788075
-mas "Microsoft Remote Desktop", id: 715768417
-mas "Markoff", id: 1084713122
-mas "Magnet", id: 441258766
-mas "LINE", id: 539883307
-mas "Keynote", id: 409183694
-mas "GarageBand", id: 682658836
-mas "Fantastical 2", id: 975937182
-mas "Debookee Tools", id: 1110355801
-mas "Cyberduck", id: 409222199
-mas "Bear", id: 1091189122
-mas "1Password 7", id: 1333542190
-cask "yt-music"
-cask "vlc"
-cask "virtualbox"
-cask "postman"
-cask "nosqlbooster-for-mongodb"
-cask "ngrok"
-cask "kindle"
-cask "keepingyouawake"
-cask "java"
-cask "iterm2"
-cask "gyazo"
-cask "google-japanese-ime"
-cask "google-cloud-sdk"
-cask "font-myricam"
-cask "font-myrica"
-cask "flux"
-cask "docker"
-cask "bitbar"
-cask "bartender"
-cask "alfred"
-cask "adobe-creative-cloud"
-brew "zsh-syntax-highlighting"
-brew "zsh-completions"
-brew "zsh"
-brew "zlib"
-brew "yarn"
-brew "xz"
-brew "wget"
-brew "vim"
-brew "tig"
-brew "terraform"
-brew "supervisor"
-brew "sqlite"
-brew "scala"
-brew "sbt"
-brew "ripgrep"
-brew "rbenv"
-brew "r"
-brew "python"
-brew "pyenv-virtualenv"
-brew "pyenv"
-brew "pstree"
-brew "postgresql"
-brew "plantuml"
-brew "openssl"
-brew "nodenv"
-brew "nkf"
-brew "mysql"
-brew "moreutils"
-brew "mono"
-brew "mecab-ipadic"
-brew "mecab"
-brew "mas"
-brew "libtool"
-brew "kyoh86/tap/richgo"
-brew "kyoh86/tap/goimportssw"
-brew "kyoh86/tap/gogh"
-brew "kyoh86/tap/git-vertag"
-brew "kyoh86/tap/git-statuses"
-brew "kyoh86/tap/git-prompt"
-brew "kyoh86/pyenv/pyenv-default-packages"
-brew "jq"
-brew "influxdb"
-brew "hugo"
-brew "hub"
-brew "httpie"
-brew "gzip"
-brew "grep"
-brew "graphviz"
-brew "goreleaser/goreleaser/goreleaser"
-brew "golangci/tap/golangci-lint"
-brew "go"
-brew "gnu-tar"
-brew "gnu-sed"
-brew "git"
-brew "gibo"
-brew "ghi"
-brew "gd"
-brew "fswatch"
-brew "fontconfig"
-brew "fish"
-brew "findutils"
-brew "figlet"
-brew "ffmpeg"
-brew "docker", link: false
-brew "direnv"
-brew "dep"
-brew "curl"
-brew "coreutils"
-brew "cmake"
-brew "circleci"
-brew "cassandra", restart_service: true
-brew "awscli"
-brew "autoconf"
-brew "asciinema"
-brew "alecthomas/tap/gometalinter"
-# Yet another part-of-speech and morphological analyzer
-# XML-based font configuration API for X Windows
-# Work on GitHub issues on the command-line
-# Vi 'workalike' with many additional features
-# User-friendly command-line shell for UNIX-like operating systems
-# User-friendly cURL replacement (command-line HTTP client)
-# UNIX shell (command interpreter)
-# Tools for working with Lightbend Reactive Platform
-# Tool to build, change, and version infrastructure
-# Time series, events, and metrics database
-# Text interface for Git repositories
-# Software environment for statistical computing
-# Show ps output as a tree
-# Shorthand for gofmt -s -w $@ && goimports -w $@
-# Search tool like grep and The Silver Searcher
+tap "argon/mas"
+tap "golangci/tap"
+tap "goreleaser/goreleaser"
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "kyoh86/pyenv"
+tap "kyoh86/tap"
+tap "mix3/ndenv"
 # SSL/TLS cryptography library
-# Ruby version manager
-# Record and share terminal sessions
-# Python version management
-# Pyenv plugin to manage virtualenv
-# Process Control System
-# Popular GNU data compression program
-# Play, record, convert, and stream audio and video
-# Pack, ship and run any application as a lightweight container
-# Open source relational database management system
-# Open source programming language to build simple/reliable/efficient software
-# Official Amazon AWS command-line interface
-# Object-relational database system
-# Network Kanji code conversion Filter (NKF)
-# Monitor a directory for changes and run a shell command
-# Manage multiple NodeJS versions
-# Mac App Store command-line interface
-# Load/unload environment variables based on $PWD
-# Lightweight and flexible command-line JSON processor
-# JavaScript package manager
-# JVM-based programming language
-# Interpreted, interactive, object-oriented programming language
-# Internet file retriever
-# IPA dictionary compiled for MeCab
-# High-performance, schema-free, document-oriented database
-# Graphics library to dynamically manipulate images
-# Graph visualization software from AT&T and Bell Labs
-# Go dependency management tool
-# Get a file from an HTTP, HTTPS or FTP server
-# Generic library support script
-# General-purpose lossless data-compression library
-# General-purpose data compression with high compression ratio
-# GO GitHub project manager
-# GNU version of the tar archiving utility
-# GNU implementation of the famous stream editor
-# GNU grep, egrep and fgrep
-# GNU File, Shell, and Text utilities
-# Fish shell like syntax highlighting for zsh
-# Fast linters runner for Go.
-# Eventually consistent, distributed key-value store
-# Enables you to reproduce the CircleCI environment locally
-# Draw UML diagrams
-# Distributed revision control system
-# Deliver Go binaries as fast and easily as possible
-# Cross-platform make
-# Cross platform, open source .NET development framework
-# Configurable static site generator
-# Concurrently run Go lint tools and normalise their output.
+brew "openssl"
 # Command-line interface for SQLite
-# Command-line fuzzy finder written in Go
-# Collection of tools that nobody wrote when UNIX was young
-# Collection of GNU find, xargs, and locate
-# Checks for unpinned variables in go programs.
-# Build tool for Scala projects
-# Banner-like program prints strings as ASCII art
+brew "sqlite"
+# General-purpose data compression with high compression ratio
+brew "xz"
+# Interpreted, interactive, object-oriented programming language
+brew "python"
+# Record and share terminal sessions
+brew "asciinema"
 # Automatic configure script builder
-# Additional completion definitions for zsh
-# Add GitHub support to git on the command-line
+brew "autoconf"
+# Official Amazon AWS command-line interface
+brew "awscli"
+# Simple command-line tool to read AWS CloudWatch logs
+brew "awslogs"
+# Bourne-Again SHell, a UNIX command interpreter
+brew "bash"
+# XML-based font configuration API for X Windows
+brew "fontconfig"
+# Eventually consistent, distributed key-value store
+brew "cassandra", restart_service: true
+# Enables you to reproduce the CircleCI environment locally
+brew "circleci"
+# Cross-platform make
+brew "cmake"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Get a file from an HTTP, HTTPS or FTP server
+brew "curl"
+# Go dependency management tool
+brew "dep"
+# Load/unload environment variables based on $PWD
+brew "direnv"
+# Pack, ship and run any application as a lightweight container
+brew "docker", link: false
+# Play, record, convert, and stream audio and video
+brew "ffmpeg"
+# Banner-like program prints strings as ASCII art
+brew "figlet"
+# Collection of GNU find, xargs, and locate
+brew "findutils"
+# User-friendly command-line shell for UNIX-like operating systems
+brew "fish"
+# Monitor a directory for changes and run a shell command
+brew "fswatch"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# Graphics library to dynamically manipulate images
+brew "gd"
+# Work on GitHub issues on the command-line
+brew "ghi"
 # Access GitHub's .gitignore boilerplates
-# A tool to manage version-tag with the semantic versioning specification.
+brew "gibo"
+# Distributed revision control system
+brew "git"
+# GNU implementation of the famous stream editor
+brew "gnu-sed"
+# GNU version of the tar archiving utility
+brew "gnu-tar"
+# Embed files into a Go executable
+brew "go-statik"
+# Graph visualization software from AT&T and Bell Labs
+brew "graphviz"
+# GNU grep, egrep and fgrep
+brew "grep"
+# Popular GNU data compression program
+brew "gzip"
+# User-friendly cURL replacement (command-line HTTP client)
+brew "httpie"
+# Add GitHub support to git on the command-line
+brew "hub"
+# Configurable static site generator
+brew "hugo"
+# Time series, events, and metrics database
+brew "influxdb"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# Generic library support script
+brew "libtool"
+# Mac App Store command-line interface
+brew "mas"
+# Yet another part-of-speech and morphological analyzer
+brew "mecab"
+# IPA dictionary compiled for MeCab
+brew "mecab-ipadic"
+# Cross platform, open source .NET development framework
+brew "mono"
+# Collection of tools that nobody wrote when UNIX was young
+brew "moreutils"
+# Open source relational database management system
+brew "mysql"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
+# Network Kanji code conversion Filter (NKF)
+brew "nkf"
+# Manage multiple NodeJS versions
+brew "nodenv"
+# Generate clients, server & docs from an OpenAPI spec (v2, v3)
+brew "openapi-generator"
+# Swiss-army knife of markup format conversion
+brew "pandoc"
+# Draw UML diagrams
+brew "plantuml"
+# Object-relational database system
+brew "postgresql"
+# Show ps output as a tree
+brew "pstree"
+# Password generator
+brew "pwgen"
+# Python version management
+brew "pyenv"
+# Pyenv plugin to manage virtualenv
+brew "pyenv-virtualenv"
+# Software environment for statistical computing
+brew "r"
+# Ruby version manager
+brew "rbenv"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# Build tool for Scala projects
+brew "sbt"
+# JVM-based programming language
+brew "scala"
+# Static analysis and lint tool, for (ba)sh scripts
+brew "shellcheck"
+# Process Control System
+brew "supervisor"
+# Tool to build, change, and version infrastructure
+brew "terraform"
+# Text interface for Git repositories
+brew "tig"
+# Tools for working with Lightbend Reactive Platform
+brew "typesafe-activator"
+# Vi 'workalike' with many additional features
+brew "vim"
+# Internet file retriever
+brew "wget"
+# JavaScript package manager
+brew "yarn"
+# General-purpose lossless data-compression library
+brew "zlib"
+# UNIX shell (command interpreter)
+brew "zsh"
+# Additional completion definitions for zsh
+brew "zsh-completions"
+# Fish shell like syntax highlighting for zsh
+brew "zsh-syntax-highlighting"
+# Concurrently run Go lint tools and normalise their output.
+brew "alecthomas/tap/gometalinter"
+# Fast linters runner for Go.
+brew "golangci/tap/golangci-lint"
+# Deliver Go binaries as fast and easily as possible
+brew "goreleaser/goreleaser/goreleaser"
+brew "kyoh86/pyenv/pyenv-default-packages"
+# A CLI tool to make the docbase more convenience!
+brew "kyoh86/tap/docbase"
+# generate emoji (like 👍 in slack) banner which support some bitmap font faces
+brew "kyoh86/tap/gigamoji"
+# Show each branch, upstream, author in git repository.
+brew "kyoh86/tap/git-branches"
 # A tool for Prompting git informations
+brew "kyoh86/tap/git-prompt"
 # **git-statuses** finds local git repositories and show statuses of them.
+brew "kyoh86/tap/git-statuses"
+# A tool to manage version-tag with the semantic versioning specification.
+brew "kyoh86/tap/git-vertag"
+# GO GitHub project manager
+brew "kyoh86/tap/gogh"
+# Shorthand for gofmt -s -w $@ && goimports -w $@
+brew "kyoh86/tap/goimportssw"
+# Checks for unpinned variables in go programs.
+brew "kyoh86/tap/richgo"
+# Encode(metafy) / decode(unmetafy) .zsh_history file
+brew "kyoh86/tap/zshist"
+cask "adobe-creative-cloud"
+cask "alacritty"
+cask "alfred"
+cask "bartender"
+cask "bitbar"
+cask "docker"
+cask "flux"
+cask "font-myrica"
+cask "font-myricam"
+cask "google-chrome"
+cask "google-chrome-canary"
+cask "google-cloud-sdk"
+cask "google-japanese-ime"
+cask "gyazo"
+cask "iterm2"
+cask "java"
+cask "keepingyouawake"
+cask "keycast"
+cask "kindle"
+cask "ngrok"
+cask "nosqlbooster-for-mongodb"
+cask "postman"
+cask "virtualbox"
+cask "vlc"
+cask "wkhtmltopdf"
+cask "yt-music"
+mas "1Password 7", id: 1333542190
+mas "Debookee Tools", id: 1110355801
+mas "Fantastical", id: 975937182
+mas "GarageBand", id: 682658836
+mas "iMage Tools", id: 493949693
+mas "iMovie", id: 408981434
+mas "Magnet", id: 441258766
+mas "Markoff", id: 1084713122
+mas "Microsoft Remote Desktop", id: 715768417
+mas "Movist", id: 461788075
+mas "Pixel Perfect", id: 916097243
+mas "The Unarchiver", id: 425424353
+mas "Todoist", id: 585829637
+mas "TweetDeck", id: 485812721
+mas "Xcode", id: 497799835
+mas "Yoink", id: 457622435
+mas "タイピスト", id: 415166115
