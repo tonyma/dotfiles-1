@@ -11,8 +11,6 @@ tap "homebrew/services"
 tap "kyoh86/pyenv"
 tap "kyoh86/tap"
 tap "mix3/ndenv"
-# SSL/TLS cryptography library
-brew "openssl"
 # Command-line interface for SQLite
 brew "sqlite"
 # General-purpose data compression with high compression ratio
@@ -31,8 +29,6 @@ brew "awslogs"
 brew "bash"
 # XML-based font configuration API for X Windows
 brew "fontconfig"
-# Eventually consistent, distributed key-value store
-brew "cassandra", restart_service: true
 # Enables you to reproduce the CircleCI environment locally
 brew "circleci"
 # Cross-platform make
@@ -41,6 +37,8 @@ brew "cmake"
 brew "coreutils"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
+# Open source programming language to build simple/reliable/efficient software
+brew "go"
 # Go dependency management tool
 brew "dep"
 # Load/unload environment variables based on $PWD
@@ -111,6 +109,8 @@ brew "nkf"
 brew "nodenv"
 # Generate clients, server & docs from an OpenAPI spec (v2, v3)
 brew "openapi-generator"
+# SSL/TLS cryptography library
+brew "openssl"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
 # Draw UML diagrams
@@ -143,8 +143,6 @@ brew "supervisor"
 brew "terraform"
 # Text interface for Git repositories
 brew "tig"
-# Tools for working with Lightbend Reactive Platform
-brew "typesafe-activator"
 # Vi 'workalike' with many additional features
 brew "vim"
 # Internet file retriever
@@ -195,7 +193,6 @@ cask "docker"
 cask "flux"
 cask "font-myrica"
 cask "font-myricam"
-cask "google-chrome"
 cask "google-chrome-canary"
 cask "google-cloud-sdk"
 cask "google-japanese-ime"
@@ -213,16 +210,22 @@ cask "vlc"
 cask "wkhtmltopdf"
 cask "yt-music"
 mas "1Password 7", id: 1333542190
+mas "Cyberduck", id: 409222199
 mas "Debookee Tools", id: 1110355801
 mas "Fantastical", id: 975937182
 mas "GarageBand", id: 682658836
 mas "iMage Tools", id: 493949693
 mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "LINE", id: 539883307
 mas "Magnet", id: 441258766
 mas "Markoff", id: 1084713122
 mas "Microsoft Remote Desktop", id: 715768417
 mas "Movist", id: 461788075
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
 mas "Pixel Perfect", id: 916097243
+mas "Slack", id: 803453959
 mas "The Unarchiver", id: 425424353
 mas "Todoist", id: 585829637
 mas "TweetDeck", id: 485812721

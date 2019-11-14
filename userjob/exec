@@ -1,20 +1,23 @@
-#!env zsh
+#!/bin/zsh
 
 [ -f /usr/local/var/userjob-log.log ] && rm -f /usr/local/var/userjob-log.log
 [ -f /etc/zshenv ] && source /etc/zshenv
-source ${ZDOTDIR}/.zshenv
+source ${HOME}/.config/zsh/.zshenv
 
 error=""
 
 # Bundle brew:
-if command -v brew >/dev/null 2>&1 ; then
-  file=${HOME}/.config/homebrew/bundle
-  brew bundle dump --force --file=${file} --describe || error="1"
+if [ -x /usr/local/bin/brew ]; then
+  /usr/local/bin/brew bundle dump --force --file=${HOME}/.config/homebrew/bundle --describe || error="1"
+else
+  echo no brew >&2
 fi
 
 # dump gogh
-if command -v gogh >/dev/null 2>&1 ; then
-  gogh dump --public kyoh86 > ${DOTFILES}/gogh/list.txt
+if [ -x /usr/local/bin/gogh ]; then
+  /usr/local/bin/gogh dump --public kyoh86 > ${HOME}/.config/gogh/dump.txt || error="1"
+else
+  echo no gogh >&2
 fi
 
 if [[ -n ${error} ]]; then
