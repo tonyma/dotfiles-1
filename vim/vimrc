@@ -646,6 +646,7 @@ call _plug_begin()
   Plug 'bps/vim-textobj-python'
   Plug 'briancollins/vim-jst', {'for': 'jst'}
   Plug 'cespare/vim-toml', {'for': 'toml'}
+  Plug 'dhruvasagar/vim-table-mode'
 
 if executable('direnv')
   Plug 'direnv/direnv.vim'

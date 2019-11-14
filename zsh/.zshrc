@@ -121,18 +121,18 @@ if [[ -f ${DOTFILES}/lazyenv/lazyenv.bash ]]; then
   _nodenv_init() {
     eval "$(command nodenv init -)"
   }
-  eval "$(lazyenv.load _nodenv_init `ls --color=never ~/.nodenv/shims`)"
+  eval "$(lazyenv.load _nodenv_init `gls --color=never ~/.nodenv/shims`)"
   
   _rbenv_init() {
     eval "$(command rbenv init -)"
   }
-  eval "$(lazyenv.load _rbenv_init `ls --color=never ~/.rbenv/shims`)"
+  eval "$(lazyenv.load _rbenv_init `gls --color=never ~/.rbenv/shims`)"
   
   _pyenv_init() {
     eval "$(command pyenv init -)"
     eval "$(command pyenv virtualenv-init -)"
   }
-  eval "$(lazyenv.load _pyenv_init `ls --color=never ~/.pyenv/shims`)"
+  eval "$(lazyenv.load _pyenv_init `gls --color=never ~/.pyenv/shims`)"
 fi
 # }}}
 
@@ -253,7 +253,7 @@ function new-project() {
   fi
   if [[ -e ${project_dir} ]]; then
     echo "${fg[red]}An object already exists"
-    ls -lad --color=never "${project_dir}"
+    gls -lad --color=never "${project_dir}"
     echo -n "${reset_color}"
     return
   fi
