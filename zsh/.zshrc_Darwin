@@ -1,4 +1,4 @@
-alias ls="gls --color"
+alias ls="gls --color=auto"
 alias find=/usr/local/opt/findutils/bin/gfind
 alias xargs=/usr/local/opt/findutils/bin/gxargs
 alias grep="/usr/local/bin/ggrep --color=auto"

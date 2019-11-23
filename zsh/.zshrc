@@ -86,8 +86,6 @@ export LSCOLORS=Exfxcxdxbxegedabagacad
 # 補完時の色の設定
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export ZLS_COLORS=$LS_COLORS
-# lsコマンド時、自動で色がつく
-export CLICOLOR=true
 # 補完候補に色を付ける
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # }}}
@@ -121,18 +119,18 @@ if [[ -f ${DOTFILES}/lazyenv/lazyenv.bash ]]; then
   _nodenv_init() {
     eval "$(command nodenv init -)"
   }
-  eval "$(lazyenv.load _nodenv_init `gls --color=never ~/.nodenv/shims`)"
+  eval "$(lazyenv.load _nodenv_init `ls --color=never ~/.nodenv/shims`)"
   
   _rbenv_init() {
     eval "$(command rbenv init -)"
   }
-  eval "$(lazyenv.load _rbenv_init `gls --color=never ~/.rbenv/shims`)"
+  eval "$(lazyenv.load _rbenv_init `ls --color=never ~/.rbenv/shims`)"
   
   _pyenv_init() {
     eval "$(command pyenv init -)"
     eval "$(command pyenv virtualenv-init -)"
   }
-  eval "$(lazyenv.load _pyenv_init `gls --color=never ~/.pyenv/shims`)"
+  eval "$(lazyenv.load _pyenv_init `ls --color=never ~/.pyenv/shims`)"
 fi
 # }}}
 
@@ -173,6 +171,10 @@ fi
 
 # }}}
 
+# }}}
+
+# 環境別の設定 {{{
+[ -f $ZDOTDIR/.zshrc_`uname` ] && . $ZDOTDIR/.zshrc_`uname`
 # }}}
 
 # 自作関数 {{{
@@ -253,7 +255,7 @@ function new-project() {
   fi
   if [[ -e ${project_dir} ]]; then
     echo "${fg[red]}An object already exists"
-    gls -lad --color=never "${project_dir}"
+    ls -lad --color=never "${project_dir}"
     echo -n "${reset_color}"
     return
   fi
@@ -341,10 +343,6 @@ zle -N revive-job
 bindkey '^Z' revive-job
 # }}}
 
-# }}}
-
-# 環境別の設定 {{{
-[ -f $ZDOTDIR/.zshrc_`uname` ] && . $ZDOTDIR/.zshrc_`uname`
 # }}}
 
 # ZSHRC 終了処理 {{{
