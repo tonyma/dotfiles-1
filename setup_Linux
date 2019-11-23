@@ -1,23 +1,53 @@
+#!/bin/bash
+
 # TODO: judge distributions (command -v pacman?)
 sudo pacman -S \
-          linux-headers \
-          \
-          gnome-keyring seahorse libgnome-keyring \
-          networkmanager network-manager-applet xfce4-notifyd \
-          \
-          zsh-syntax-highlighting zsh-completions \
-          diff-so-fancy \
-          inotify-tools \
-          \
-          wget \
-          ripgrep \
-          gvim \
-          \
-          jq httpie asciinema \
-          git hub tig \
-          sqlite postgresql mysql \
-          yarn go python-language-server \
-          docker aws-cli \
+  $(: Linuxのヘッダファイル群。makeするときに何やかや出番が多い) \
+  linux-headers \
+  \
+  $(: Macで言うところのキーチェーン。鍵情報を管理してくれる) \
+  seahorse \
+  gnome-keyring \
+  libgnome-keyring \
+  \
+  $(: ネットワークマネージャ。Wi-Fiへの接続とか自動でやってくれる) \
+  networkmanager \
+  network-manager-applet \
+  xfce4-notifyd \
+  \
+  $(: Display Manager) \
+  lightdm \
+  lightdm-gtk-greeter \
+  accountsservice \
+  \
+  $(: Desktop Environment) \
+  xfce4 \
+  \
+  $(: シェルを便利にしたい群) \
+  zsh-syntax-highlighting zsh-completions \
+  diff-so-fancy \
+  \
+  $(: CLI人権ツール群) \
+  wget \
+  ripgrep \
+  gvim \
+  \
+  $(: 開発でよく使うツール、言語系) \
+  inotify-tools \
+  jq httpie asciinema \
+  git hub tig \
+  sqlite postgresql mysql \
+  yarn go python-language-server \
+  docker aws-cli \
+  \
+  $(: Tumbnail プラグイン群) \
+  tumbler            $(: サムネイルを表示するのに必須) \
+  poppler-glib       $(: Adobe の .pdf ファイル) \
+  evince             $(: .pdf ファイル) \
+  ffmpegthumbnailer  $(: 動画ファイル) \
+  freetype2          $(: フォントファイル) \
+  libgsf             $(: .odf ファイル) \
+  raw-thumbnailer    $(: .raw ファイル。いわゆるカメラのあれ。)
 
 yarn global add \
           typescript-language-server \
@@ -25,6 +55,9 @@ yarn global add \
 
 GO111MODULE=on go get golang.org/x/tools/gopls@latest
 go get github.com/mattn/efm-langserver
+
+# remove conflicts
+sudo pacman -R xscreensaver # conflicts to xfce4 session manager (issue #32)
 
 # link configurations
 ln -s "${DOTFILES}/vim" "${HOME}/.vim"
@@ -39,5 +72,5 @@ done
 
 systemctl --user daemon-reload
 systemctl --user enable userjob.timer
-systemctl enable sddm
+systemctl enable lightdm.service
 systemctl enable NetworkManager.service
