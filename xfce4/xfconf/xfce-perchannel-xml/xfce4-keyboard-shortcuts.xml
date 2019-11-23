@@ -33,20 +33,25 @@
       </property>
       <property name="&lt;Alt&gt;F1" type="string" value="xfce4-popup-applicationsmenu"/>
       <property name="XF86Mail" type="string" value="exo-open --launch MailReader"/>
-      <property name="Print" type="string" value="xfce4-screenshooter"/>
       <property name="XF86WWW" type="string" value="exo-open --launch WebBrowser"/>
       <property name="&lt;Super&gt;p" type="string" value="xfce4-display-settings --minimal"/>
       <property name="override" type="bool" value="true"/>
       <property name="Super_L" type="empty">
         <property name="startup-notify" type="bool" value="true"/>
       </property>
-      <property name="&lt;Super&gt;space" type="string" value="xfce4-appfinder">
+      <property name="&lt;Super&gt;space" type="empty">
         <property name="startup-notify" type="bool" value="true"/>
       </property>
       <property name="AudioRaiseVolume" type="string" value="sh -c &quot;pactl set-sink-mute 0 false ; pactl set-sink-volume 0 +5%&quot;"/>
       <property name="AudioLowerVolume" type="string" value="sh -c &quot;pactl set-sink-mute 0 false ; pactl -- set-sink-volume 0 -5%&quot;"/>
       <property name="AudioMute" type="string" value="pactl set-sink-mute 0 toggle"/>
       <property name="AudioMicMute" type="string" value="pactl set-source-mute 1 toggle"/>
+      <property name="WakeUp" type="empty">
+        <property name="startup-notify" type="bool" value="true"/>
+      </property>
+      <property name="Print" type="empty">
+        <property name="startup-notify" type="bool" value="true"/>
+      </property>
     </property>
   </property>
   <property name="xfwm4" type="empty">
@@ -160,7 +165,7 @@
       <property name="override" type="bool" value="true"/>
       <property name="&lt;Super&gt;Right" type="string" value="tile_right_key"/>
       <property name="&lt;Super&gt;Left" type="string" value="tile_left_key"/>
-      <property name="&lt;Shift&gt;&lt;Super&gt;f" type="string" value="fill_window_key"/>
+      <property name="&lt;Shift&gt;&lt;Alt&gt;&lt;Super&gt;f" type="string" value="fill_window_key"/>
     </property>
   </property>
   <property name="providers" type="array">
