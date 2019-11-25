@@ -20,6 +20,12 @@ else
   echo no gogh >&2
 fi
 
+# update pip
+pyenv versions --bare | while read version; do
+pyenv shell ${version}
+pyenv exec pip install -U -r ~/.config/pyenv/default-packages
+done
+
 if [[ -n ${error} ]]; then
   if command -v osascript >/dev/null 2>&1 ; then
     echo "var app = Application('System Events');
