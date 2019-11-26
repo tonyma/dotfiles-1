@@ -40,6 +40,9 @@ sudo pacman -S \
   yarn go python-language-server \
   docker aws-cli \
   \
+  $(: Bash CLIツール群) \
+  libnotify $(: notify-send コマンド) \
+  \
   $(: Tumbnail プラグイン群) \
   tumbler            $(: サムネイルを表示するのに必須) \
   poppler-glib       $(: Adobe の .pdf ファイル) \
@@ -51,7 +54,9 @@ sudo pacman -S \
 
 yarn global add \
           typescript-language-server \
-          vim-language-server
+          vim-language-server \
+          yo \
+          generator-go-project
 
 GO111MODULE=on go get golang.org/x/tools/gopls@latest
 go get github.com/mattn/efm-langserver
