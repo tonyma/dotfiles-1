@@ -52,7 +52,9 @@ let $LIBRARY_PATH=$LIBRARY_PATH.':/usr/local/opt/openssl/lib/'
 let $PATH=$HOME.'/.rbenv/bin:'.$HOME.'/.rbenv/shims:'.$PATH
 
 " Python:
-let $PYTHON_CONFIGURE_OPTS='--enable-framework'
+if has("mac")
+  let $PYTHON_CONFIGURE_OPTS='--enable-framework'
+endif
 let $PYENV_DEFAULT_PACKAGES=$XDG_CONFIG_HOME.'/pyenv/default-packages'
 let $PYENV_ROOT=$HOME.'/.pyenv'
 let $PATH=$PYENV_ROOT.'/bin:'.$PYENV_ROOT.'/shims:'.$PATH
