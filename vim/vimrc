@@ -206,6 +206,27 @@ call _plug_begin()
     autocmd BufWritePre *.go,*.py call s:autoFormatSync()
   augroup END
 
+  " CodeActionの選択をFZFで {{{
+  function! s:select_code_action(actions, callback) abort
+    let l:choices = map(
+      \ copy(a:actions),
+      \ {index, action -> string(index)  . ' ' . action['title']}
+      \ )
+    call fzf#run({
+      \ 'source': l:choices,
+      \ 'sink': function('<SID>kick_code_action', [a:actions, a:callback]),
+      \ 'options': ['--with-nth', '2..'],
+      \ 'down': '30%'
+      \ })
+  endfunction
+  let g:lsp_code_action_selector = [function('<SID>select_code_action')]
+
+  function! s:kick_code_action(actions, callback, line)
+    let [l:choice; _] = split(a:line)
+    call a:callback(a:actions[l:choice])
+  endfunction
+  " }}}
+
   nmap <Leader>ld <Plug>(lsp-definition)
   nmap <Leader>lh <Plug>(lsp-hover)
   nmap <Leader>ln <Plug>(lsp-next-error)
