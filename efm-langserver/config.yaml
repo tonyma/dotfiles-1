@@ -1,6 +1,6 @@
 languages:
   vim:
-    lint-command: vimt -
+    lint-command: vint -
     lint-stdin: true
 
   markdown:
@@ -9,7 +9,7 @@ languages:
     lint-formats:
       - '%f: %l: %m'
   go:
-    lint-command: golangci-lint
+    lint-command: golangci-lint run
     lint-stdin: false
 
   sh:

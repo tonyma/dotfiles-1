@@ -212,16 +212,16 @@ call _plug_begin()
   nmap <Leader>lp <Plug>(lsp-previous-error)
   nmap <Leader>lr <Plug>(lsp-rename)
   nmap <Leader>lf <Plug>(lsp-document-format)
+  nmap <Leader>la <Plug>(lsp-code-action)
+  nmap <Leader>ll <Plug>(lsp-document-diagnostics)
+  nmap <Leader>ls <Plug>(lsp-status)
 
   " nmap <Leader> <Plug>(lsp-references)
-  " nmap <Leader> <Plug>(lsp-code-action)
   " nmap <Leader> <Plug>(lsp-declaration)
   " nmap <Leader> <Plug>(lsp-document-symbol)
-  " nmap <Leader> <Plug>(lsp-document-diagnostics)
   " nmap <Leader> <Plug>(lsp-workspace-symbol)
   " nmap <Leader> <Plug>(lsp-implementation)
   " nmap <Leader> <Plug>(lsp-type-definition)
-  nmap <Leader>ls <Plug>(lsp-status)
 
   " for golang
   augroup Lsp.go
@@ -311,6 +311,7 @@ call _plug_begin()
           \   }
           \ },
           \ })
+      autocmd FileType vim setlocal omnifunc=lsp#complete
     else
       echoerr 'vim-language-server is not found'
     endif

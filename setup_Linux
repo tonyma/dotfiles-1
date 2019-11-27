@@ -37,7 +37,8 @@ sudo pacman -S \
   jq httpie asciinema \
   git hub tig \
   sqlite postgresql mysql \
-  yarn go python-language-server \
+  yarn go puthon python-pip python-language-server \
+  shellcheck \
   docker aws-cli \
   \
   $(: Bash CLIツール群) \
