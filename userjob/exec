@@ -21,8 +21,10 @@ else
 fi
 
 # update pip
+eval "$(pyenv init -)"
 pyenv versions --bare | while read version; do
 pyenv shell ${version}
+unset PIP_REQUIRE_VIRTUALENV
 pyenv exec pip install -U -r ~/.config/pyenv/default-packages
 done
 
