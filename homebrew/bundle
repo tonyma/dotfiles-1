@@ -109,8 +109,6 @@ brew "nkf"
 brew "nodenv"
 # Generate clients, server & docs from an OpenAPI spec (v2, v3)
 brew "openapi-generator"
-# SSL/TLS cryptography library
-brew "openssl"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
 # Draw UML diagrams
