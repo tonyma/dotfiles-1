@@ -747,10 +747,7 @@ endif
     return fzf#run(fzf#wrap({
     \ 'source':  map(
     \   filter(
-    \     range(
-    \       1,
-    \       bufnr('$')
-    \     ),
+    \     range(1, bufnr('$')),
     \     {_, nr -> buflisted(nr) && getbufvar(nr, "&filetype") != "qf" && !getbufvar(nr, "&modified")}
     \   ),
     \   {_, nr -> s:format_buffer(nr)}
