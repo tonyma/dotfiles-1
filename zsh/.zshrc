@@ -343,6 +343,95 @@ zle -N revive-job
 bindkey '^Z' revive-job
 # }}}
 
+# update bins {{{
+update() {
+  if (( $# > 0 )) ; then
+    while (( $# > 0 )); do
+      update-$1
+      shift
+    done
+  else
+    update-pip
+    update-go
+    update-yarn
+    update-yay
+    update-brew
+  fi
+}
+
+# update pip {{{
+function update-pip {
+  echo updating pip
+  if command -v pyenv >/dev/null 2>&1 ; then
+    eval "$(pyenv init -)"
+    pyenv versions --bare | while read version; do
+    pyenv shell ${version}
+    unset PIP_REQUIRE_VIRTUALENV
+    pyenv exec pip install -U -r ~/.config/pyenv/default-packages
+    done
+  elif command -v pip > /dev/null 2>&1 ; then
+    unset PIP_REQUIRE_VIRTUALENV
+    pip install --user -U -r ~/.config/pyenv/default-packages
+  fi
+}
+# }}}
+
+# update go/bin {{{
+function update-go {
+  echo updating go
+  local bin="\"$(go env GOPATH)/bin/\""
+  local fmt="\"%.$((${#$(go env GOPATH)}+5))s\""
+  fmt="$(
+    echo -n "{{if eq ${bin} (printf ${fmt} .Target)}}";
+    echo -n "{{.Target}} {{.ImportPath}}";
+    echo -n "{{end}}";
+  )" 
+  go list -f "${fmt}" all 2>/dev/null | while read line ; do
+    local pkg="${line##* }"
+    if [ -x "${line%% *}" ]; then
+      echo "update ${pkg}"
+      go get -u "${pkg}" || :
+    fi
+  done
+  gogh list --primary --format full | while read project; do
+    cd "${project}"
+    echo "$(go list -f "${fmt}" ./... 2>/dev/null || :)" | while read line ; do
+      local pkg="${line##* }"
+      if [ -x "${line%% *}" ]; then
+        echo "update ${pkg}"
+        go get -u "${pkg}" || :
+      fi
+    done
+  done
+}
+# }}}
+
+# update yarn global {{{
+function update-yarn {
+  echo updating yarn
+  yarn global upgrade --latest
+}
+alias update-js=update-yarn
+alias update-npm=update-yarn
+# }}}
+
+# update brew {{{
+function update-brew {
+  echo updating brew
+  if command -v brew >/dev/null 2>&1 ; then
+    brew update
+  fi
+}
+# }}}
+
+# update pacman {{{
+function update-yay {
+  echo updating yay
+  if command -v pacman >/dev/null 2>&1 ; then
+    yay -Syyu
+  fi
+}
+# }}}
 # }}}
 
 # ZSHRC 終了処理 {{{
