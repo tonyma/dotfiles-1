@@ -44,6 +44,9 @@ sudo pacman -S \
   $(: Bash CLIツール群) \
   libnotify $(: notify-send コマンド) \
   \
+  $(: autokey ) \
+  autokey \
+  \
   $(: Tumbnail プラグイン群) \
   tumbler            $(: サムネイルを表示するのに必須) \
   poppler-glib       $(: Adobe の .pdf ファイル) \

@@ -28,6 +28,8 @@ end
 " Path環境変数の設定:
 let $PATH='/usr/local/bin:'.$PATH
 let $PATH='/usr/local/sbin:'.$PATH
+let $PATH=$HOME.'/.local/bin:'.$PATH
+let $PATH=$HOME.'/.local/sbin:'.$PATH
 let $PATH=$PATH.':/bin'
 let $PATH=$PATH.':/usr/bin'
 let $PATH=$PATH.':/sbin'
@@ -54,11 +56,11 @@ let $PATH=$HOME.'/.rbenv/bin:'.$HOME.'/.rbenv/shims:'.$PATH
 " Python:
 if has("mac")
   let $PYTHON_CONFIGURE_OPTS='--enable-framework'
+  let $PIP_REQUIRE_VIRTUALENV='true'
 endif
 let $PYENV_DEFAULT_PACKAGES=$XDG_CONFIG_HOME.'/pyenv/default-packages'
 let $PYENV_ROOT=$HOME.'/.pyenv'
 let $PATH=$PYENV_ROOT.'/bin:'.$PYENV_ROOT.'/shims:'.$PATH
-let $PIP_REQUIRE_VIRTUALENV='true'
 
 " Node:
 let $PATH=$PATH.':'.$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin'
