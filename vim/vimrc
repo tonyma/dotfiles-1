@@ -729,15 +729,37 @@ endif
   " }}}
   " {{{ junegunn/fzf
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  Plug 'kyoh86/fzf.vim', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/fzf.vim'}
+  Plug 'junegunn/fzf.vim'
   let g:fzf_command_prefix = 'Fzf'
   nnoremap <Leader>f  :<C-u>FzfFiles<CR>
   nnoremap <Leader>w  :<C-u>FzfWindows<CR>
   nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
-  nnoremap <Leader>bw :<C-u>FzfWipeouts<CR>
   nnoremap <Leader>i  :<C-u>FzfHistory<CR>
   nnoremap q:         :<C-u>FzfHistory :<CR>
   nnoremap q/         :<C-u>FzfHistory /<CR>
+
+  function! s:format_buffer(b)
+    let l:name = bufname(a:b)
+    return printf("%s\t%s", a:b, empty(l:name) ? '[No Name]' : fnamemodify(l:name, ":p:~:."))
+  endfunction
+
+  function! s:wipeout_buffers()
+    return fzf#run(fzf#wrap({
+    \ 'source':  map(
+    \   filter(
+    \     range(
+    \       1,
+    \       bufnr('$')
+    \     ),
+    \     {_, nr -> buflisted(nr) && getbufvar(nr, "&filetype") != "qf" && !getbufvar(nr, "&modified")}
+    \   ),
+    \   {_, nr -> s:format_buffer(nr)}
+    \ ),
+    \ 'sink*': {lines -> execute('bwipeout '.join(map(lines, {_, line -> split(line)[0]})), '')},
+    \ 'options': ['-m', '--tiebreak=index', '--ansi', '-d', '\t', '--prompt', 'Wipeout> ']
+    \}))
+  endfunction
+  nnoremap <silent> <Leader>bw :<C-u>call <SID>wipeout_buffers()<CR>
   " }}}
   Plug 'kyoh86/vim-wipeout', {'on': 'Wipeout', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-wipeout'}
   Plug 'kyoh86/vim-editerm', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-editerm'}
