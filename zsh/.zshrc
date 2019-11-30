@@ -9,6 +9,7 @@ function _source_if() {
 HISTFILE=${HOME}/.zsh_history
 HISTSIZE=100000
 SAVEHIST=100000
+HISTORY_IGNORE="(ls|cd|rm|git|rmdir|mv|cp|export|exit)"
 setopt extended_history       # 補完時にヒストリを自動的に展開
 setopt hist_ignore_all_dups   # ヒストリに追加されるコマンド行が古いものと同じなら古いものを削除
 setopt hist_ignore_space      # スペースで始まるコマンド行はヒストリリストから削除
