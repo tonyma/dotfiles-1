@@ -685,6 +685,7 @@ call _plug_begin()
   "}}}
   " Plug 'AndrewRadev/quickpeek.vim'
 
+  Plug 'po3rin/vim-gofmtmd'
   Plug 'AndrewRadev/linediff.vim'
   Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
   Plug 'bps/vim-textobj-python'
