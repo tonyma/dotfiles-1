@@ -502,11 +502,11 @@ call _plug_begin()
     endif
 
     let l:stat = s:getGitStatus(l:location)
-    let l:commit = s:statPart(l:stat, 'ahead', '⬆ ') . s:statPart(l:stat, 'behind', '⬇ ')
+    let l:commit = s:statPart(l:stat, 'ahead', "\uf55d") . s:statPart(l:stat, 'behind', "\uf545") . get(l:stat, 'sync', "")
     let l:merge = s:statPart(l:stat, 'unmerged', 'Unmerged:')
-    let l:stage = s:statPart(l:stat, 'staged', '+') . s:statPart(l:stat, 'unstaged', '-')
+    let l:stage = s:statPart(l:stat, 'staged', "\uf631") . s:statPart(l:stat, 'unstaged', "\uf66f") . s:statPart(l:stat, 'untracked', "\uf7d6")
     let l:warn = [ l:commit, l:merge, l:stage ]
-    let l:brch = s:statPart(l:stat, 'local-branch', "\ue0a0 ")
+    let l:brch = s:statPart(l:stat, 'local-branch', "\ue0a0")
     return [ [ l:brch ], l:warn, [] ]
   endfunction
 
@@ -546,16 +546,22 @@ call _plug_begin()
     for l:file in split(l:res, "\n")
       if l:file[0:1] ==# '##'
         " ブランチ名を取得する
-        let [l:info['local-branch'], l:info['remote-branch']; l:remain] = split(l:file, '\.\.\.\|[ \[\],]')[1:]
-        let l:key = ''
-        for l:_ in l:remain
-          if l:key !=# ''
-            let l:info[l:key] = l:_
-            let l:key = ''
-          else
-            let l:key = l:_
-          endif
-        endfor
+        let l:words = split(l:file, '\.\.\.\|[ \[\],]')[1:]
+        if len(l:words) == 1
+          let l:info['local-branch'] = l:words[0] . '?'
+          let l:info['sync'] = "\uf12a"
+        else
+          let [l:info['local-branch'], l:info['remote-branch']; l:remain] = l:words
+          let l:key = ''
+          for l:_ in l:remain
+            if l:key !=# ''
+              let l:info[l:key] = l:_
+              let l:key = ''
+            else
+              let l:key = l:_
+            endif
+          endfor
+        endif
       elseif l:file[0] ==# 'U' || l:file[1] ==# 'U' || l:file[0:1] ==# 'AA' || l:file[0:1] ==# 'DD'
         call s:inc(l:info, 'unmerged')
       elseif l:file[0:1] ==# '??'
