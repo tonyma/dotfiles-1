@@ -121,5 +121,10 @@
         <value type="string" value="15751584231.desktop"/>
       </property>
     </property>
+    <property name="clipman" type="empty">
+      <property name="settings" type="empty">
+        <property name="max-texts-in-history" type="uint" value="200"/>
+      </property>
+    </property>
   </property>
 </channel>

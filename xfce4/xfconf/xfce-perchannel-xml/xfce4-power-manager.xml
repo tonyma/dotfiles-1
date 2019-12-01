@@ -10,5 +10,9 @@
     <property name="logind-handle-lid-switch" type="bool" value="false"/>
     <property name="lid-action-on-ac" type="uint" value="3"/>
     <property name="general-notification" type="bool" value="true"/>
+    <property name="dpms-on-ac-sleep" type="uint" value="60"/>
+    <property name="blank-on-ac" type="int" value="50"/>
+    <property name="dpms-on-ac-off" type="uint" value="60"/>
+    <property name="brightness-level-on-ac" type="uint" value="80"/>
   </property>
 </channel>
