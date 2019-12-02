@@ -884,6 +884,7 @@ nnoremap <ESC><ESC> :<C-u>nohl<CR><ESC>
 nnoremap <Leader>q :<C-u>copen<CR><ESC>
 
 nnoremap Q <Nop>
+nnoremap gQ <Nop>
 augroup TermMap
   " ターミナルで
   "   * <C-\><C-n> による job <- -> normal モードの往復を可能にする
