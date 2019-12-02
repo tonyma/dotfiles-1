@@ -168,7 +168,7 @@ brew "kyoh86/tap/docbase"
 brew "kyoh86/tap/gigamoji"
 # Show each branch, upstream, author in git repository.
 brew "kyoh86/tap/git-branches"
-# A tool for Prompting git informations
+# Show prompt strings for tmux, vim and zsh
 brew "kyoh86/tap/git-prompt"
 # **git-statuses** finds local git repositories and show statuses of them.
 brew "kyoh86/tap/git-statuses"

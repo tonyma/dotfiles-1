@@ -19,7 +19,6 @@ https://github.com/kyoh86/go-spdx
 https://github.com/kyoh86/kyoh86.dev
 https://github.com/kyoh86/vim-gogh
 https://github.com/kyoh86/action-golangci-lint
-https://github.com/kyoh86/fzf.vim
 https://github.com/kyoh86/homebrew-pyenv
 https://github.com/kyoh86/go-docbase
 https://github.com/kyoh86/docbase
