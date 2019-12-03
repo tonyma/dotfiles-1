@@ -166,7 +166,7 @@ brew "kyoh86/pyenv/pyenv-default-packages"
 brew "kyoh86/tap/docbase"
 # generate emoji (like 👍 in slack) banner which support some bitmap font faces
 brew "kyoh86/tap/gigamoji"
-# Show each branch, upstream, author in git repository.
+# Show each branch, upstream, author in git repository
 brew "kyoh86/tap/git-branches"
 # Show prompt strings for tmux, vim and zsh
 brew "kyoh86/tap/git-prompt"
