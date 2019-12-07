@@ -1,0 +1,59 @@
+#!/bin/zsh
+
+sudo pacman -S \
+  "$(: Linuxのヘッダファイル群。makeするときに何やかや出番が多い)" \
+  linux-headers \
+  \
+  "$(: Macで言うところのキーチェーン。鍵情報を管理してくれる)" \
+  seahorse \
+  gnome-keyring \
+  libgnome-keyring \
+  \
+  "$(: ネットワークマネージャ。Wi-Fiへの接続とか自動でやってくれる)" \
+  networkmanager \
+  network-manager-applet \
+  xfce4-notifyd \
+  \
+  "$(: Display Manager)" \
+  lightdm \
+  lightdm-gtk-greeter \
+  accountsservice \
+  \
+  "$(: Desktop Environment)" \
+  xfce4 \
+  \
+  "$(: シェルを便利にしたい群)" \
+  zsh-syntax-highlighting zsh-completions \
+  diff-so-fancy \
+  \
+  "$(: CLI人権ツール群)" \
+  wget \
+  ripgrep \
+  gvim \
+  \
+  "$(: 開発でよく使うツール、言語系)" \
+  inotify-tools \
+  jq httpie asciinema \
+  git hub tig \
+  sqlite postgresql mysql \
+  yarn go puthon python-pip python-language-server \
+  shellcheck \
+  docker aws-cli \
+  \
+  "$(: Bash CLIツール群)" \
+  libnotify "$(: notify-send コマンド)" \
+  \
+  "$(: autokey )" \
+  autokey \
+  \
+  "$(: Tumbnail プラグイン群)" \
+  tumbler            "$(: サムネイルを表示するのに必須)" \
+  poppler-glib       "$(: Adobe の .pdf ファイル)" \
+  evince             "$(: .pdf ファイル)" \
+  ffmpegthumbnailer  "$(: 動画ファイル)" \
+  freetype2          "$(: フォントファイル)" \
+  libgsf             "$(: .odf ファイル)" \
+  raw-thumbnailer    "$(: .raw ファイル。いわゆるカメラのあれ。)"
+
+# remove conflicts
+sudo pacman -R xscreensaver # conflicts to xfce4 session manager (issue #32)
