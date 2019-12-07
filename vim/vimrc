@@ -670,7 +670,7 @@ call _plug_begin()
   " textobj の先頭へ移動する
   nmap <Leader>h <Plug>(operator-jump-head)
   " textobj の末尾へ移動する
-  nmap <Leader>l <Plug>(operator-jump-tail)
+  nmap <Leader>t <Plug>(operator-jump-tail)
   " }}}
   "{{{ 'simeji/winresizer'
   let g:winresizer_start_key = '<C-W><C-E>'
@@ -928,4 +928,5 @@ set columns=200
 set lines=50
 set guioptions=cei
 set guifont=Cica\ 13
+set mouse=
 " }}}
