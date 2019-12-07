@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <channel name="displays" version="1.0">
-  <property name="ActiveProfile" type="string" value="b4301e4bc1aea642ab9bac2f13320083b9e9ae36"/>
+  <property name="ActiveProfile" type="string" value="Default"/>
   <property name="Default" type="empty">
     <property name="eDP1" type="string" value="ラップトップ">
       <property name="Active" type="bool" value="false"/>

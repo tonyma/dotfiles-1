@@ -148,6 +148,3 @@ nodenv global $nod_latest
 
 ## 注意: yarnはHomebrewで管理している
 yarn global add typescript typescript-language-server vim-language-server yo
-
-#TODO: ログイン項目の設定
-#TODO: iTermのテーマ設定
