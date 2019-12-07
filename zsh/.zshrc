@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 function _source_if() {
   [ -f ${1} ] && source ${1}
 }
@@ -45,6 +47,7 @@ PROMPT="%(?,,%F{red}[%?]%f
 
 # 自動補完の設定 {{{
 fpath=(/usr/local/share/zsh-completions $fpath)
+plugins=(zsh-completions zsh-syntax-highlighting $plugins)
 autoload -U compinit
 compinit -C
 # }}}
@@ -60,13 +63,19 @@ bindkey '^d' delete-char
 # }}}
 
 # ZSHコマンドハイライト設定 {{{
-if [ -d "${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR}" ]; then
-  for f in $(find ${ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR} -name "*.zsh"); do
+HIGHLIGHTING='/usr/local/share/zsh-syntax-highlighting'
+if [ ! -d "${HIGHLIGHTING}" ]; then
+  HIGHLIGHTING='/usr/share/zsh/plugins/zsh-syntax-highlighting'
+fi
+
+if [ -d "${HIGHLIGHTING}/highlighters" ]; then
+  export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR="${HIGHLIGHTING}/highlighters"
+  for f in $(find "${HIGHLIGHTING}/highlighters" -name "*.zsh"); do
     if [ ! -e "${f}.zwc" ] || [ "${f}" -nt "${f}.zwc" ]; then
-      zcompile $f
+      zcompile "${f}" > /dev/null 2>&1 || :
     fi
   done
-  _source_if /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  _source_if "${HIGHLIGHTING}/zsh-syntax-highlighting.zsh"
 fi
 # }}}
 

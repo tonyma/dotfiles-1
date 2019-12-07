@@ -27,7 +27,7 @@ bindkey '^x^l' insert-launchctl
 # Homebrew が Python を管理対象にしろ、とAlert出してくるので
 # Homebrew には pyenv 配下の Python の存在を隠す
 function brew() {
-  env PATH=${PATH/${HOME}\/\.pyenv\/shims:/} command brew $@
+  env PATH="${PATH/${HOME}\/\.pyenv\/shims:/}" command brew "$@"
 }
 zle -N brew
 # }}}
