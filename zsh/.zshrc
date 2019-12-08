@@ -156,7 +156,7 @@ function java() {
 # }}}
 
 # gogh {{{
-if which gogh >/dev/null 2>&1; then
+if command -v gogh >/dev/null 2>&1; then
   eval "$(gogh setup)"
 fi
 # }}}
