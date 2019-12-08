@@ -190,7 +190,7 @@ command! HighlightInfo call s:get_highlight_info()
 " }}}
 
 " Configure Plugins {{{
-function! _plug_begin()
+function! s:plug_begin()
   let l:dir = g:xdg_data_home . '/vim-plug'
   if !isdirectory(l:dir)
     call mkdir(l:dir, 'p')
@@ -198,7 +198,7 @@ function! _plug_begin()
   call plug#begin(l:dir)
 endfunction
 
-call _plug_begin()
+call s:plug_begin()
   " {{{ prabirshrestha/vim-lsp
   Plug 'Shougo/neosnippet.vim'
   Plug 'Shougo/neosnippet-snippets'
