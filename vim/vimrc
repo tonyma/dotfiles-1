@@ -128,72 +128,6 @@ if !isdirectory(&backupdir)
 endif
 " }}}
 
-" Functions {{{
-" Function: Edit Configurations {{{
-let g:config_home = g:xdg_config_home . '/vim'
-let g:vimrc_file = g:config_home . '/vimrc'
-let g:zshrc_file = g:xdg_config_home . '/zsh/.zshrc'
-let g:zshenv_file = g:xdg_config_home . '/zsh/.zshenv'
-if exists('fzf#run')
-  command! -nargs=0 Config call fzf#run(fzf#wrap({'source': [
-      \ g:xdg_config_home,
-      \ g:vimrc_file, 
-      \ g:zshrc_file,
-      \ g:zshenv_file
-      \ ]}))
-else
-  function! Config(bang, mods)
-    if a:mods == ''
-      let l:command = 'edit'
-    else
-      let l:command = a:mods + ' split'
-    endif
-    execute l:command . a:bang . ' ' . g:vimrc_file
-    command! -bang -nargs=0 Config :call Config('<bang>', '<mods>')
-  endfunction
-endif
-" }}}
-
-" Function: Switch Branch {{{
-function! s:git_switch(line)
-  let l:branch = get(split(a:line), 1, '')
-  exec '!git switch '.l:branch
-endfunction
-
-command! SwitchBranch call fzf#run({
-    \ 'source': "git-branches --color --exclude-current",
-    \ 'sink': function('<SID>git_switch'),
-    \ 'down': '30%'
-    \ })
-nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
-" }}}
-
-" Function: Update Terminal Window Title {{{
-function! Tapi_UpdateStatus(bufnum, arglist)
-  if len(a:arglist) == 1
-    call lightline#update()
-  endif
-endfunction
-" }}}
-
-" Function: What's the highlight on the cursor {{{
-
-function! s:get_syn_id(transparent)
-    let synid = synID(line('.'), col('.'), 1)
-    return a:transparent ? synIDtrans(synid) : synid
-endfunction
-function! s:get_syn_name(synid)
-    return synIDattr(a:synid, 'name')
-endfunction
-function! s:get_highlight_info()
-    execute "highlight " . s:get_syn_name(s:get_syn_id(0))
-    execute "highlight " . s:get_syn_name(s:get_syn_id(1))
-endfunction
-command! HighlightInfo call s:get_highlight_info()
-" }}}
-
-" }}}
-
 " Configure Plugins {{{
 function! s:plug_begin()
   let l:dir = g:xdg_data_home . '/vim-plug'
@@ -847,6 +781,72 @@ augroup END
       \ 'whitelist': ['*'],
       \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
       \ }))
+" }}}
+
+" Functions {{{
+" Function: Edit Configurations {{{
+let g:config_home = g:xdg_config_home . '/vim'
+let g:vimrc_file = g:config_home . '/vimrc'
+let g:zshrc_file = g:xdg_config_home . '/zsh/.zshrc'
+let g:zshenv_file = g:xdg_config_home . '/zsh/.zshenv'
+" if exists('fzf#run')
+  command! -nargs=0 Config call fzf#run(fzf#wrap({'source': [
+      \ g:xdg_config_home,
+      \ g:vimrc_file, 
+      \ g:zshrc_file,
+      \ g:zshenv_file
+      \ ]}))
+" else
+"   function! Config(bang, mods)
+"     if a:mods == ''
+"       let l:command = 'edit'
+"     else
+"       let l:command = a:mods + ' split'
+"     endif
+"     execute l:command . a:bang . ' ' . g:vimrc_file
+"   endfunction
+"   command! -bang -nargs=0 Config :call Config('<bang>', '<mods>')
+" endif
+" }}}
+
+" Function: Switch Branch {{{
+function! s:git_switch(line)
+  let l:branch = get(split(a:line), 1, '')
+  exec '!git switch '.l:branch
+endfunction
+
+command! SwitchBranch call fzf#run({
+    \ 'source': "git-branches --color --exclude-current",
+    \ 'sink': function('<SID>git_switch'),
+    \ 'down': '30%'
+    \ })
+nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
+" }}}
+
+" Function: Update Terminal Window Title {{{
+function! Tapi_UpdateStatus(bufnum, arglist)
+  if len(a:arglist) == 1
+    call lightline#update()
+  endif
+endfunction
+" }}}
+
+" Function: What's the highlight on the cursor {{{
+
+function! s:get_syn_id(transparent)
+    let synid = synID(line('.'), col('.'), 1)
+    return a:transparent ? synIDtrans(synid) : synid
+endfunction
+function! s:get_syn_name(synid)
+    return synIDattr(a:synid, 'name')
+endfunction
+function! s:get_highlight_info()
+    execute "highlight " . s:get_syn_name(s:get_syn_id(0))
+    execute "highlight " . s:get_syn_name(s:get_syn_id(1))
+endfunction
+command! HighlightInfo call s:get_highlight_info()
+" }}}
+
 " }}}
 
 " Settings {{{
