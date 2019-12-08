@@ -4,6 +4,7 @@ endif
 
 " in editing
 
+set colorcolumn=80
 highlight  link  helpIgnore     PreProc
 highlight  link  helpBar        PreProc
 highlight  link  helpStar       PreProc
