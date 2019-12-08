@@ -11,7 +11,6 @@ if ($XDG_CACHE_HOME ==# '')
   let $XDG_CACHE_HOME=$HOME.'/.cache'
 end
 
-
 set undodir=$XDG_CACHE_HOME/vim/undo
 set directory=$XDG_CACHE_HOME/vim/swap
 set backupdir=$XDG_CACHE_HOME/vim/backup
