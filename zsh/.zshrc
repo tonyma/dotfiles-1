@@ -372,6 +372,7 @@ update() {
 # update pip {{{
 function update-pip {
   echo updating pip
+  cd ~
   if command -v pyenv >/dev/null 2>&1 ; then
     eval "$(pyenv init -)"
     pyenv versions --bare | while read version; do
@@ -389,6 +390,7 @@ function update-pip {
 # update go/bin {{{
 function update-go {
   echo updating go
+  cd ~
   local bin="\"$(go env GOPATH)/bin/\""
   local fmt="\"%.$((${#$(go env GOPATH)}+5))s\""
   fmt="$(
@@ -419,6 +421,7 @@ function update-go {
 # update yarn global {{{
 function update-yarn {
   echo updating yarn
+  cd ~
   yarn global upgrade --latest
 }
 alias update-js=update-yarn
@@ -428,6 +431,7 @@ alias update-npm=update-yarn
 # update brew {{{
 function update-brew {
   echo updating brew
+  cd ~
   if command -v brew >/dev/null 2>&1 ; then
     brew update
   fi
@@ -437,6 +441,7 @@ function update-brew {
 # update pacman {{{
 function update-yay {
   echo updating yay
+  cd ~
   if command -v pacman >/dev/null 2>&1 ; then
     yay -Syyu
   fi
