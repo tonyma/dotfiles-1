@@ -690,8 +690,6 @@ endif
   " My Plugins {{{
   " {{{ kyoh86/vim-gogh
   Plug 'kyoh86/vim-gogh', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-gogh'}
-  " let g:gogh_params_list_primary = 1  TODO: wacul, wcl48 to modules
-  let g:gogh_edit_project_command = 'vnew'
   nmap <Leader>ge <Plug>(gogh-edit-project)
   nmap <Leader>gp <Plug>(gogh-switch-project)
   nmap <Leader>gg <Plug>(gogh-get-repository)
@@ -775,11 +773,15 @@ augroup CheckPlug
 augroup END
 " }}}
 
+" Configure loaded plugins {{{
+  call gogh#ui#fzf#use()
   call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
       \ 'name': 'neosnippet',
       \ 'whitelist': ['*'],
       \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
       \ }))
+" }}}
+"
 " }}}
 
 " Functions {{{
