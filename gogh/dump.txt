@@ -33,3 +33,4 @@ https://github.com/kyoh86/google-japanese-ime-icons
 https://github.com/kyoh86/generator-go-project
 https://github.com/kyoh86/gogh
 https://github.com/kyoh86/xdg
+https://github.com/kyoh86/scopelint

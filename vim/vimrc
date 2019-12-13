@@ -138,9 +138,6 @@ endfunction
 
 call s:plug_begin()
   " {{{ prabirshrestha/vim-lsp
-  Plug 'Shougo/neosnippet.vim'
-  Plug 'Shougo/neosnippet-snippets'
-
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
 
@@ -151,11 +148,17 @@ call s:plug_begin()
   inoremap <expr> <C-y> pumvisible() ? asyncomplete#close_popup() : "\<C-y>"
   inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
+  " {{{ snippets
+  Plug 'Shougo/neosnippet.vim'
+  Plug 'Shougo/neosnippet-snippets'
+  let g:neosnippet#snippets_directory = $XDG_CONFIG_HOME.'/vim/snippet'
+
   Plug 'prabirshrestha/asyncomplete-lsp.vim'
   Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
   imap <C-k>     <Plug>(neosnippet_expand_or_jump)
   smap <C-k>     <Plug>(neosnippet_expand_or_jump)
   xmap <C-k>     <Plug>(neosnippet_expand_target)
+  " }}}
 
   let g:lsp_async_completion = 1
   let g:lsp_signs_enabled = 1           " enable signs
@@ -667,7 +670,7 @@ endif
   Plug 'kana/vim-operator-user'
   Plug 'kana/vim-textobj-entire'
   Plug 'kana/vim-textobj-user'
-  Plug 'kazuph/previm', { 'branch': 'feature/add-plantuml-plugin' }
+  Plug 'previm/previm'
   Plug 'kristijanhusak/vim-dirvish-git'
   Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
   Plug 'machakann/vim-swap'
@@ -822,6 +825,10 @@ command! SwitchBranch call fzf#run({
     \ 'down': '30%'
     \ })
 nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
+" }}}
+" Function: Edit Changed Files {{{
+command! FzfDirty call fzf#run(fzf#wrap({'source': 'git status --porcelain | cut -c4-'}))
+nnoremap <Leader>gd :<C-u>FzfDirty<CR>
 " }}}
 
 " Function: Update Terminal Window Title {{{

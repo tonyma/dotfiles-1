@@ -37,8 +37,6 @@ brew "cmake"
 brew "coreutils"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
-# Open source programming language to build simple/reliable/efficient software
-brew "go"
 # Go dependency management tool
 brew "dep"
 # Load/unload environment variables based on $PWD
@@ -208,8 +206,8 @@ cask "vlc"
 cask "wkhtmltopdf"
 cask "yt-music"
 mas "1Password 7", id: 1333542190
+mas "com.iwaxx.Debookee-Tools", id: 1110355801
 mas "Cyberduck", id: 409222199
-mas "Debookee Tools", id: 1110355801
 mas "Fantastical", id: 975937182
 mas "GarageBand", id: 682658836
 mas "iMage Tools", id: 493949693
