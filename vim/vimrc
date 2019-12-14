@@ -319,16 +319,16 @@ call s:plug.begin()
   endfunction
 
   Plug 'itchyny/lightline.vim'
-  function! s:plug.after.itchyny__lightline__vim()
+  function! s:plug.after.itchyny__lightline__vim() "
     let g:lightline = {
       \   'colorscheme': 'momiji',
       \   'separator': {
-      \     'left': "\UE0C0",
-      \     'right': "\UE0C2"
+      \     'left': "",
+      \     'right': ""
       \   },
       \   'subseparator': {
-      \     'left': "\UE0C1",
-      \     'right': "\UE0C3"
+      \     'left': "\UFFE8",
+      \     'right': "\UFFE8"
       \   },
       \   'active': {
       \     'left': [
@@ -350,7 +350,7 @@ call s:plug.begin()
       \     ]
       \   },
       \   'mode_map': {
-      \     'n': "\UFFB32", 'i': "\UFFAE6", 'R': 'REPL', 'v': 'VIS', 'V': 'VLNE', "\<C-v>": 'VBLK',
+      \     'n': "\UFFB32", 'i': "\UFFAE6", 'R': "\UFF954", 'v': 'VIS', 'V': 'VLNE', "\<C-v>": 'VBLK',
       \     'c': 'COMM', 's': 'SLCT', 'S': 'SLNE', "\<C-s>": 'SBLK', 't': "\UF120"
       \   },
       \   'component_expand': {
@@ -960,10 +960,6 @@ let g:vim_json_conceal = 0
 " }}}
 
 " GVim Settings {{{
-function! s:my_foldtext()
-  return v:folddashes . getline(v:foldstart-1)
-endfunction
-set foldtext=s:my_foldtext()
 set columns=200
 set lines=50
 set guioptions=cei
