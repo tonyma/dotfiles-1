@@ -128,7 +128,11 @@ endif
 " }}}
 
 " Configure Plugins {{{
-function! s:plug_begin()
+" Begin with mkdir {{{
+let s:plug = {}
+let s:plug['before'] = {}
+let s:plug['after'] = {}
+function! s:plug.begin()
   let l:dir = g:xdg_data_home . '/vim-plug'
   if !isdirectory(l:dir)
     call mkdir(l:dir, 'p')
@@ -136,521 +140,513 @@ function! s:plug_begin()
   call plug#begin(l:dir)
 endfunction
 
-call s:plug_begin()
-  " {{{ prabirshrestha/vim-lsp
+function! s:plug.end()
+  for l:name in keys(s:plug.before)
+    call s:plug.before[l:name]()
+  endfor
+  call plug#end()
+  for l:name in keys(s:plug.after)
+    call s:plug.after[l:name]()
+  endfor
+endfunction
+" }}}
+
+call s:plug.begin()
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
+  function! s:plug.after.vim__lsp()
+    let g:lsp_async_completion = 1
+    let g:lsp_signs_enabled = 1           " enable signs
+    let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+    let g:lsp_highlight_references_enabled = 0 " disable references highlighting
 
-  Plug 'prabirshrestha/asyncomplete.vim'
-  let g:asyncomplete_auto_completeopt = 1  " Set default `completeopt` options. These are `menuone,noinsert,noselect`
-  inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-  inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-  inoremap <expr> <C-y> pumvisible() ? asyncomplete#close_popup() : "\<C-y>"
-  inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+    " 保存時に自動でフォーマット
+    let g:kyoh86_auto_format = v:true
+    function! s:autoFormatSync()
+      if g:kyoh86_auto_format
+        LspDocumentFormatSync
+      endif
+    endfunction
 
-  " {{{ snippets
-  Plug 'Shougo/neosnippet.vim'
-  Plug 'Shougo/neosnippet-snippets'
-  let g:neosnippet#snippets_directory = $XDG_CONFIG_HOME.'/vim/snippet'
+    augroup Lsp.format
+      autocmd!
+      autocmd BufWritePre *.go,*.py call s:autoFormatSync()
+    augroup END
+
+    nmap <Leader>ld <Plug>(lsp-definition)
+    nmap <Leader>lh <Plug>(lsp-hover)
+    nmap <Leader>ln <Plug>(lsp-next-error)
+    nmap <Leader>lp <Plug>(lsp-previous-error)
+    nmap <Leader>lr <Plug>(lsp-rename)
+    nmap <Leader>lf <Plug>(lsp-document-format)
+    nmap <Leader>la <Plug>(lsp-code-action)
+    nmap <Leader>ll <Plug>(lsp-document-diagnostics)
+    nmap <Leader>ls <Plug>(lsp-status)
+
+    " nmap <Leader> <Plug>(lsp-references)
+    " nmap <Leader> <Plug>(lsp-declaration)
+    " nmap <Leader> <Plug>(lsp-document-symbol)
+    " nmap <Leader> <Plug>(lsp-workspace-symbol)
+    " nmap <Leader> <Plug>(lsp-implementation)
+    " nmap <Leader> <Plug>(lsp-type-definition)
+
+    " for golang
+    augroup Lsp.go
+      autocmd!
+
+      if executable('gopls')
+        autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'go-lang',
+            \ 'cmd': {server_info->['gopls']},
+            \ 'whitelist': ['go'],
+            \ 'workspace_config': {'gopls': {
+            \    'source.organizeImports': 'true',
+            \ }},
+            \ })
+        autocmd FileType go setlocal omnifunc=lsp#complete
+      else
+        echoerr 'gopls not found'
+      endif
+    augroup END
+
+    " for some linters
+    augroup Lsp.lint
+      autocmd!
+
+      if executable('efm-langserver')
+        autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'efm-langserver',
+            \ 'cmd': {server_info->['efm-langserver']},
+            \ 'whitelist': ['go', 'vim', 'markdown', 'sh'],
+            \ })
+        autocmd FileType go,vim,markdown,sh setlocal omnifunc=lsp#complete
+      else
+        echoerr 'efm-langserver not found'
+      endif
+    augroup END
+
+    " for python
+    augroup Lsp.python
+      autocmd!
+
+      if executable('pyls')
+        " pip install python-language-server
+        autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'pyls',
+            \ 'cmd': {server_info->['pyls']},
+            \ 'workspace_config': {'pyls': {
+            \   'configurationSources': ['flake8'],
+            \   'plugins': {
+            \     'black': {'enabled': v:true},
+            \     'pycodestyle': {'enabled': v:false},
+            \     'pyls_mypy': {'enabled': v:true, 'live_mode': v:false},
+            \   },
+            \ }},
+            \ 'whitelist': ['python'],
+            \ })
+        autocmd FileType python setlocal omnifunc=lsp#complete
+      else
+        echoerr 'pyls not found'
+      endif
+    augroup END
+
+    " for viml
+    augroup Lsp.viml
+      autocmd!
+      if executable('vim-language-server')
+        autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'vim-language-server',
+            \ 'cmd': {server_info->[&shell, &shellcmdflag, 'vim-language-server --stdio']},
+            \ 'whitelist': ['vim'],
+            \ 'workspace_config': {
+            \   "iskeyword": "vim iskeyword option",
+            \   "vimruntime": $VIMRUNTIME,
+            \   "runtimepath": $VIM,
+            \   "diagnostic": {
+            \     "enable": v:true
+            \   }
+            \ },
+            \ })
+        autocmd FileType vim setlocal omnifunc=lsp#complete
+      else
+        echoerr 'vim-language-server is not found'
+      endif
+    augroup END
+
+    " for TypeScript (using tsuquyomi)
+    augroup Lsp.typescript
+      autocmd!
+      if executable('typescript-language-server')
+        autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'typescript-language-server',
+            \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+            \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+            \ 'whitelist': ['typescript'],
+            \ })
+      else
+        echoerr 'typescript-language-server not found'
+      endif
+    augroup END
+  endfunction
 
   Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  Plug 'prabirshrestha/asyncomplete.vim'
+  function! s:plug.after.prabirshrestha__asyncomplete__vim()
+    let g:asyncomplete_auto_completeopt = 1  " Set default `completeopt` options. These are `menuone,noinsert,noselect`
+    inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+    autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+    " inoremap <expr> <C-y> pumvisible() ? asyncomplete#close_popup() : "\<C-y>"
+    " inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+  endfunction
+
+  Plug 'Shougo/neosnippet.vim'
+  function! s:plug.after.Shougo__neosnippet__vim()
+    let g:neosnippet#snippets_directory = $XDG_CONFIG_HOME.'/vim/snippet'
+  endfunction
+  Plug 'Shougo/neosnippet-snippets'
   Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
-  imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-  smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-  xmap <C-k>     <Plug>(neosnippet_expand_target)
-  " }}}
-
-  let g:lsp_async_completion = 1
-  let g:lsp_signs_enabled = 1           " enable signs
-  let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-  let g:lsp_highlight_references_enabled = 0 " disable references highlighting
-
-  " 保存時に自動でフォーマット
-  let g:kyoh86_auto_format = v:true
-  function! s:autoFormatSync()
-    if g:kyoh86_auto_format
-      LspDocumentFormatSync
-    endif
+  function! s:plug.after.prabirshrestha__asyncomplete__neosnippet__vim()
+    call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+        \ 'name': 'neosnippet',
+        \ 'whitelist': ['*'],
+        \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+        \ }))
+    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+    smap <C-k> <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k> <Plug>(neosnippet_expand_target)
   endfunction
-  augroup Lsp.format
-    autocmd!
-    autocmd BufWritePre *.go,*.py call s:autoFormatSync()
-  augroup END
 
-  " CodeActionの選択をFZFで {{{
-  function! s:select_code_action(actions, callback) abort
-    let l:choices = map(
-      \ copy(a:actions),
-      \ {index, action -> string(index)  . ' ' . action['title']}
-      \ )
-    call fzf#run({
-      \ 'source': l:choices,
-      \ 'sink': function('<SID>kick_code_action', [a:actions, a:callback]),
-      \ 'options': ['--with-nth', '2..'],
-      \ 'down': '30%'
-      \ })
-  endfunction
-  let g:lsp_code_action_selector = [function('<SID>select_code_action')]
-
-  function! s:kick_code_action(actions, callback, line)
-    let [l:choice; _] = split(a:line)
-    call a:callback(a:actions[l:choice])
-  endfunction
-  " }}}
-
-  nmap <Leader>ld <Plug>(lsp-definition)
-  nmap <Leader>lh <Plug>(lsp-hover)
-  nmap <Leader>ln <Plug>(lsp-next-error)
-  nmap <Leader>lp <Plug>(lsp-previous-error)
-  nmap <Leader>lr <Plug>(lsp-rename)
-  nmap <Leader>lf <Plug>(lsp-document-format)
-  nmap <Leader>la <Plug>(lsp-code-action)
-  nmap <Leader>ll <Plug>(lsp-document-diagnostics)
-  nmap <Leader>ls <Plug>(lsp-status)
-
-  " nmap <Leader> <Plug>(lsp-references)
-  " nmap <Leader> <Plug>(lsp-declaration)
-  " nmap <Leader> <Plug>(lsp-document-symbol)
-  " nmap <Leader> <Plug>(lsp-workspace-symbol)
-  " nmap <Leader> <Plug>(lsp-implementation)
-  " nmap <Leader> <Plug>(lsp-type-definition)
-
-  " for golang
-  augroup Lsp.go
-    autocmd!
-
-    if executable('gopls')
-      autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'go-lang',
-          \ 'cmd': {server_info->['gopls']},
-          \ 'whitelist': ['go'],
-          \ 'workspace_config': {'gopls': {
-          \    'source.organizeImports': 'true',
-          \ }},
-          \ })
-      autocmd FileType go setlocal omnifunc=lsp#complete
-    else
-      echoerr 'gopls not found'
-    endif
-    " if executable('go-langserver')
-    "   au User lsp_setup call lsp#register_server({
-    "     \ 'name': 'go-langserver',
-    "     \ 'cmd': {server_info->['go-langserver', '-gocodecompletion']},
-    "     \ 'whitelist': ['go'],
-    "     \ })
-    "   autocmd FileType go setlocal omnifunc=lsp#complete
-    "   autocmd BufWritePre *.go LspDocumentFormatSync
-    " else
-    "   echoerr 'go-langserver not found'
-    " endif
-  augroup END
-
-  " for some linters
-  augroup Lsp.lint
-    autocmd!
-
-    if executable('efm-langserver')
-      autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'efm-langserver',
-          \ 'cmd': {server_info->['efm-langserver']},
-          \ 'whitelist': ['go', 'vim', 'markdown', 'sh'],
-          \ })
-      autocmd FileType go,vim,markdown,sh setlocal omnifunc=lsp#complete
-    else
-      echoerr 'efm-langserver not found'
-    endif
-  augroup END
-
-  " for python
-  augroup Lsp.python
-    autocmd!
-
-    if executable('pyls')
-      " pip install python-language-server
-      autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'pyls',
-          \ 'cmd': {server_info->['pyls']},
-          \ 'workspace_config': {'pyls': {
-          \   'configurationSources': ['flake8'],
-          \   'plugins': {
-          \     'black': {'enabled': v:true},
-          \     'pycodestyle': {'enabled': v:false},
-          \     'pyls_mypy': {'enabled': v:true, 'live_mode': v:false},
-          \   },
-          \ }},
-          \ 'whitelist': ['python'],
-          \ })
-      autocmd FileType python setlocal omnifunc=lsp#complete
-    else
-      echoerr 'pyls not found'
-    endif
-  augroup END
-
-  " for viml
-  augroup Lsp.viml
-    autocmd!
-    if executable('vim-language-server')
-      autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'vim-language-server',
-          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'vim-language-server --stdio']},
-          \ 'whitelist': ['vim'],
-          \ 'workspace_config': {
-          \   "iskeyword": "vim iskeyword option",
-          \   "vimruntime": $VIMRUNTIME,
-          \   "runtimepath": $VIM,
-          \   "diagnostic": {
-          \     "enable": v:true
-          \   }
-          \ },
-          \ })
-      autocmd FileType vim setlocal omnifunc=lsp#complete
-    else
-      echoerr 'vim-language-server is not found'
-    endif
-  augroup END
-
-  " for TypeScript (using tsuquyomi)
-  augroup Lsp.typescript
-    autocmd!
-    if executable('typescript-language-server')
-      autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'typescript-language-server',
-          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-          \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-          \ 'whitelist': ['typescript'],
-          \ })
-    else
-      echoerr 'typescript-language-server not found'
-    endif
-  augroup END
-
-  " }}}
-  " {{{ airblade/vim-gitgutter
-  Plug 'airblade/vim-gitgutter'
-  " }}}
-  " {{{ itchyny/lightline.vim
   Plug 'itchyny/lightline.vim'
-  let g:lightline = {
-    \   'colorscheme': 'momiji',
-    \   'separator': {
-    \     'left': "\ue0c6",
-    \     'right': "\ue0c7"
-    \   },
-    \   'subseparator': {
-    \     'left': "\ue0b5",
-    \     'right': "\ue0b7"
-    \   },
-    \   'active': {
-    \     'left': [
-    \       [ 'mode', 'paste' ],
-    \       [ 'pwd', 'gitstatus', 'relativepath', 'readonly', 'modified', 'terminalinfo' ]
-    \     ],
-    \     'right': [
-    \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
-    \       [ 'fileformat', 'fileencoding', 'filetype', 'lineinfo' ]
-    \     ]
-    \   },
-    \   'inactive': {
-    \     'left': [
-    \       [ 'mode', 'paste' ],
-    \       [ 'relativepath', 'readonly', 'modified' ]
-    \     ],
-    \     'right': [
-    \       [ 'filetype' ]
-    \     ]
-    \   },
-    \   'mode_map': {
-    \     'n': 'NORM', 'i': 'INS', 'R': 'REPL', 'v': 'VIS', 'V': 'VLNE', "\<C-v>": 'VBLK',
-    \     'c': 'COMM', 's': 'SLCT', 'S': 'SLNE', "\<C-s>": 'SBLK', 't': 'TERM'
-    \   },
-    \   'component_expand': {
-    \     'linter_ok': 'LightlineLspOK',
-    \     'linter_warnings': 'LightlineLspWarnings',
-    \     'linter_errors': 'LightlineLspErrors',
-    \     'gitstatus': 'LightlineGitStatus'
-    \   },
-    \   'component_type': {
-    \     'linter_warnings': 'warning',
-    \     'gitstatus': 'warning',
-    \     'linter_errors': 'error',
-    \   },
-    \   'component_function': {
-    \     'pwd': 'LightlinePwd',
-    \     'percent': 'LightlinePercent',
-    \     'fileformat': 'LightlineDevFileformat',
-    \     'fileencoding': 'LightlineFileEncoding',
-    \     'filetype': 'LightlineDevFiletype',
-    \     'terminalinfo': 'LightlineTerminalInfo',
-    \     'readonly': 'LightlineReadonly', 
-    \     'relativepath': 'LightlineRelativePath',
-    \     'filename': 'LightlineFilename',
-    \     'gitgutter': 'LightlineGitGutter',
-    \     'lineinfo': 'LightlineLineInfo',
-    \     'modified': 'LightlineModified'
-    \   },
-    \ }
-  augroup LightLineUpdate
-    autocmd!
-    autocmd DirChanged * call lightline#update()
-  augroup END
-  function! LightlinePwd() abort
-    return fnamemodify(getcwd(), ':t')
-  endfunction
-  function! LightlinePercent() abort
-    let l:last = line('$')
-    let l:cur = line('.')
-    return &buftype ==# 'terminal' ? '' : printf('%3d%% of %d', l:cur * 100 / l:last, l:last)
-  endfunction
-  function! LightlineDevFiletype()
-    return &buftype ==# 'terminal' ? '' : strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft'
-  endfunction
+  function! s:plug.after.itchyny__lightline__vim()
+    let g:lightline = {
+      \   'colorscheme': 'momiji',
+      \   'separator': {
+      \     'left': "\UE0C0",
+      \     'right': "\UE0C2"
+      \   },
+      \   'subseparator': {
+      \     'left': "\UE0C1",
+      \     'right': "\UE0C3"
+      \   },
+      \   'active': {
+      \     'left': [
+      \       [ 'mode', 'paste' ],
+      \       [ 'pwd', 'gitstatus', 'relativepath', 'readonly', 'modified', 'terminalinfo' ]
+      \     ],
+      \     'right': [
+      \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
+      \       [ 'fileformat', 'fileencoding', 'filetype', 'lineinfo' ]
+      \     ]
+      \   },
+      \   'inactive': {
+      \     'left': [
+      \       [ 'mode', 'paste' ],
+      \       [ 'relativepath', 'readonly', 'modified' ]
+      \     ],
+      \     'right': [
+      \       [ 'filetype' ]
+      \     ]
+      \   },
+      \   'mode_map': {
+      \     'n': "\UFFB32", 'i': "\UFFAE6", 'R': 'REPL', 'v': 'VIS', 'V': 'VLNE', "\<C-v>": 'VBLK',
+      \     'c': 'COMM', 's': 'SLCT', 'S': 'SLNE', "\<C-s>": 'SBLK', 't': "\UF120"
+      \   },
+      \   'component_expand': {
+      \     'linter_ok': 'LightlineLspOK',
+      \     'linter_warnings': 'LightlineLspWarnings',
+      \     'linter_errors': 'LightlineLspErrors',
+      \     'gitstatus': 'LightlineGitStatus'
+      \   },
+      \   'component_type': {
+      \     'linter_warnings': 'warning',
+      \     'gitstatus': 'warning',
+      \     'linter_errors': 'error',
+      \   },
+      \   'component_function': {
+      \     'pwd': 'LightlinePwd',
+      \     'percent': 'LightlinePercent',
+      \     'fileformat': 'LightlineDevFileformat',
+      \     'fileencoding': 'LightlineFileEncoding',
+      \     'filetype': 'LightlineDevFiletype',
+      \     'terminalinfo': 'LightlineTerminalInfo',
+      \     'readonly': 'LightlineReadonly', 
+      \     'relativepath': 'LightlineRelativePath',
+      \     'filename': 'LightlineFilename',
+      \     'gitgutter': 'LightlineGitGutter',
+      \     'lineinfo': 'LightlineLineInfo',
+      \     'modified': 'LightlineModified'
+      \   },
+      \ }
+    augroup LightLineUpdate
+      autocmd!
+      autocmd DirChanged * call lightline#update()
+    augroup END
+    function! LightlinePwd() abort
+      return fnamemodify(getcwd(), ':t')
+    endfunction
+    function! LightlinePercent() abort
+      let l:last = line('$')
+      let l:cur = line('.')
+      return &buftype ==# 'terminal' ? '' : printf('%3d%% of %d', l:cur * 100 / l:last, l:last)
+    endfunction
+    function! LightlineDevFiletype()
+      return &buftype ==# 'terminal' ? '' : strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft'
+    endfunction
 
-  function! LightlineDevFileformat()
-    return &buftype ==# 'terminal' ? '' : (&fileformat ==# 'unix' ? '' : &fileformat . ' ' . WebDevIconsGetFileFormatSymbol())
-  endfunction
+    function! LightlineDevFileformat()
+      return &buftype ==# 'terminal' ? '' : (&fileformat ==# 'unix' ? '' : &fileformat . ' ' . WebDevIconsGetFileFormatSymbol())
+    endfunction
 
-  function! LightlineModified() abort
-    return &buftype ==# 'terminal' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-  endfunction
-  function! LightlineFileEncoding() abort
-    let l:enc = &fileencoding !=# '' ? &fileencoding : &encoding
-    return &buftype ==# 'terminal' ? '' : (l:enc ==# 'utf-8' ? '' : l:enc)
-  endfunction
-  function! LightlineLineInfo() abort
-    return &buftype ==# 'terminal' ? '' : "\ue0a1".line('.').':'.printf('%03d', col('.'))
-  endfunction
-  function! LightlineTerminalInfo() abort
-    if &buftype !=# 'terminal'
-      return ''
-    endif
-    let l:ttl=term_gettitle('%')
-    let l:rel=fnamemodify(l:ttl, ':p:.')
-    if l:rel ==# ''
-      let l:rel='.'
-    elseif l:rel[0] !=# '/'
-      let l:rel='./'.l:rel
-    endif
-    return bufnr('%').':'.l:rel
-  endfunction
-  function! LightlineRelativePath() abort
-    if expand('%') ==# ''
-      let l:name = '[No Name]'
-    else
-      let l:max = winwidth(0) - 100
-      let l:name = expand('%:t')
-      if len(l:name) < l:max
-        let l:name = expand('%:.')
-        if l:name ==# ''
-          let l:name = '.'
-        elseif l:name[0] !=# '/'
-          let l:name='./'.l:name
-        endif
-
-        if len(l:name) > l:max
-          let l:name = '…' . l:name[-l:max :]
-        endif
+    function! LightlineModified() abort
+      return &buftype ==# 'terminal' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+    endfunction
+    function! LightlineFileEncoding() abort
+      let l:enc = &fileencoding !=# '' ? &fileencoding : &encoding
+      return &buftype ==# 'terminal' ? '' : (l:enc ==# 'utf-8' ? '' : l:enc)
+    endfunction
+    function! LightlineLineInfo() abort
+      return &buftype ==# 'terminal' ? '' : "\ue0a1".line('.').':'.printf('%03d', col('.'))
+    endfunction
+    function! LightlineTerminalInfo() abort
+      if &buftype !=# 'terminal'
+        return ''
       endif
-    endif
-
-    return &buftype ==# 'terminal' ? '' : bufnr('%') . ':' . l:name
-  endfunction
-  function! LightlineFilename() abort
-    return &buftype ==# 'terminal' ? '' : bufnr('%') . ':' . (expand('%:t') !=# '' ? expand('%:t') : '[No Name]')
-  endfunction
-  function! LightlineReadonly() abort
-    return &buftype ==# 'terminal' ? '' : &readonly ? "\ue0a2" : ''
-  endfunction
-  function! LightlineGitStatus()
-    let l:brch = ''
-    let l:warn = ''
-    let l:location = getcwd()
-    if &buftype ==# 'terminal'
-      let l:location = term_gettitle('%')
-    endif
-
-    let l:stat = s:getGitStatus(l:location)
-    let l:commit = s:statPart(l:stat, 'ahead', "\uf55d") . s:statPart(l:stat, 'behind', "\uf545") . get(l:stat, 'sync', "")
-    let l:merge = s:statPart(l:stat, 'unmerged', 'Unmerged:')
-    let l:stage = s:statPart(l:stat, 'staged', "\uf631") . s:statPart(l:stat, 'unstaged', "\uf66f") . s:statPart(l:stat, 'untracked', "\uf7d6")
-    let l:warn = [ l:commit, l:merge, l:stage ]
-    let l:brch = s:statPart(l:stat, 'local-branch', "\ue0a0")
-    return [ [ l:brch ], l:warn, [] ]
-  endfunction
-
-  function! LightlineGitGutter()
-    if ! exists('*GitGutterGetHunkSummary')
-          \ || ! get(g:, 'gitgutter_enabled', 0)
-          \ || winwidth('.') <= 90
-      return ''
-    endif
-    let l:symbols = [
-          \ g:gitgutter_sign_added . ' ',
-          \ g:gitgutter_sign_modified . ' ',
-          \ g:gitgutter_sign_removed . ' '
-          \ ]
-    let l:hunks = GitGutterGetHunkSummary()
-    let l:ret = []
-    for i in [0, 1, 2]
-      if l:hunks[i] > 0
-        call add(l:ret, l:symbols[i] . l:hunks[i])
+      let l:ttl=term_gettitle('%')
+      let l:rel=fnamemodify(l:ttl, ':p:.')
+      if l:rel ==# ''
+        let l:rel='.'
+      elseif l:rel[0] !=# '/'
+        let l:rel='./'.l:rel
       endif
-    endfor
-    return join(l:ret, ' ')
-  endfunction
-
-  function! s:statPart(stat, key, pre)
-    if !has_key(a:stat, a:key) || a:stat[a:key] ==# ''
-      return ''
-    endif
-    return a:pre . a:stat[a:key]
-  endfunction
-  function! s:getGitStatus(path)
-    let l:info = {}
-    let l:res = system("git -C '" . a:path . "' status --porcelain --branch --untracked-files --ahead-behind --renames")
-    if l:res[0:6] ==# 'fatal: '
-      return l:info
-    endif
-    for l:file in split(l:res, "\n")
-      if l:file[0:1] ==# '##'
-        " ブランチ名を取得する
-        let l:words = split(l:file, '\.\.\.\|[ \[\],]')[1:]
-        if len(l:words) == 1
-          let l:info['local-branch'] = l:words[0] . '?'
-          let l:info['sync'] = "\uf12a"
-        else
-          let [l:info['local-branch'], l:info['remote-branch']; l:remain] = l:words
-          let l:key = ''
-          for l:_ in l:remain
-            if l:key !=# ''
-              let l:info[l:key] = l:_
-              let l:key = ''
-            else
-              let l:key = l:_
-            endif
-          endfor
-        endif
-      elseif l:file[0] ==# 'U' || l:file[1] ==# 'U' || l:file[0:1] ==# 'AA' || l:file[0:1] ==# 'DD'
-        call s:inc(l:info, 'unmerged')
-      elseif l:file[0:1] ==# '??'
-        call s:inc(l:info, 'untracked')
+      return bufnr('%').':'.l:rel
+    endfunction
+    function! LightlineRelativePath() abort
+      if expand('%') ==# ''
+        let l:name = '[No Name]'
       else
-        if l:file[0] !=# ' '
-          call s:inc(l:info, 'staged')
-        endif
-        if l:file[1] !=# ' '
-          call s:inc(l:info, 'unstaged')
+        let l:max = winwidth(0) - 100
+        let l:name = expand('%:t')
+        if len(l:name) < l:max
+          let l:name = expand('%:.')
+          if l:name ==# ''
+            let l:name = '.'
+          elseif l:name[0] !=# '/'
+            let l:name='./'.l:name
+          endif
+
+          if len(l:name) > l:max
+            let l:name = '…' . l:name[-l:max :]
+          endif
         endif
       endif
-    endfor
-    return l:info
-  endfunction
-  function! s:inc(info, key)
-    let a:info[a:key] = get(a:info, a:key, 0) + 1
-  endfunction
-  set laststatus=2  " statuslineは常に表示
-  set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
-  function! LightlineLspOK() abort
-    if &buftype ==# 'terminal'
+
+      return &buftype ==# 'terminal' ? '' : bufnr('%') . ':' . l:name
+    endfunction
+    function! LightlineFilename() abort
+      return &buftype ==# 'terminal' ? '' : bufnr('%') . ':' . (expand('%:t') !=# '' ? expand('%:t') : '[No Name]')
+    endfunction
+    function! LightlineReadonly() abort
+      return &buftype ==# 'terminal' ? '' : &readonly ? "\ue0a2" : ''
+    endfunction
+    function! LightlineGitStatus()
+      let l:brch = ''
+      let l:warn = ''
+      let l:location = getcwd()
+      if &buftype ==# 'terminal'
+        let l:location = term_gettitle('%')
+      endif
+
+      let l:stat = s:getGitStatus(l:location)
+      let l:commit = trim(s:statPart(l:stat, 'ahead', " \UFF55D") . s:statPart(l:stat, 'behind', " \UFF545") . get(l:stat, 'sync', ""))
+      let l:merge = s:statPart(l:stat, 'unmerged', 'Unmerged:')
+      let l:stage = trim(s:statPart(l:stat, 'staged', " \UFF631") . s:statPart(l:stat, 'unstaged', " \UFF915") . s:statPart(l:stat, 'untracked', " \UFFC89"))
+      let l:warn = [ l:commit, l:merge, l:stage ]
+      let l:brch = trim(s:statPart(l:stat, 'local-branch', "\UE0A0"))
+      return [ [ l:brch ], l:warn, [] ]
+    endfunction
+
+    function! LightlineGitGutter()
+      if ! exists('*GitGutterGetHunkSummary')
+            \ || ! get(g:, 'gitgutter_enabled', 0)
+            \ || winwidth('.') <= 90
+        return ''
+      endif
+      let l:symbols = [
+            \ g:gitgutter_sign_added . ' ',
+            \ g:gitgutter_sign_modified . ' ',
+            \ g:gitgutter_sign_removed . ' '
+            \ ]
+      let l:hunks = GitGutterGetHunkSummary()
+      let l:ret = []
+      for i in [0, 1, 2]
+        if l:hunks[i] > 0
+          call add(l:ret, l:symbols[i] . l:hunks[i])
+        endif
+      endfor
+      return join(l:ret, ' ')
+    endfunction
+
+    function! s:statPart(stat, key, pre)
+      if !has_key(a:stat, a:key) || a:stat[a:key] ==# ''
+        return ''
+      endif
+      return a:pre . a:stat[a:key]
+    endfunction
+    function! s:getGitStatus(path)
+      let l:info = {}
+      let l:res = system("git -C '" . a:path . "' status --porcelain --branch --untracked-files --ahead-behind --renames")
+      if l:res[0:6] ==# 'fatal: '
+        return l:info
+      endif
+      for l:file in split(l:res, "\n")
+        if l:file[0:1] ==# '##'
+          " ブランチ名を取得する
+          let l:words = split(l:file, '\.\.\.\|[ \[\],]')[1:]
+          if len(l:words) == 1
+            let l:info['local-branch'] = l:words[0] . '?'
+            let l:info['sync'] = "\uf12a"
+          else
+            let [l:info['local-branch'], l:info['remote-branch']; l:remain] = l:words
+            let l:key = ''
+            for l:_ in l:remain
+              if l:key !=# ''
+                let l:info[l:key] = l:_
+                let l:key = ''
+              else
+                let l:key = l:_
+              endif
+            endfor
+          endif
+        elseif l:file[0] ==# 'U' || l:file[1] ==# 'U' || l:file[0:1] ==# 'AA' || l:file[0:1] ==# 'DD'
+          call s:inc(l:info, 'unmerged')
+        elseif l:file[0:1] ==# '??'
+          call s:inc(l:info, 'untracked')
+        else
+          if l:file[0] !=# ' '
+            call s:inc(l:info, 'staged')
+          endif
+          if l:file[1] !=# ' '
+            call s:inc(l:info, 'unstaged')
+          endif
+        endif
+      endfor
+      return l:info
+    endfunction
+    function! s:inc(info, key)
+      let a:info[a:key] = get(a:info, a:key, 0) + 1
+    endfunction
+    set laststatus=2  " statuslineは常に表示
+    set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
+    function! LightlineLspOK() abort
+      if &buftype ==# 'terminal'
+        return ''
+      endif
+      let l:counts = lsp#get_buffer_diagnostics_counts()    " *vim-lsp-get_buffer_diagnostics_counts*
+      if l:counts['error'] == 0 && l:counts['warning'] == 0
+        return 'OK'
+      endif
       return ''
-    endif
-    let l:counts = lsp#get_buffer_diagnostics_counts()    " *vim-lsp-get_buffer_diagnostics_counts*
-    if l:counts['error'] == 0 && l:counts['warning'] == 0
-      return 'OK'
-    endif
-    return ''
+    endfunction
+    function! LightlineLspWarnings() abort
+      if &buftype ==# 'terminal'
+        return ''
+      endif
+      let l:counts = lsp#get_buffer_diagnostics_counts()    " *vim-lsp-get_buffer_diagnostics_counts*
+      if l:counts['warning'] == 0
+        return ''
+      endif
+      return 'W:' . l:counts['warning']
+    endfunction
+    function! LightlineLspErrors() abort
+      if &buftype ==# 'terminal'
+        return ''
+      endif
+      let l:counts = lsp#get_buffer_diagnostics_counts()    " *vim-lsp-get_buffer_diagnostics_counts*
+      if l:counts['error'] == 0
+        return ''
+      endif
+      return 'E:' . l:counts['error']
+    endfunction
   endfunction
-  function! LightlineLspWarnings() abort
-    if &buftype ==# 'terminal'
-      return ''
-    endif
-    let l:counts = lsp#get_buffer_diagnostics_counts()    " *vim-lsp-get_buffer_diagnostics_counts*
-    if l:counts['warning'] == 0
-      return ''
-    endif
-    return 'W:' . l:counts['warning']
-  endfunction
-  function! LightlineLspErrors() abort
-    if &buftype ==# 'terminal'
-      return ''
-    endif
-    let l:counts = lsp#get_buffer_diagnostics_counts()    " *vim-lsp-get_buffer_diagnostics_counts*
-    if l:counts['error'] == 0
-      return ''
-    endif
-    return 'E:' . l:counts['error']
-  endfunction
-  " }}}
-  " {{{ plasticboy/vim-markdown
+
   Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
-  let g:vim_markdown_folding_disabled = 1
-  let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'uml=plantuml']
-  let g:vim_markdown_math = 1
-  let g:vim_markdown_frontmatter = 1
-  let g:vim_markdown_toml_frontmatter = 1
-  let g:vim_markdown_json_frontmatter = 1
-  let g:vim_markdown_conceal = 0
-  let g:tex_conceal = ''
-  " }}}
-   " {{{ jremmen/vim-ripgrep
+  function! s:plug.after.plasticboy__vim__markdown()
+    let g:vim_markdown_folding_disabled = 1
+    let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'uml=plantuml']
+    let g:vim_markdown_math = 1
+    let g:vim_markdown_frontmatter = 1
+    let g:vim_markdown_toml_frontmatter = 1
+    let g:vim_markdown_json_frontmatter = 1
+    let g:vim_markdown_conceal = 0
+    let g:tex_conceal = ''
+  endfunction
+
   Plug 'jremmen/vim-ripgrep', {'on': ['Rg', 'RgRoot']}
-  let g:rg_command = 'rg --vimgrep'
-  " }}}
-  " {{{ lambdalisue/vim-pyenv
+  function! s:plug.after.jremmen__vim__ripgrep()
+    let g:rg_command = 'rg --vimgrep'
+  endfunction
+
   Plug 'lambdalisue/vim-pyenv', {'for': 'python'}
   Plug 'jmcantrell/vim-virtualenv', {'for': 'python'}
-  function! s:jedi_auto_force_py_version() abort
-    let g:jedi#force_py_version = pyenv#python#get_internal_major_version()
+  function! s:plug.after.jmcantrell__vim__virtualenv()
+    function! s:jedi_auto_force_py_version() abort
+      let g:jedi#force_py_version = pyenv#python#get_internal_major_version()
+    endfunction
+    augroup vim-pyenv-custom-augroup
+      autocmd! *
+      autocmd User vim-pyenv-activate-post   call s:jedi_auto_force_py_version()
+      autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
+    augroup END
   endfunction
-  augroup vim-pyenv-custom-augroup
-    autocmd! *
-    autocmd User vim-pyenv-activate-post   call s:jedi_auto_force_py_version()
-    autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
-  augroup END
-  " }}}
-  " {{{ aklt/plantuml-syntax
   Plug 'aklt/plantuml-syntax', {'for': 'plantuml'}
-  augroup PlantUMLCmd
-    autocmd FileType plantuml command! OpenUml :!open -a "Google Chrome" %
-  augroup END
-  " }}}
-  " {{{ elzr/vim-json
+  function! s:plug.after.aklt__plantuml__syntax()
+    augroup PlantUMLCmd
+      autocmd FileType plantuml command! OpenUml :!open -a "Google Chrome" %
+    augroup END
+  endfunction
   Plug 'elzr/vim-json', {'for': 'json'}
-  let g:vim_json_syntax_conceal = 0
-  " }}}
-  " {{{ qpkorr/vim-bufkill
+  function! s:plug.after.elzr__vim__json()
+    let g:vim_json_syntax_conceal = 0
+  endfunction
   Plug 'qpkorr/vim-bufkill'
-  let g:BufKillCreateMappings = 0
-  " }}}
-  " {{{ arp242/gopher.vim
+  function! s:plug.after.qpkorr__vim__bufkill()
+    let g:BufKillCreateMappings = 0
+  endfunction
   Plug 'arp242/gopher.vim'
-  " }}}
-  " {{{ thinca/vim-quickrun
+  function! s:plug.after.arp242__gopher__vim()
+    let g:gopher_map = {
+        \ '_default':      1,
+        \ '_imap_prefix': '<C-g>'
+        \ }
+  endfunction
   Plug 'thinca/vim-quickrun', {'on': 'QuickRun'}
-  let g:quickrun_config = {
+  function! s:plug.after.thinca__vim__quickrun()
+    let g:quickrun_config = {
         \ '_': {
         \   'runner': 'terminal'
         \   }
         \ }
-  " }}}
-  " {{{ osyo-manga/vim-operator-jump_side
+  endfunction
   Plug 'osyo-manga/vim-operator-jump_side'
-  " textobj の先頭へ移動する
-  nmap <Leader>h <Plug>(operator-jump-head)
-  " textobj の末尾へ移動する
-  nmap <Leader>t <Plug>(operator-jump-tail)
-  " }}}
-  "{{{ 'simeji/winresizer'
-  let g:winresizer_start_key = '<C-W><C-E>'
+  function! s:plug.after.osyo__manga__vim__operator__jump_side()
+    " textobj の先頭へ移動する
+    nmap <Leader>h <Plug>(operator-jump-head)
+    " textobj の末尾へ移動する
+    nmap <Leader>t <Plug>(operator-jump-tail)
+  endfunction
   Plug 'simeji/winresizer'
-  "}}}
-  "{{{'machakann/vim-sandwich'
+  function! s:plug.before.osyo__manga__vim__operator__jump_side()
+    let g:winresizer_start_key = '<C-W><C-E>'
+  endfunction
   Plug 'machakann/vim-sandwich'  " Edit surrounders (like brackets, parentheses and quotes)
-  nnoremap s <Nop>   " ignore s instead of the cl
-  xnoremap s <Nop>   " ignore s instead of the cl
-  silent! nmap <unique><silent> sc <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
-  silent! nmap <unique><silent> scb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
-  "}}}
-  " Plug 'AndrewRadev/quickpeek.vim'
+  function! s:plug.after.machakann__vim__sandwich()
+    nnoremap s <Nop>   " ignore s instead of the cl
+    xnoremap s <Nop>   " ignore s instead of the cl
+    silent! nmap <unique><silent> sc <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
+    silent! nmap <unique><silent> scb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+  endfunction
 
   Plug 'po3rin/vim-gofmtmd'
   Plug 'AndrewRadev/linediff.vim'
@@ -659,10 +655,7 @@ call s:plug_begin()
   Plug 'briancollins/vim-jst', {'for': 'jst'}
   Plug 'cespare/vim-toml', {'for': 'toml'}
   Plug 'dhruvasagar/vim-table-mode'
-
-if executable('direnv')
-  Plug 'direnv/direnv.vim'
-endif
+  Plug 'airblade/vim-gitgutter'
   Plug 'iberianpig/tig-explorer.vim'
   Plug 'jez/vim-github-hub', {'for': 'ghhub'}
   Plug 'justinmk/vim-dirvish'
@@ -690,58 +683,68 @@ endif
   Plug 'vim-jp/vital.vim', {'on': 'Vitalize'}
   Plug 'vim-scripts/sudo.vim'
 
+if executable('direnv')
+  Plug 'direnv/direnv.vim'
+endif
+
   " My Plugins {{{
   " {{{ kyoh86/vim-gogh
   Plug 'kyoh86/vim-gogh', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-gogh'}
-  nmap <Leader>ge <Plug>(gogh-edit-project)
-  nmap <Leader>gp <Plug>(gogh-switch-project)
-  nmap <Leader>gg <Plug>(gogh-get-repository)
+  function! s:plug.after.kyoh86__vim__gogh()
+    nmap <Leader>ge <Plug>(gogh-edit-project)
+    nmap <Leader>gp <Plug>(gogh-switch-project)
+    nmap <Leader>gg <Plug>(gogh-get-repository)
+    call gogh#ui#fzf#use()
   " }}}
+  endfunction
   " {{{ kyoh86/vim-docbase
   Plug 'kyoh86/vim-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-docbase'}
-  let g:docbase_domain = 'wacul'
+  function! s:plug.after.kyoh86__vim__docbase()
+    let g:docbase_domain = 'wacul'
   " }}}
+  endfunction
   " {{{ junegunn/fzf
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
-  let g:fzf_command_prefix = 'Fzf'
-  nnoremap <Leader>f  :<C-u>FzfFiles<CR>
-  nnoremap <Leader>w  :<C-u>FzfWindows<CR>
-  nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
-  nnoremap <Leader>i  :<C-u>FzfHistory<CR>
-  nnoremap q:         :<C-u>FzfHistory :<CR>
-  nnoremap q/         :<C-u>FzfHistory /<CR>
 
-  function! s:format_buffer(b)
-    let l:name = bufname(a:b)
-    return printf("%s\t%s", a:b, empty(l:name) ? '[No Name]' : fnamemodify(l:name, ":p:~:."))
-  endfunction
+  function! s:plug.after.junegunn__fzf__vim()
+    let g:fzf_command_prefix = 'Fzf'
+    nnoremap <Leader>f  :<C-u>FzfFiles<CR>
+    nnoremap <Leader>w  :<C-u>FzfWindows<CR>
+    nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
+    nnoremap <Leader>i  :<C-u>FzfHistory<CR>
+    nnoremap q:         :<C-u>FzfHistory :<CR>
+    nnoremap q/         :<C-u>FzfHistory /<CR>
 
-  function! s:wipeout_buffers()
-    return fzf#run(fzf#wrap({
-    \ 'source':  map(
-    \   filter(
-    \     range(1, bufnr('$')),
-    \     {_, nr -> buflisted(nr) && getbufvar(nr, "&filetype") != "qf" && !getbufvar(nr, "&modified")}
-    \   ),
-    \   {_, nr -> s:format_buffer(nr)}
-    \ ),
-    \ 'sink*': {lines -> execute('bwipeout '.join(map(lines, {_, line -> split(line)[0]})), '')},
-    \ 'options': ['-m', '--tiebreak=index', '--ansi', '-d', '\t', '--prompt', 'Wipeout> ']
-    \}))
+    function! s:format_buffer(b)
+      let l:name = bufname(a:b)
+      return printf("%s\t%s", a:b, empty(l:name) ? '[No Name]' : fnamemodify(l:name, ":p:~:."))
+    endfunction
+
+    function! s:wipeout_buffers()
+      return fzf#run(fzf#wrap({
+      \ 'source':  map(
+      \   filter(
+      \     range(1, bufnr('$')),
+      \     {_, nr -> buflisted(nr) && getbufvar(nr, "&filetype") != "qf" && !getbufvar(nr, "&modified")}
+      \   ),
+      \   {_, nr -> s:format_buffer(nr)}
+      \ ),
+      \ 'sink*': {lines -> execute('bwipeout '.join(map(lines, {_, line -> split(line)[0]})), '')},
+      \ 'options': ['-m', '--tiebreak=index', '--ansi', '-d', '\t', '--prompt', 'Wipeout> ']
+      \}))
+    endfunction
+    nnoremap <silent> <Leader>bw :<C-u>call <SID>wipeout_buffers()<CR>
   endfunction
-  nnoremap <silent> <Leader>bw :<C-u>call <SID>wipeout_buffers()<CR>
   " }}}
   Plug 'kyoh86/vim-wipeout', {'on': 'Wipeout', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-wipeout'}
   Plug 'kyoh86/vim-editerm', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-editerm'}
   Plug 'kyoh86/momiji', {'rtp': 'vim', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/momiji'}
   " }}}
-call plug#end()
+call s:plug.end()
 
 " Auto-install plugins {{{
-let s:plug = {
-      \ 'plugs': get(g:, 'plugs', {})
-      \ }
+let s:plug.plugs =  get(g:, 'plugs', {})
 
 function! s:plug.is_installed(name)
   return has_key(l:self.plugs, a:name) ? isdirectory(l:self.plugs[a:name].dir) : 0
@@ -776,17 +779,11 @@ augroup CheckPlug
 augroup END
 " }}}
 
-" Configure loaded plugins {{{
-  call gogh#ui#fzf#use()
-  call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
-      \ 'name': 'neosnippet',
-      \ 'whitelist': ['*'],
-      \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
-      \ }))
-" }}}
-"
 " }}}
 
+" Configure loaded plugins {{{
+" }}}
+"
 " Functions {{{
 " Function: Edit Configurations {{{
 let g:config_home = g:xdg_config_home . '/vim'
@@ -963,6 +960,10 @@ let g:vim_json_conceal = 0
 " }}}
 
 " GVim Settings {{{
+function! s:my_foldtext()
+  return v:folddashes . getline(v:foldstart-1)
+endfunction
+set foldtext=s:my_foldtext()
 set columns=200
 set lines=50
 set guioptions=cei
