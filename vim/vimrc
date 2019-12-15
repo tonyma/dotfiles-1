@@ -292,13 +292,13 @@ call s:plug.begin()
   Plug 'prabirshrestha/asyncomplete-lsp.vim'
   Plug 'prabirshrestha/asyncomplete.vim'
   function! s:plug.after.prabirshrestha__asyncomplete__vim()
-    let g:asyncomplete_auto_completeopt = 1  " Set default `completeopt` options. These are `menuone,noinsert,noselect`
+    let g:asyncomplete_auto_completeopt = 1  " set 0 if you want to set default `completeopt` options. These are `menuone,noinsert,noselect`
     inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
     autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-    " inoremap <expr> <C-y> pumvisible() ? asyncomplete#close_popup() : "\<C-y>"
-    " inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+    inoremap <expr> <C-y> pumvisible() ? asyncomplete#close_popup() : "\<C-y>"
+    inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() : "\<cr>"
   endfunction
 
   Plug 'Shougo/neosnippet.vim'
