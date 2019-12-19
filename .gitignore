@@ -24,6 +24,7 @@
 !/locale.conf
 !/memo.txt
 !/mypy
+!/pacman
 !/plist
 !/pycodestyle
 !/pyenv

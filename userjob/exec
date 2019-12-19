@@ -20,6 +20,13 @@ else
   echo no gogh >&2
 fi
 
+# dump pacman
+if [ -x /usr/bin/pacman ]; then
+  /usr/bin/pacman -Qe > ${HOME}/.config/pacman/dump.txt || error="1"
+else
+  echo no pacman >&2
+fi
+
 if [[ -n ${error} ]]; then
   if command -v osascript >/dev/null 2>&1 ; then
     echo "var app = Application('System Events');
