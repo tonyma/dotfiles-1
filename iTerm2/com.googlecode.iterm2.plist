@@ -371,7 +371,13 @@
 	</dict>
 	<key>Default Bookmark Guid</key>
 	<string>55962E7B-C675-4185-8011-9E7C7C5CA7EA</string>
+	<key>EnableDivisionView</key>
+	<false/>
 	<key>HapticFeedbackForEsc</key>
+	<false/>
+	<key>HideActivityIndicator</key>
+	<false/>
+	<key>HideTabNumber</key>
 	<false/>
 	<key>HotkeyMigratedFromSingleToMulti</key>
 	<true/>
@@ -427,9 +433,11 @@
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>410 363 620 392 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 0 1440 877 0 0 1440 877 </string>
+	<string>-1920 -123 1920 1057 -1920 -123 1920 1057 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>-1920 -115 1914 1049 -1920 -123 1920 1057 </string>
+	<string>-960 -123 955 1057 -1920 -123 1920 1057 </string>
+	<key>NSWindow Frame iTerm Window 2</key>
+	<string>218 0 570 402 0 0 1440 877 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1131,6 +1139,8 @@
 			<false/>
 			<key>Shortcut</key>
 			<string></string>
+			<key>Show Mark Indicators</key>
+			<true/>
 			<key>Silence Bell</key>
 			<false/>
 			<key>Sync Title</key>
@@ -1924,6 +1934,7 @@
 	</array>
 	<key>NoSyncBFPRecents</key>
 	<array>
+		<string>DejaVuSansMono Nerd Font Mono</string>
 		<string>CicaTest</string>
 		<string>Monaco</string>
 		<string>Cica</string>
@@ -1931,16 +1942,16 @@
 	<key>NoSyncFrame_SharedPreferences</key>
 	<dict>
 		<key>screenFrame</key>
-		<string>{{0, 0}, {1440, 900}}</string>
+		<string>{{-1920, -123}, {1920, 1080}}</string>
 		<key>topLeft</key>
-		<string>{269, 595}</string>
+		<string>{-1879, 712}</string>
 	</dict>
 	<key>NoSyncInstallationId</key>
 	<string>3A54D494-300D-461E-A9BC-9872D41B97AB</string>
 	<key>NoSyncLastTipTime</key>
 	<real>595994868.03891695</real>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>31</integer>
+	<integer>91</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -2670,6 +2681,8 @@
 		<string>000</string>
 		<string>0000</string>
 	</array>
+	<key>PerPaneBackgroundImage</key>
+	<true/>
 	<key>PointerActions</key>
 	<dict>
 		<key>Button,1,1,,</key>
@@ -2716,14 +2729,26 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2019-12-07T16:37:48Z</date>
+	<date>2019-12-18T08:25:42Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateRelaunchingMarker</key>
 	<false/>
+	<key>ShowNewOutputIndicator</key>
+	<true/>
 	<key>SoundForEsc</key>
 	<false/>
+	<key>SplitPaneDimmingAmount</key>
+	<real>0.39263630319148934</real>
+	<key>ToolbeltTools</key>
+	<array>
+		<string>Profiles</string>
+	</array>
+	<key>UseBorder</key>
+	<false/>
 	<key>VisualIndicatorForEsc</key>
+	<false/>
+	<key>WindowNumber</key>
 	<false/>
 	<key>findMode_iTerm</key>
 	<integer>0</integer>
