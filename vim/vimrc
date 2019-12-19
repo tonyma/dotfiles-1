@@ -811,6 +811,7 @@ command! SwitchBranch call fzf#run({
     \ })
 nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
 " }}}
+
 " Function: Edit Changed Files {{{
 command! FzfDirty call fzf#run(fzf#wrap({'source': 'git status --porcelain | cut -c4-'}))
 nnoremap <Leader>gd :<C-u>FzfDirty<CR>
@@ -945,6 +946,18 @@ let g:is_posix = 1
 let g:vim_json_conceal = 0
 " }}}
 
+" Auto-off IME {{{
+if executable('fcitx-remote')
+  " IM OFF command
+  command! ImeOff silent !fcitx-remote -c
+
+  " When in insert mode
+  augroup InsertHook
+      autocmd!
+      autocmd InsertLeave * ImeOff
+  augroup END
+endif
+" }}}
 " }}}
 
 " GVim Settings {{{
