@@ -697,6 +697,7 @@ endif
   function! s:plug.after.junegunn__fzf__vim()
     let g:fzf_command_prefix = 'Fzf'
     nnoremap <Leader>f  :<C-u>FzfFiles<CR>
+    nnoremap <Leader>c  :<C-u>FzfCommits<CR>
     nnoremap <Leader>w  :<C-u>FzfWindows<CR>
     nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
     nnoremap <Leader>i  :<C-u>FzfHistory<CR>

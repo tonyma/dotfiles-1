@@ -30,6 +30,7 @@ https://github.com/kyoh86/kyoh86.work
 https://github.com/kyoh86/notifail
 https://github.com/kyoh86/momiji
 https://github.com/kyoh86/google-japanese-ime-icons
+https://github.com/kyoh86/issues
 https://github.com/kyoh86/generator-go-project
 https://github.com/kyoh86/gogh
 https://github.com/kyoh86/xdg

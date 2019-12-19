@@ -93,8 +93,6 @@ brew "mas"
 brew "mecab"
 # IPA dictionary compiled for MeCab
 brew "mecab-ipadic"
-# Cross platform, open source .NET development framework
-brew "mono"
 # Collection of tools that nobody wrote when UNIX was young
 brew "moreutils"
 # Open source relational database management system
@@ -121,14 +119,10 @@ brew "pwgen"
 brew "pyenv"
 # Pyenv plugin to manage virtualenv
 brew "pyenv-virtualenv"
-# Software environment for statistical computing
-brew "r"
 # Ruby version manager
 brew "rbenv"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
-# Build tool for Scala projects
-brew "sbt"
 # JVM-based programming language
 brew "scala"
 # Static analysis and lint tool, for (ba)sh scripts
