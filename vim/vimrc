@@ -191,118 +191,49 @@ call s:plug.begin()
     " nmap <Leader> <Plug>(lsp-implementation)
     " nmap <Leader> <Plug>(lsp-type-definition)
 
-    " for golang
-    augroup Lsp.go
-      autocmd!
-
-      if executable('gopls')
-        autocmd User lsp_setup call lsp#register_server({
-            \ 'name': 'go-lang',
-            \ 'cmd': {server_info->['gopls']},
-            \ 'whitelist': ['go'],
-            \ 'workspace_config': {'gopls': {
-            \    'source.organizeImports': 'true',
-            \ }},
-            \ })
-        autocmd FileType go setlocal omnifunc=lsp#complete
-      else
-        echoerr 'gopls not found'
-      endif
-    augroup END
+    autocmd FileType go,python,typescript,vim,markdown,sh setlocal omnifunc=lsp#complete
 
     " for some linters
     augroup Lsp.lint
       autocmd!
-
       if executable('efm-langserver')
         autocmd User lsp_setup call lsp#register_server({
             \ 'name': 'efm-langserver',
             \ 'cmd': {server_info->['efm-langserver']},
             \ 'whitelist': ['go', 'vim', 'markdown', 'sh'],
             \ })
-        autocmd FileType go,vim,markdown,sh setlocal omnifunc=lsp#complete
       else
         echoerr 'efm-langserver not found'
       endif
     augroup END
 
-    " for python
-    augroup Lsp.python
-      autocmd!
-
-      if executable('pyls')
-        " pip install python-language-server
-        autocmd User lsp_setup call lsp#register_server({
-            \ 'name': 'pyls',
-            \ 'cmd': {server_info->['pyls']},
-            \ 'workspace_config': {'pyls': {
-            \   'configurationSources': ['flake8'],
-            \   'plugins': {
-            \     'black': {'enabled': v:true},
-            \     'pycodestyle': {'enabled': v:false},
-            \     'pyls_mypy': {'enabled': v:true, 'live_mode': v:false},
-            \   },
-            \ }},
-            \ 'whitelist': ['python'],
-            \ })
-        autocmd FileType python setlocal omnifunc=lsp#complete
-      else
-        echoerr 'pyls not found'
-      endif
-    augroup END
-
-    " for viml
-    augroup Lsp.viml
-      autocmd!
-      if executable('vim-language-server')
-        autocmd User lsp_setup call lsp#register_server({
-            \ 'name': 'vim-language-server',
-            \ 'cmd': {server_info->[&shell, &shellcmdflag, 'vim-language-server --stdio']},
-            \ 'whitelist': ['vim'],
-            \ 'workspace_config': {
-            \   "iskeyword": "vim iskeyword option",
-            \   "vimruntime": $VIMRUNTIME,
-            \   "runtimepath": $VIM,
-            \   "diagnostic": {
-            \     "enable": v:true
-            \   }
-            \ },
-            \ })
-        autocmd FileType vim setlocal omnifunc=lsp#complete
-      else
-        echoerr 'vim-language-server is not found'
-      endif
-    augroup END
-
-    " for TypeScript (using tsuquyomi)
-    augroup Lsp.typescript
-      autocmd!
-      if executable('typescript-language-server')
-        autocmd User lsp_setup call lsp#register_server({
-            \ 'name': 'typescript-language-server',
-            \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-            \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-            \ 'whitelist': ['typescript'],
-            \ })
-      else
-        echoerr 'typescript-language-server not found'
-      endif
-    augroup END
   endfunction
-  
-  Plug 'hrsh7th/vim-vsnip-integ'
-  Plug 'hrsh7th/vim-vsnip'
-  Plug 'microsoft/vscode-go'
-  function! s:plug.after.hrsh7th__vim__vsnip()
 
-    let g:vsnip_namespace = 'vsnip_'
-    let g:vsnip_snippet_dirs = ['~/.local/share/vim-plug/vscode-go/snippets']
-    imap <expr> <C-j>   vsnip#available(1)  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-    imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-    imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-    smap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-    imap <expr> <S-Tab> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-    smap <expr> <S-Tab> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+  Plug 'mattn/vim-lsp-settings'
+  function! s:plug.after.mattn__vim__lsp__settings()
+    let g:lsp_settings = {}
+    " for python
+    let g:lsp_settings['pyls'] =
+          \ {
+          \   'workspace_config': {'pyls': {
+          \     'configurationSources': ['flake8'],
+          \     'plugins': {
+          \       'black': {'enabled': v:true},
+          \       'pycodestyle': {'enabled': v:false},
+          \       'pyls_mypy': {'enabled': v:true, 'live_mode': v:false},
+          \     }
+          \   }}
+          \ }
+    " for viml
+    let g:lsp_settings['vim-language-server'] = 
+          \ {
+          \   'workspace_config': {
+          \     "iskeyword": "vim iskeyword option",
+          \     "diagnostic": {
+          \       "enable": v:true
+          \     }
+          \   }
+          \ }
   endfunction
 
   Plug 'itchyny/lightline.vim'
