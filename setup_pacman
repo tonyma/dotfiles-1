@@ -1,29 +1,34 @@
 #!/bin/zsh
 
+# inuxのヘッダファイル群。makeするときに何やかや出番が多い
 sudo pacman -S \
-  "$(: Linuxのヘッダファイル群。makeするときに何やかや出番が多い)" \
-  linux-headers \
-  \
-  "$(: シェルを便利にしたい群)" \
+  linux-headers
+
+# シェルを便利にしたい群
+sudo pacman -S \
   zsh-syntax-highlighting zsh-completions \
-  diff-so-fancy \
-  \
-  "$(: CLI人権ツール群)" \
+  diff-so-fancy
+
+  # CLI人権ツール群
+sudo pacman -S \
   wget \
   ripgrep \
-  gvim \
-  \
-  "$(: 開発でよく使うツール、言語系)" \
+  gvim
+
+  # 開発でよく使うツール、言語系
+sudo pacman -S \
   inotify-tools \
   jq httpie asciinema \
   git hub tig \
   sqlite postgresql mysql \
   yarn go puthon python-pip python-language-server \
   shellcheck \
-  docker aws-cli \
-  \
-  "$(: Bash CLIツール群)" \
-  libnotify "$(: notify-send コマンド)" \
-  \
-  "$(: その他)" \
+  docker aws-cli
+
+  # Bash CLIツール群
+sudo pacman -S \
+  libnotify
+
+  # その他
+sudo pacman -S \
   chromium
