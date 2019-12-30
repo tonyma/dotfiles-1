@@ -1,7 +1,6 @@
 accountsservice 0.6.55-1
 adobe-source-han-sans-jp-fonts 2.001-1
 adobe-source-han-serif-jp-fonts 1.001-2
-albert 0.16.1-2
 alsa-plugins 1.2.1-1
 alsa-utils 1.2.1-1
 asciinema 2.0.2-3
@@ -50,6 +49,7 @@ grep 3.3-3
 groff 1.22.4-2
 gvfs 1.42.2-1
 gvim 8.1.2268-2
+gyazo 1.2.1-1
 gzip 1.10-3
 httpie 1.0.3-2
 hub 2.13.0-1

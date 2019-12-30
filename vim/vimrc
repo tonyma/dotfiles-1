@@ -617,10 +617,11 @@ endif
   endfunction
   " {{{ kyoh86/vim-docbase
   Plug 'kyoh86/vim-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-docbase'}
+  Plug 'kyoh86/vim-metarw-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-metarw-docbase'}
   function! s:plug.after.kyoh86__vim__docbase()
-    let g:docbase_domain = 'wacul'
-  " }}}
+    call metarw#define_wrapper_commands(v:true)
   endfunction
+  " }}}
   " {{{ junegunn/fzf
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
@@ -700,9 +701,6 @@ augroup END
 
 " }}}
 
-" Configure loaded plugins {{{
-" }}}
-"
 " Functions {{{
 " Function: Edit Configurations {{{
 let g:config_home = g:xdg_config_home . '/vim'
@@ -806,8 +804,6 @@ let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
-" let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-" set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 " }}}
 
 " Completion {{{
@@ -877,6 +873,16 @@ let g:is_posix = 1
 let g:vim_json_conceal = 0
 " }}}
 
+" Grep {{{
+" auto-open quickfix
+autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
+" use rg for grep
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --no-heading
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+" }}}
+
 " Auto-off IME {{{
 if executable('fcitx-remote')
   " IM OFF command
@@ -897,4 +903,5 @@ set lines=50
 set guioptions=cei
 set guifont=Cica\ 13
 set mouse=
+set guicursor=n-c:block-Cursor/lCursor,v:block-vCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor,a:blinkwait333-blinkoff333-blinkon333
 " }}}

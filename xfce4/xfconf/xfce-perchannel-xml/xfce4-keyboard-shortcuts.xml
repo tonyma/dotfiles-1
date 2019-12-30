@@ -163,7 +163,7 @@
       <property name="&lt;Super&gt;q" type="string" value="close_window_key"/>
       <property name="&lt;Shift&gt;&lt;Alt&gt;&lt;Super&gt;f" type="string" value="maximize_window_key"/>
       <property name="&lt;Shift&gt;&lt;Alt&gt;&lt;Super&gt;Left" type="string" value="tile_left_key"/>
-      <property name="&lt;Alt&gt;&lt;Super&gt;Shift_L" type="string" value="tile_right_key"/>
+      <property name="&lt;Shift&gt;&lt;Alt&gt;&lt;Super&gt;Right" type="string" value="tile_right_key"/>
     </property>
   </property>
   <property name="providers" type="array">
