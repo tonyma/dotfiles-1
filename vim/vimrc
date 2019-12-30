@@ -884,7 +884,16 @@ endif
 " }}}
 
 " Auto-off IME {{{
-if executable('fcitx-remote')
+if executable('ibus')
+  " IM OFF command
+  command! ImeOff silent !ibus engine 'xkb:us::eng'
+
+  " When in insert mode
+  augroup InsertHook
+      autocmd!
+      autocmd InsertLeave * ImeOff
+  augroup END
+elseif executable('fcitx-remote')
   " IM OFF command
   command! ImeOff silent !fcitx-remote -c
 

@@ -1,7 +1,11 @@
 #!/bin/zsh
 
 if command -v pacman > /dev/null 2>&1 ; then
-  . "${DOTFILES}/setup_pacman"
+  source "${DOTFILES}/setup_pacman"
+fi
+
+if command -v gsettings > /dev/null 2>&1 ; then
+  source "${DOTFILES}/setup_GNOME"
 fi
 
 yarn global add \
@@ -14,10 +18,18 @@ yarn global add \
 GO111MODULE=on go get golang.org/x/tools/gopls@latest
 go get github.com/mattn/efm-langserver
 
+# start bluetooth service
+modprobe btusb
+systemctl start bluetooth
+systemctl enable bluetooth
+sudo gpasswd --add "${USER}" lp
+
 # link configurations
+rm -rf "${HOME}/.vim"
 ln -s "${DOTFILES}/vim" "${HOME}/.vim"
-rm "${HOME}/.bash_profile" && ln -s "${DOTFILES}/bash/bash_profile" "${HOME}/.bash_profile"
-rm "${HOME}/.xinitrc" && ln -s "${DOTFILES}/X11/xinitrc" "${HOME}/.xinitrc"
+
+# setup Cica font
+sudo cp "${DOTFILES}/fonts/*.ttf" /usr/share/fonts
 
 # register userjobs
 mkdir -p ~/.local/share/systemd/user/

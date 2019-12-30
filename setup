@@ -1,6 +1,6 @@
-#!/bin/zsh
+#!env zsh
 
-set -e
+set -ex
 
 ## DotFiles:
 DOTFILES=${HOME}/.config
@@ -20,7 +20,7 @@ fi
 source ${DOTFILES}/zsh/.zshenv
 
 # OS別のセットアップ
-[ -f ${DOTFILES}/setup_`uname` ] && . ${DOTFILES}/setup_`uname`
+[ -f ${DOTFILES}/setup_`uname` ] && source ${DOTFILES}/setup_`uname`
 
 # OS別のgitconfig
 function link_os() {
@@ -47,7 +47,7 @@ if [[ -d ${DOTFILES}/.git ]]; then
   git -C ${DOTFILES} pull
 else
   rm -rf ${DOTFILES}
-  git clone git@github.com:kyoh86/dotfiles ${DOTFILES}
+  git clone https://github.com/kyoh86/dotfiles ${DOTFILES}
 fi
 
 echo "DONE🍺"
