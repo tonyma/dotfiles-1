@@ -11,7 +11,7 @@ if [[ -f ${DOTFILES}/setup ]]; then
 else
   DOTTMP=${HOME}/dotfiles-master
   rm -rf ${DOTTMP}
-  curl -L https://github.com/kyoh86/dotfiles/archive/master.tar.gz | tar xv -
+  curl -L https://github.com/kyoh86/dotfiles/archive/master.tar.gz | tar xvz -
 
   mkdir -p ${DOTFILES}
   cp -RPf ${DOTTMP}/* ${DOTFILES}
