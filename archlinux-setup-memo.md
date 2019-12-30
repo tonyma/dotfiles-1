@@ -540,17 +540,25 @@ UNDONE:
 （略）
 ```
 
-### GDM起動しちゃう
+### GDMなどGNOME関係のサービスを起動しちゃう
 
 [root@kyoh86-thinkpad ~]# systemctl enable gdm
 Created symlink /etc/systemd/system/display-manager.service → /usr/lib/systemd/system/gdm.service.
+[root@kyoh86-thinkpad ~]# systemctl enable NetworkManager.service
+[root@kyoh86-thinkpad ~]# systemctl start NetworkManager
 
 ### ユーザーセットアップ
 
 ```console
 [root@kyoh86-thinkpad ~]# useradd -m -G wheel -s /usr/bin/zsh kyoh86
 [root@kyoh86-thinkpad ~]# passwd kyoh86
+[root@kyoh86-thinkpad ~]# EDITOR=/usr/bin/vim visudo
+[root@kyoh86-thinkpad ~]# tail -N1 /etc/sudoers
+kyoh86 kyoh86-thinkpad=(ALL) ALL
 ```
+
+sudoersとしては、visudo起動後に一番末尾に上記の通りの内容を記載しておく。
+ホスト名がkyoh86-thinkpadと固定されていることに注意（つまりSSHではsudoできない）
 
 
 

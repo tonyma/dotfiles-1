@@ -23,4 +23,7 @@ sudo pacman -S \
   docker aws-cli \
   \
   "$(: Bash CLIツール群)" \
-  libnotify "$(: notify-send コマンド)"
+  libnotify "$(: notify-send コマンド)" \
+  \
+  "$(: その他)" \
+  chromium
