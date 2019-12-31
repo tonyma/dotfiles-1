@@ -27,7 +27,7 @@ yay -S \
   jq httpie asciinema \
   git hub tig \
   sqlite postgresql mysql \
-  yarn go puthon python-pip python-language-server \
+  yarn go python python-pip python-language-server python-poetry \
   shellcheck \
   docker aws-cli docker-compose
 
