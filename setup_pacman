@@ -7,34 +7,43 @@ cd -
 rm -rf ./yay
 
 # inuxのヘッダファイル群。makeするときに何やかや出番が多い
-sudo pacman -S \
+yay -S \
   linux-headers
 
 # シェルを便利にしたい群
-sudo pacman -S \
+yay -S \
   zsh-syntax-highlighting zsh-completions \
   diff-so-fancy
 
 # CLI人権ツール群
-sudo pacman -S \
+yay -S \
   wget \
   ripgrep \
   gvim
 
 # 開発でよく使うツール、言語系
-sudo pacman -S \
+yay -S \
   inotify-tools \
   jq httpie asciinema \
   git hub tig \
   sqlite postgresql mysql \
   yarn go puthon python-pip python-language-server \
   shellcheck \
-  docker aws-cli
+  docker aws-cli docker-compose
 
 # Bash CLIツール群
-sudo pacman -S \
-  libnotify
+yay -S \
+  libnotify \
+  coreutils \
+  binutils \
+  diffutils \
+  findutils \
+  bash
 
 # その他
-sudo pacman -S \
-  chromium
+yay -S \
+  chrome-gnome-shell \
+  chromium \
+  seahorse \
+  gyazo \
+  slack-desktop
