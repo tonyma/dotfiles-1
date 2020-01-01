@@ -6,10 +6,13 @@ scriptencoding utf-8
 " Setup XDG_HOME {{{
 if ($XDG_CONFIG_HOME ==# '')
   let $XDG_CONFIG_HOME=$HOME.'/.config'
-end
+endif
+if $XDG_CONFIG_HOME =~ '/$'
+  let $XDG_CONFIG_HOME = strpart($XDG_CONFIG_HOME, 0, strlen($XDG_CONFIG_HOME)-1)
+endif
 if ($XDG_CACHE_HOME ==# '')
   let $XDG_CACHE_HOME=$HOME.'/.cache'
-end
+endif
 
 set undodir=$XDG_CACHE_HOME/vim/undo
 set directory=$XDG_CACHE_HOME/vim/swap
@@ -30,14 +33,17 @@ let $COLORTERM='xterm-256color'
 let $TERM='xterm-256color'
 
 " Path環境変数の設定:
-let $PATH='/usr/local/bin:'.$PATH
-let $PATH='/usr/local/sbin:'.$PATH
-let $PATH=$HOME.'/.local/bin:'.$PATH
-let $PATH=$HOME.'/.local/sbin:'.$PATH
-let $PATH=$PATH.':/bin'
-let $PATH=$PATH.':/usr/bin'
-let $PATH=$PATH.':/sbin'
-let $PATH=$PATH.':/usr/sbin'
+
+let $PATH='.:' .
+      \ $HOME . '/.local/bin:'  .
+      \ $HOME . '/.local/sbin:' .
+      \ '/usr/local/bin:'       .
+      \ '/usr/local/sbin:'      .
+      \ $PATH .
+      \ ':/bin' .
+      \ ':/usr/bin' .
+      \ ':/sbin' .
+      \ ':/usr/sbin'
 
 " Zsh:
 let $ZDOTDIR=$HOME.'/.config/zsh'
