@@ -846,9 +846,16 @@ augroup TermMap
       \ nnoremap <buffer> q <Nop>|
 augroup END
 
-nnoremap <silent> tt :<C-u>terminal++curwin <CR>
-nnoremap <silent> tx :<C-u>terminal         <CR>
-nnoremap <silent> tv :<C-u>vertical terminal<CR>
+nnoremap <silent> tt :<C-u>terminal++curwin ++noclose <CR>
+nnoremap <silent> tx :<C-u>terminal++noclose         <CR>
+nnoremap <silent> tv :<C-u>vertical terminal++noclose<CR>
+
+" ++nocloseで開くので、exitしたらそのままbuffer wipeoutしたい。
+" zshrcの方で function :q() としてこいつを呼び出してexitするコマンド :q を定義済
+" Function: Wipeout Terminal Buffer {{{
+function! Tapi_WipeoutTerminalBuffer(bufnum, arglist)
+  autocmd! SafeState <buffer> ++once bwipeout
+endfunction
 
 " }}}
 
