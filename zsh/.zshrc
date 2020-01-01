@@ -175,8 +175,9 @@ if [[ -n "${VIM_TERMINAL}" ]]; then
     source "${VIM_EDITERM_SETUP}" 
   fi
 
+  alias q='exit'
   # :q で exit -> noclose指定のterminalウインドウを閉じる
-  function :q() {
+  function :bw() {
     echo -ne "\033]51;[\"call\", \"Tapi_WipeoutTerminalBuffer\", []]\07"
     exit
   }

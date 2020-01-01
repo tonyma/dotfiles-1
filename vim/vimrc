@@ -856,9 +856,9 @@ nnoremap <silent> tt :<C-u>terminal++curwin ++noclose <CR>
 nnoremap <silent> tx :<C-u>terminal++noclose         <CR>
 nnoremap <silent> tv :<C-u>vertical terminal++noclose<CR>
 
-" ++nocloseで開くので、exitしたらそのままbuffer wipeoutしたい。
-" zshrcの方で function :q() としてこいつを呼び出してexitするコマンド :q を定義済
 " Function: Wipeout Terminal Buffer {{{
+" ++nocloseで開くので、exitしたらそのままbuffer wipeoutしたい。
+" zshrcの方で function :bw() としてこいつを呼び出してexitするコマンド :bw を定義済
 function! Tapi_WipeoutTerminalBuffer(bufnum, arglist)
   autocmd! SafeState <buffer> ++once bwipeout
 endfunction
