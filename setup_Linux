@@ -39,5 +39,3 @@ done
 
 systemctl --user daemon-reload
 systemctl --user enable userjob.timer
-systemctl enable lightdm.service
-systemctl enable NetworkManager.service
