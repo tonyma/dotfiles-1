@@ -350,7 +350,7 @@ call s:plug.begin()
       if expand('%') ==# ''
         let l:name = '[No Name]'
       else
-        let l:max = winwidth(0) - 100
+        let l:max = winwidth(0) - 80
         let l:name = expand('%:t')
         if len(l:name) < l:max
           let l:name = expand('%:.')
@@ -596,7 +596,7 @@ call s:plug.begin()
   Plug 'robertbasic/vim-hugo-helper'
   Plug 'ryanoasis/vim-devicons'
   Plug 'sgur/vim-textobj-parameter'
-  Plug 'stefandtw/quickfix-reflector.vim', {'for': 'qf'}
+  Plug 'stefandtw/quickfix-reflector.vim'
   Plug 'tell-k/vim-autoflake', {'for': 'python'}
   Plug 'tpope/vim-dispatch'
   Plug 'tyru/capture.vim', {'on': 'Capture'}  " Show Ex command output in a buffer
