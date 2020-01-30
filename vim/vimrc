@@ -162,23 +162,32 @@ call s:plug.begin()
   Plug 'prabirshrestha/vim-lsp'
   function! s:plug.after.vim__lsp()
   "  let g:lsp_async_completion = 1
-    let g:auto_enable = 1
-    let g:lsp_signs_enabled = 1           " enable signs
     let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-    let g:lsp_highlight_references_enabled = 0 " disable references highlighting
 
-    " 保存時に自動でフォーマット
+    " 保存時に自動でフォーマット {{{
+
     let g:kyoh86_auto_format = v:true
+
     function! s:autoFormatSync()
       if g:kyoh86_auto_format
         LspDocumentFormatSync
       endif
     endfunction
 
+    function! s:goAutoFormatSync()
+      if g:kyoh86_auto_format
+        LspCodeAction source.organizeImports
+        LspDocumentFormatSync
+      endif
+    endfunction
+
     augroup Lsp.format
       autocmd!
-      autocmd BufWritePre *.go,*.py call s:autoFormatSync()
+      autocmd BufWritePre *.py call s:autoFormatSync()
+      autocmd BufWritePre *.go call s:goAutoFormatSync()
     augroup END
+
+    " }}}
 
     nmap <Leader>ld <Plug>(lsp-definition)
     nmap <Leader>lh <Plug>(lsp-hover)
@@ -197,21 +206,21 @@ call s:plug.begin()
     " nmap <Leader> <Plug>(lsp-implementation)
     " nmap <Leader> <Plug>(lsp-type-definition)
 
-    autocmd FileType go,python,typescript,vim,markdown,sh setlocal omnifunc=lsp#complete
+    " autocmd FileType go,python,typescript,vim,markdown,sh setlocal omnifunc=lsp#complete
 
     " for some linters
-    augroup Lsp.lint
-      autocmd!
-      if executable('efm-langserver')
-        autocmd User lsp_setup call lsp#register_server({
-            \ 'name': 'efm-langserver',
-            \ 'cmd': {server_info->['efm-langserver']},
-            \ 'whitelist': ['go', 'vim', 'markdown', 'sh'],
-            \ })
-      else
-        echoerr 'efm-langserver not found'
-      endif
-    augroup END
+    " augroup Lsp.lint
+    "   autocmd!
+    "   if executable('efm-langserver')
+    "     autocmd User lsp_setup call lsp#register_server({
+    "         \ 'name': 'efm-langserver',
+    "         \ 'cmd': {server_info->['efm-langserver']},
+    "         \ 'whitelist': ['go', 'vim', 'markdown', 'sh'],
+    "         \ })
+    "   else
+    "     echoerr 'efm-langserver not found'
+    "   endif
+    " augroup END
 
   endfunction
 
