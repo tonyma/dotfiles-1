@@ -1,5 +1,5 @@
 root:
-- ~/Projects
-- ~/go/src
+  - ~/Projects
+  - ~/go/src
 github:
-  user: kyoh86
+    user: kyoh86

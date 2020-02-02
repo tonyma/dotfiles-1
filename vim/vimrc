@@ -99,6 +99,9 @@ let $GIGAMOJI_BG=':space:'
 " Fzf:
 let $PATH=$PATH.':'.$HOME.'/.fzf/bin'
 
+" Gordon:
+let $PATH=$PATH.':'.$HOME.'/Project/bin'
+
 " dotfiles自体
 let $DOTFILES=$HOME.'/.config'
 let $DOTS=$DOTFILES
@@ -644,7 +647,7 @@ endif
   function! s:plug.after.junegunn__fzf__vim()
     let g:fzf_command_prefix = 'Fzf'
     nnoremap <Leader>f  :<C-u>FzfFiles<CR>
-    nnoremap <Leader>c  :<C-u>FzfCommits<CR>
+    nnoremap <Leader>c  :<C-u>FzfCommands<CR>
     nnoremap <Leader>w  :<C-u>FzfWindows<CR>
     nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
     nnoremap <Leader>i  :<C-u>FzfHistory<CR>
@@ -785,6 +788,10 @@ endfunction
 command! HighlightInfo call s:get_highlight_info()
 " }}}
 
+" }}}
+
+" Command aliases {{{
+command! Ghf OpenGithubFile
 " }}}
 
 " Settings {{{
@@ -932,7 +939,7 @@ endif
 set columns=200
 set lines=50
 set guioptions=cei
-set guifont=Cica\ 13
+set guifont=Cica\ 13.5
 set mouse=
 set guicursor=n-c:block-Cursor/lCursor,v:block-vCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor,a:blinkwait333-blinkoff333-blinkon333
 " }}}

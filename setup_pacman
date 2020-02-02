@@ -42,8 +42,11 @@ yay -S \
 
 # その他
 yay -S \
+  noto-fonts-all \
   chrome-gnome-shell \
   chromium \
   seahorse \
   gyazo \
-  slack-desktop
+  slack-desktop \
+  peek \
+  gstreamer gst-plugins-ugly
