@@ -15,8 +15,6 @@ tap "mix3/ndenv"
 brew "sqlite"
 # General-purpose data compression with high compression ratio
 brew "xz"
-# Interpreted, interactive, object-oriented programming language
-brew "python"
 # Record and share terminal sessions
 brew "asciinema"
 # Automatic configure script builder
@@ -29,6 +27,8 @@ brew "awslogs"
 brew "bash"
 # XML-based font configuration API for X Windows
 brew "fontconfig"
+# Interpreted, interactive, object-oriented programming language
+brew "python"
 # Enables you to reproduce the CircleCI environment locally
 brew "circleci"
 # Cross-platform make
@@ -133,8 +133,6 @@ brew "supervisor"
 brew "terraform"
 # Text interface for Git repositories
 brew "tig"
-# Vi 'workalike' with many additional features
-brew "vim"
 # Internet file retriever
 brew "wget"
 # JavaScript package manager

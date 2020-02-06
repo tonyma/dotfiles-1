@@ -126,6 +126,7 @@ if which 'defaults' ; then
   defaults write com.apple.AppleMultitouchTrackpad USBMouseStopsTrackpad -integer 0
   defaults write com.apple.AppleMultitouchTrackpad UserPreferences -bool true
   defaults write com.apple.AppleMultitouchTrackpad version -integer 11
+  defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
 fi
 
 # link vimrc

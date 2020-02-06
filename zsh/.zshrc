@@ -284,7 +284,7 @@ bindkey '^x^n' new-project
 # }}}
 
 # ブランチ切り替え {{{
-function checkout-git-branch() {
+function switch-git-branch() {
   local selected
   selected=$(
     git-branches --color --exclude-current \
@@ -294,16 +294,16 @@ function checkout-git-branch() {
   if [ -z "${selected}" ]; then
     return
   fi
-  BUFFER="git checkout $selected"
+  BUFFER="git switch $selected"
   zle accept-line
   # redisplay the command line
   zle -R -c
 }
-zle -N checkout-git-branch
-bindkey '^xgb' checkout-git-branch
-bindkey '^xg^b' checkout-git-branch
-bindkey '^x^gb' checkout-git-branch
-bindkey '^x^g^b' checkout-git-branch
+zle -N switch-git-branch
+bindkey '^xgb' switch-git-branch
+bindkey '^xg^b' switch-git-branch
+bindkey '^x^gb' switch-git-branch
+bindkey '^x^g^b' switch-git-branch
 # }}}
 
 # コマンド履歴検索 {{{
@@ -437,7 +437,7 @@ function update-brew {
   echo updating brew
   cd ~
   if command -v brew >/dev/null 2>&1 ; then
-    brew update
+    brew upgrade
   fi
 }
 # }}}

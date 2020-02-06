@@ -1,0 +1,52 @@
+#!env zsh
+
+set -ex
+
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+export VIM_SOURCE_DIR="${XDG_DATA_HOME}/vim-compile"
+export VIM_PREFIX_DIR="${HOME}/.local"
+
+if [ ! -d "${VIM_SOURCE_DIR}" ]; then
+  rm -rf "${VIM_SOURCE_DIR}"
+  mkdir -p "${VIM_SOURCE_DIR}"
+fi
+cd "${VIM_SOURCE_DIR}"
+
+if [ -d ./vim/.git ]; then
+  cd vim
+  git reset --hard
+  git clean -fd
+  git checkout master
+  git pull
+else
+  git clone https://github.com/vim/vim.git
+  cd vim
+fi
+
+./configure --prefix="${VIM_PREFIX_DIR}" \
+  --enable-luainterp=OPTS      \
+  --enable-mzschemeinterp      \
+  --enable-perlinterp=OPTS     \
+  --enable-pythoninterp=OPTS   \
+  --enable-python3interp=OPTS  \
+  --enable-tclinterp=OPTS      \
+  --enable-rubyinterp=OPTS     \
+  --enable-cscope              \
+  --enable-xim                 \
+  --enable-fontset             \
+  --enable-gui=OPTS            \
+  --enable-gtk2-check          \
+  --enable-gnome-check         \
+  --enable-gtk3-check          \
+  --enable-motif-check         \
+  --enable-athena-check        \
+  --enable-nextaw-check        \
+  --enable-carbon-check        \
+  || :
+
+make
+make uninstall
+make install
+
+which vim
+vim --version
