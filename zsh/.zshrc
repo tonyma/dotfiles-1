@@ -317,7 +317,7 @@ function show-github-issue() {
   if [ -z "${selected}" ]; then
     return
   fi
-  BUFFER="echo gh issue view $selected"
+  BUFFER="gh issue view $selected"
   zle accept-line
   # redisplay the command line
   zle -R -c
