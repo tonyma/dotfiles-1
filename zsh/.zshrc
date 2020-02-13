@@ -311,7 +311,7 @@ function show-github-issue() {
   local selected
   selected=$(
     gh issue list --state open --limit 100 \
-      | fzf --preview 'gh issue view -p {1}' -0 -n 2 \
+      | fzf --preview 'gh issue view -p {1}' \
       | cut -f1
   )
   if [ -z "${selected}" ]; then
