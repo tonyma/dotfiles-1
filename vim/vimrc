@@ -785,8 +785,12 @@ nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
 " }}}
 
 " Function: Edit Changed Files {{{
-command! FzfDirty call fzf#run(fzf#wrap({'source': 'git status --porcelain | grep -ve "^.D" | cut -c4-'}))
-nnoremap <Leader>gd :<C-u>FzfDirty<CR>
+function! s:fzf_dirty(bang)
+  call fzf#run(fzf#wrap({'source': 'git status --porcelain ' . (a:bang ? '-uall ' : '') . '| grep -ve "^.D" | cut -c4-'}))
+endfunction
+command! -bang FzfDirty call <SID>fzf_dirty(<bang>v:false)
+nnoremap <Leader>gd :<C-u>FzfDirty!<CR>
+nnoremap <Leader>gD :<C-u>FzfDirty<CR>
 " }}}
 
 " Function: Update Terminal Window Title {{{
