@@ -306,6 +306,29 @@ bindkey '^x^gb' switch-git-branch
 bindkey '^x^g^b' switch-git-branch
 # }}}
 
+# Issueを開く {{{
+function show-github-issue() {
+  local selected
+  selected=$(
+    gh issue list --state open --limit 100 \
+      | fzf --preview 'gh issue view -p {1}' -0 -n 2 \
+      | cut -f1
+  )
+  if [ -z "${selected}" ]; then
+    return
+  fi
+  BUFFER="echo gh issue view $selected"
+  zle accept-line
+  # redisplay the command line
+  zle -R -c
+}
+zle -N show-github-issue
+bindkey '^xgi' show-github-issue
+bindkey '^xg^i' show-github-issue
+bindkey '^x^gi' show-github-issue
+bindkey '^x^g^i' show-github-issue
+# }}}
+
 # コマンド履歴検索 {{{
 function put-history() {
   local selected
