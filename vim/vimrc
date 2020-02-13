@@ -604,6 +604,8 @@ call s:plug.begin()
     let g:loaded_netrwSettings     = 1
     let g:loaded_netrwFileHandlers = 1
 
+    nnoremap - :<C-u>Fern %:h<CR>
+
     augroup my-fern-hijack
       autocmd!
       autocmd BufEnter * ++nested call s:hijack_directory()
@@ -783,7 +785,7 @@ nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
 " }}}
 
 " Function: Edit Changed Files {{{
-command! FzfDirty call fzf#run(fzf#wrap({'source': 'git status --porcelain | cut -c4-'}))
+command! FzfDirty call fzf#run(fzf#wrap({'source': 'git status --porcelain | grep -ve "^.D" | cut -c4-'}))
 nnoremap <Leader>gd :<C-u>FzfDirty<CR>
 " }}}
 
