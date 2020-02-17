@@ -1,5 +1,6 @@
 tap "alecthomas/tap"
 tap "argon/mas"
+tap "github/gh"
 tap "golangci/tap"
 tap "goreleaser/goreleaser"
 tap "homebrew/bundle"
@@ -147,6 +148,8 @@ brew "zsh-completions"
 brew "zsh-syntax-highlighting"
 # Concurrently run Go lint tools and normalise their output.
 brew "alecthomas/tap/gometalinter"
+# GitHub CLI
+brew "github/gh/gh"
 # Fast linters runner for Go.
 brew "golangci/tap/golangci-lint"
 # Deliver Go binaries as fast and easily as possible

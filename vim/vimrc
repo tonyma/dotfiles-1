@@ -605,6 +605,7 @@ call s:plug.begin()
     let g:loaded_netrwFileHandlers = 1
 
     nnoremap - :<C-u>Fern %:h<CR>
+    let g:fern#default_hidden      = 1
 
     augroup my-fern-hijack
       autocmd!
