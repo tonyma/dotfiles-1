@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 function _source_if() {
   [ -f ${1} ] && source ${1}

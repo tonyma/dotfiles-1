@@ -135,6 +135,14 @@ endif
 " }}}
 
 " Configure Plugins {{{
+" Auto install {{{
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+" }}}
+
 " Begin with mkdir {{{
 let s:plug = {}
 let s:plug['before'] = {}
@@ -159,6 +167,9 @@ endfunction
 " }}}
 
 call s:plug.begin()
+  " If you need Vim help for vim-plug itself (e.g. :help plug-options), register vim-plug as a plugin.
+  Plug 'junegunn/vim-plug'
+
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
   function! s:plug.after.vim__lsp()
@@ -241,6 +252,48 @@ call s:plug.begin()
           \   }
           \ }
   " endfunction }}}
+
+  " {{{ junegunn/fzf
+  let g:fzf_layout = { 'window': {
+        \ 'width': 0.6,
+        \ 'height': 0.6,
+        \ 'border': 'ascii'
+        \ } }
+
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
+
+  function! s:plug.after.junegunn__fzf__vim()
+    let g:fzf_command_prefix = 'Fzf'
+    nnoremap <Leader>f  :<C-u>FzfFiles<CR>
+    nnoremap <Leader>c  :<C-u>FzfCommands<CR>
+    nnoremap <Leader>w  :<C-u>FzfWindows<CR>
+    nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
+    nnoremap <Leader>i  :<C-u>FzfHistory<CR>
+    nnoremap q:         :<C-u>FzfHistory :<CR>
+    nnoremap q/         :<C-u>FzfHistory /<CR>
+
+    function! s:format_buffer(b)
+      let l:name = bufname(a:b)
+      return printf("%s\t%s", a:b, empty(l:name) ? '[No Name]' : fnamemodify(l:name, ":p:~:."))
+    endfunction
+
+    function! s:wipeout_buffers()
+      return fzf#run(fzf#wrap({
+      \ 'source':  map(
+      \   filter(
+      \     range(1, bufnr('$')),
+      \     {_, nr -> buflisted(nr) && getbufvar(nr, "&filetype") != "qf" && !getbufvar(nr, "&modified")}
+      \   ),
+      \   {_, nr -> s:format_buffer(nr)}
+      \ ),
+      \ 'sink*': {lines -> execute('bwipeout '.join(map(lines, {_, line -> split(line)[0]})), '')},
+      \ 'options': ['-m', '--tiebreak=index', '--ansi', '-d', '\t', '--prompt', 'Wipeout> ']
+      \}))
+    endfunction
+    nnoremap <silent> <Leader>bw :<C-u>call <SID>wipeout_buffers()<CR>
+  endfunction
+  " }}}
 
   Plug 'itchyny/lightline.vim'
   function! s:plug.after.itchyny__lightline__vim() "
@@ -572,18 +625,6 @@ call s:plug.begin()
     silent! nmap <unique><silent> scb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
   endfunction
 
-  Plug 'po3rin/vim-gofmtmd'
-  Plug 'AndrewRadev/linediff.vim'
-  Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
-  Plug 'bps/vim-textobj-python'
-  Plug 'briancollins/vim-jst', {'for': 'jst'}
-  Plug 'cespare/vim-toml', {'for': 'toml'}
-  Plug 'dhruvasagar/vim-table-mode'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'iberianpig/tig-explorer.vim'
-  Plug 'jez/vim-github-hub', {'for': 'ghhub'}
-  " Plug 'justinmk/vim-dirvish'
-  " Plug 'kristijanhusak/vim-dirvish-git'
   Plug 'lambdalisue/fern.vim'
   function! s:hijack_directory() abort
     let l:target=expand('%')
@@ -615,6 +656,43 @@ call s:plug.begin()
 
     nnoremap - :<C-u>Fern %:h<CR>
   endfunction
+
+  " My Plugins {{{
+  " {{{ kyoh86/vim-gogh
+  Plug 'kyoh86/vim-gogh', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-gogh'}
+  function! s:plug.after.kyoh86__vim__gogh()
+    nmap <Leader>ge <Plug>(gogh-edit-project)
+    nmap <Leader>gp <Plug>(gogh-switch-project)
+    nmap <Leader>gg <Plug>(gogh-get-repository)
+    call gogh#ui#fzf#use()
+  " }}}
+  endfunction
+  " {{{ kyoh86/vim-docbase
+  Plug 'kyoh86/vim-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-docbase'}
+  Plug 'kyoh86/vim-metarw-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-metarw-docbase'}
+  function! s:plug.after.kyoh86__vim__docbase()
+    call metarw#define_wrapper_commands(v:true)
+  endfunction
+  " }}}
+  Plug 'kyoh86/vim-wipeout', {'on': 'Wipeout', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-wipeout'}
+  Plug 'kyoh86/vim-editerm', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-editerm'}
+  Plug 'kyoh86/momiji', {'rtp': 'vim', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/momiji'}
+  " }}}
+
+if executable('direnv')
+  Plug 'direnv/direnv.vim'
+endif
+
+  Plug 'po3rin/vim-gofmtmd'
+  Plug 'AndrewRadev/linediff.vim'
+  Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
+  Plug 'bps/vim-textobj-python'
+  Plug 'briancollins/vim-jst', {'for': 'jst'}
+  Plug 'cespare/vim-toml', {'for': 'toml'}
+  Plug 'dhruvasagar/vim-table-mode'
+  Plug 'airblade/vim-gitgutter'
+  Plug 'iberianpig/tig-explorer.vim'
+  Plug 'jez/vim-github-hub', {'for': 'ghhub'}
   Plug 'kana/vim-metarw'
   Plug 'kana/vim-operator-user'
   Plug 'kana/vim-textobj-entire'
@@ -637,124 +715,21 @@ call s:plug.begin()
   Plug 'vim-jp/vimdoc-ja'
   Plug 'vim-jp/vital.vim', {'on': 'Vitalize'}
   Plug 'vim-scripts/sudo.vim'
+  Plug 'z0mbix/vim-shfmt'
 
-if executable('direnv')
-  Plug 'direnv/direnv.vim'
-endif
-
-  " My Plugins {{{
-  " {{{ kyoh86/vim-gogh
-  Plug 'kyoh86/vim-gogh', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-gogh'}
-  function! s:plug.after.kyoh86__vim__gogh()
-    nmap <Leader>ge <Plug>(gogh-edit-project)
-    nmap <Leader>gp <Plug>(gogh-switch-project)
-    nmap <Leader>gg <Plug>(gogh-get-repository)
-    call gogh#ui#fzf#use()
-  " }}}
-  endfunction
-  " {{{ kyoh86/vim-docbase
-  Plug 'kyoh86/vim-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-docbase'}
-  Plug 'kyoh86/vim-metarw-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-metarw-docbase'}
-  function! s:plug.after.kyoh86__vim__docbase()
-    call metarw#define_wrapper_commands(v:true)
-  endfunction
-  " }}}
-  " {{{ junegunn/fzf
-  let g:fzf_layout = { 'window': {
-        \ 'width': 0.6,
-        \ 'height': 0.6,
-        \ 'border': 'ascii'
-        \ } }
-
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  Plug 'junegunn/fzf.vim'
-
-  function! s:plug.after.junegunn__fzf__vim()
-    let g:fzf_command_prefix = 'Fzf'
-    nnoremap <Leader>f  :<C-u>FzfFiles<CR>
-    nnoremap <Leader>c  :<C-u>FzfCommands<CR>
-    nnoremap <Leader>w  :<C-u>FzfWindows<CR>
-    nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
-    nnoremap <Leader>i  :<C-u>FzfHistory<CR>
-    nnoremap q:         :<C-u>FzfHistory :<CR>
-    nnoremap q/         :<C-u>FzfHistory /<CR>
-
-    function! s:format_buffer(b)
-      let l:name = bufname(a:b)
-      return printf("%s\t%s", a:b, empty(l:name) ? '[No Name]' : fnamemodify(l:name, ":p:~:."))
-    endfunction
-
-    function! s:wipeout_buffers()
-      return fzf#run(fzf#wrap({
-      \ 'source':  map(
-      \   filter(
-      \     range(1, bufnr('$')),
-      \     {_, nr -> buflisted(nr) && getbufvar(nr, "&filetype") != "qf" && !getbufvar(nr, "&modified")}
-      \   ),
-      \   {_, nr -> s:format_buffer(nr)}
-      \ ),
-      \ 'sink*': {lines -> execute('bwipeout '.join(map(lines, {_, line -> split(line)[0]})), '')},
-      \ 'options': ['-m', '--tiebreak=index', '--ansi', '-d', '\t', '--prompt', 'Wipeout> ']
-      \}))
-    endfunction
-    nnoremap <silent> <Leader>bw :<C-u>call <SID>wipeout_buffers()<CR>
-  endfunction
-  " }}}
-  Plug 'kyoh86/vim-wipeout', {'on': 'Wipeout', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-wipeout'}
-  Plug 'kyoh86/vim-editerm', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-editerm'}
-  Plug 'kyoh86/momiji', {'rtp': 'vim', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/momiji'}
-  " }}}
 call s:plug.end()
-
-" Auto-install plugins {{{
-let s:plug.plugs =  get(g:, 'plugs', {})
-
-function! s:plug.is_installed(name)
-  return has_key(l:self.plugs, a:name) ? isdirectory(l:self.plugs[a:name].dir) : 0
-endfunction
-
-function! s:plug.check_installation()
-  if empty(l:self.plugs)
-    return
-  endif
-  let l:list = []
-  for [l:name, l:spec] in items(l:self.plugs)
-    if !isdirectory(l:spec.dir)
-      if has_key(l:spec, 'uri')
-        call add(l:list, l:spec.uri)
-      endif
-    endif
-  endfor
-  if len(l:list) > 0
-    let l:unplugged = map(l:list, 'substitute(v:val, "^.*github\.com/\\(.*/.*\\)\.git$", "\\1", "g")')
-    " Ask whether installing plugs like NeoBundle
-    echomsg 'Not installed plugs: ' . string(l:unplugged)
-    if confirm('Install plugs now?', "yes\nNo", 2) == 1
-      PlugInstall
-      echo 'Pleaze restart vim'
-    endif
-  endif
-endfunction
-
-augroup CheckPlug
-  autocmd!
-  autocmd VimEnter * if !argc() | call s:plug.check_installation() | endif
-augroup END
-" }}}
-
 " }}}
 
 " Functions {{{
 " Function: Edit Configurations {{{
 let g:config_home = g:xdg_config_home . '/vim'
-let g:vimrc_file = g:config_home . '/vimrc'
 let g:alacritty_file = g:xdg_config_home . '/alacritty/alacritty.yml'
 let g:zshrc_file = g:xdg_config_home . '/zsh/.zshrc'
 let g:zshenv_file = g:xdg_config_home . '/zsh/.zshenv'
 " if exists('fzf#run')
   command! -nargs=0 Config call fzf#run(fzf#wrap({'source': [
       \ g:xdg_config_home,
-      \ g:vimrc_file, 
+      \ $MYVIMRC, 
       \ g:alacritty_file, 
       \ g:zshrc_file,
       \ g:zshenv_file
@@ -766,11 +741,35 @@ let g:zshenv_file = g:xdg_config_home . '/zsh/.zshenv'
 "     else
 "       let l:command = a:mods + ' split'
 "     endif
-"     execute l:command . a:bang . ' ' . g:vimrc_file
+"     execute l:command . a:bang . ' ' . $MYVIMRC
 "   endfunction
 "   command! -bang -nargs=0 Config :call Config('<bang>', '<mods>')
 " endif
+"
 " }}}
+
+function! s:add_plug(name) abort
+  let l:cur_file = expand('%:p')
+  if l:cur_file != $MYVIMRC
+    execute ':edit ' . escape($MYVIMRC, ' ')
+  endif
+  if expand('%:p') != $MYVIMRC
+    return
+  endif
+  if &readonly == v:true
+    if l:cur_file != $MYVIMRC
+      execute ':bw'
+    endif
+    return
+  endif
+  execute ':%s/\n\(\n*call s:plug\.end()\)$/\r  Plug ' . "'" . escape(a:name, '/') . "'" . '\r\1/'
+  execute ':w'
+  if l:cur_file != $MYVIMRC
+    execute ':bw'
+  endif
+  source $MYVIMRC
+endfunction
+command! -nargs=1 AddPlug call <SID>add_plug('<args>')
 
 " Function: Switch Branch {{{
 function! s:git_switch(line)
