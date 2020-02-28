@@ -473,6 +473,9 @@ call s:plug.begin()
     endfunction
     function! s:getGitStatus(path)
       let l:info = {}
+      " TODO: see
+      " https://git-scm.com/docs/git-status#_porcelain_format_version_2 and
+      " use porcelain v2
       let l:res = system("git -C '" . a:path . "' status --porcelain --branch --untracked-files --ahead-behind --renames")
       if l:res[0:6] ==# 'fatal: '
         return l:info
@@ -771,10 +774,18 @@ function! s:add_plug(name) abort
 endfunction
 command! -nargs=1 AddPlug call <SID>add_plug('<args>')
 
+function! s:update_all() abort
+  execute 'terminal ' . &shell . ' -c "source ' . $ZDOTDIR . '/.zshrc && update"'
+  PlugUpgrade
+  PlugUpdate
+endfunction
+command! UpdateAll call <SID>update_all()
+
 " Function: Switch Branch {{{
 function! s:git_switch(line)
   let l:branch = get(split(a:line), 1, '')
   exec '!git switch '.l:branch
+  call lightline#update()
 endfunction
 
 command! SwitchBranch call fzf#run(fzf#wrap({

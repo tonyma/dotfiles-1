@@ -393,31 +393,36 @@ update() {
     update-yarn
     update-yay
     update-brew
+    echo done
   fi
 }
 
 # update pip {{{
 function update-pip {
   echo updating pip
-  cd ~
+  pushd ~
   if command -v pyenv >/dev/null 2>&1 ; then
     eval "$(pyenv init -)"
     pyenv versions --bare | while read version; do
-    pyenv shell ${version}
-    unset PIP_REQUIRE_VIRTUALENV
-    pyenv exec pip install -U -r ~/.config/pyenv/default-packages
+      pyenv shell ${version}
+      unset PIP_REQUIRE_VIRTUALENV
+      pyenv exec pip install -U -r ~/.config/pyenv/default-packages
     done
   elif command -v pip > /dev/null 2>&1 ; then
     unset PIP_REQUIRE_VIRTUALENV
     pip install --user -U -r ~/.config/pyenv/default-packages
   fi
+  popd
 }
 # }}}
 
 # update go/bin {{{
 function update-go {
+  # ローカルで開発作業してるときはgo/binに色々ノイズが乗りがちなので、
+  # Make cleanが定義されてたら呼び出す
+  make clean || :
   echo updating go
-  cd ~
+  pushd ~
   local bin="\"$(go env GOPATH)/bin/\""
   local fmt="\"%.$((${#$(go env GOPATH)}+5))s\""
   fmt="$(
@@ -442,14 +447,16 @@ function update-go {
       fi
     done
   done
+  popd
 }
 # }}}
 
 # update yarn global {{{
 function update-yarn {
   echo updating yarn
-  cd ~
+  pushd ~
   yarn global upgrade --latest
+  popd
 }
 alias update-js=update-yarn
 alias update-npm=update-yarn
@@ -458,20 +465,22 @@ alias update-npm=update-yarn
 # update brew {{{
 function update-brew {
   echo updating brew
-  cd ~
+  pushd ~
   if command -v brew >/dev/null 2>&1 ; then
     brew upgrade
   fi
+  popd
 }
 # }}}
 
 # update pacman {{{
 function update-yay {
   echo updating yay
-  cd ~
+  pushd ~
   if command -v pacman >/dev/null 2>&1 ; then
     yay -Syyu
   fi
+  popd
 }
 # }}}
 # }}}

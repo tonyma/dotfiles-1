@@ -13,13 +13,6 @@ else
   echo no brew >&2
 fi
 
-# dump gogh
-if [ -x /usr/local/bin/gogh ]; then
-  /usr/local/bin/gogh dump --public kyoh86 > ${HOME}/.config/gogh/dump.txt || error="1"
-else
-  echo no gogh >&2
-fi
-
 # dump pacman
 if [ -x /usr/bin/pacman ]; then
   /usr/bin/pacman -Qe > ${HOME}/.config/pacman/dump.txt || error="1"

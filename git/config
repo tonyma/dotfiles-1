@@ -62,6 +62,7 @@
 	verbose = true
 [rebase]
 	autosquash = true
+	autostash = true
 [github]
 	user = kyoh86
 [ghi]
