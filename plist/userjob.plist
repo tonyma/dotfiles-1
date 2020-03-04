@@ -19,7 +19,7 @@
   <key>StandardErrorPath</key>
     <string>/usr/local/var/userjob-err.log</string>
   <key>StandardOutPath</key>
-    <string>/usr/local/var/userjob-log.log</string>
+    <string>/usr/local/var/userjob-out.log</string>
   <key>UserName</key>
     <string>kyoh86</string>
 </dict>

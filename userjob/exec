@@ -1,6 +1,16 @@
 #!/bin/zsh
 
-[ -f /usr/local/var/userjob-log.log ] && rm -f /usr/local/var/userjob-log.log
+STDOUT_FILE=/usr/local/var/userjob-out.log
+STDERR_FILE=/usr/local/var/userjob-err.log
+if [ -f "${STDOUT_FILE}" && -x /usr/local/bin/truncate ]; then
+  /usr/local/bin/truncate "${STDOUT_FILE}"
+fi
+if [ -f "${STDERR_FILE}" ]; then
+  error_offset=$(( $(wc -l "${STDERR_FILE}" | awk '{print $1}') + 1 ))
+else
+  error_offset=$(( 0 ))
+fi
+
 [ -f /etc/zshenv ] && source /etc/zshenv
 source ${HOME}/.config/zsh/.zshenv
 
@@ -8,36 +18,32 @@ error=""
 
 # Bundle brew:
 if [ -x /usr/local/bin/brew ]; then
-  PATH=/usr/local/bin:${PATH} /usr/local/bin/brew bundle dump --force --file=${HOME}/.config/homebrew/bundle --describe || error="1"
+  PATH="/usr/local/bin/:${PATH}" /usr/local/bin/brew bundle dump --force --file=${HOME}/.config/homebrew/bundle --describe || error="1"
 else
-  echo no brew >&2
+  echo no brew
 fi
 
 # dump pacman
 if [ -x /usr/bin/pacman ]; then
   /usr/bin/pacman -Qe > ${HOME}/.config/pacman/dump.txt || error="1"
 else
-  echo no pacman >&2
+  echo no pacman
 fi
 
 if [[ -n ${error} ]]; then
   if command -v osascript >/dev/null 2>&1 ; then
+    message="$(tail -n +${error_offset} "${STDERR_FILE}" | tr -d "'" | perl -pe 's/[\r\n]/\\\\n/g')"
     echo "var app = Application('System Events');
   app.includeStandardAdditions = true;
-  var reply = app.displayDialog('Failed to process scheduled task', {
-    'withTitle': 'User Job',
-    'withIcon':'caution',
+  var reply = app.displayAlert('Failed to process scheduled task', {
+    'message': '${message}',
+    'as':'warning',
 
     'givingUpAfter': 15,
 
     'defaultButton': 'OK',
-    'buttons': ['Details', 'OK']
+    'buttons': ['OK']
   });
-
-  if (reply.buttonReturned === 'Details') {
-    var textEdit = Application('TextEdit');
-    textEdit.open('/usr/local/var/userjob-err.log');
-  }
   " \
       | osascript -l JavaScript -
   fi
