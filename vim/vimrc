@@ -703,6 +703,12 @@ endif
   Plug 'previm/previm'
   Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
   Plug 'machakann/vim-swap'
+  function! s:plug.after.machakann__vim__swap()
+    omap i, <Plug>(swap-textobject-i)
+    xmap i, <Plug>(swap-textobject-i)
+    omap a, <Plug>(swap-textobject-a)
+    xmap a, <Plug>(swap-textobject-a)
+  endfunction
   Plug 'pangloss/vim-javascript', {'for': 'javascript'}
   Plug 'posva/vim-vue'
   Plug 'robertbasic/vim-hugo-helper'
