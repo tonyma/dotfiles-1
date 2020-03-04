@@ -8,7 +8,7 @@ error=""
 
 # Bundle brew:
 if [ -x /usr/local/bin/brew ]; then
-  /usr/local/bin/brew bundle dump --force --file=${HOME}/.config/homebrew/bundle --describe || error="1"
+  PATH=/usr/local/bin:${PATH} /usr/local/bin/brew bundle dump --force --file=${HOME}/.config/homebrew/bundle --describe || error="1"
 else
   echo no brew >&2
 fi
