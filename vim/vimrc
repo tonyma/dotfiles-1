@@ -73,7 +73,7 @@ let $PYENV_ROOT=$HOME.'/.pyenv'
 let $PATH=$PYENV_ROOT.'/bin:'.$PYENV_ROOT.'/shims:'.$PATH
 
 " Node:
-let $PATH=$PATH.':'.$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin'
+let $PATH=$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin:'.$PATH
 
 " GNU commands:
 let $PATH='/usr/local/opt/gzip/bin:'.$PATH
