@@ -788,6 +788,13 @@ function! s:update_all() abort
 endfunction
 command! UpdateAll call <SID>update_all()
 
+function! s:grep_todo() abort
+  execute "grep! 'TODO\\|UNDONE\\|HACK\\|FIXME'"
+endfunction
+command! Todo call <SID>grep_todo()
+command! ToDo call <SID>grep_todo()
+command! TODO call <SID>grep_todo()
+
 " Function: Switch Branch {{{
 function! s:git_switch(line)
   let l:branch = get(split(a:line), 1, '')
