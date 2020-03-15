@@ -48,6 +48,9 @@ let $PATH='.:' .
 " Zsh:
 let $ZDOTDIR=$HOME.'/.config/zsh'
 
+" Gordon:
+let $PATH=$PATH.':'.$HOME.'/Project/bin'
+
 " Go:
 let $GOPATH=$HOME.'/go'
 let $PATH=$PATH.':/usr/local/go/bin:'.$HOME.'/go/bin'
@@ -96,9 +99,6 @@ let $PATH=$PATH.':'.$HOME.'/perl5/bin'
 
 " Gigamoji:
 let $GIGAMOJI_BG=':space:'
-
-" Gordon:
-let $PATH=$PATH.':'.$HOME.'/Project/bin'
 
 " dotfiles自体
 let $DOTFILES=$HOME.'/.config'
