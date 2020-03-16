@@ -930,6 +930,7 @@ set hlsearch
 set incsearch
 set t_RV=
 highlight Pmenu ctermfg=159 ctermbg=17
+language messages en_US.UTF-8
 " }}}
 
 " Setup Keymaps (for regular functions) {{{
