@@ -18,6 +18,10 @@
 .rgignore
 ### end of Ripgrep ###
 
+### Nodenv ###
+.node-version
+### end of Nodenv ###
+
 # Created by https://www.gitignore.io
 
 ### OSX ###

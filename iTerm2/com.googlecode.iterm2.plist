@@ -435,9 +435,9 @@
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>650 498 620 392 0 0 1920 1057 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>960 0 955 1057 0 0 1920 1057 </string>
-	<key>NSWindow Frame iTerm Window 1</key>
 	<string>0 0 1920 1057 0 0 1920 1057 </string>
+	<key>NSWindow Frame iTerm Window 1</key>
+	<string>1 5 1438 866 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
 	<string>0 666 570 376 0 0 1920 1057 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
@@ -1957,7 +1957,7 @@
 	<key>NoSyncLastTipTime</key>
 	<real>595994868.03891695</real>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>232</integer>
+	<integer>236</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -2735,12 +2735,14 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-03-05T01:40:21Z</date>
+	<date>2020-03-08T08:38:54Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateGroupIdentifier</key>
 	<integer>2675720562</integer>
 	<key>SUUpdateRelaunchingMarker</key>
+	<false/>
+	<key>ShowFullScreenTabBar</key>
 	<false/>
 	<key>ShowNewOutputIndicator</key>
 	<true/>

@@ -70,6 +70,8 @@ brew "gnu-sed"
 brew "gnu-tar"
 # Embed files into a Go executable
 brew "go-statik"
+# Generic library support script
+brew "libtool"
 # Graph visualization software from AT&T and Bell Labs
 brew "graphviz"
 # GNU grep, egrep and fgrep
@@ -86,8 +88,6 @@ brew "hugo"
 brew "influxdb"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
-# Generic library support script
-brew "libtool"
 # Mac App Store command-line interface
 brew "mas"
 # Yet another part-of-speech and morphological analyzer

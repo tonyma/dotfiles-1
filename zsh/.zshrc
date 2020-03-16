@@ -81,7 +81,6 @@ fi
 
 # その他の設定 {{{
 setopt extended_glob
-tabs 4
 
 stty eof ''
 # }}}
