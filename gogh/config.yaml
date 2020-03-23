@@ -1,4 +1,4 @@
 githubUser: kyoh86
 roots:
-  - /Users/kyoh86/Projects
+  - ~/Projects
   - ~/go/src

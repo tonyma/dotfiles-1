@@ -49,7 +49,7 @@ let $PATH='.:' .
 let $ZDOTDIR=$HOME.'/.config/zsh'
 
 " Gordon:
-let $PATH=$PATH.':'.$HOME.'/Project/bin'
+let $PATH=$PATH.':'.$HOME.'/Projects/bin'
 
 " Go:
 let $GOPATH=$HOME.'/go'
