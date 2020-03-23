@@ -1,5 +1,4 @@
-root:
-  - ~/Projects
+githubUser: kyoh86
+roots:
+  - /Users/kyoh86/Projects
   - ~/go/src
-github:
-    user: kyoh86
