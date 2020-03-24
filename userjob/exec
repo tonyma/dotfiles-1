@@ -2,8 +2,8 @@
 
 STDOUT_FILE=/usr/local/var/userjob-out.log
 STDERR_FILE=/usr/local/var/userjob-err.log
-if [ -f "${STDOUT_FILE}" && -x /usr/local/bin/truncate ]; then
-  /usr/local/bin/truncate "${STDOUT_FILE}"
+if [[ -f "${STDOUT_FILE}" && -x /usr/local/bin/truncate ]]; then
+  /usr/local/bin/truncate --size 0 "${STDOUT_FILE}"
 fi
 if [ -f "${STDERR_FILE}" ]; then
   error_offset=$(( $(wc -l "${STDERR_FILE}" | awk '{print $1}') + 1 ))
