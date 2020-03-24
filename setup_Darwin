@@ -1,4 +1,5 @@
 # homebrew用に/usr/local/optの所有者を個人に設定
+sudo mkdir -p /usr/local/opt
 sudo chown -R ${USER} /usr/local/opt
 # userjob を配置
 sudo mkdir -p /usr/local/opt/userjob
