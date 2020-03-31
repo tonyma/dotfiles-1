@@ -780,6 +780,7 @@ function! s:add_plug(name) abort
   source $MYVIMRC
 endfunction
 command! -nargs=1 AddPlug call <SID>add_plug('<args>')
+command! -nargs=1 PlugAdd call <SID>add_plug('<args>')
 
 function! s:update_all() abort
   execute 'terminal ' . &shell . ' -c "source ' . $ZDOTDIR . '/.zshrc && update"'
