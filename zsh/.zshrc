@@ -411,6 +411,7 @@ function update-pip {
     pyenv versions --bare | while read version; do
       pyenv shell ${version}
       unset PIP_REQUIRE_VIRTUALENV
+      pyenv exec pip install --upgrade pip
       pyenv exec pip install -U -r ~/.config/pyenv/default-packages
     done
   elif command -v pip > /dev/null 2>&1 ; then

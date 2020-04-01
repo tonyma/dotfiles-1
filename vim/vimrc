@@ -256,8 +256,8 @@ call s:plug.begin()
 
   " {{{ junegunn/fzf
   let g:fzf_layout = { 'window': {
-        \ 'width': 0.6,
-        \ 'height': 0.6,
+        \ 'width': 0.8,
+        \ 'height': 0.8,
         \ 'border': 'ascii'
         \ } }
 
