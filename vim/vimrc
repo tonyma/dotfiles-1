@@ -748,6 +748,10 @@ endif
   Plug 'vim-jp/vital.vim', {'on': 'Vitalize'}
   Plug 'vim-scripts/sudo.vim'
   Plug 'z0mbix/vim-shfmt'
+  Plug 'kana/vim-operator-replace'
+  function!s:plug.after.kana__vim__operator__replace()
+    map _  <Plug>(operator-replace)
+  endfunction
 
 call s:plug.end()
 " }}}
