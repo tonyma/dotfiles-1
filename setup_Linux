@@ -9,12 +9,11 @@ if command -v gsettings > /dev/null 2>&1 ; then
 fi
 
 yarn global add \
-          typescript-language-server \
-          vim-language-server \
           markdownlint \
           yo \
           generator-go-project
 
+cat "${DOTFILES}/pyenv/default-packages" | xargs pip install -U --user
 GO111MODULE=on go get golang.org/x/tools/gopls@latest
 go get github.com/mattn/efm-langserver
 

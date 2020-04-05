@@ -34,7 +34,7 @@ let $TERM='xterm-256color'
 
 " Path環境変数の設定:
 
-let $PATH='.:' .
+let $PATH=
       \ $HOME . '/.local/bin:'  .
       \ $HOME . '/.local/sbin:' .
       \ '/usr/local/bin:'       .
@@ -47,9 +47,6 @@ let $PATH='.:' .
 
 " Zsh:
 let $ZDOTDIR=$HOME.'/.config/zsh'
-
-" Gordon:
-let $PATH=$PATH.':'.$HOME.'/Projects/bin'
 
 " Go:
 let $GOPATH=$HOME.'/go'
@@ -97,6 +94,9 @@ let $PATH=$PATH.':'.$HOME.'/.yarn/bin'
 " Perl:
 let $PATH=$PATH.':'.$HOME.'/perl5/bin'
 
+" Git:
+let $PATH=$PATH.':'.'/usr/local/share/git-core/contrib/diff-highlight'
+
 " Gigamoji:
 let $GIGAMOJI_BG=':space:'
 
@@ -106,6 +106,20 @@ let $DOTS=$DOTFILES
 
 silent! ru ./secret.vim
 
+function! s:uniquify_paths()
+  let l:list = split($PATH, ':')
+  let l:dict = {}
+  let l:uniq = []
+  for l:path in l:list
+    if has_key(l:dict, l:path)
+      continue
+    endif
+    let l:dict[l:path] = v:true
+    let l:uniq = add(l:uniq, l:path)
+  endfor
+  let $PATH=join(l:uniq, ':')
+endfunction
+call s:uniquify_paths()
 " }}}
 
 " Setup XDG Home directory paths. {{{
@@ -174,7 +188,7 @@ call s:plug.begin()
   Plug 'prabirshrestha/vim-lsp'
   function! s:plug.after.vim__lsp()
     let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-    let g:lsp_diagnostics_float_cursor = 1
+    " let g:lsp_diagnostics_float_cursor = 1
 
     " 保存時に自動でフォーマット {{{
 
@@ -223,36 +237,44 @@ call s:plug.begin()
   endfunction
 
   Plug 'mattn/vim-lsp-settings'
-  " {{{ function! s:plug.after.mattn__vim__lsp__settings()
-    " for python
-    let g:lsp_settings = {}
-    let g:lsp_settings['pyls'] =
-          \ {
-          \   'workspace_config': {'pyls': {
-          \     'configurationSources': ['flake8'],
-          \     'plugins': {
-          \       'black': {'enabled': v:true},
-          \       'pycodestyle': {'enabled': v:false},
-          \       'pyls_mypy': {'enabled': v:true, 'live_mode': v:false},
-          \     }
-          \   }}
-          \ }
-    " for linters
-    let g:lsp_settings['efm-langserver'] = 
-          \ {
-          \   'disabled': v:false
-          \ }
-    " for viml
-    let g:lsp_settings['vim-language-server'] = 
-          \ {
-          \   'workspace_config': {
-          \     "iskeyword": "vim iskeyword option",
-          \     "diagnostic": {
-          \       "enable": v:true
-          \     }
-          \   }
-          \ }
-  " endfunction }}}
+  augroup vim_lsp_golangci_lint_langserver
+    au!
+    autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'golangci-lint-langserver',
+        \ 'cmd': {server_info->['golangci-lint-langserver']},
+        \ 'initialization_options': {'command': ['golangci-lint', 'run', '--out-format', 'json']},
+        \ 'whitelist': ['go'],
+        \ })
+  augroup END
+
+  " for python
+  let g:lsp_settings = {}
+  let g:lsp_settings['pyls'] =
+        \ {
+        \   'workspace_config': {'pyls': {
+        \     'configurationSources': ['flake8'],
+        \     'plugins': {
+        \       'black': {'enabled': v:true},
+        \       'pycodestyle': {'enabled': v:false},
+        \       'pyls_mypy': {'enabled': v:true, 'live_mode': v:false},
+        \     }
+        \   }}
+        \ }
+  " for linters
+  let g:lsp_settings['efm-langserver'] = 
+        \ {
+        \   'disabled': v:false
+        \ }
+  " for viml
+  let g:lsp_settings['vim-language-server'] = 
+        \ {
+        \   'workspace_config': {
+        \     "iskeyword": "vim iskeyword option",
+        \     "diagnostic": {
+        \       "enable": v:true
+        \     }
+        \   }
+        \ }
 
   " {{{ junegunn/fzf
   let g:fzf_layout = { 'window': {

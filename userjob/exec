@@ -23,6 +23,13 @@ else
   echo no brew
 fi
 
+# Bundle gordon:
+if command -v gordon >/dev/null 2>&1 ; then
+  gordon dump ${HOME}/.config/gordon/bundle || error="1"
+else
+  echo no gordon
+fi
+
 # dump pacman
 if [ -x /usr/bin/pacman ]; then
   /usr/bin/pacman -Qe > ${HOME}/.config/pacman/dump.txt || error="1"

@@ -4,9 +4,6 @@
 # pyenv shell x.x.x された状態と同等になってしまうのを回避する
 unset PYENV_VERSION
 
-## git
-export PATH=$PATH:/usr/local/share/git-core/contrib/diff-highlight
-
 ## zsh
 export SHELL="zsh"
 
