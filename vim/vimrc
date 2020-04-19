@@ -298,22 +298,47 @@ call s:plug.begin()
 
     function! s:format_buffer(b)
       let l:name = bufname(a:b)
-      return printf("%s\t%s", a:b, empty(l:name) ? '[No Name]' : fnamemodify(l:name, ":p:~:."))
+      let l:name = empty(l:name) ? '[No Name]' : fnamemodify(l:name, ":p:~:.")
+      let l:flag = a:b == bufnr('')  ? '%' :
+              \ (a:b == bufnr('#') ? '#' : ' ')
+      let l:modified = getbufvar(a:b, '&modified') ? ' [+]' : ''
+      let l:readonly = getbufvar(a:b, '&modifiable') ? '' : ' [RO]'
+      let l:extra = join(filter([l:modified, l:readonly], '!empty(v:val)'), '')
+      return substitute(printf("[%s] %s\t%s\t%s", a:b, l:flag, l:name, l:extra), '^\s*\|\s*$', '', 'g')
     endfunction
 
     function! s:wipeout_buffers()
+      let l:preview_window = get(g:, 'fzf_preview_window', &columns >= 120 ? 'right': '')
+      let l:preview_opt = {}
+      if len(l:preview_window)
+        let l:preview_opt = fzf#vim#with_preview(
+              \   {"placeholder": "{2}"},
+              \   l:preview_window
+              \ )
+      endif
+
       return fzf#run(fzf#wrap({
       \ 'source':  map(
       \   filter(
       \     range(1, bufnr('$')),
-      \     {_, nr -> buflisted(nr) && getbufvar(nr, "&filetype") != "qf" && !getbufvar(nr, "&modified")}
+      \     {_, nr -> buflisted(nr) && !getbufvar(nr, "&modified")}
       \   ),
       \   {_, nr -> s:format_buffer(nr)}
       \ ),
-      \ 'sink*': {lines -> execute('bwipeout '.join(map(lines, {_, line -> split(line)[0]})), '')},
-      \ 'options': ['-m', '--tiebreak=index', '--ansi', '-d', '\t', '--prompt', 'Wipeout> ']
+      \ 'sink*': {
+      \   lines -> execute('bwipeout ' . join(map(lines, {
+      \     _, line -> substitute(split(line)[0], '^\[\|\]$', '', 'g')
+      \   })), 'silent!')
+      \ },
+      \ 'options': extend([
+      \   '-m',
+      \   '--tiebreak=index',
+      \   '-d', '\t',
+      \   '--prompt', 'Wipeout> '
+      \ ], l:preview_opt['options']),
       \}))
     endfunction
+    command! FzfWipeoutBuffers call <SID>wipeout_buffers()
     nnoremap <silent> <Leader>bw :<C-u>call <SID>wipeout_buffers()<CR>
   endfunction
   " }}}
