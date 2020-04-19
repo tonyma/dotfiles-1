@@ -1000,7 +1000,7 @@ augroup TermMap
   "   * q によるmacro記録を禁止する
   autocmd! TerminalOpen *
       \ nnoremap <buffer> <C-\><C-n> i|
-      \ nnoremap <buffer> q <Nop>|
+      \ nnoremap <buffer> q <Nop>
 augroup END
 
 nnoremap <silent> tt :<C-u>terminal++curwin ++noclose <CR>
@@ -1028,7 +1028,7 @@ augroup TermSetting
   "   * 行番号を表示しない
   "   * wrapする（と、なぜかWrapしなくなる）
   autocmd! TerminalWinOpen *
-      \ setlocal nonumber wrap
+      \ setlocal nonumber nowrap
 augroup END
 " }}}
 
