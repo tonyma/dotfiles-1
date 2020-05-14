@@ -192,11 +192,11 @@ call s:plug.begin()
   Plug 'kyoh86/momiji', {'rtp': 'vim', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/momiji'}
 
   " {{{ junegunn/fzf
-  let g:fzf_layout = { 'window': {
-        \ 'width': 0.8,
-        \ 'height': 0.8,
-        \ 'border': 'ascii'
-        \ } }
+  " let g:fzf_layout = { 'window': {
+  "       \ 'width': 0.8,
+  "       \ 'height': 0.8,
+  "       \ 'border': 'ascii'
+  "       \ } }
 
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
