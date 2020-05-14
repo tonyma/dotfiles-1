@@ -1,3 +1,8 @@
+" Vim Debug {{{
+" set verbose=20
+" set verbosefile=$HOME/.local/share/vim/verbose
+" }}}
+
 " Setup encodings {{{
 set encoding=utf-8
 scriptencoding utf-8
@@ -705,7 +710,7 @@ call s:plug.begin()
       " autocmd FileType fern call s:init_fern()
     augroup END
 
-    nnoremap - :<C-u>Fern %:h<CR>
+    nnoremap <BS> :<C-u>Fern %:h<CR>
   endfunction
 
   " My Plugins {{{
@@ -716,8 +721,9 @@ call s:plug.begin()
     nmap <Leader>gp <Plug>(gogh-switch-project)
     nmap <Leader>gg <Plug>(gogh-get-repository)
     call gogh#ui#fzf#use()
-  " }}}
   endfunction
+  " }}}
+  "
   " {{{ kyoh86/vim-docbase
   Plug 'kyoh86/vim-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-docbase'}
   Plug 'kyoh86/vim-metarw-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-metarw-docbase'}
@@ -991,6 +997,9 @@ nnoremap <ESC><ESC> :<C-u>nohl<CR><ESC>
 
 " Quickfix
 nnoremap <Leader>q :<C-u>copen<CR><ESC>
+
+" コマンドウインドウとコマンドラインの相互切り替えをどっちもCtrl-Cでやる
+set cedit=<C-c>
 
 nnoremap Q <Nop>
 nnoremap gQ <Nop>
