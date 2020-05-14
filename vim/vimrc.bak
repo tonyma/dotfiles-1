@@ -189,76 +189,6 @@ call s:plug.begin()
   " If you need Vim help for vim-plug itself (e.g. :help plug-options), register vim-plug as a plugin.
   Plug 'junegunn/vim-plug'
 
-  Plug 'kyoh86/momiji', {'rtp': 'vim', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/momiji'}
-
-  " {{{ junegunn/fzf
-  let g:fzf_layout = { 'window': {
-        \ 'width': 0.8,
-        \ 'height': 0.8,
-        \ 'border': 'ascii'
-        \ } }
-
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  Plug 'junegunn/fzf.vim'
-
-  function! s:plug.after.junegunn__fzf__vim()
-    let g:fzf_command_prefix = 'Fzf'
-    nnoremap <Leader>f  :<C-u>FzfFiles<CR>
-    nnoremap <Leader>c  :<C-u>FzfCommands<CR>
-    nnoremap <Leader>w  :<C-u>FzfWindows<CR>
-    nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
-    nnoremap <Leader>i  :<C-u>FzfHistory<CR>
-    nnoremap q:         :<C-u>FzfHistory :<CR>
-    nnoremap q/         :<C-u>FzfHistory /<CR>
-
-    function! s:format_buffer(b)
-      let l:name = bufname(a:b)
-      let l:name = empty(l:name) ? '[No Name]' : fnamemodify(l:name, ":p:~:.")
-      let l:flag = a:b == bufnr('')  ? '%' :
-              \ (a:b == bufnr('#') ? '#' : ' ')
-      let l:modified = getbufvar(a:b, '&modified') ? ' [+]' : ''
-      let l:readonly = getbufvar(a:b, '&modifiable') ? '' : ' [RO]'
-      let l:extra = join(filter([l:modified, l:readonly], '!empty(v:val)'), '')
-      return substitute(printf("[%s] %s\t%s\t%s", a:b, l:flag, l:name, l:extra), '^\s*\|\s*$', '', 'g')
-    endfunction
-
-    function! s:wipeout_buffers()
-      let l:preview_window = get(g:, 'fzf_preview_window', &columns >= 120 ? 'right': '')
-      let l:preview_opt = {}
-      if len(l:preview_window)
-        let l:preview_opt = fzf#vim#with_preview(
-              \   {"placeholder": "{2}"},
-              \   l:preview_window
-              \ )
-      endif
-
-      return fzf#run(fzf#wrap({
-      \ 'source':  map(
-      \   filter(
-      \     range(1, bufnr('$')),
-      \     {_, nr -> buflisted(nr) && !getbufvar(nr, "&modified")}
-      \   ),
-      \   {_, nr -> s:format_buffer(nr)}
-      \ ),
-      \ 'sink*': {
-      \   lines -> execute('bwipeout ' . join(map(lines, {
-      \     _, line -> substitute(split(line)[0], '^\[\|\]$', '', 'g')
-      \   })), 'silent!')
-      \ },
-      \ 'options': extend([
-      \   '-m',
-      \   '--tiebreak=index',
-      \   '-d', '\t',
-      \   '--prompt', 'Wipeout> '
-      \ ], l:preview_opt['options']),
-      \}))
-    endfunction
-    command! FzfWipeoutBuffers call <SID>wipeout_buffers()
-    nnoremap <silent> <Leader>bw :<C-u>call <SID>wipeout_buffers()<CR>
-  endfunction
-  " }}}
-
-  " {{{ vim-lsp
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
   function! s:plug.after.vim__lsp()
@@ -350,9 +280,74 @@ call s:plug.begin()
         \     }
         \   }
         \ }
+
+  " {{{ junegunn/fzf
+  let g:fzf_layout = { 'window': {
+        \ 'width': 0.8,
+        \ 'height': 0.8,
+        \ 'border': 'ascii'
+        \ } }
+
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
+
+  function! s:plug.after.junegunn__fzf__vim()
+    let g:fzf_command_prefix = 'Fzf'
+    nnoremap <Leader>f  :<C-u>FzfFiles<CR>
+    nnoremap <Leader>c  :<C-u>FzfCommands<CR>
+    nnoremap <Leader>w  :<C-u>FzfWindows<CR>
+    nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
+    nnoremap <Leader>i  :<C-u>FzfHistory<CR>
+    nnoremap q:         :<C-u>FzfHistory :<CR>
+    nnoremap q/         :<C-u>FzfHistory /<CR>
+
+    function! s:format_buffer(b)
+      let l:name = bufname(a:b)
+      let l:name = empty(l:name) ? '[No Name]' : fnamemodify(l:name, ":p:~:.")
+      let l:flag = a:b == bufnr('')  ? '%' :
+              \ (a:b == bufnr('#') ? '#' : ' ')
+      let l:modified = getbufvar(a:b, '&modified') ? ' [+]' : ''
+      let l:readonly = getbufvar(a:b, '&modifiable') ? '' : ' [RO]'
+      let l:extra = join(filter([l:modified, l:readonly], '!empty(v:val)'), '')
+      return substitute(printf("[%s] %s\t%s\t%s", a:b, l:flag, l:name, l:extra), '^\s*\|\s*$', '', 'g')
+    endfunction
+
+    function! s:wipeout_buffers()
+      let l:preview_window = get(g:, 'fzf_preview_window', &columns >= 120 ? 'right': '')
+      let l:preview_opt = {}
+      if len(l:preview_window)
+        let l:preview_opt = fzf#vim#with_preview(
+              \   {"placeholder": "{2}"},
+              \   l:preview_window
+              \ )
+      endif
+
+      return fzf#run(fzf#wrap({
+      \ 'source':  map(
+      \   filter(
+      \     range(1, bufnr('$')),
+      \     {_, nr -> buflisted(nr) && !getbufvar(nr, "&modified")}
+      \   ),
+      \   {_, nr -> s:format_buffer(nr)}
+      \ ),
+      \ 'sink*': {
+      \   lines -> execute('bwipeout ' . join(map(lines, {
+      \     _, line -> substitute(split(line)[0], '^\[\|\]$', '', 'g')
+      \   })), 'silent!')
+      \ },
+      \ 'options': extend([
+      \   '-m',
+      \   '--tiebreak=index',
+      \   '-d', '\t',
+      \   '--prompt', 'Wipeout> '
+      \ ], l:preview_opt['options']),
+      \}))
+    endfunction
+    command! FzfWipeoutBuffers call <SID>wipeout_buffers()
+    nnoremap <silent> <Leader>bw :<C-u>call <SID>wipeout_buffers()<CR>
+  endfunction
   " }}}
 
-  " {{{ lightline
   Plug 'itchyny/lightline.vim'
   function! s:plug.after.itchyny__lightline__vim() "
     let g:lightline = {
@@ -609,8 +604,6 @@ call s:plug.begin()
     endfunction
   endfunction
 
-  " }}}
-
   Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
   function! s:plug.after.plasticboy__vim__markdown()
     let g:vim_markdown_folding_disabled = 1
@@ -740,11 +733,12 @@ call s:plug.begin()
   " }}}
   Plug 'kyoh86/vim-wipeout', {'on': 'Wipeout', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-wipeout'}
   Plug 'kyoh86/vim-editerm', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-editerm'}
+  Plug 'kyoh86/momiji', {'rtp': 'vim', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/momiji'}
   " }}}
 
-  if executable('direnv')
-    Plug 'direnv/direnv.vim'
-  endif
+if executable('direnv')
+  Plug 'direnv/direnv.vim'
+endif
 
   Plug 'po3rin/vim-gofmtmd'
   Plug 'AndrewRadev/linediff.vim'
