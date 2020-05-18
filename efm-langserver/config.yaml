@@ -1,19 +1,57 @@
-languages:
-  vim:
-    lint-command: vint -
-    lint-stdin: true
+version: 2
 
-  markdown:
-    lint-command: markdownlint -s
-    lint-stdin: true
-    lint-formats:
-      - '%f: %l: %m'
-  go:
-    lint-command: golangci-lint run
-    lint-stdin: false
+tools:
+  prettier: &prettier
+    format-command: './node_modules/.bin/prettier'
 
-  sh:
-    lint-command: shellcheck -f gcc -
+  html-prettier: &html-prettier
+    format-command: './node_modules/.bin/prettier --parser html'
+
+  css-prettier: &css-prettier
+    format-command: './node_modules/.bin/prettier --parser css'
+
+  vim-vint: &vim-vint
+    lint-command: 'vint -'
     lint-stdin: true
     lint-formats:
       - '%f:%l:%c: %m'
+
+  markdown-markdownlint: &markdown-markdownlint
+    lint-command: 'markdownlint -s'
+    lint-stdin: true
+    lint-formats:
+      - '%f:%l %m'
+      - '%f:%l:%c %m'
+      - '%f: %l: %m'
+
+  golangci-lint: &golangci-lint
+    lint-command: golangci-lint run
+    lint-stdin: false
+
+  sh-shellcheck: &sh-shellcheck
+    lint-command: 'shellcheck -f gcc -x'
+    lint-formats:
+      - '%f:%l:%c: %trror: %m'
+      - '%f:%l:%c: %tarning: %m'
+      - '%f:%l:%c: %tote: %m'
+
+  sh-shfmt: &sh-shfmt
+    format-command: 'shfmt -ci -s -bn'
+    format-stdin: true
+
+languages:
+  vim:
+    - <<: *vim-vint
+  markdown:
+    - <<: *markdown-markdownlint
+  go:
+    - <<: *golangci-lint
+  sh:
+    - <<: *sh-shellcheck
+    - <<: *sh-shfmt
+  typescript:
+    - <<: *prettier
+  html:
+    - <<: *html-prettier
+  css:
+    - <<: *css-prettier
