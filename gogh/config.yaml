@@ -2,3 +2,5 @@ githubUser: kyoh86
 roots:
   - ~/Projects
   - ~/go/src
+  - ~/go/1.12.12/src
+  - ~/go/1.14.2/src
