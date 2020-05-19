@@ -6,6 +6,10 @@
 .vimrc.local
 ### end of vim directory local ###
 
+### goenv ###
+.go-version
+### end of goenv ###
+
 ### pyenv ###
 .python-version
 ### end of pyenv ###

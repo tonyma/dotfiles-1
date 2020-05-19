@@ -54,6 +54,9 @@ let $PATH=
 let $ZDOTDIR=$HOME.'/.config/zsh'
 
 " Go:
+let $GOENV_ROOT=$HOME.'/.goenv'
+let $PATH=$GOENV_ROOT.'/bin:'.$PATH
+let $PATH=$HOME.'/.goenv/bin:'.$PATH
 let $GOPATH=$HOME.'/go'
 let $PATH=$PATH.':/usr/local/go/bin:'.$HOME.'/go/bin'
 

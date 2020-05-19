@@ -123,9 +123,13 @@ _source_if ~/.fzf.zsh
 
 if [[ -f ${DOTFILES}/lazyenv/lazyenv.bash ]]; then
   source ${DOTFILES}/lazyenv/lazyenv.bash
-  
+
   eval "$( command direnv hook zsh )"
-  
+
+  if command -v goenv >/dev/null 2>&1 ; then
+    eval "$( command goenv init - )"
+  fi
+
   _nodenv_init() {
     eval "$(command nodenv init -)"
   }
