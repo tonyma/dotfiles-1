@@ -870,6 +870,37 @@ endfunction
 command! Quote call s:quote_file()
 " }}}
 
+" Function: Show cursor info / buffer info in popup
+function! s:popup_cursor_info()
+  " get cursor position informations
+  let l:vals = getpos('.')
+  " get charcode informations
+  let l:char = strcharpart(strpart(getline('.'), col('.') - 1), 0, 1)
+  let l:charnr = char2nr(l:char)
+  " format output
+  let l:lines = [
+        \ 'Cursor Info',
+        \ '  Line:        ' . l:vals[1],
+        \ '  Column:      ' . l:vals[2],
+        \ '  Char:        ' . printf('"%s" -- (%d)10 (%X)16', l:char, l:charnr, l:charnr),
+        \ '  Highlight:   ' . synIDattr(synID(line("."), col("."), 1), "name"),
+        \ '',
+        \ 'Buffer Info',
+        \ '  File type:   ' . &filetype,
+        \ '  Encoding:    ' . &encoding,
+        \ '  File format: ' . &fileformat,
+        \ '  Syntax:      ' . &syntax,
+        \ ]
+  " open temporary popup
+  call popup_atcursor(l:lines, #{
+        \ pos: 'topleft',
+        \ moved: 'any',
+        \ padding: [0, 1, 0, 1],
+        \ wrap: v:false,
+        \ })
+endfunction
+command! CursorInfo call <SID>popup_cursor_info()
+
 " }}}
 
 " Command aliases {{{
