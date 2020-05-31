@@ -358,6 +358,8 @@ call s:plug.begin()
   " {{{ lightline
   Plug 'itchyny/lightline.vim'
   function! s:plug.after.itchyny__lightline__vim() "
+    set laststatus=2  " statuslineは常に表示
+    set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
     let g:lightline = {
       \   'colorscheme': 'momiji',
       \   'separator': {
@@ -370,22 +372,20 @@ call s:plug.begin()
       \   },
       \   'active': {
       \     'left': [
-      \       [ 'mode', 'paste' ],
-      \       [ 'pwd', 'gitstatus', 'relativepath', 'readonly', 'modified', 'terminalinfo' ]
+      \       ['mode', 'paste'],
+      \       ['pwd', 'relativepath', 'readonly', 'modified', 'terminalinfo']
       \     ],
       \     'right': [
-      \       [ 'linter_ok', 'linter_errors', 'linter_warnings' ],
-      \       [ 'fileformat', 'fileencoding', 'filetype', 'lineinfo' ]
+      \       ['linter_ok', 'linter_errors', 'linter_warnings'],
+      \       ['gitstatus']
       \     ]
       \   },
       \   'inactive': {
       \     'left': [
-      \       [ 'mode', 'paste' ],
-      \       [ 'relativepath', 'readonly', 'modified' ]
+      \       ['mode', 'paste'],
+      \       ['pwd', 'relativepath', 'readonly', 'modified', 'terminalinfo']
       \     ],
-      \     'right': [
-      \       [ 'filetype' ]
-      \     ]
+      \     'right': []
       \   },
       \   'mode_map': {
       \     'n': "\UFFB32", 'i': "\UFFAE6", 'R': "\UFF954", 'v': 'VIS', 'V': 'VLNE', "\<C-v>": 'VBLK',
@@ -399,22 +399,15 @@ call s:plug.begin()
       \   },
       \   'component_type': {
       \     'linter_warnings': 'warning',
-      \     'gitstatus': 'warning',
       \     'linter_errors': 'error',
+      \     'gitstatus': 'warning',
       \   },
       \   'component_function': {
       \     'pwd': 'LightlinePwd',
-      \     'percent': 'LightlinePercent',
-      \     'fileformat': 'LightlineDevFileformat',
-      \     'fileencoding': 'LightlineFileEncoding',
-      \     'filetype': 'LightlineDevFiletype',
-      \     'terminalinfo': 'LightlineTerminalInfo',
-      \     'readonly': 'LightlineReadonly', 
       \     'relativepath': 'LightlineRelativePath',
-      \     'filename': 'LightlineFilename',
-      \     'gitgutter': 'LightlineGitGutter',
-      \     'lineinfo': 'LightlineLineInfo',
-      \     'modified': 'LightlineModified'
+      \     'readonly': 'LightlineReadonly', 
+      \     'modified': 'LightlineModified',
+      \     'terminalinfo': 'LightlineTerminalInfo',
       \   },
       \ }
     augroup LightLineUpdate
@@ -424,28 +417,8 @@ call s:plug.begin()
     function! LightlinePwd() abort
       return fnamemodify(getcwd(), ':t')
     endfunction
-    function! LightlinePercent() abort
-      let l:last = line('$')
-      let l:cur = line('.')
-      return &buftype ==# 'terminal' ? '' : printf('%3d%% of %d', l:cur * 100 / l:last, l:last)
-    endfunction
-    function! LightlineDevFiletype()
-      return &buftype ==# 'terminal' ? '' : strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft'
-    endfunction
-
-    function! LightlineDevFileformat()
-      return &buftype ==# 'terminal' ? '' : (&fileformat ==# 'unix' ? '' : &fileformat . ' ' . WebDevIconsGetFileFormatSymbol())
-    endfunction
-
     function! LightlineModified() abort
       return &buftype ==# 'terminal' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-    endfunction
-    function! LightlineFileEncoding() abort
-      let l:enc = &fileencoding !=# '' ? &fileencoding : &encoding
-      return &buftype ==# 'terminal' ? '' : (l:enc ==# 'utf-8' ? '' : l:enc)
-    endfunction
-    function! LightlineLineInfo() abort
-      return &buftype ==# 'terminal' ? '' : "\ue0a1".line('.').':'.printf('%03d', col('.'))
     endfunction
     function! LightlineTerminalInfo() abort
       if &buftype !=# 'terminal'
@@ -487,15 +460,6 @@ call s:plug.begin()
         return  bufnr('%') . ':' . l:name
       endif
     endfunction
-    function! LightlineFilename() abort
-      if &buftype ==# 'terminal'
-        return ''
-      elseif &buftype ==# 'quickfix' && get(w:, 'quickfix_title', '') !=# ''
-        return bufnr('%') . ':' . w:quickfix_title
-      else
-        return bufnr('%') . ':' . (expand('%:t') !=# '' ? expand('%:t') : '[No Name]')
-      endif
-    endfunction
     function! LightlineReadonly() abort
       return &buftype ==# 'terminal' ? '' : &readonly ? "\ue0a2" : ''
     endfunction
@@ -506,37 +470,14 @@ call s:plug.begin()
       if &buftype ==# 'terminal'
         let l:location = term_gettitle('%')
       endif
-
       let l:stat = s:getGitStatus(l:location)
       let l:commit = trim(s:statPart(l:stat, 'ahead', " \UFF55D") . s:statPart(l:stat, 'behind', " \UFF545") . get(l:stat, 'sync', ""))
       let l:merge = s:statPart(l:stat, 'unmerged', 'Unmerged:')
       let l:stage = trim(s:statPart(l:stat, 'staged', " \UFF631") . s:statPart(l:stat, 'unstaged', " \UFF915") . s:statPart(l:stat, 'untracked', " \UFFC89"))
       let l:warn = [ l:commit, l:merge, l:stage ]
       let l:brch = trim(s:statPart(l:stat, 'local-branch', "\UE0A0"))
-      return [ [ l:brch ], l:warn, [] ]
+      return [[], l:warn, [ l:brch ]]
     endfunction
-
-    function! LightlineGitGutter()
-      if ! exists('*GitGutterGetHunkSummary')
-            \ || ! get(g:, 'gitgutter_enabled', 0)
-            \ || winwidth('.') <= 90
-        return ''
-      endif
-      let l:symbols = [
-            \ g:gitgutter_sign_added . ' ',
-            \ g:gitgutter_sign_modified . ' ',
-            \ g:gitgutter_sign_removed . ' '
-            \ ]
-      let l:hunks = GitGutterGetHunkSummary()
-      let l:ret = []
-      for i in [0, 1, 2]
-        if l:hunks[i] > 0
-          call add(l:ret, l:symbols[i] . l:hunks[i])
-        endif
-      endfor
-      return join(l:ret, ' ')
-    endfunction
-
     function! s:statPart(stat, key, pre)
       if !has_key(a:stat, a:key) || a:stat[a:key] ==# ''
         return ''
@@ -589,8 +530,6 @@ call s:plug.begin()
     function! s:inc(info, key)
       let a:info[a:key] = get(a:info, a:key, 0) + 1
     endfunction
-    set laststatus=2  " statuslineは常に表示
-    set noshowmode  " lightlineで表示するので、vim標準のモード表示は隠す
     function! LightlineLspOK() abort
       if &buftype ==# 'terminal'
         return ''
@@ -622,7 +561,6 @@ call s:plug.begin()
       return 'E:' . l:counts['error']
     endfunction
   endfunction
-
   " }}}
 
   Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
