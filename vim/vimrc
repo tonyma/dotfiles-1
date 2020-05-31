@@ -606,13 +606,6 @@ call s:plug.begin()
   function! s:plug.after.qpkorr__vim__bufkill()
     let g:BufKillCreateMappings = 0
   endfunction
-  Plug 'arp242/gopher.vim'
-  function! s:plug.after.arp242__gopher__vim()
-    let g:gopher_map = {
-        \ '_default':      1,
-        \ '_imap_prefix': '<C-g>'
-        \ }
-  endfunction
   Plug 'thinca/vim-quickrun', {'on': 'QuickRun'}
   function! s:plug.after.thinca__vim__quickrun()
     let g:quickrun_config = {
