@@ -969,6 +969,7 @@ set showtabline=1
 set hlsearch
 set incsearch
 set t_RV=
+set helplang=ja,en
 highlight Pmenu ctermfg=159 ctermbg=17
 language messages en_US.UTF-8
 " }}}
