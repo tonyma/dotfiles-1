@@ -402,6 +402,7 @@ update() {
     update-yarn
     update-yay
     update-brew
+    update-gordon
     echo done
   fi
 }
@@ -489,6 +490,17 @@ function update-yay {
   pushd ~
   if command -v pacman >/dev/null 2>&1 ; then
     yay -Syyu
+  fi
+  popd
+}
+# }}}
+
+# update gordon {{{
+function update-gordon {
+  echo updating gordon
+  pushd ~
+  if command -v gordon >/dev/null 2>&1 ; then
+    gordon update
   fi
   popd
 }
