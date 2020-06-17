@@ -843,7 +843,7 @@ endfunction
 
 " Function: Quote current filename and content {{{
 function! s:quote_file()
-  let l:content=expand('%:t') . "\n```" . &filetype
+  let l:content=expand('%:t') . "\n```" . &filetype . "\n"
   let l:lines = getline(0, line("$"))
   for l:l in l:lines
      let l:content .= l:l . "\n"
