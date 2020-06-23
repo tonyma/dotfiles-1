@@ -7,3 +7,4 @@ set main-view = id:width=12 date author commit-title:graph=yes,refs=yes
 set split-view-height = 80%
 
 bind main C !@git pbcopy %(commit)
+bind main R !git rebase -i %(commit)
