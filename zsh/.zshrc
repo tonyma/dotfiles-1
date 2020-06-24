@@ -166,7 +166,7 @@ function java() {
 
 # gogh {{{
 if command -v gogh >/dev/null 2>&1; then
-  eval "$(gogh setup)"
+  eval "$(gogh init)"
 fi
 # }}}
 

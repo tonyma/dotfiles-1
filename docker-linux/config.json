@@ -1,0 +1,5 @@
+{
+  "credsStore": "secretservice",
+	"experimental": "enabled",
+	"stackOrchestrator": "swarm"
+}

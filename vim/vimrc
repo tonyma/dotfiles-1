@@ -108,6 +108,16 @@ let $PATH=$PATH.':'.'/usr/local/share/git-core/contrib/diff-highlight'
 " Gigamoji:
 let $GIGAMOJI_BG=':space:'
 
+" Docker:
+"
+if has('osx')
+  let $DOCKER_CONFIG=$XDG_CONFIG_HOME . '/docker-osx'
+  let $MACHINE_STORAGE_PATH=$XDG_DATA_HOME . '/docker-machine-osx'
+elseif has('linux')
+  let $DOCKER_CONFIG=$XDG_CONFIG_HOME . '/docker-linux'
+  let $MACHINE_STORAGE_PATH=$XDG_DATA_HOME . '/docker-machine-linux'
+endif
+
 " dotfiles自体
 let $DOTFILES=$HOME.'/.config'
 let $DOTS=$DOTFILES
@@ -266,7 +276,7 @@ call s:plug.begin()
   Plug 'prabirshrestha/vim-lsp'
   function! s:plug.after.vim__lsp()
     let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-    let g:lsp_diagnostics_float_cursor = 1
+    let g:lsp_diagnostics_float_cursor = 1 " enable hover under cursor when in normal mode
 
     " 保存時に自動でフォーマット {{{
 
@@ -735,6 +745,7 @@ call s:plug.begin()
     map _  <Plug>(operator-replace)
   endfunction
   Plug 'lambdalisue/vim-backslash'
+  Plug 'kana/vim-textobj-line'
 
 call s:plug.end()
 " }}}
