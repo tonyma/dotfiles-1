@@ -227,13 +227,19 @@ call s:plug.begin()
 
     function! s:wipeout_buffers()
       let l:preview_window = get(g:, 'fzf_preview_window', &columns >= 120 ? 'right': '')
-      let l:preview_opt = {}
+      let l:options = [
+      \   '-m',
+      \   '--tiebreak=index',
+      \   '-d', '\t',
+      \   '--prompt', 'Wipeout> '
+      \ ]
       if len(l:preview_window)
-        let l:preview_opt = fzf#vim#with_preview(
+        let l:options = extend(l:options, get(fzf#vim#with_preview(
               \   {"placeholder": "{2}"},
               \   l:preview_window
-              \ )
+              \ ), 'options', []))
       endif
+
 
       return fzf#run(fzf#wrap({
       \ 'source':  map(
@@ -248,12 +254,7 @@ call s:plug.begin()
       \     _, line -> substitute(split(line)[0], '^\[\|\]$', '', 'g')
       \   })), 'silent!')
       \ },
-      \ 'options': extend([
-      \   '-m',
-      \   '--tiebreak=index',
-      \   '-d', '\t',
-      \   '--prompt', 'Wipeout> '
-      \ ], l:preview_opt['options']),
+      \ 'options': l:options,
       \}))
     endfunction
     command! FzfWipeoutBuffers call <SID>wipeout_buffers()
