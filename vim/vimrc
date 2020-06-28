@@ -263,11 +263,10 @@ call s:plug.begin()
   " }}}
 
   " {{{ vim-lsp
-  Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
   function! s:plug.after.vim__lsp()
     let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-    " let g:lsp_diagnostics_float_cursor = 1
+    let g:lsp_diagnostics_float_cursor = 1
 
     " 保存時に自動でフォーマット {{{
 
