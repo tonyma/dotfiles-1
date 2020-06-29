@@ -734,6 +734,7 @@ call s:plug.begin()
   function!s:plug.after.kana__vim__operator__replace()
     map _  <Plug>(operator-replace)
   endfunction
+  Plug 'lambdalisue/vim-backslash'
 
 call s:plug.end()
 " }}}
@@ -822,6 +823,10 @@ command! SwitchBranch call fzf#run(fzf#wrap({
     \ 'sink': function('<SID>git_switch'),
     \ }))
 nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
+" }}}
+
+" Function: Cleanup Branch {{{
+command! CleanupBranch !git-branches cleanup
 " }}}
 
 " Function: Edit Changed Files {{{
