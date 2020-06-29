@@ -830,7 +830,7 @@ function! s:git_switch(line)
 endfunction
 
 command! SwitchBranch call fzf#run(fzf#wrap({
-    \ 'source': "git-branches --color --exclude-current",
+    \ 'source': "git-branches --color !current",
     \ 'sink': function('<SID>git_switch'),
     \ }))
 nnoremap <Leader>gb :<C-u>SwitchBranch<CR>

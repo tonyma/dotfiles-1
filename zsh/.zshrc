@@ -397,10 +397,10 @@ update() {
       shift
     done
   else
+    update-yay
     update-pip
     update-go
     update-yarn
-    update-yay
     update-brew
     update-gordon
     echo done
