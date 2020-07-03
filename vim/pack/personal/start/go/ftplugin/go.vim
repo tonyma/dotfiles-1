@@ -8,3 +8,5 @@ setlocal comments=s1:/*,mb:*,ex:*/,://
 setlocal commentstring=//\ %s
 setlocal foldmethod=syntax
 setlocal noexpandtab
+
+call go#init#scaffold()
