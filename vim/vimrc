@@ -1034,6 +1034,7 @@ elseif executable('/usr/bin/zsh')
 endif
 
 tnoremap <S-Space> <Space> " Shift+Space押しがち。邪魔なのでSpaceに置き換えちゃう
+tnoremap <C-x> <C-w>:normal \
 
 augroup TermSetting
   " ターミナルで
