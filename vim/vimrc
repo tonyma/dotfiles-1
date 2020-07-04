@@ -644,37 +644,7 @@ call s:plug.begin()
     silent! nmap <unique><silent> scb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
   endfunction
 
-  Plug 'lambdalisue/fern.vim'
-  function! s:hijack_directory() abort
-    let l:target=expand('%')
-    if !isdirectory(l:target) || &ft == 'fern'
-      return
-    endif
-    bwipeout %
-    execute 'Fern ' . l:target
-  endfunction
-  function! s:init_fern() abort
-    setlocal bufhidden=wipe
-    setlocal nobuflisted
-  endfunction
-  function! s:plug.after.lambdalisue__fern()
-    " hijack netrw
-    let g:loaded_netrw             = 1
-    let g:loaded_netrwPlugin       = 1
-    let g:loaded_netrwSettings     = 1
-    let g:loaded_netrwFileHandlers = 1
-
-    nnoremap - :<C-u>Fern %:h<CR>
-    let g:fern#default_hidden      = 1
-
-    augroup my-fern-hijack
-      autocmd!
-      autocmd BufEnter * ++nested call s:hijack_directory()
-      " autocmd FileType fern call s:init_fern()
-    augroup END
-
-    nnoremap <BS> :<C-u>Fern %:h<CR>
-  endfunction
+  Plug 'justinmk/vim-dirvish'
 
   " My Plugins {{{
   " {{{ kyoh86/vim-gogh
@@ -735,6 +705,9 @@ call s:plug.begin()
   Plug 'tpope/vim-dispatch'
   Plug 'tyru/capture.vim', {'on': 'Capture'}  " Show Ex command output in a buffer
   Plug 'tyru/open-browser-github.vim'
+  function! s:plug.after.tyru__open__browser__github__vim()
+    let g:openbrowser_github_select_current_line = v:true
+  endfunction
   Plug 'tyru/open-browser.vim'
   Plug 'vim-jp/vim-vimlparser'
   Plug 'vim-jp/vimdoc-ja'
@@ -957,6 +930,7 @@ set tabstop=2
 set autoindent
 set shiftwidth=2
 set expandtab
+set smarttab
 set nowrap
 " }}}
 
@@ -997,8 +971,12 @@ set backspace=2
 set cursorline   " Highlight cursor line
 set showtabline=1
 set hlsearch
+set history=1000
 set incsearch
 set t_RV=
+set scrolloff=3 " Show least &scrolloff lines before/after cursor
+set sidescrolloff=3
+set formatoptions+=j " Delete comment character when joining commented lines
 set helplang=ja,en
 highlight Pmenu ctermfg=159 ctermbg=17
 language messages en_US.UTF-8
@@ -1025,6 +1003,8 @@ augroup END
 nnoremap <silent> tt :<C-u>terminal++curwin ++noclose <CR>
 nnoremap <silent> tx :<C-u>terminal++noclose         <CR>
 nnoremap <silent> tv :<C-u>vertical terminal++noclose<CR>
+
+" }}}
 
 " Function: Wipeout Terminal Buffer {{{
 " ++nocloseで開くので、exitしたらそのままbuffer wipeoutしたい。
@@ -1087,7 +1067,6 @@ elseif executable('fcitx-remote')
   augroup END
 endif
 " }}}
-" }}}
 
 " GVim Settings {{{
 set columns=200
@@ -1097,3 +1076,8 @@ set guifont=Cica\ 13.5
 set mouse=
 set guicursor=n-c:block-Cursor/lCursor,v:block-vCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor,a:blinkwait333-blinkoff333-blinkon333
 " }}}
+
+" }}}
+
+unlet! skip_defaults_vim
+source $VIMRUNTIME/defaults.vim
