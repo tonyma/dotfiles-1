@@ -222,8 +222,10 @@ call s:plug.begin()
     nnoremap <Leader>w  :<C-u>FzfWindows<CR>
     nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
     nnoremap <Leader>i  :<C-u>FzfHistory<CR>
-    nnoremap q:         :<C-u>FzfHistory :<CR>
-    nnoremap q/         :<C-u>FzfHistory /<CR>
+    " I want to set a nnoremap below but I cannot do it
+    " since https://github.com/kyoh86/dotfiles/issues/89
+    " nnoremap q:         :<C-u>FzfHistory :<CR> 
+    " nnoremap q/         :<C-u>FzfHistory /<CR>
 
     function! s:format_buffer(b)
       let l:name = bufname(a:b)
@@ -653,6 +655,9 @@ call s:plug.begin()
   function! s:empty_prompt_mappings() abort
     call empty_prompt#map(#{lhs: ';', rhs: "<C-w>:"})
     call empty_prompt#map(#{lhs: '<Esc>', rhs: "<C-w>N"})
+
+    " tnoremap <C-x> <C-w>:normal \
+    tnoremap <expr> <C-x> empty_prompt#is_empty() ? "<C-w>:normal \\" : "<C-x>"
   endfunction
   autocmd VimEnter * ++once call s:empty_prompt_mappings()
   nnoremap ; :
@@ -1032,9 +1037,10 @@ if executable('/usr/local/bin/zsh')
 elseif executable('/usr/bin/zsh')
   set shell=/usr/bin/zsh
 endif
-
-tnoremap <S-Space> <Space> " Shift+Space押しがち。邪魔なのでSpaceに置き換えちゃう
-tnoremap <C-x> <C-w>:normal \
+"
+" Shift+Space押しがち。邪魔なのでSpaceに置き換えちゃう
+" https://github.com/vim-jp/issues/issues/1328
+tnoremap <S-Space> <Space>
 
 augroup TermSetting
   " ターミナルで
