@@ -645,6 +645,17 @@ call s:plug.begin()
   endfunction
 
   Plug 'justinmk/vim-dirvish'
+  Plug 'lambdalisue/readablefold.vim'
+  Plug 'tyru/empty-prompt.vim'
+  function! s:plug.before.tyru__empty__prompt__vim()
+    let g:empty_prompt#pattern = '^\$ \+$'
+  endfunction
+  function! s:empty_prompt_mappings() abort
+    call empty_prompt#map(#{lhs: ';', rhs: "<C-w>:"})
+    call empty_prompt#map(#{lhs: '<Esc>', rhs: "<C-w>N"})
+  endfunction
+  autocmd VimEnter * ++once call s:empty_prompt_mappings()
+  nnoremap ; :
 
   " My Plugins {{{
   " {{{ kyoh86/vim-gogh
@@ -1021,6 +1032,8 @@ if executable('/usr/local/bin/zsh')
 elseif executable('/usr/bin/zsh')
   set shell=/usr/bin/zsh
 endif
+
+tnoremap <S-Space> <Space> " Shift+Space押しがち。邪魔なのでSpaceに置き換えちゃう
 
 augroup TermSetting
   " ターミナルで
