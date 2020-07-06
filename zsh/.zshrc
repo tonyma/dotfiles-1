@@ -296,7 +296,7 @@ bindkey '^x^n' new-project
 function switch-git-branch() {
   local selected
   selected=$(
-    git-branches --color --exclude-current \
+    git-branches --color !current \
       | fzf -0 -n 2..3 \
       | awk '{print $2}' \
   )
