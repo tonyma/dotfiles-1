@@ -11,7 +11,7 @@
 !/autostart
 !/bash
 !/docker-osx
-!/docker-linux
+!/docker-linux/config.json
 !/efm-langserver
 !/fcitx/conf*
 !/flake8
