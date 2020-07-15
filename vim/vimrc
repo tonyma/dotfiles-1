@@ -721,9 +721,6 @@ call s:plug.begin()
   Plug 'tpope/vim-dispatch'
   Plug 'tyru/capture.vim', {'on': 'Capture'}  " Show Ex command output in a buffer
   Plug 'tyru/open-browser-github.vim'
-  function! s:plug.after.tyru__open__browser__github__vim()
-    let g:openbrowser_github_select_current_line = v:true
-  endfunction
   Plug 'tyru/open-browser.vim'
   Plug 'vim-jp/vim-vimlparser'
   Plug 'vim-jp/vimdoc-ja'
