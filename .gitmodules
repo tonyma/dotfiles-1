@@ -1,6 +1,3 @@
 [submodule "zsh/vimode-visual"]
 	path = zsh/vimode-visual
 	url = https://github.com/b4b4r07/zsh-vimode-visual
-[submodule "lazyenv"]
-	path = lazyenv
-	url = https://github.com/takezoh/lazyenv
