@@ -238,13 +238,13 @@ call s:plug.begin()
       return substitute(printf("[%s] %s\t%s\t%s", a:b, l:flag, l:name, l:extra), '^\s*\|\s*$', '', 'g')
     endfunction
 
-    function! s:wipeout_buffers()
+    function! s:delete_buffers()
       let l:preview_window = get(g:, 'fzf_preview_window', &columns >= 120 ? 'right': '')
       let l:options = [
       \   '-m',
       \   '--tiebreak=index',
       \   '-d', '\t',
-      \   '--prompt', 'Wipeout> '
+      \   '--prompt', 'Delete> '
       \ ]
       if len(l:preview_window)
         let l:options = extend(l:options, get(fzf#vim#with_preview(
@@ -263,15 +263,15 @@ call s:plug.begin()
       \   {_, nr -> s:format_buffer(nr)}
       \ ),
       \ 'sink*': {
-      \   lines -> execute('bwipeout ' . join(map(lines, {
+      \   lines -> execute('bdelete ' . join(map(lines, {
       \     _, line -> substitute(split(line)[0], '^\[\|\]$', '', 'g')
       \   })), 'silent!')
       \ },
       \ 'options': l:options,
       \}))
     endfunction
-    command! FzfWipeoutBuffers call <SID>wipeout_buffers()
-    nnoremap <silent> <Leader>bw :<C-u>call <SID>wipeout_buffers()<CR>
+    command! FzfDeleteBuffers call <SID>delete_buffers()
+    nnoremap <silent> <Leader>bw :<C-u>call <SID>delete_buffers()<CR>
   endfunction
   " }}}
 
@@ -680,7 +680,7 @@ call s:plug.begin()
     call metarw#define_wrapper_commands(v:true)
   endfunction
   " }}}
-  Plug 'kyoh86/vim-wipeout', {'on': 'Wipeout', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-wipeout'}
+  Plug 'kyoh86/vim-beedle', {'on': 'Bdelete', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-beedle'}
   Plug 'kyoh86/vim-editerm', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-editerm'}
   " }}}
 
@@ -1019,11 +1019,11 @@ nnoremap <silent> tv :<C-u>vertical terminal++noclose<CR>
 
 " }}}
 
-" Function: Wipeout Terminal Buffer {{{
-" ++nocloseで開くので、exitしたらそのままbuffer wipeoutしたい。
+" Function: Delete Terminal Buffer {{{
+" ++nocloseで開くので、exitしたらそのままbuffer deleteしたい。
 " zshrcの方で function :bw() としてこいつを呼び出してexitするコマンド :bw を定義済
-function! Tapi_WipeoutTerminalBuffer(bufnum, arglist)
-  autocmd! SafeState <buffer> ++once bwipeout
+function! Tapi_DeleteTerminalBuffer(bufnum, arglist)
+  autocmd! SafeState <buffer> ++once bdelete
 endfunction
 
 " }}}

@@ -138,18 +138,18 @@ if [[ -f ${DOTFILES}/lazyenv/lazyenv.bash ]]; then
   if command -v gls >/dev/null 2>&1 ; then
     list="gls"
   fi
-  eval "$(lazyenv.load _nodenv_init `$list --color=never ~/.nodenv/shims`)"
+  eval "$(lazyenv.load _nodenv_init `$list --color=never ~/.nodenv/shims` nodenv)"
   
   _rbenv_init() {
     eval "$(command rbenv init -)"
   }
-  eval "$(lazyenv.load _rbenv_init `$list --color=never ~/.rbenv/shims`)"
+  eval "$(lazyenv.load _rbenv_init `$list --color=never ~/.rbenv/shims` rbenv)"
   
   _pyenv_init() {
     eval "$(command pyenv init -)"
     eval "$(command pyenv virtualenv-init -)"
   }
-  eval "$(lazyenv.load _pyenv_init `$list --color=never ~/.pyenv/shims`)"
+  eval "$(lazyenv.load _pyenv_init `$list --color=never ~/.pyenv/shims` pyenv)"
 fi
 # }}}
 
@@ -186,8 +186,8 @@ if [[ -n "${VIM_TERMINAL}" ]]; then
 
   alias q='exit'
   # :q で exit -> noclose指定のterminalウインドウを閉じる
-  function :bw() {
-    echo -ne "\033]51;[\"call\", \"Tapi_WipeoutTerminalBuffer\", []]\07"
+  function :bd() {
+    echo -ne "\033]51;[\"call\", \"Tapi_DeleteTerminalBuffer\", []]\07"
     exit
   }
 fi
