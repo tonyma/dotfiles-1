@@ -124,7 +124,9 @@ _source_if ~/.fzf.zsh
 if [[ -f ${DOTFILES}/lazyenv/lazyenv.bash ]]; then
   source ${DOTFILES}/lazyenv/lazyenv.bash
 
-  eval "$( command direnv hook zsh )"
+  if command -v direnv >/dev/null 2>&1 ; then
+    eval "$( command direnv hook zsh )"
+  fi
 
   if command -v goenv >/dev/null 2>&1 ; then
     eval "$( command goenv init - )"
@@ -138,18 +140,18 @@ if [[ -f ${DOTFILES}/lazyenv/lazyenv.bash ]]; then
   if command -v gls >/dev/null 2>&1 ; then
     list="gls"
   fi
-  eval "$(lazyenv.load _nodenv_init `$list --color=never ~/.nodenv/shims` nodenv)"
+  eval "$(lazyenv.load _nodenv_init `$list --color=never ~/.nodenv/shims 2>/dev/null` nodenv)"
   
   _rbenv_init() {
     eval "$(command rbenv init -)"
   }
-  eval "$(lazyenv.load _rbenv_init `$list --color=never ~/.rbenv/shims` rbenv)"
+  eval "$(lazyenv.load _rbenv_init `$list --color=never ~/.rbenv/shims 2>/dev/null` rbenv)"
   
   _pyenv_init() {
     eval "$(command pyenv init -)"
     eval "$(command pyenv virtualenv-init -)"
   }
-  eval "$(lazyenv.load _pyenv_init `$list --color=never ~/.pyenv/shims` pyenv)"
+  eval "$(lazyenv.load _pyenv_init `$list --color=never ~/.pyenv/shims 2>/dev/null` pyenv)"
 fi
 # }}}
 

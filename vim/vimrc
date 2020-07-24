@@ -315,12 +315,12 @@ call s:plug.begin()
     nmap <Leader>la <Plug>(lsp-code-action)
     nmap <Leader>ll <Plug>(lsp-document-diagnostics)
     nmap <Leader>ls <Plug>(lsp-status)
+    nmap <Leader>li <Plug>(lsp-implementation)
 
     " nmap <Leader> <Plug>(lsp-references)
     " nmap <Leader> <Plug>(lsp-declaration)
     " nmap <Leader> <Plug>(lsp-document-symbol)
     " nmap <Leader> <Plug>(lsp-workspace-symbol)
-    " nmap <Leader> <Plug>(lsp-implementation)
     " nmap <Leader> <Plug>(lsp-type-definition)
 
     autocmd FileType go,python,typescript,vim,markdown,sh setlocal omnifunc=lsp#complete
