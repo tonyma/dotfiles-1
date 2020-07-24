@@ -46,10 +46,11 @@ PROMPT="%(?,,%F{red}[%?]%f
 # }}}
 
 # 自動補完の設定 {{{
-fpath=(/usr/local/share/zsh-completions $fpath)
+if [ -d /usr/local/share/zsh-completions ]; then
+  fpath=(/usr/local/share/zsh-completions $fpath)
+fi
 plugins=(zsh-completions zsh-syntax-highlighting $plugins)
-autoload -U compinit
-compinit -C
+autoload -Uz compinit && compinit
 # }}}
 
 # 色名による指定を有効にする {{{
