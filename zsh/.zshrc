@@ -502,7 +502,7 @@ function update-gordon {
   echo updating gordon
   pushd ~
   if command -v gordon >/dev/null 2>&1 ; then
-    gordon update
+    gordon update --all
   fi
   popd
 }
