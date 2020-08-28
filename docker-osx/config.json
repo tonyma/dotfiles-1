@@ -4,7 +4,7 @@
 		"837135262633.dkr.ecr.us-east-1.amazonaws.com": {}
 	},
 	"HttpHeaders": {
-		"User-Agent": "Docker-Client/19.03.8 (darwin)"
+		"User-Agent": "Docker-Client/19.03.12 (darwin)"
 	},
 	"credsStore": "osxkeychain",
 	"experimental": "enabled",
