@@ -676,13 +676,6 @@ call s:plug.begin()
   endfunction
   " }}}
   "
-  " {{{ kyoh86/vim-docbase
-  Plug 'kyoh86/vim-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-docbase'}
-  Plug 'kyoh86/vim-metarw-docbase', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-metarw-docbase'}
-  function! s:plug.after.kyoh86__vim__docbase()
-    call metarw#define_wrapper_commands(v:true)
-  endfunction
-  " }}}
   Plug 'kyoh86/vim-beedle', {'on': 'Bdelete', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-beedle'}
   Plug 'kyoh86/vim-editerm', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-editerm'}
   " }}}
@@ -701,7 +694,6 @@ call s:plug.begin()
   Plug 'airblade/vim-gitgutter'
   Plug 'iberianpig/tig-explorer.vim'
   Plug 'jez/vim-github-hub', {'for': 'ghhub'}
-  Plug 'kana/vim-metarw'
   Plug 'kana/vim-operator-user'
   Plug 'kana/vim-textobj-entire'
   Plug 'kana/vim-textobj-user'
