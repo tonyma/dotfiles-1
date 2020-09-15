@@ -837,8 +837,7 @@ function! s:fzf_dirty(bang)
   call fzf#run(fzf#wrap({'source': 'git status --porcelain ' . (a:bang ? '-uall ' : '') . '| grep -ve "^.D" | cut -c4- | perl -pe "s/^.* -> //g"'}))
 endfunction
 command! -bang FzfDirty call <SID>fzf_dirty(<bang>v:false)
-nnoremap <Leader>gd :<C-u>FzfDirty!<CR>
-nnoremap <Leader>gD :<C-u>FzfDirty<CR>
+nnoremap <Leader>gd :<C-u>GitEdit<CR>
 " }}}
 
 " Function: Update Terminal Window Title {{{
