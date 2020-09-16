@@ -45,15 +45,15 @@ function! s:select_file(line) abort
           \   l:preview_window
           \ ), 'options', []))
   endif
+  let l:commit = split(a:line, ' ')[0]
   if a:line ==# ''
     return
-  elseif a:line ==# 'Unmerged' || a:line ==# 'Unstaged' || a:line ==# 'Staged' || a:line ==# 'Untracked'
+  elseif l:commit ==# 'Unmerged' || l:commit ==# 'Unstaged' || l:commit ==# 'Staged' || l:commit ==# 'Untracked'
     let l:source = ''
-    for l:file in s:status[a:line]
+    for l:file in s:status[l:commit]
       let l:source = l:source . 'echo "' . l:file . '";'
     endfor
   else
-    let l:commit = split(a:line, ' ')[0]
     echom 'selected commit: ' . l:commit
     let l:source = 'git diff-tree --no-commit-id --name-only -r ' . l:commit
   endif
