@@ -9,9 +9,9 @@ function! gitedit#select_commit() abort
   let l:preview_prefix = ''
   let l:preview_suffix = ''
   let l:source = 'git log --oneline --decorate=short --color'
-  for l:key in ['Staged files', 'Unstaged files', 'Unmerged files', 'Untracked files']
+  for l:key in ['Staged', 'Unstaged', 'Unmerged', 'Untracked']
     if len(s:status[l:key]) > 0
-      let l:source = 'echo ' . l:key . ';' . l:source
+      let l:source = 'echo "' . l:key . ' files";' . l:source
       let l:preview_prefix = l:preview_prefix . 'if [ {1} = "' . l:key . '" ];then;'
       for l:file in s:status[l:key]
         let l:preview_prefix = l:preview_prefix . 'echo "' . l:file . '";'
@@ -65,10 +65,10 @@ endfunction
 
 function! gitedit#get_status(path, branch) abort
   let l:status = {
-        \ 'Unmerged files': [],
-        \ 'Staged files': [],
-        \ 'Unstaged files': [],
-        \ 'Untracked files': [],
+        \ 'Unmerged': [],
+        \ 'Staged': [],
+        \ 'Unstaged': [],
+        \ 'Untracked': [],
         \ }
   " TODO: see
   " https://git-scm.com/docs/git-status#_porcelain_format_version_2 and
@@ -89,15 +89,15 @@ function! gitedit#get_status(path, branch) abort
     if l:file[0:1] ==# '##'
       call extend(l:status, s:parse_branch_status(l:file))
     elseif l:file[0] ==# 'U' || l:file[1] ==# 'U' || l:file[0:1] ==# 'AA' || l:file[0:1] ==# 'DD'
-      call add(l:status['Unmerged files'], l:file[3:])
+      call add(l:status['Unmerged'], l:file[3:])
     elseif l:file[0:1] ==# '??'
-      call add(l:status['Untracked files'], l:file[3:])
+      call add(l:status['Untracked'], l:file[3:])
     else
       if l:file[0] !=# ' '
-        call add(l:status['Staged files'], l:file[3:])
+        call add(l:status['Staged'], l:file[3:])
       endif
       if l:file[1] !=# ' '
-        call add(l:status['Unstaged files'], l:file[3:])
+        call add(l:status['Unstaged'], l:file[3:])
       endif
     endif
   endfor
