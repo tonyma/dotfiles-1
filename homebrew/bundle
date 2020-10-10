@@ -28,8 +28,6 @@ brew "awslogs"
 brew "bash"
 # XML-based font configuration API for X Windows
 brew "fontconfig"
-# Interpreted, interactive, object-oriented programming language
-brew "python", link: false
 # Enables you to reproduce the CircleCI environment locally
 brew "circleci"
 # Cross-platform make
@@ -42,8 +40,10 @@ brew "curl"
 brew "dep"
 # Load/unload environment variables based on $PWD
 brew "direnv"
-# Pack, ship and run any application as a lightweight container
-brew "docker", link: false
+# Zip password cracker
+brew "fcrackzip"
+# Generic library support script
+brew "libtool"
 # Play, record, convert, and stream audio and video
 brew "ffmpeg"
 # Banner-like program prints strings as ASCII art
@@ -58,6 +58,8 @@ brew "fswatch"
 brew "fzf"
 # Graphics library to dynamically manipulate images
 brew "gd"
+# GitHub command-line tool
+brew "gh"
 # Work on GitHub issues on the command-line
 brew "ghi"
 # Access GitHub's .gitignore boilerplates
@@ -70,8 +72,6 @@ brew "gnu-sed"
 brew "gnu-tar"
 # Embed files into a Go executable
 brew "go-statik"
-# Generic library support script
-brew "libtool"
 # Graph visualization software from AT&T and Bell Labs
 brew "graphviz"
 # GNU grep, egrep and fgrep
@@ -104,6 +104,8 @@ brew "neovim"
 brew "nkf"
 # Manage multiple NodeJS versions
 brew "nodenv"
+# Development kit for the Java programming language
+brew "openjdk"
 # Generate clients, server & docs from an OpenAPI spec (v2, v3)
 brew "openapi-generator"
 # Swiss-army knife of markup format conversion
@@ -126,6 +128,8 @@ brew "rbenv"
 brew "ripgrep"
 # JVM-based programming language
 brew "scala"
+# Intuitive find & replace CLI
+brew "sd"
 # Static analysis and lint tool, for (ba)sh scripts
 brew "shellcheck"
 # Process Control System
@@ -150,8 +154,6 @@ brew "zsh-completions"
 brew "zsh-syntax-highlighting"
 # Concurrently run Go lint tools and normalise their output.
 brew "alecthomas/tap/gometalinter"
-# GitHub CLI
-brew "github/gh/gh"
 # Fast linters runner for Go.
 brew "golangci/tap/golangci-lint"
 # Deliver Go binaries as fast and easily as possible
@@ -178,11 +180,11 @@ brew "kyoh86/tap/richgo"
 # Encode(metafy) / decode(unmetafy) .zsh_history file
 brew "kyoh86/tap/zshist"
 cask "adobe-creative-cloud"
-cask "alacritty"
 cask "alfred"
 cask "bartender"
 cask "bitbar"
 cask "docker"
+cask "drawio"
 cask "flux"
 cask "font-myrica"
 cask "font-myricam"
@@ -195,6 +197,7 @@ cask "iterm2"
 cask "java"
 cask "keepingyouawake"
 cask "keycast"
+cask "keycastr"
 cask "kindle"
 cask "ngrok"
 cask "nosqlbooster-for-mongodb"

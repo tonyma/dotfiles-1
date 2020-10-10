@@ -334,12 +334,12 @@ call s:plug.begin()
   Plug 'mattn/vim-lsp-settings'
   augroup vim_lsp_golangci_lint_langserver
     au!
-    autocmd User lsp_setup call lsp#register_server({
-        \ 'name': 'golangci-lint-langserver',
-        \ 'cmd': {server_info->['golangci-lint-langserver']},
-        \ 'initialization_options': {'command': ['golangci-lint', 'run', '--out-format', 'json']},
-        \ 'whitelist': ['go'],
-        \ })
+    " autocmd User lsp_setup call lsp#register_server({
+    "     \ 'name': 'golangci-lint-langserver',
+    "     \ 'cmd': {server_info->['golangci-lint-langserver']},
+    "     \ 'initialization_options': {'command': ['golangci-lint', 'run', '--out-format', 'json']},
+    "     \ 'whitelist': ['go'],
+    "     \ })
   augroup END
 
   " for python
