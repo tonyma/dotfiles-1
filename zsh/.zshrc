@@ -193,6 +193,11 @@ if [[ -n "${VIM_TERMINAL}" ]]; then
     echo -ne "\033]51;[\"call\", \"Tapi_DeleteTerminalBuffer\", []]\07"
     exit
   }
+  # :q で exit -> noclose指定のterminalウインドウを閉じる
+  function :bw() {
+    echo -ne "\033]51;[\"call\", \"Tapi_WipeoutTerminalBuffer\", []]\07"
+    exit
+  }
 fi
 
 # }}}

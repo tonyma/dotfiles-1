@@ -59,6 +59,7 @@ let $ZDOTDIR=$HOME.'/.config/zsh'
 
 " Go:
 let $GOENV_ROOT=$HOME.'/.goenv'
+let $GO111MODULE='on'
 let $PATH=$GOENV_ROOT.'/bin:'.$PATH
 let $PATH=$GOENV_ROOT.'/shims:'.$PATH
 let $PATH=$HOME.'/.goenv/bin:'.$PATH
@@ -677,6 +678,7 @@ call s:plug.begin()
   " }}}
   "
   Plug 'kyoh86/vim-beedle', {'on': 'Bdelete', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-beedle'}
+  Plug 'kyoh86/vim-wipeout', {'on': 'Wipeout', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-wipeout'}
   Plug 'kyoh86/vim-editerm', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-editerm'}
   " }}}
 
@@ -1011,9 +1013,15 @@ nnoremap <silent> tv :<C-u>vertical terminal++noclose<CR>
 
 " Function: Delete Terminal Buffer {{{
 " ++nocloseで開くので、exitしたらそのままbuffer deleteしたい。
-" zshrcの方で function :bw() としてこいつを呼び出してexitするコマンド :bw を定義済
+" zshrcの方で function :bd() としてこいつを呼び出してexitするコマンド :bd を定義済
 function! Tapi_DeleteTerminalBuffer(bufnum, arglist)
   autocmd! SafeState <buffer> ++once bdelete
+endfunction
+
+" ++nocloseで開くので、exitしたらそのままbuffer wipeoutしたい。
+" zshrcの方で function :bw() としてこいつを呼び出してexitするコマンド :bw を定義済
+function! Tapi_WipeoutTerminalBuffer(bufnum, arglist)
+  autocmd! SafeState <buffer> ++once bwipeout
 endfunction
 
 " }}}
