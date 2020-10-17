@@ -1087,7 +1087,7 @@ endif
 set columns=200
 set lines=50
 set guioptions=cei
-set guifont=Cica\ 13.5
+set guifont=Cica\ 11.5
 set mouse=
 set guicursor=n-c:block-Cursor/lCursor,v:block-vCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor,a:blinkwait333-blinkoff333-blinkon333
 " }}}
