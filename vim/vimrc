@@ -60,6 +60,7 @@ let $ZDOTDIR=$HOME.'/.config/zsh'
 " Go:
 let $GOENV_ROOT=$HOME.'/.goenv'
 let $GO111MODULE='on'
+let $GOPATH=$HOME.'/go'
 let $PATH=$GOENV_ROOT.'/bin:'.$PATH
 let $PATH=$GOENV_ROOT.'/shims:'.$PATH
 let $PATH=$HOME.'/.goenv/bin:'.$PATH
@@ -171,6 +172,8 @@ endif
 " }}}
 
 " Configure Plugins {{{
+" vim-plug global settings
+let g:plug_window = 'topleft new'
 " Auto install {{{
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -210,13 +213,9 @@ call s:plug.begin()
   Plug 'kyoh86/momiji', {'rtp': 'vim', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/momiji'}
 
   " {{{ junegunn/fzf
-  let g:fzf_layout = { 'window': {
-        \ 'width': 0.8,
-        \ 'height': 0.8,
-        \ 'border': 'ascii'
-        \ } }
+  let g:fzf_layout = { 'down': '20%' }
 
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf', { 'dir': $HOME.'/.fzf', 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
 
   function! s:plug.after.junegunn__fzf__vim()
