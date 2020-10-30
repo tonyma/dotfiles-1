@@ -87,7 +87,7 @@ let $PYENV_ROOT=$HOME.'/.pyenv'
 let $PATH=$PYENV_ROOT.'/bin:'.$PYENV_ROOT.'/shims:'.$PATH
 
 " Node:
-let $PATH=$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin:'.$PATH
+let $PATH=$HOME.'/.nodenv/shims:'.$HOME.'/.nodenv/bin:'.'./node_modules/.bin:'.$PATH
 
 " GNU commands:
 let $PATH='/usr/local/opt/gzip/bin:'.$PATH
@@ -326,20 +326,11 @@ call s:plug.begin()
     " nmap <Leader> <Plug>(lsp-workspace-symbol)
     " nmap <Leader> <Plug>(lsp-type-definition)
 
-    autocmd FileType go,python,typescript,vim,markdown,sh setlocal omnifunc=lsp#complete
+    set omnifunc=lsp#complete
 
   endfunction
 
   Plug 'mattn/vim-lsp-settings'
-  augroup vim_lsp_golangci_lint_langserver
-    au!
-    " autocmd User lsp_setup call lsp#register_server({
-    "     \ 'name': 'golangci-lint-langserver',
-    "     \ 'cmd': {server_info->['golangci-lint-langserver']},
-    "     \ 'initialization_options': {'command': ['golangci-lint', 'run', '--out-format', 'json']},
-    "     \ 'whitelist': ['go'],
-    "     \ })
-  augroup END
 
   " for python
   let g:lsp_settings = {}
