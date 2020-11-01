@@ -720,7 +720,11 @@ call s:plug.begin()
   endfunction
   Plug 'lambdalisue/vim-backslash'
   Plug 'kana/vim-textobj-line'
-
+  Plug 'nikvdp/ejs-syntax'
+  function!s:plug.after.nikvdp__ejs__syntax()
+    autocmd BufNewFile,BufRead *.ejs set filetype=ejs
+    autocmd BufNewFile,BufRead *._ejs set filetype=ejs
+  endfunction
 call s:plug.end()
 " }}}
 
