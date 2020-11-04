@@ -28,6 +28,10 @@ tools:
     lint-command: golangci-lint run
     lint-stdin: false
 
+  myvet-lint: &myvet-lint
+    lint-command: test -d myvet && (test -x ./myvet/bin || go build -o ./myvet/bin ./myvet) && go vet -vettool=./myvet/bin ./...
+    lint-stdin: false
+
   sh-shellcheck: &sh-shellcheck
     lint-command: 'shellcheck -f gcc -x'
     lint-formats:
@@ -46,6 +50,7 @@ languages:
     - <<: *markdown-markdownlint
   go:
     - <<: *golangci-lint
+    - <<: *myvet-lint
   sh:
     - <<: *sh-shellcheck
     - <<: *sh-shfmt

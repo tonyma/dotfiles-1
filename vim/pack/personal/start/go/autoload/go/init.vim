@@ -19,11 +19,33 @@ function! go#init#get_package_name() abort
     return ''
   endif
 
+  let l:basename = fnamemodify(l:filename, ':t')
+  if l:basename !~ '\.go$'
+    return ''
+  endif
+
   let l:dir = fnamemodify(l:filename, ':h')
   let l:dirname = fnamemodify(l:dir, ':t')
 
-  " Search simbling *.go files and get package name from them
-  for l:simb in glob(l:dir . '/*.go', v:true, v:true)
+  " Search simbling *_test.go files and get package name from them
+  if l:basename =~ '_test\.go$'
+    for l:simb in glob(l:dir . '/*_test.go', v:true, v:true)
+      for l:line in readfile(l:simb, v:null, get(g:, 'go_init_read_package_line_max_length', 10))
+        let l:matches = matchlist(l:line, 'package \(.*\)')
+        if len(l:matches) > 1
+          return l:matches[1]
+        endif
+      endfor
+    endfor
+  endif
+
+  " Search simbling *.go files (not *_test.go) and get package name from them
+  let l:wildignore = &wildignore
+  set wildignore=*_test.go
+  let l:files = glob(l:dir . '/*.go', v:false, v:true)
+  let &wildignore = l:wildignore
+
+  for l:simb in l:files
     for l:line in readfile(l:simb, v:null, get(g:, 'go_init_read_package_line_max_length', 10))
       let l:matches = matchlist(l:line, 'package \(.*\)')
       if len(l:matches) > 1
@@ -45,6 +67,7 @@ function! go#init#get_package_name() abort
     let l:i = l:i + 1
   endwhile
 
+  " Directory containing invalid charactors for package name, return 'main'
   if match(l:dirname, '[^0-9a-zA-Z_]') >= 0
     return 'main'
   endif

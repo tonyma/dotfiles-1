@@ -284,31 +284,6 @@ call s:plug.begin()
     let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
     let g:lsp_diagnostics_float_cursor = 1 " enable hover under cursor when in normal mode
 
-    " 保存時に自動でフォーマット {{{
-
-    let g:kyoh86_auto_format = v:true
-
-    function! s:autoFormatSync()
-      if g:kyoh86_auto_format
-        LspDocumentFormatSync
-      endif
-    endfunction
-
-    function! s:goAutoFormatSync()
-      if g:kyoh86_auto_format
-        LspCodeAction source.organizeImports
-        LspDocumentFormatSync
-      endif
-    endfunction
-
-    augroup Lsp.format
-      autocmd!
-      autocmd BufWritePre *.py call s:autoFormatSync()
-      autocmd BufWritePre *.go call s:goAutoFormatSync()
-    augroup END
-
-    " }}}
-
     nmap <Leader>ld <Plug>(lsp-definition)
     nmap <Leader>lh <Plug>(lsp-hover)
     nmap <Leader>ln <Plug>(lsp-next-error)
@@ -582,6 +557,11 @@ call s:plug.begin()
     let g:tex_conceal = ''
   endfunction
 
+  Plug 'mattn/vim-goimports'
+  function! s:plug.after.mattn__vim__goimports()
+    let g:goimports = v:true
+    let g:goimports_simplify = v:true
+  endfunction
   Plug 'jremmen/vim-ripgrep', {'on': ['Rg', 'RgRoot']}
   function! s:plug.after.jremmen__vim__ripgrep()
     let g:rg_command = 'rg --vimgrep'
@@ -1081,7 +1061,7 @@ endif
 set columns=200
 set lines=50
 set guioptions=cei
-set guifont=Cica\ 11.5
+set guifont=Cica\ 10.5
 set mouse=
 set guicursor=n-c:block-Cursor/lCursor,v:block-vCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor,a:blinkwait333-blinkoff333-blinkon333
 " }}}
