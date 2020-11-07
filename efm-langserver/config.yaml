@@ -1,4 +1,6 @@
 version: 2
+logfile: ./output.log
+loglevel: 1
 
 tools:
   prettier: &prettier
@@ -24,13 +26,13 @@ tools:
       - '%f:%l:%c %m'
       - '%f: %l: %m'
 
-  golangci-lint: &golangci-lint
-    lint-command: golangci-lint run
-    lint-stdin: false
+  # golangci-lint: &golangci-lint
+  #   lint-command: golangci-lint run
+  #   lint-stdin: false
 
-  myvet-lint: &myvet-lint
-    lint-command: test -d myvet && (test -x ./myvet/bin || go build -o ./myvet/bin ./myvet) && go vet -vettool=./myvet/bin ./...
-    lint-stdin: false
+  # myvet-lint: &myvet-lint
+  #   lint-command: test -d myvet && (test -x ./myvet/bin || go build -o ./myvet/bin ./myvet) && go vet -vettool=./myvet/bin
+  #   lint-stdin: false
 
   sh-shellcheck: &sh-shellcheck
     lint-command: 'shellcheck -f gcc -x'
@@ -49,8 +51,8 @@ languages:
   markdown:
     - <<: *markdown-markdownlint
   go:
-    - <<: *golangci-lint
-    - <<: *myvet-lint
+    # - <<: *golangci-lint
+    # - <<: *myvet-lint
   sh:
     - <<: *sh-shellcheck
     - <<: *sh-shfmt

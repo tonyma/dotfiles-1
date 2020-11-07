@@ -66,6 +66,9 @@ let $PATH=$GOENV_ROOT.'/shims:'.$PATH
 let $PATH=$HOME.'/.goenv/bin:'.$PATH
 let $PATH=$PATH.':/usr/local/go/bin:'.$HOME.'/go/bin'
 
+" Go AWS Library
+let $AWS_SDK_LOAD_CONFIG=1
+
 " Generator-go-project:
 let $GO_PROJECT_ROOT=$HOME.'/Projects'
 
