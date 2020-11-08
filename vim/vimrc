@@ -120,6 +120,9 @@ let $RIPGREP_CONFIG_PATH=$DOTFILES . '/ripgrep/config'
 " Gigamoji:
 let $GIGAMOJI_BG=':space:'
 
+" GnuPG:
+let $GNUPGHOME=$XDG_CONFIG_HOME . '/gnupg'
+
 " Docker:
 "
 if has('osx')
