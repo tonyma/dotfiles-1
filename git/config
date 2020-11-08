@@ -21,8 +21,6 @@
 	clean = git lfs clean %f
 	smudge = git lfs smudge %f
 	required = true
-[include]
-  path = config_os
 [color]
 	diff = auto
 	status = auto
@@ -73,3 +71,6 @@
 	rebase = true
 [gpg]
 	program = gpg
+
+[include]
+  path = config_os

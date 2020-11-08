@@ -1,10 +1,10 @@
+[user]
+  signingkey = F94D388BF762AE88
+[commit]
+  gpgsign = true
 [credential]
-	helper = /usr/lib/git-core/git-credential-gnome-keyring
+  helper = /usr/lib/git-core/git-credential-gnome-keyring
 [pager]
   log = diff-so-fancy | less
   show = diff-so-fancy | less
   diff = diff-so-fancy | less
-[user]
-        signingkey = 8388BC685A37B06B
-[commit]
-        gpgsign = true
