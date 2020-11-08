@@ -1,6 +1,10 @@
+[user]
+	signingkey = E99AB508CD0EBEC4
+[commit]
+	gpgsign = true
 [credential]
 	helper = osxkeychain
 [pager]
-  log = diff-highlight | less
-  show = diff-highlight | less
-  diff = diff-highlight | less
+	log = diff-highlight | less
+	show = diff-highlight | less
+	diff = diff-highlight | less

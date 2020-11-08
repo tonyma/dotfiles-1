@@ -34,12 +34,12 @@
 [http "https://gopkg.in"]
 	followRedirects = true
 [color "diff"]
-  context = dim
-  meta = white bold
-  frag = white black
-  old = red normal ul bold
-  new = green normal ul bold
-  commit = magenta
+	context = dim
+	meta = white bold
+	frag = white black
+	old = red normal ul bold
+	new = green normal ul bold
+	commit = magenta
 	whitespace = normal normal
 [color "decorate"]
 	branch = green
@@ -54,7 +54,7 @@
 	untracked = blue
 	unmerged = yellow
 [diff]
-  compactionHeuristic = true
+	compactionHeuristic = true
 
 [commit]
 	verbose = true
@@ -73,4 +73,4 @@
 	program = gpg
 
 [include]
-  path = config_os
+	path = config_os
