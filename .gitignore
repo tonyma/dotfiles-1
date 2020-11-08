@@ -17,6 +17,7 @@
 !/flake8
 !/fonts
 !/git
+!/gnupg/.gitignore
 !/gocode
 !/gogh
 !/gordon
