@@ -71,3 +71,5 @@
 	protocol = https
 [pull]
 	rebase = true
+[gpg]
+	program = gpg
