@@ -8,7 +8,7 @@
     <string>dev.kyoh86.userjob</string>
   <key>ProgramArguments</key>
     <array>
-      <string>/Users/kyoh86/.config/userjob/exec</string>
+      <string>/Users/yamada/.config/userjob/exec</string>
     </array>
   <key>RunAtLoad</key>
     <true/>

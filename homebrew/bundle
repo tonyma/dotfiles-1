@@ -12,6 +12,8 @@ tap "homebrew/services"
 tap "kyoh86/pyenv"
 tap "kyoh86/tap"
 tap "mix3/ndenv"
+# Run your GitHub Actions locally 🚀
+brew "act"
 # Command-line interface for SQLite
 brew "sqlite"
 # General-purpose data compression with high compression ratio
@@ -54,8 +56,6 @@ brew "findutils"
 brew "fish"
 # Monitor a directory for changes and run a shell command
 brew "fswatch"
-# Command-line fuzzy finder written in Go
-brew "fzf"
 # Graphics library to dynamically manipulate images
 brew "gd"
 # GitHub command-line tool
@@ -70,6 +70,8 @@ brew "git"
 brew "gnu-sed"
 # GNU version of the tar archiving utility
 brew "gnu-tar"
+# GNU Pretty Good Privacy (PGP) package
+brew "gnupg"
 # Embed files into a Go executable
 brew "go-statik"
 # Graph visualization software from AT&T and Bell Labs
@@ -110,6 +112,8 @@ brew "openjdk"
 brew "openapi-generator"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
+# Pinentry for GPG on Mac
+brew "pinentry-mac"
 # Draw UML diagrams
 brew "plantuml"
 # Object-relational database system
@@ -152,8 +156,6 @@ brew "zsh"
 brew "zsh-completions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
-# Concurrently run Go lint tools and normalise their output.
-brew "alecthomas/tap/gometalinter"
 # Fast linters runner for Go.
 brew "golangci/tap/golangci-lint"
 # Deliver Go binaries as fast and easily as possible
@@ -207,8 +209,11 @@ cask "vlc"
 cask "wkhtmltopdf"
 cask "yt-music"
 mas "1Password 7", id: 1333542190
+mas "AnyMP4 4K Converter", id: 1013790008
 mas "com.iwaxx.Debookee-Tools", id: 1110355801
 mas "Cyberduck", id: 409222199
+mas "Display Menu", id: 549083868
+mas "EasyRes", id: 688211836
 mas "Fantastical", id: 975937182
 mas "GarageBand", id: 682658836
 mas "iMage Tools", id: 493949693
@@ -224,9 +229,7 @@ mas "Pages", id: 409201541
 mas "Pixel Perfect", id: 916097243
 mas "Slack", id: 803453959
 mas "The Unarchiver", id: 425424353
-mas "Todoist", id: 585829637
 mas "TweetDeck", id: 485812721
-mas "WeChat", id: 836500024
 mas "Xcode", id: 497799835
 mas "Yoink", id: 457622435
 mas "タイピスト", id: 415166115

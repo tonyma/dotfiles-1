@@ -1,6 +1,6 @@
 version: 2
-logfile: ./output.log
-loglevel: 1
+# logfile: ./output.log
+# loglevel: 1
 
 tools:
   prettier: &prettier
