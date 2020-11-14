@@ -4,8 +4,6 @@
 !/.richstyle
 !/24-bit-color.sh
 !/README.md
-!/X11
-!/alacritty
 !/archlinux-setup-memo.md
 !/autokey
 !/autorandr
@@ -14,7 +12,6 @@
 !/docker-linux/config.json
 !/docker-osx
 !/efm-langserver
-!/fcitx/conf*
 !/flake8
 !/fonts
 !/git
