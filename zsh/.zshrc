@@ -497,7 +497,7 @@ function update-yay {
   echo updating yay
   pushd ~
   if command -v pacman >/dev/null 2>&1 ; then
-    yay -Syyu
+    yay -Syyu --answerclean All --answerdiff None --answerupgrade '' --noconfirm
   fi
   popd
 }
