@@ -3,7 +3,7 @@
 ## installation
 
 ```sh
-curl "https://raw.githubusercontent.com/kyoh86/dotfiles/master/setup" | zsh
+curl "https://raw.githubusercontent.com/kyoh86/dotfiles/main/setup" | zsh
 ```
 
 ## my Ergodox layout
