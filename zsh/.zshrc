@@ -411,6 +411,7 @@ update() {
     update-yarn
     update-brew
     update-gordon
+    update-vim-plug
     echo done
   fi
 }
@@ -500,6 +501,32 @@ function update-yay {
     yay -Syyu --answerclean All --answerdiff None --answerupgrade '' --noconfirm
   fi
   popd
+}
+# }}}
+
+# update vim-plug {{{
+function update-vim-plug {
+  echo updating vim-plug
+  if [ -d "${DOTFILES}" ]; then
+    pushd "${DOTFILES}"
+    git submodule update --init --recursive
+    popd >/dev/null 2>&1
+  fi
+  if [ -d "${VIM_PLUG_DIR}" ]; then
+    set +m
+    pushd "${VIM_PLUG_DIR}"
+    ls -1d *(/) | while read -r p; do
+      echo "updating ${p}"
+      (
+        git -C ${p} pull --quiet --no-verify --autostash --depth 1
+        echo "${p} done"
+      ) &
+    done
+    wait >/dev/null 2>&1
+    set -m
+    echo "updating vim-plug: DONE"
+    popd >/dev/null 2>&1
+  fi
 }
 # }}}
 

@@ -194,6 +194,7 @@ let s:plug['before'] = {}
 let s:plug['after'] = {}
 function! s:plug.begin()
   let l:dir = g:xdg_data_home . '/vim-plug'
+  let $VIM_PLUG_DIR=l:dir
   let s:plug['dir'] = l:dir
   if !isdirectory(l:dir)
     call mkdir(l:dir, 'p')
@@ -781,8 +782,6 @@ command! -nargs=1 PlugAdd call <SID>add_plug('<args>')
 " Update All {{{
 function! s:update_all() abort
   execute 'terminal ' . &shell . ' -c "source ' . $ZDOTDIR . '/.zshrc && update"'
-  PlugUpgrade
-  PlugUpdate
 endfunction
 command! UpdateAll call <SID>update_all()
 " }}}
