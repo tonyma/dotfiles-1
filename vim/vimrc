@@ -712,6 +712,26 @@ call s:plug.begin()
     autocmd BufNewFile,BufRead *.ejs set filetype=ejs
     autocmd BufNewFile,BufRead *._ejs set filetype=ejs
   endfunction
+  Plug 'kkiyama117/zenn-vim'
+  function!s:plug.after.kkiyama117__zenn__vim()
+    let g:zenn#article#edit_new_cmd = 'new'
+
+    " npm install zenn-cli@latest
+    command! -nargs=0 ZennUpdate call zenn#update()
+
+    " Run npx zenn preview
+    " call "|:ZennPreview| or |:ZennPreview {port}|
+    command! -nargs=* ZennPreview call zenn#preview(<f-args>)
+
+    " Stop zenn preview process 
+    command! -nargs=0 ZennStopPreview call zenn#stop_preview()
+
+    " Create zenn new article
+    command! -nargs=* ZennNewArticle call zenn#new_article(<f-args>)
+
+    " Create zenn new book
+    command! -nargs=* ZennNewBook call zenn#new_book(<f-args>)
+  endfunction
 call s:plug.end()
 " }}}
 
