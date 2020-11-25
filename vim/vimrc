@@ -224,6 +224,7 @@ call s:plug.begin()
 
   Plug 'junegunn/fzf', { 'dir': $HOME.'/.fzf', 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
+  Plug 'pbogut/fzf-mru.vim'
 
   function! s:plug.after.junegunn__fzf__vim()
     let g:fzf_command_prefix = 'Fzf'
@@ -231,11 +232,9 @@ call s:plug.begin()
     nnoremap <Leader>c  :<C-u>FzfCommands<CR>
     nnoremap <Leader>w  :<C-u>FzfWindows<CR>
     nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
-    nnoremap <Leader>i  :<C-u>FzfHistory<CR>
-    " I want to set a nnoremap below but I cannot do it
-    " since https://github.com/kyoh86/dotfiles/issues/89
-    " nnoremap q:         :<C-u>FzfHistory :<CR> 
-    " nnoremap q/         :<C-u>FzfHistory /<CR>
+    nnoremap <Leader>i  :<C-u>FZFMru<CR>
+    nnoremap <Leader>:  :<C-u>FzfHistory :<CR> 
+    nnoremap <Leader>/  :<C-u>FzfHistory /<CR>
 
     function! s:format_buffer(b)
       let l:name = bufname(a:b)
@@ -248,7 +247,7 @@ call s:plug.begin()
       return substitute(printf("[%s] %s\t%s\t%s", a:b, l:flag, l:name, l:extra), '^\s*\|\s*$', '', 'g')
     endfunction
 
-    function! s:delete_buffers()
+    function! s:wipeout_buffers()
       let l:preview_window = get(g:, 'fzf_preview_window', &columns >= 120 ? 'right': '')
       let l:options = [
       \   '-m',
@@ -263,7 +262,6 @@ call s:plug.begin()
               \ ), 'options', []))
       endif
 
-
       return fzf#run(fzf#wrap({
       \ 'source':  map(
       \   filter(
@@ -273,15 +271,15 @@ call s:plug.begin()
       \   {_, nr -> s:format_buffer(nr)}
       \ ),
       \ 'sink*': {
-      \   lines -> execute('bdelete ' . join(map(lines, {
+      \   lines -> execute('bwipeout ' . join(map(lines, {
       \     _, line -> substitute(split(line)[0], '^\[\|\]$', '', 'g')
       \   })), 'silent!')
       \ },
       \ 'options': l:options,
       \}))
     endfunction
-    command! FzfDeleteBuffers call <SID>delete_buffers()
-    nnoremap <silent> <Leader>bw :<C-u>call <SID>delete_buffers()<CR>
+    command! FzfDeleteBuffers call <SID>wipeout_buffers()
+    nnoremap <silent> <Leader>bw :<C-u>call <SID>wipeout_buffers()<CR>
   endfunction
   " }}}
 

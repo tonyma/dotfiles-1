@@ -15,3 +15,7 @@ export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
 if [ -f "${ZDOTDIR}/.zsh_secret" ]; then
   source "${ZDOTDIR}/.zsh_secret"
 fi
+
+gsettings set org.gnome.desktop.peripherals.keyboard repeat true >/dev/null 2>&1 || :
+gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 50 >/dev/null 2>&1 || :
+gsettings set org.gnome.desktop.peripherals.keyboard delay 200 >/dev/null 2>&1 || :
