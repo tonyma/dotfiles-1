@@ -1,1 +1,7 @@
 alias ls='ls --color=auto'
+
+if (which gsettings > /dev/null); then
+  gsettings set org.gnome.desktop.peripherals.keyboard repeat true
+  gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 80
+  gsettings set org.gnome.desktop.peripherals.keyboard delay 200
+fi
