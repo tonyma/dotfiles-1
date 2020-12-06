@@ -193,13 +193,12 @@ let s:plug = {}
 let s:plug['before'] = {}
 let s:plug['after'] = {}
 function! s:plug.begin()
-  let l:dir = g:xdg_data_home . '/vim-plug'
-  let $VIM_PLUG_DIR=l:dir
-  let s:plug['dir'] = l:dir
-  if !isdirectory(l:dir)
-    call mkdir(l:dir, 'p')
+  let g:plug_dir = g:xdg_data_home . '/vim-plug'
+  let $VIM_PLUG_DIR=g:plug_dir
+  if !isdirectory(g:plug_dir)
+    call mkdir(g:plug_dir, 'p')
   endif
-  call plug#begin(l:dir)
+  call plug#begin(g:plug_dir)
 endfunction
 
 function! s:plug.end()
@@ -773,7 +772,7 @@ def s:edit_plug(dir: string, bang: string, mods: string)
     execute cmd .. ' ' .. dir
   endif
 enddef
-command! -bang -nargs=0 PlugEdit call s:edit_plug(s:plug['dir'], '<bang>', '<mods>')
+command! -bang -nargs=0 PlugEdit call s:edit_plug(g:plug_dir, '<bang>', '<mods>')
 nnoremap <Leader><Leader>p :<C-u>PlugEdit<CR>
 " }}}
 
