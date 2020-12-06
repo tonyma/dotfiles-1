@@ -232,7 +232,7 @@ call s:plug.begin()
     nnoremap <Leader>c  :<C-u>FzfCommands<CR>
     nnoremap <Leader>w  :<C-u>FzfWindows<CR>
     nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
-    nnoremap <Leader>i  :<C-u>FZFMru<CR>
+    nnoremap <Leader>r  :<C-u>FZFMru<CR>
     nnoremap <Leader>:  :<C-u>FzfHistory :<CR> 
     nnoremap <Leader>/  :<C-u>FzfHistory /<CR>
 
@@ -278,8 +278,8 @@ call s:plug.begin()
       \ 'options': l:options,
       \}))
     endfunction
-    command! FzfDeleteBuffers call <SID>wipeout_buffers()
-    nnoremap <silent> <Leader>bw :<C-u>call <SID>wipeout_buffers()<CR>
+    command! FzfDeleteBuffers call s:wipeout_buffers()
+    nnoremap <silent> <Leader>bw :<C-u>FzfDeleteBuffers<CR>
   endfunction
   " }}}
 
@@ -730,99 +730,104 @@ call s:plug.begin()
     " Create zenn new book
     command! -nargs=* ZennNewBook call zenn#new_book(<f-args>)
   endfunction
+
+  Plug 'vim-jp/autofmt'
+  set formatexpr=autofmt#japanese#formatexpr()  " kaoriya版では設定済み
+  let autofmt_allow_over_tw=1                   " 全角文字がぶら下がりで1カラムはみ出すのを許可
+  set formatoptions+=mB     " または mM
+  set smartindent
 call s:plug.end()
 " }}}
 
 " Functions {{{
 
-" Function: Edit Configurations {{{
-function! EditConfig(bang, mods)
+" ConfigEdit {{{
+def s:edit_config(bang: string, mods: string)
   if exists('g:fzf#vim#buffers')
-    call fzf#vim#files(g:xdg_config_home)
+    fzf#vim#files(g:xdg_config_home)
   else
-    if a:mods == ''
-      let l:command = 'edit' . a:bang
+    var cmd: string
+    if mods == ''
+      cmd = 'edit' .. bang
     else
-      let l:command = a:mods + ' split'
+      cmd = mods .. ' split'
     endif
-    execute l:command . ' ' . $MYVIMRC
+    execute cmd .. ' ' .. $MYVIMRC
   endif
-endfunction
-
-command! -bang -nargs=0 ConfigEdit call EditConfig('<bang>', '<mods>')
-
+enddef
+command! -bang -nargs=0 ConfigEdit call s:edit_config('<bang>', '<mods>')
 nnoremap <Leader><Leader>c :<C-u>ConfigEdit<CR>
 " }}}
 
-" Function: Edit Plugins {{{
-function! EditPlugin(bang, mods)
+" PlugEdit {{{
+def s:edit_plug(dir: string, bang: string, mods: string)
   if exists('g:fzf#vim#buffers')
-    call fzf#vim#files(s:plug['dir'])
+    fzf#vim#files(dir)
   else
-    if a:mods == ''
-      let l:command = 'edit' . a:bang
+    var cmd: string
+    if mods == ''
+      cmd = 'edit' .. bang
     else
-      let l:command = a:mods + ' split'
+      cmd = mods .. ' split'
     endif
-    execute l:command . ' ' . s:plug['dir']
+    execute cmd .. ' ' .. dir
   endif
-endfunction
-
-command! -bang -nargs=0 PlugEdit call EditPlugin('<bang>', '<mods>')
+enddef
+command! -bang -nargs=0 PlugEdit call s:edit_plug(s:plug['dir'], '<bang>', '<mods>')
 nnoremap <Leader><Leader>p :<C-u>PlugEdit<CR>
 " }}}
 
-" Manage Plugins {{{
-function! s:add_plug(name) abort
-  let l:cur_file = expand('%:p')
-  if l:cur_file != $MYVIMRC
-    execute ':edit ' . escape($MYVIMRC, ' ')
+" PlugAdd {{{
+def s:plug_add(name: string)
+  var cur_file = expand('%:p')
+  if cur_file != $MYVIMRC
+    execute ':edit ' .. escape($MYVIMRC, ' ')
   endif
   if expand('%:p') != $MYVIMRC
     return
   endif
   if &readonly == v:true
-    if l:cur_file != $MYVIMRC
+    if cur_file != $MYVIMRC
       execute ':bw'
     endif
     return
   endif
-  execute ':%s/\n\(\n*call s:plug\.end()\)$/\r  Plug ' . "'" . escape(a:name, '/') . "'" . '\r\1/'
+  execute ':%s/\n\(\n*call s:plug\.end()\)$/\r  Plug ' .. "'" .. escape(name, '/') .. "'" .. '\r\1/'
   execute ':w'
-  if l:cur_file != $MYVIMRC
+  if cur_file != $MYVIMRC
     execute ':bw'
   endif
   source $MYVIMRC
-endfunction
-command! -nargs=1 PlugAdd call <SID>add_plug('<args>')
+enddef
+command! -nargs=1 PlugAdd call s:plug_add('<args>')
 " }}}
 
 " Update All {{{
-function! s:update_all() abort
-  execute 'terminal ' . &shell . ' -c "source ' . $ZDOTDIR . '/.zshrc && update"'
-endfunction
-command! UpdateAll call <SID>update_all()
+def s:update_all()
+  execute 'terminal ' .. &shell .. ' -c "source ' .. $ZDOTDIR .. '/.zshrc && update"'
+enddef
+command! UpdateAll call s:update_all()
 " }}}
 
 " Manage TODOs {{{
-function! s:grep_todo() abort
-  execute "grep! 'TODO\\|UNDONE\\|HACK\\|FIXME'"
-endfunction
-command! Todo call <SID>grep_todo()
-command! ToDo call <SID>grep_todo()
-command! TODO call <SID>grep_todo()
+def s:grep_todo()
+  grep! 'TODO\\|UNDONE\\|HACK\\|FIXME'
+enddef
+command! Todo call s:grep_todo()
+command! ToDo call s:grep_todo()
+command! TODO call s:grep_todo()
 " }}}
 
 " Function: Switch Branch {{{
-function! s:git_switch(line)
-  let l:branch = get(split(a:line), 1, '')
-  exec '!git switch '.l:branch
-  call lightline#update()
-endfunction
+def s:git_switch(line: string)
+  var branch = get(split(line), 1, '')
+  execute '!git switch ' .. branch
+  lightline#update()
+enddef
 
-command! SwitchBranch call fzf#run(fzf#wrap({
-    \ 'source': "git-branches --color !current",
-    \ 'sink': function('<SID>git_switch'),
+command! SwitchBranch call fzf#run(fzf#wrap(#{
+    \ source: "git-branches --color !current",
+    \ sink: function('<SID>git_switch'),
     \ }))
 nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
 " }}}
@@ -835,68 +840,88 @@ command! CleanupBranch !git-branches cleanup
 nnoremap <Leader>gd :<C-u>GitEdit<CR>
 " }}}
 
-" Function: Update Terminal Window Title {{{
-function! Tapi_UpdateStatus(bufnum, arglist)
-  if len(a:arglist) == 1
-    call lightline#update()
-  endif
-endfunction
-" }}}
-
 " Function: Quote current filename and content {{{
-function! s:quote_file()
-  let l:content=expand('%:t') . "\n```" . &filetype . "\n"
-  let l:lines = getline(0, line("$"))
-  for l:l in l:lines
-     let l:content .= l:l . "\n"
+def s:quote_file()
+  var content = expand('%:t') .. "\n```" .. &filetype .. "\n"
+  var lines = getline(0, line("$"))
+  for line in lines
+     content = content .. line .. "\n"
   endfor
-  let l:content .= '```'
-  let @+=l:content
-endfunction
+  content = content .. '```'
+  setreg('+', content)
+enddef
+
 command! Quote call s:quote_file()
 " }}}
 
 " Function: Show cursor info / buffer info in popup {{{
-function! s:get_syn_id(transparent)
-  let synid = synID(line('.'), col('.'), 1)
-  return a:transparent ? synIDtrans(synid) : synid
-endfunction
-function! s:get_syn_name(synid)
-  return synIDattr(a:synid, 'name')
-endfunction
-function! s:get_highlight_info(transparent)
-  return trim(execute("highlight " . s:get_syn_name(s:get_syn_id(a:transparent))))
-endfunction
-function! s:popup_cursor_info()
-  " get cursor position informations
-  let l:pos = getpos('.')
-  " get charcode informations
-  let l:char = strcharpart(strpart(getline('.'), col('.') - 1), 0, 1)
-  let l:charnr = char2nr(l:char)
-  " format output
-  let l:lines = [
-        \ 'Cursor Info',
-        \ '  Line:        ' . l:pos[1],
-        \ '  Column:      ' . l:pos[2],
-        \ '  Char:        ' . printf('"%s" -- (%d)10 (%X)16', l:char, l:charnr, l:charnr),
-        \ '  Highlight:   ' . s:get_highlight_info(0),
-        \ '               ' . s:get_highlight_info(1),
-        \ '',
-        \ 'Buffer Info',
-        \ '  File type:   ' . &filetype,
-        \ '  Encoding:    ' . &encoding,
-        \ '  File format: ' . &fileformat,
-        \ '  Syntax:      ' . &syntax,
-        \ ]
-  " open temporary popup
-  call popup_atcursor(l:lines, #{
-        \ pos: 'topleft',
-        \ moved: 'any',
-        \ padding: [0, 1, 0, 1],
-        \ wrap: v:false,
-        \ })
-endfunction
-command! CursorInfo call <SID>popup_cursor_info()
+def s:get_syn_id(transparent: bool): string
+  const synid = synID(line('.'), col('.'), 1)
+  return transparent ? synIDtrans(synid) : synid
+enddef
+def s:get_syn_name(synid: string): string
+  return synIDattr(synid, 'name')
+enddef
+def s:get_highlight_info(transparent: bool): string
+  return trim(execute("highlight " .. s:get_syn_name(s:get_syn_id(transparent))))
+enddef
+def s:popup_cursor_info()
+  # get cursor line text
+  const text = getline('.')
+  const text_before = strpart(text, 0, col('.') - 1)
+  const text_after = strpart(text, col('.') - 1)
+  const char = strcharpart(text_after, 0, 1)
+
+  # get cursor position informations
+  const cur_row_idx = line('.')
+  const cur_row_len = strchars(text)
+  const cur_col_char_idx = strchars(text_before) + 1
+
+  # get charcode informations
+  const charcode = char2nr(char)
+  const charcode_utf8 = trim(execute('normal g8'))
+
+  # get buffer size
+  const buf_lines = line('$')
+  const buf_counts = wordcount()
+
+  # format output
+  const output = [
+         'Cursor Info',
+         '  Line: ' .. cur_row_idx .. ' of ' .. buf_lines .. '; Col: ' .. cur_col_char_idx .. ' of ' .. cur_row_len,
+         '  Word: ' .. buf_counts['cursor_words'] .. ' of ' .. buf_counts['words'] .. '; Byte: ' .. buf_counts['cursor_bytes'] .. ' of ' .. buf_counts['bytes'],
+         '  Char: ' .. buf_counts['cursor_chars'] .. ' of ' .. buf_counts['chars'],
+         '  Code: ' .. printf('"%s" {(%d)10 (%X)16 (%s)utf8}', char, charcode, charcode, charcode_utf8),
+       ]
+  # open temporary popup
+  call popup_atcursor(output, #{
+        pos: 'topleft',
+        moved: 'any',
+        padding: [0, 1, 0, 1],
+        wrap: v:false,
+      })
+enddef
+command! CursorInfo call s:popup_cursor_info()
+nnoremap <silent> <Leader>ic :<C-u>CursorInfo<CR>
+def s:popup_buffer_info()
+  # format output
+  const output = [
+         'Buffer Info',
+         '  File type:   ' .. &filetype,
+         '  Encoding:    ' .. &encoding,
+         '  File format: ' .. &fileformat,
+         '  Syntax:      ' .. &syntax,
+       ]
+  # open temporary popup
+  call popup_atcursor(output, #{
+        pos: 'topleft',
+        moved: 'any',
+        padding: [0, 1, 0, 1],
+        wrap: v:false,
+      })
+enddef
+command! BufferInfo call s:popup_buffer_info()
+nnoremap <silent> <Leader>ib :<C-u>BufferInfo<CR>
 " }}}
 
 " }}}
@@ -1008,6 +1033,13 @@ nnoremap <silent> tv :<C-u>vertical terminal++noclose<CR>
 
 " }}}
 
+" Function: Update Terminal Window Title {{{
+function! Tapi_UpdateStatus(bufnum, arglist)
+  if len(a:arglist) == 1
+    call lightline#update()
+  endif
+endfunction
+" }}}
 " Function: Delete Terminal Buffer {{{
 " ++nocloseで開くので、exitしたらそのままbuffer deleteしたい。
 " zshrcの方で function :bd() としてこいつを呼び出してexitするコマンド :bd を定義済
@@ -1087,6 +1119,15 @@ set guioptions=cei
 set guifont=Cica\ 10.5
 set mouse=
 set guicursor=n-c:block-Cursor/lCursor,v:block-vCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor,a:blinkwait333-blinkoff333-blinkon333
+" }}}
+
+" Command-line-mode mappings {{{
+cnoremap <C-A> <Home>
+cnoremap <C-F> <Right>
+cnoremap <C-B> <Left>
+cnoremap <C-D> <Del>
+cnoremap <C-H> <Del>
+set cedit=\<C-Y> " enter command-line-window
 " }}}
 
 " }}}
