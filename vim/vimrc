@@ -835,10 +835,6 @@ nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
 command! CleanupBranch !git-branches cleanup
 " }}}
 
-" Function: Edit Changed Files {{{
-nnoremap <Leader>gd :<C-u>GitEdit<CR>
-" }}}
-
 " Function: Quote current filename and content {{{
 def s:quote_file()
   var content = expand('%:t') .. "\n```" .. &filetype .. "\n"
@@ -853,80 +849,15 @@ enddef
 command! Quote call s:quote_file()
 " }}}
 
-" Function: Show cursor info / buffer info in popup {{{
-def s:get_syn_id(transparent: bool): string
-  const synid = synID(line('.'), col('.'), 1)
-  return transparent ? synIDtrans(synid) : synid
-enddef
-def s:get_syn_name(synid: string): string
-  return synIDattr(synid, 'name')
-enddef
-def s:get_highlight_info(transparent: bool): string
-  return trim(execute("highlight " .. s:get_syn_name(s:get_syn_id(transparent))))
-enddef
-def s:popup_cursor_info()
-  # get cursor line text
-  const text = getline('.')
-  const text_before = strpart(text, 0, col('.') - 1)
-  const text_after = strpart(text, col('.') - 1)
-  const char = strcharpart(text_after, 0, 1)
-
-  # get cursor position informations
-  const cur_row_idx = line('.')
-  const cur_row_len = strchars(text)
-  const cur_col_char_idx = strchars(text_before) + 1
-
-  # get charcode informations
-  const charcode = char2nr(char)
-  const charcode_utf8 = trim(execute('normal g8'))
-
-  # get buffer size
-  const buf_lines = line('$')
-  const buf_counts = wordcount()
-
-  # format output
-  const output = [
-         'Cursor Info',
-         '  Line: ' .. cur_row_idx .. ' of ' .. buf_lines .. '; Col: ' .. cur_col_char_idx .. ' of ' .. cur_row_len,
-         '  Word: ' .. buf_counts['cursor_words'] .. ' of ' .. buf_counts['words'] .. '; Byte: ' .. buf_counts['cursor_bytes'] .. ' of ' .. buf_counts['bytes'],
-         '  Char: ' .. buf_counts['cursor_chars'] .. ' of ' .. buf_counts['chars'],
-         '  Code: ' .. printf('"%s" {(%d)10 (%X)16 (%s)utf8}', char, charcode, charcode, charcode_utf8),
-       ]
-  # open temporary popup
-  call popup_atcursor(output, #{
-        pos: 'topleft',
-        moved: 'any',
-        padding: [0, 1, 0, 1],
-        wrap: v:false,
-      })
-enddef
-command! CursorInfo call s:popup_cursor_info()
-nnoremap <silent> <Leader>ic :<C-u>CursorInfo<CR>
-def s:popup_buffer_info()
-  # format output
-  const output = [
-         'Buffer Info',
-         '  File type:   ' .. &filetype,
-         '  Encoding:    ' .. &encoding,
-         '  File format: ' .. &fileformat,
-         '  Syntax:      ' .. &syntax,
-       ]
-  # open temporary popup
-  call popup_atcursor(output, #{
-        pos: 'topleft',
-        moved: 'any',
-        padding: [0, 1, 0, 1],
-        wrap: v:false,
-      })
-enddef
-command! BufferInfo call s:popup_buffer_info()
-nnoremap <silent> <Leader>ib :<C-u>BufferInfo<CR>
 " }}}
 
-" }}}
-
-" Command aliases {{{
+" Command aliases & map {{{
 command! Ghf OpenGithubFile
+nmap <Leader>gd <Plug>(git-edit)
+nmap <Leader>ic <Plug>(pinfo-show-cursor)
+nmap <Leader>ib <Plug>(pinfo-show-buffer)
+nmap <Leader>ih <Plug>(pinfo-show-highlight)
+
 " }}}
 
 " Settings {{{
@@ -1115,7 +1046,7 @@ endif
 set columns=200
 set lines=50
 set guioptions=cei
-set guifont=Cica\ 10.5
+set guifont=Cica\ 9.5
 set mouse=
 set guicursor=n-c:block-Cursor/lCursor,v:block-vCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor,a:blinkwait333-blinkoff333-blinkon333
 " }}}
