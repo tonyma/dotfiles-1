@@ -18,6 +18,10 @@ setopt hist_ignore_space      # スペースで始まるコマンド行はヒス
 setopt hist_reduce_blanks     # 余分な空白は詰めて記録
 setopt hist_no_store          # historyコマンドは履歴に登録しない
 setopt hist_verify            # ヒストリを呼び出してから実行する間に一旦編集可能
+zshaddhistory() {
+  emulate -L zsh
+  [[ ${1%%$'\n'} != ${~HISTORY_IGNORE} ]]
+}
 # }}}
 
 # プロンプト設定 {{{
