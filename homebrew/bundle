@@ -78,6 +78,8 @@ brew "go-statik"
 brew "graphviz"
 # GNU grep, egrep and fgrep
 brew "grep"
+# Like cURL, but for gRPC
+brew "grpcurl"
 # Popular GNU data compression program
 brew "gzip"
 # User-friendly cURL replacement (command-line HTTP client)
