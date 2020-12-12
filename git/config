@@ -65,8 +65,6 @@
 	user = kyoh86
 [ghi]
 	token = !security find-internet-password -a kyoh86 -s github.com -l 'ghi token' -w
-[hub]
-	protocol = https
 [pull]
 	rebase = true
 [gpg]
