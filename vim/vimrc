@@ -289,21 +289,22 @@ call s:plug.begin()
     let g:lsp_diagnostics_float_cursor = 1 " enable hover under cursor when in normal mode
 
     nmap <Leader>ld <Plug>(lsp-definition)
+    nmap <Leader>ldf <Plug>(lsp-definition)
+    nmap <Leader>ldc <Plug>(lsp-declaration)
+    nmap <Leader>ldt <Plug>(lsp-type-definition)
+
     nmap <Leader>lh <Plug>(lsp-hover)
     nmap <Leader>ln <Plug>(lsp-next-error)
     nmap <Leader>lp <Plug>(lsp-previous-error)
-    nmap <Leader>lr <Plug>(lsp-rename)
     nmap <Leader>lf <Plug>(lsp-document-format)
     nmap <Leader>la <Plug>(lsp-code-action)
     nmap <Leader>ll <Plug>(lsp-document-diagnostics)
     nmap <Leader>ls <Plug>(lsp-status)
     nmap <Leader>li <Plug>(lsp-implementation)
-
-    " nmap <Leader> <Plug>(lsp-references)
-    " nmap <Leader> <Plug>(lsp-declaration)
+    nmap <Leader>lr <Plug>(lsp-references)
+    nmap <Leader>le <Plug>(lsp-rename)
     " nmap <Leader> <Plug>(lsp-document-symbol)
     " nmap <Leader> <Plug>(lsp-workspace-symbol)
-    " nmap <Leader> <Plug>(lsp-type-definition)
 
     set omnifunc=lsp#complete
 
@@ -728,7 +729,14 @@ call s:plug.begin()
     " Create zenn new book
     command! -nargs=* ZennNewBook call zenn#new_book(<f-args>)
   endfunction
-
+  Plug 'osyo-manga/vim-brightest'
+  function!s:plug.after.osyo__manga__vim__brightest()
+    " ハイライトするグループ名を設定します
+    " アンダーラインで表示する
+    let g:brightest#highlight = {
+    \   "group" : "BrightestUnderline"
+    \}
+  endfunction
   Plug 'vim-jp/autofmt'
   set formatexpr=autofmt#japanese#formatexpr()  " kaoriya版では設定済み
   let autofmt_allow_over_tw=1                   " 全角文字がぶら下がりで1カラムはみ出すのを許可
@@ -916,6 +924,8 @@ set completeopt=menuone,noinsert,noselect  " set by asyncomplete.vim
 
 " Other misc settings {{{
 set clipboard=unnamedplus,unnamed
+set shortmess-=S
+set shortmess+=I
 set hidden              " able to edit without saving
 set fixendofline        " <EOL> at the end of file will be restored if missing
 set showcmd             " 
