@@ -843,17 +843,8 @@ command! CleanupBranch !git-branches cleanup
 " }}}
 
 " Function: Quote current filename and content {{{
-def s:quote_file()
-  var content = expand('%:t') .. "\n```" .. &filetype .. "\n"
-  var lines = getline(0, line("$"))
-  for line in lines
-     content = content .. line .. "\n"
-  endfor
-  content = content .. '```'
-  setreg('+', content)
-enddef
-
-command! Quote call s:quote_file()
+nmap Y <Plug>(quotem-copy-name)
+vmap Y <Plug>(quotem-copy-name)
 " }}}
 
 " }}}
