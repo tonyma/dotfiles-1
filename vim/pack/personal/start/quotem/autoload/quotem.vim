@@ -1,8 +1,16 @@
 def! quotem#copy(firstline: number, lastline: number, ...modifiers: list<string>): void
-  var label = expand(join(['%'] + modifiers, ':'))
-  setreg('+', join([label] + quotem#quote(firstline, lastline), "\n"))
-enddef
+  var lines: list<string>
 
-def! quotem#quote(firstline: number, lastline: number): list<string>
-  return ["```" .. &filetype] + getline(firstline, lastline) + ["```"]
+  if &buftype ==# 'terminal'
+    add(lines, "```console")
+  else
+    # put buffer name on the top
+    add(lines, expand(join(['%'] + modifiers, ':')))
+    add(lines, "```" .. &filetype)
+  endif
+
+  extend(lines, getline(firstline, lastline))
+  add(lines, "```")
+
+  setreg('+', join(lines, "\n"))
 enddef

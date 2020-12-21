@@ -843,8 +843,8 @@ command! CleanupBranch !git-branches cleanup
 " }}}
 
 " Function: Quote current filename and content {{{
-nmap Y <Plug>(quotem-copy-name)
-vmap Y <Plug>(quotem-copy-name)
+nmap Y <Plug>(quotem-copy)
+vmap Y <Plug>(quotem-copy)
 " }}}
 
 " }}}
