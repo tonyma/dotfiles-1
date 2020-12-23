@@ -12,6 +12,8 @@ def go#init#scaffold(): void
     return
   endif
 
+  # TODO: import testtarget if the testfile. testtarget path can be get with
+  # "go list ."
   call setline(1, ['package ' .. package_name, '', ''])
   call cursor(3, 1)
 enddef
