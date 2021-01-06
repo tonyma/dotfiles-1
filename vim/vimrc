@@ -1056,7 +1056,13 @@ cnoremap <C-F> <Right>
 cnoremap <C-B> <Left>
 cnoremap <C-D> <Del>
 cnoremap <C-H> <Del>
-set cedit=\<C-Y> " enter command-line-window
+
+" enter command-line-window
+set cedit=\<C-Y>
+
+" Go back command histories with prefix in the command
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
 " }}}
 
 " }}}
