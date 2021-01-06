@@ -996,11 +996,16 @@ endif
 tnoremap <S-Space> <Space>
 
 augroup TermSetting
-  " ターミナルで
-  "   * 行番号を表示しない
-  "   * wrapする（と、なぜかWrapしなくなる）
+  " ターミナルでの設定
   autocmd! TerminalWinOpen *
-      \ setlocal nonumber nowrap
+      \ if &buftype == 'terminal'
+      "\ 行番号を表示しない
+      \ | setlocal nonumber
+      "\ wrapする（と、なぜかWrapしなくなる）
+      \ | setlocal nonumber nowrap
+      "\ ノーマルモード、<Up>で一つ前のプロンプトに戻る
+      \ | nnoremap <buffer> <silent> <Up> ?^\(\(([^)]\+) \)\=\$ \)\@=<CR>n
+      \ | endif
 augroup END
 " }}}
 
