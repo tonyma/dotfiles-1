@@ -177,6 +177,9 @@ if !isdirectory(&backupdir)
 endif
 " }}}
 
+unlet! skip_defaults_vim
+source $VIMRUNTIME/defaults.vim
+
 " Configure Plugins {{{
 " vim-plug global settings
 let g:plug_window = 'topleft new'
@@ -1080,17 +1083,14 @@ cnoremap <C-A> <Home>
 cnoremap <C-F> <Right>
 cnoremap <C-B> <Left>
 cnoremap <C-D> <Del>
-cnoremap <C-H> <Del>
-
-" enter command-line-window
-set cedit=\<C-Y>
-
+cnoremap <C-H> <BS>
+"
 " Go back command histories with prefix in the command
 cnoremap <C-P> <Up>
 cnoremap <C-N> <Down>
+
+" enter command-line-window
+set cedit=\<C-Y>
 " }}}
 
 " }}}
-
-unlet! skip_defaults_vim
-source $VIMRUNTIME/defaults.vim
