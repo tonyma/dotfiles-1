@@ -936,6 +936,7 @@ set formatoptions+=j " Delete comment character when joining commented lines
 set helplang=ja,en
 highlight Pmenu ctermfg=159 ctermbg=17
 language messages en_US.UTF-8
+let g:html_indent_autotags='html,body,head,tbody,theadk' " seealso :help ft-html-indent
 " }}}
 
 " Setup Keymaps (for regular functions) {{{
@@ -995,18 +996,37 @@ endif
 " https://github.com/vim-jp/issues/issues/1328
 tnoremap <S-Space> <Space>
 
+function s:term_setting()
+  if &buftype ==# 'terminal'
+    " 行番号を表示しない
+    setlocal nonumber
+    " wrapする（と、なぜかWrapしなくなる）
+    setlocal nonumber nowrap
+    " ノーマルモード、<Up>で一つ前のプロンプトに戻る
+    nnoremap <buffer> <silent> <Up>   ?^\(\(([^)]\+) \)\=\$ .\+\)\@=<CR>
+    " ノーマルモード、<Down>で一つ後のプロンプトに戻る
+    nnoremap <buffer> <silent> <Down> /^\(\(([^)]\+) \)\=\$ .\+\)\@=<CR>
+  endif
+endfunction
+
 augroup TermSetting
   " ターミナルでの設定
-  autocmd! TerminalWinOpen *
-      \ if &buftype == 'terminal'
-      "\ 行番号を表示しない
-      \ | setlocal nonumber
-      "\ wrapする（と、なぜかWrapしなくなる）
-      \ | setlocal nonumber nowrap
-      "\ ノーマルモード、<Up>で一つ前のプロンプトに戻る
-      \ | nnoremap <buffer> <silent> <Up> ?^\(\(([^)]\+) \)\=\$ \)\@=<CR>n
-      \ | endif
+  autocmd! TerminalWinOpen * call s:term_setting()
 augroup END
+" }}}
+
+" Load settings for each location {{{
+augroup vimrc-local
+  autocmd!
+  autocmd DirChanged global call s:vimrc_local(expand('<afile>'))
+augroup END
+
+function! s:vimrc_local(loc)
+  let files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
+  for i in reverse(filter(files, 'filereadable(v:val)'))
+    source `=i`
+  endfor
+endfunction
 " }}}
 
 " Default Plugins {{{
