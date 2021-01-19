@@ -1,3 +1,9 @@
 [submodule "vim/autoload"]
 	path = vim/autoload
 	url = https://github.com/junegunn/vim-plug.git
+[submodule "vim/pack/vim-pack-go/opt/go-coverage"]
+	path = vim/pack/vim-pack-go/opt/go-coverage
+	url = https://github.com/kyoh86/vim-go-coverage
+[submodule "vim/pack/vim-pack-go/opt/go-imports"]
+	path = vim/pack/vim-pack-go/opt/go-imports
+	url = https://github.com/mattn/vim-goimports

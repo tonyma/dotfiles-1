@@ -565,11 +565,6 @@ call s:plug.begin()
     let g:tex_conceal = ''
   endfunction
 
-  Plug 'mattn/vim-goimports'
-  function! s:plug.after.mattn__vim__goimports()
-    let g:goimports = v:true
-    let g:goimports_simplify = v:true
-  endfunction
   Plug 'jremmen/vim-ripgrep', {'on': ['Rg', 'RgRoot']}
   function! s:plug.after.jremmen__vim__ripgrep()
     let g:rg_command = 'rg --vimgrep'
@@ -746,6 +741,13 @@ call s:plug.begin()
   set formatoptions+=mB     " または mM
   set smartindent
 call s:plug.end()
+" }}}
+
+" Configure packages {{{
+packadd go-imports
+let g:goimports = v:true
+let g:goimports_simplify = v:true
+packadd go-coverage
 " }}}
 
 " Functions {{{
