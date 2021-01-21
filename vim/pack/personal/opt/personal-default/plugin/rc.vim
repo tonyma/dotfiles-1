@@ -683,7 +683,7 @@ call s:plug.begin()
     nmap <Leader>ge <Plug>(gogh-edit-project)
     nmap <Leader>gp <Plug>(gogh-switch-project)
     nmap <Leader>gg <Plug>(gogh-get-repository)
-    " call gogh#ui#fzf#use()
+    call gogh#ui#fzf#use()
   endfunction
   " }}}
   "
