@@ -1,2 +1,10 @@
 packadd personal-default
+"
+" デフォルト設定は  vim/pack/personal/opt/personal-default/plugin/rc.vim 
+" を packadd で適用しているので、編集時は↑をいじること。
+" (カーソルを合わせて gf が便利)
+"
+" Vimrcとか各種Pluginの設定ミスを検証するために空の環境を作るには
+" vim/pack/personal/opt/try-vsnip/plugin/rc.vim あたりを参考にして
+"
 " packadd try-vsnip

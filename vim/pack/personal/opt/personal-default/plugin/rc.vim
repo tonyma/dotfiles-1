@@ -293,8 +293,8 @@ call s:plug.begin()
     setlocal signcolumn=yes
     setlocal tagfunc=lsp#tagfunc
 
-    let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-    let g:lsp_diagnostics_float_cursor = 1 " enable hover under cursor when in normal mode
+    let g:lsp_diagnostics_echo_cursor = v:true " enable echo under cursor when in normal mode
+    let g:lsp_diagnostics_float_cursor = v:true " enable hover under cursor when in normal mode
     let g:lsp_work_done_progress_enabled = v:true
 
     nmap <Leader>ld <Plug>(lsp-definition)
@@ -323,36 +323,52 @@ call s:plug.begin()
   augroup END
 
   Plug 'mattn/vim-lsp-settings'
-
   function! s:plug.before.vim__lsp__settings()
-    " for python
-    let g:lsp_settings = {}
-    let g:lsp_settings['pyls'] =
-          \ {
-          \   'workspace_config': {'pyls': {
-          \     'configurationSources': ['flake8'],
-          \     'plugins': {
-          \       'black': {'enabled': v:true},
-          \       'pycodestyle': {'enabled': v:false},
-          \       'pyls_mypy': {'enabled': v:true, 'live_mode': v:false},
-          \     }
-          \   }}
-          \ }
-    " for linters
-    let g:lsp_settings['efm-langserver'] = 
-          \ {
-          \   'disabled': v:false
-          \ }
-    " for viml
-    let g:lsp_settings['vim-language-server'] = 
-          \ {
-          \   'workspace_config': {
-          \     "iskeyword": "vim iskeyword option",
-          \     "diagnostic": {
-          \       "enable": v:true
+    let g:lsp_settings = {
+          "\ for python
+          \   'pyls': {
+          \     'workspace_config': {'pyls': {
+          \       'configurationSources': ['flake8'],
+          \       'plugins': {
+          \         'black': {'enabled': v:true},
+          \         'pycodestyle': {'enabled': v:false},
+          \         'pyls_mypy': {'enabled': v:true, 'live_mode': v:false},
+          \       }
+          \     }}
+          \   },
+          "\ for linters
+          \   'efm-langserver': {
+          \     'disabled': v:false
+          \   },
+          "\ for go
+          \   'gopls': {
+          \     'initialization_options': {
+          \       'usePlaceholders': v:true,
+          \     },
+          \   },
+          "\ for viml
+          \   'vim-language-server': {
+          \     'workspace_config': {
+          \       "iskeyword": "vim iskeyword option",
+          \       "diagnostic": {
+          \         "enable": v:true
+          \       }
           \     }
           \   }
           \ }
+  endfunction
+  " }}}
+
+  " {{{ snippet completion
+  Plug 'prabirshrestha/asyncomplete.vim'
+  function! s:plug.after.asyncomplete__vim()
+    let g:asyncomplete_auto_popup = 0
+
+    " :help ins-completion と :help i_CTRL-X でその他のCTRL-X配下の入力一覧を確認できる
+    inoremap <silent><expr> <C-x><C-s> asyncomplete#force_refresh()
+
+    let g:asyncomplete_auto_completeopt = 0
+    set completeopt=menuone,noinsert,noselect,preview,popup
   endfunction
 
   Plug 'hrsh7th/vim-vsnip'
@@ -961,7 +977,6 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 " Completion {{{
 set wildmenu
 set wildmode=longest:full,full
-set completeopt=preview,menuone,noinsert,noselect  " set by asyncomplete.vim
 " }}}
 
 " Other misc settings {{{
