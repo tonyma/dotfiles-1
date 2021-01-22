@@ -376,7 +376,7 @@ call s:plug.begin()
 
   function! s:plug.before.vim__vsnip()
     let g:vsnip_integ_debug = v:true
-    let g:vsnip_snippet_dir = expand('<sfile>:p:h:h') . '/vsnip'
+    let g:vsnip_snippet_dir = $XDG_CONFIG_HOME . '/vim/vsnip'
   endfunction
 
   function! s:plug.after.vim__vsnip()
