@@ -12,10 +12,31 @@ def go#init#scaffold(): void
     return
   endif
 
-  # TODO: import testtarget if the testfile. testtarget path can be get with
-  # "go list ."
-  call setline(1, ['package ' .. package_name, '', ''])
-  call cursor(3, 1)
+  var scaffold: list<string> = ['package ' .. package_name]
+
+  if package_name =~# '_test$'
+    try
+      var pkglist: list<string>
+      pkglist = systemlist('go list ./' .. expand('%:h'))
+      if v:shell_error == 0
+        if len(pkglist) > 0
+          extend(scaffold, [
+                \ '',
+                \ 'import (',
+                \ "\t" .. '"testing"',
+                \ '',
+                \ "\t" .. 'testtarget "' .. pkglist[0] .. '"',
+                \ ')'])
+        endif
+      endif
+    catch
+      # noop
+    endtry
+  endif
+
+  extend(scaffold, ['', 'func Test(t *testing.T) {', "\t" .. 'testtarget.', '}'])
+  setline(1, scaffold)
+  cursor(len(scaffold) - 2, 9)
 enddef
 
 # Get package name for the current file path
