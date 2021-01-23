@@ -8,3 +8,4 @@ packadd personal-default
 " vim/pack/personal/opt/try-vsnip/plugin/rc.vim あたりを参考にして
 "
 " packadd try-vsnip
+" packadd try-gopher

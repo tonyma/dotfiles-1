@@ -32,11 +32,15 @@ def go#init#scaffold(): void
     catch
       # noop
     endtry
+    extend(scaffold, ['', 'func Test(t *testing.T) {', "\t" .. 'testtarget.', '}'])
+    setline(1, scaffold)
+    cursor(len(scaffold) - 2, 9)
+  else
+    extend(scaffold, ['', ''])
+    setline(1, scaffold)
+    cursor(3, 1)
   endif
 
-  extend(scaffold, ['', 'func Test(t *testing.T) {', "\t" .. 'testtarget.', '}'])
-  setline(1, scaffold)
-  cursor(len(scaffold) - 2, 9)
 enddef
 
 # Get package name for the current file path
@@ -47,9 +51,9 @@ def go#init#get_package_name(): string
   endif
 
   const basename = fnamemodify(filename, ':t')
-  # if basename !~ '\.go$'
-  #   return ''
-  # endif
+  if basename !~ '\.go$'
+    return ''
+  endif
 
   const dir = fnamemodify(filename, ':h')
 

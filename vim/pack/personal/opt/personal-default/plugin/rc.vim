@@ -288,44 +288,44 @@ call s:plug.begin()
   " {{{ vim-lsp
   Plug 'prabirshrestha/vim-lsp'
 
+  function! s:plug.before.prabirshrestha__vim__lsp()
+    let g:lsp_diagnostics_echo_cursor = v:true " enable echo under cursor when in normal mode
+    let g:lsp_diagnostics_float_cursor = v:true " enable hover under cursor when in normal mode
+    let g:lsp_work_done_progress_enabled = v:true
+    augroup lsp_install
+      au!
+      " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+      autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+    augroup END
+  endfunction
+
   function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
     setlocal tagfunc=lsp#tagfunc
 
-    let g:lsp_diagnostics_echo_cursor = v:true " enable echo under cursor when in normal mode
-    let g:lsp_diagnostics_float_cursor = v:true " enable hover under cursor when in normal mode
-    let g:lsp_work_done_progress_enabled = v:true
+    nmap <silent> <Leader>ld <Plug>(lsp-definition)
+    nmap <silent> <Leader>ldf <Plug>(lsp-definition)
+    nmap <silent> <Leader>ldc <Plug>(lsp-declaration)
+    nmap <silent> <Leader>ldt <Plug>(lsp-type-definition)
 
-    nmap <Leader>ld <Plug>(lsp-definition)
-    nmap <Leader>ldf <Plug>(lsp-definition)
-    nmap <Leader>ldc <Plug>(lsp-declaration)
-    nmap <Leader>ldt <Plug>(lsp-type-definition)
-
-    nmap <Leader>lh <Plug>(lsp-hover)
-    nmap <Leader>ln <Plug>(lsp-next-error)
-    nmap <Leader>lp <Plug>(lsp-previous-error)
-    nmap <Leader>lf <Plug>(lsp-document-format)
-    nmap <Leader>la <Plug>(lsp-code-action)
-    nmap <Leader>ll <Plug>(lsp-document-diagnostics)
-    nmap <Leader>ls <Plug>(lsp-status)
-    nmap <Leader>li <Plug>(lsp-implementation)
-    nmap <Leader>lr <Plug>(lsp-references)
-    nmap <Leader>le <Plug>(lsp-rename)
+    nmap <silent> <Leader>lh <Plug>(lsp-hover)
+    nmap <silent> <Leader>ln <Plug>(lsp-next-error)
+    nmap <silent> <Leader>lp <Plug>(lsp-previous-error)
+    nmap <silent> <Leader>lf <Plug>(lsp-document-format)
+    nmap <silent> <Leader>la <Plug>(lsp-code-action)
+    nmap <silent> <Leader>ll <Plug>(lsp-document-diagnostics)
+    nmap <silent> <Leader>ls <Plug>(lsp-status)
+    nmap <silent> <Leader>li <Plug>(lsp-implementation)
+    nmap <silent> <Leader>lr <Plug>(lsp-references)
+    nmap <silent> <Leader>le <Plug>(lsp-rename)
     " nmap <Leader> <Plug>(lsp-document-symbol)
     " nmap <Leader> <Plug>(lsp-workspace-symbol)
   endfunction
 
-  augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-  augroup END
-
   Plug 'mattn/vim-lsp-settings'
   function! s:plug.before.vim__lsp__settings()
     let g:lsp_settings = {
-          "\ for python
           \   'pyls': {
           \     'workspace_config': {'pyls': {
           \       'configurationSources': ['flake8'],
@@ -336,17 +336,14 @@ call s:plug.begin()
           \       }
           \     }}
           \   },
-          "\ for linters
           \   'efm-langserver': {
           \     'disabled': v:false
           \   },
-          "\ for go
           \   'gopls': {
           \     'initialization_options': {
           \       'usePlaceholders': v:true,
           \     },
           \   },
-          "\ for viml
           \   'vim-language-server': {
           \     'workspace_config': {
           \       "iskeyword": "vim iskeyword option",
@@ -368,7 +365,6 @@ call s:plug.begin()
     inoremap <silent><expr> <C-x><C-s> asyncomplete#force_refresh()
 
     let g:asyncomplete_auto_completeopt = 0
-    set completeopt=menuone,noinsert,noselect,preview,popup
   endfunction
 
   Plug 'hrsh7th/vim-vsnip'
@@ -977,6 +973,7 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 " Completion {{{
 set wildmenu
 set wildmode=longest:full,full
+set completeopt=menuone,noinsert,noselect,preview,popup
 " }}}
 
 " Other misc settings {{{
@@ -986,7 +983,7 @@ set shortmess+=I
 set hidden              " able to edit without saving
 set fixendofline        " <EOL> at the end of file will be restored if missing
 set showcmd             " 
-set textwidth=0         " never limit length of each line
+set textwidth=120         " never limit length of each line
 set ambiwidth=double
 set foldmethod=marker
 set backspace=2

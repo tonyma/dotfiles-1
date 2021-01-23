@@ -1,5 +1,10 @@
 {
 	".source.go": {
+		"table driven test": {
+			"prefix": "tdt",
+			"body": "for _, testcase := range []struct {\n\t\ttitle\tstring\n\t\t$1\n\t}{\n\t\t{\n\t\t\ttitle: \"$2\",\n\t\t\t$3\n\t\t},\n\t} {\n\t\tt.Run(testcase.title, func(t *testing.T) {\n\t\t\t$0\n\t\t})\n\t}\n}",
+			"description": "Snippet for table driven test"
+		},
 		"subtest": {
 			"prefix": "tr",
 			"body": "t.Run(\"$1\", func(t *testing.T) {\n\t$0\n})",
