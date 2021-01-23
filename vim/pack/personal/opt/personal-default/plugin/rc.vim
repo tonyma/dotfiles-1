@@ -973,7 +973,8 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 " Completion {{{
 set wildmenu
 set wildmode=longest:full,full
-set completeopt=menuone,noinsert,noselect,preview,popup
+set completeopt=menuone,noinsert,popuphidden
+set completepopup=highlight:WarningMsg,border:off
 " }}}
 
 " Other misc settings {{{
