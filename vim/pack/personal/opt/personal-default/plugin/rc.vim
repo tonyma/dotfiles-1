@@ -974,7 +974,7 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 set wildmenu
 set wildmode=longest:full,full
 set completeopt=menuone,noinsert,popuphidden
-set completepopup=highlight:WarningMsg,border:off
+set completepopup=border:on,align:item
 " }}}
 
 " Other misc settings {{{
