@@ -81,7 +81,7 @@ def go#init#get_package_name(): string
   const dirname = fnamemodify(dir, ':t')
 
   # If the file is in the dir like "main" packagee
-  if s:isin_cmd(dir) || s:is_invalid_pkg_name(dir)
+  if s:isin_cmd(dir) || s:is_invalid_pkg_name(dirname)
     return 'main' .. suffix
   endif
 
