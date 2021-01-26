@@ -679,8 +679,9 @@ call s:plug.begin()
     let g:empty_prompt#pattern = '^\$ \+$'
   endfunction
   function! s:empty_prompt_mappings() abort
-    call empty_prompt#map(#{lhs: ';', rhs: "<C-w>:"})
-    " call empty_prompt#map(#{lhs: '<Esc>', rhs: "<C-w>N"})
+    call empty_prompt#map({'lhs': ';', 'rhs': "<C-w>:"})
+    call empty_prompt#map({'lhs': ':', 'rhs': "<C-w>:"})
+    call empty_prompt#map({'lhs': '<Esc>', 'rhs': "<C-w>N"})
 
     " tnoremap <C-x> <C-w>:normal \
     tnoremap <expr> <C-x> empty_prompt#is_empty() ? "<C-w>:normal \\" : "<C-x>"
@@ -894,9 +895,9 @@ def s:git_switch(line: string)
   lightline#update()
 enddef
 
-command! SwitchBranch call fzf#run(fzf#wrap(#{
-    \ source: "git-branches --color !current",
-    \ sink: function('<SID>git_switch'),
+command! SwitchBranch call fzf#run(fzf#wrap({
+    \ 'source': "git-branches --color !current",
+    \ 'sink': function('<SID>git_switch'),
     \ }))
 nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
 " }}}
