@@ -183,33 +183,54 @@ brew "kyoh86/tap/goimportssw"
 brew "kyoh86/tap/richgo"
 # Encode(metafy) / decode(unmetafy) .zsh_history file
 brew "kyoh86/tap/zshist"
+# Collection of apps and services for photography, design, video, web, and UX
 cask "adobe-creative-cloud"
+# Application launcher and productivity software
 cask "alfred"
+# Menu bar icon organizer
 cask "bartender"
+# Utility to display the output from any script or program in the menu bar
 cask "bitbar"
+# App to build and share containerized applications and microservices
 cask "docker"
+# Draw.io is free online diagram software
 cask "drawio"
+# Screen color temperature controller
 cask "flux"
 cask "font-myrica"
 cask "font-myricam"
+# Web browser
 cask "google-chrome"
+# Web browser
 cask "google-chrome-canary"
+# Set of tools to manage resources and applications hosted on Google Cloud
 cask "google-cloud-sdk"
 cask "google-japanese-ime"
 cask "gyazo"
+# Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"
 cask "java"
+# Tool to prevent the system from going into sleep mode
 cask "keepingyouawake"
+# Record keystroke for screencast
 cask "keycast"
+# Open-source keystroke visualizer
 cask "keycastr"
+# Interface for reading and syncing eBooks
 cask "kindle"
+# Reverse proxy, secure introspectable tunnels to localhost
 cask "ngrok"
 cask "nosqlbooster-for-mongodb"
+# Collaboration platform for API development
 cask "postman"
+# Free and open-source hosted hypervisor for x86 virtualization
 cask "virtualbox"
+# Open-source code editor
 cask "visual-studio-code"
+# Multimedia player
 cask "vlc"
 cask "wkhtmltopdf"
+# App wrapper for music.youtube.com
 cask "yt-music"
 mas "1Password 7", id: 1333542190
 mas "AnyMP4 4K Converter", id: 1013790008
