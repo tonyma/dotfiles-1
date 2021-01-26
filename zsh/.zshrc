@@ -190,18 +190,6 @@ if [[ -n "${VIM_TERMINAL}" ]]; then
   if [[ "${VIM_EDITERM_SETUP}" != "" ]]; then
     source "${VIM_EDITERM_SETUP}" 
   fi
-
-  alias q='exit'
-  # :q で exit -> noclose指定のterminalウインドウを閉じる
-  function :bd() {
-    echo -ne "\033]51;[\"call\", \"Tapi_DeleteTerminalBuffer\", []]\07"
-    exit
-  }
-  # :q で exit -> noclose指定のterminalウインドウを閉じる
-  function :bw() {
-    echo -ne "\033]51;[\"call\", \"Tapi_WipeoutTerminalBuffer\", []]\07"
-    exit
-  }
 fi
 
 # }}}

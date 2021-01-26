@@ -1021,9 +1021,9 @@ augroup TermMap
       \ nnoremap <buffer> q <Nop>
 augroup END
 
-nnoremap <silent> tt :<C-u>terminal++curwin ++noclose <CR>
-nnoremap <silent> tx :<C-u>terminal++noclose         <CR>
-nnoremap <silent> tv :<C-u>vertical terminal++noclose<CR>
+nnoremap <silent> tt :<C-u>terminal++curwin <CR>
+nnoremap <silent> tx :<C-u>terminal         <CR>
+nnoremap <silent> tv :<C-u>vertical terminal<CR>
 
 " }}}
 
@@ -1033,20 +1033,6 @@ function! Tapi_UpdateStatus(bufnum, arglist)
     call lightline#update()
   endif
 endfunction
-" }}}
-" Function: Delete Terminal Buffer {{{
-" ++nocloseで開くので、exitしたらそのままbuffer deleteしたい。
-" zshrcの方で function :bd() としてこいつを呼び出してexitするコマンド :bd を定義済
-function! Tapi_DeleteTerminalBuffer(bufnum, arglist)
-  autocmd! SafeState <buffer> ++once bdelete
-endfunction
-
-" ++nocloseで開くので、exitしたらそのままbuffer wipeoutしたい。
-" zshrcの方で function :bw() としてこいつを呼び出してexitするコマンド :bw を定義済
-function! Tapi_WipeoutTerminalBuffer(bufnum, arglist)
-  autocmd! SafeState <buffer> ++once bwipeout
-endfunction
-
 " }}}
 
 " Setup terminal {{{
