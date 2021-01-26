@@ -12,6 +12,7 @@ tap "homebrew/services"
 tap "kyoh86/pyenv"
 tap "kyoh86/tap"
 tap "mix3/ndenv"
+tap "mongodb/brew"
 # Run your GitHub Actions locally 🚀
 brew "act"
 # Command-line interface for SQLite
@@ -183,6 +184,8 @@ brew "kyoh86/tap/goimportssw"
 brew "kyoh86/tap/richgo"
 # Encode(metafy) / decode(unmetafy) .zsh_history file
 brew "kyoh86/tap/zshist"
+# An interactive JavaScript command-line interface to MongoDB
+brew "mongodb/brew/mongodb-community-shell"
 # Collection of apps and services for photography, design, video, web, and UX
 cask "adobe-creative-cloud"
 # Application launcher and productivity software

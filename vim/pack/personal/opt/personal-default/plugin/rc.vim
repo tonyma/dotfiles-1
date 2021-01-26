@@ -619,6 +619,11 @@ call s:plug.begin()
     let g:rg_command = 'rg --vimgrep'
   endfunction
 
+  Plug 'vim-test/vim-test'
+  function! s:plug.after.vim__test__vim__test() abort
+    let test#strategy = 'vimterminal'
+    let test#vimterminal#term_position = 'aboveleft'
+  endfunction
   Plug 'lambdalisue/vim-pyenv', {'for': 'python'}
   Plug 'jmcantrell/vim-virtualenv', {'for': 'python'}
   function! s:plug.after.jmcantrell__vim__virtualenv()
@@ -786,11 +791,13 @@ call s:plug.begin()
     \   "group" : "BrightestUnderline"
     \}
   endfunction
+
   Plug 'vim-jp/autofmt'
   set formatexpr=autofmt#japanese#formatexpr()  " kaoriya版では設定済み
   let autofmt_allow_over_tw=1                   " 全角文字がぶら下がりで1カラムはみ出すのを許可
   set formatoptions+=mB     " または mM
   set smartindent
+
 call s:plug.end()
 " }}}
 
