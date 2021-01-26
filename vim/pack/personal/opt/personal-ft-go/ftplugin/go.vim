@@ -9,4 +9,9 @@ setlocal commentstring=//\ %s
 setlocal foldmethod=syntax
 setlocal noexpandtab
 
+augroup personal-ft-go-augroup
+  autocmd!
+  autocmd BufEnter *.go command! -buffer -bang GoOpenTest call go#open#toggle_test('%:p', '<mods>', '<bang>')
+augroup END
+
 call go#init#scaffold()

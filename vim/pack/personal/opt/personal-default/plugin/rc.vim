@@ -681,7 +681,8 @@ call s:plug.begin()
   function! s:empty_prompt_mappings() abort
     call empty_prompt#map({'lhs': ';', 'rhs': "<C-w>:"})
     call empty_prompt#map({'lhs': ':', 'rhs': "<C-w>:"})
-    call empty_prompt#map({'lhs': '<Esc>', 'rhs': "<C-w>N"})
+    " ESCキーをマップすると、↑↓の入力が<ESC>として誤爆する
+    " call empty_prompt#map({'lhs': '<Esc>', 'rhs': "<C-w>N"})
 
     " tnoremap <C-x> <C-w>:normal \
     tnoremap <expr> <C-x> empty_prompt#is_empty() ? "<C-w>:normal \\" : "<C-x>"
