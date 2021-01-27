@@ -9,3 +9,4 @@ packadd personal-default
 "
 " packadd try-vsnip
 " packadd try-gopher
+" packadd try-lightline
