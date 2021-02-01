@@ -671,8 +671,10 @@ call s:plug.begin()
   endfunction
   Plug 'machakann/vim-sandwich'  " Edit surrounders (like brackets, parentheses and quotes)
   function! s:plug.after.machakann__vim__sandwich()
-    nnoremap s <Nop>   " ignore s instead of the cl
-    xnoremap s <Nop>   " ignore s instead of the cl
+    " ignore s instead of the cl
+    nnoremap s <Nop>
+    " ignore s instead of the cl
+    xnoremap s <Nop>
     silent! nmap <unique><silent> sc <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
     silent! nmap <unique><silent> scb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
   endfunction
