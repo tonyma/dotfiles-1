@@ -219,7 +219,7 @@ call s:plug.begin()
   " If you need Vim help for vim-plug itself (e.g. :help plug-options), register vim-plug as a plugin.
   Plug 'junegunn/vim-plug'
 
-  Plug 'kyoh86/momiji', {'rtp': 'vim', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/momiji'}
+  Plug 'kyoh86/momiji', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/momiji'}
 
   " {{{ junegunn/fzf
   let g:fzf_layout = { 'down': '20%' }
