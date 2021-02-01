@@ -7,3 +7,21 @@
 [submodule "vim/pack/vim-pack-go/opt/go-imports"]
 	path = vim/pack/vim-pack-go/opt/go-imports
 	url = https://github.com/mattn/vim-goimports
+[submodule "nvim/pack/personal/opt/momiji"]
+	path = nvim/pack/personal/opt/momiji
+	url = https://github.com/kyoh86/momiji
+[submodule "nvim/pack/personal/opt/telescope.nvim"]
+	path = nvim/pack/personal/opt/telescope.nvim
+	url = https://github.com/nvim-telescope/telescope.nvim
+[submodule "nvim/pack/personal/opt/popup.nvim"]
+	path = nvim/pack/personal/opt/popup.nvim
+	url = https://github.com/nvim-lua/popup.nvim
+[submodule "nvim/pack/personal/opt/plenary.nvim"]
+	path = nvim/pack/personal/opt/plenary.nvim
+	url = https://github.com/nvim-lua/plenary.nvim
+[submodule "nvim/pack/personal/opt/galaxyline.nvim"]
+	path = nvim/pack/personal/opt/galaxyline.nvim
+	url = https://github.com/glepnir/galaxyline.nvim
+[submodule "nvim/pack/personal/opt/nvim-web-devicons"]
+	path = nvim/pack/personal/opt/nvim-web-devicons
+	url = https://github.com/kyazdani42/nvim-web-devicons
