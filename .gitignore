@@ -46,6 +46,7 @@
 !/userjob
 !/vim
 !/zsh
+/zsh/.zcompcache
 
 *.log
 /hub

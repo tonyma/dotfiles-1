@@ -191,7 +191,12 @@ if [[ -n "${VIM_TERMINAL}" ]]; then
     source "${VIM_EDITERM_SETUP}" 
   fi
 fi
-
+#
+# コマンドをVimで編集する
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^xe' edit-command-line
+bindkey '^x^e' edit-command-line
 # }}}
 
 # }}}
