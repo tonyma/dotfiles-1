@@ -133,55 +133,137 @@ call s:uniquify_paths()
 
 packadd popup.nvim
 packadd plenary.nvim
+packadd vim-textobj-user
+packadd vim-operator-user
 
 packadd momiji " {{{
-syntax enable
-set termguicolors
-colorscheme momiji
+  syntax enable
+  set termguicolors
+  colorscheme momiji
 " }}}
 
 packadd gitsigns.nvim " {{{
-lua require('gitsigns').setup()
-" }}}
-
-" packadd gitgutter " {{{
+  lua require('gitsigns').setup()
 " }}}
 
 packadd! telescope.nvim " {{{
-nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
-lua <<EOF
--- Built-in actions
-local transform_mod = require('telescope.actions.mt').transform_mod
-
-local actions = require('telescope.actions')
--- Global remapping
-------------------------------
-require('telescope').setup{
-  defaults = {
-    set_env = { ['COLORTERM'] = 'truecolor' },
-    mappings = {
-      i = {
-        ["<c-x>"] = false,
-        ["<C-i>"] = actions.goto_file_selection_split,
-        ["<CR>"] = actions.goto_file_selection_edit + actions.center,
-      },
-      n = {
-        ["<esc>"] = actions.close,
-      },
-    },
-  }
-}
-EOF
+  lua require('telescope-conf')
 " }}}
 
 packadd galaxyline.nvim " {{{
-packadd nvim-web-devicons
-set noshowmode  " galaxyline で表示するので、vim標準のモード表示は隠す
-lua require('galaxyline-conf')
+  packadd nvim-web-devicons
+  set noshowmode  " galaxyline で表示するので、vim標準のモード表示は隠す
+  lua require('galaxyline-conf')
 " }}}
+
+packadd nvim-lspconfig " {{{
+  lua require('nvim-lsp-conf')
+" }}}
+
+packadd vim-ripgrep
+packadd vim-textobj-line
+packadd vim-textobj-entire
+packadd vim-textobj-parameter
+
+packadd vim-operator-replace " {{{
+  nmap _  <Plug>(operator-replace)
+" }}}
+
+packadd vim-operator-jump_side " {{{
+  " textobj の先頭へ移動する
+  nmap <Leader>h <Plug>(operator-jump-head)
+  " textobj の末尾へ移動する
+  nmap <Leader>t <Plug>(operator-jump-tail)
+" }}}
+
+packadd winresizer " {{{
+  let g:winresizer_start_key = '<C-W><C-E>'
+" }}}
+
+packadd vim-sandwich " {{{
+  " ignore s instead of the cl
+  nnoremap s <Nop>
+  " ignore s instead of the cl
+  xnoremap s <Nop>
+  silent! nmap <unique><silent> sc <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
+  silent! nmap <unique><silent> scb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+" }}}
+
+packadd vim-quickrun " {{{
+  let g:quickrun_config = {
+      \ '_': {
+      \   'runner': 'terminal'
+      \   }
+      \ }
+" }}}
+
+packadd vim-swap " {{{
+  omap i, <Plug>(swap-textobject-i)
+  xmap i, <Plug>(swap-textobject-i)
+  omap a, <Plug>(swap-textobject-a)
+  xmap a, <Plug>(swap-textobject-a)
+" }}}
+"
+packadd readablefold.vim
+packadd vim-devicons
+packadd sudo.vim
+
+" TODO:
+" - snippets
+" - vim-test/vim-test
+" - qpkorr/vim-bufkill
+" - justinmk/vim-dirvish
+" - tyru/empty-prompt.vim
+" - kyoh86/vim-gogh
+" - kyoh86/vim-beedle
+" - kyoh86/vim-wipeout
+" - kyoh86/vim-editerm
+" - direnv/direnv.vim
+" - po3rin/vim-gofmtmd
+" - AndrewRadev/linediff.vim
+" - dhruvasagar/vim-table-mode
+" - iberianpig/tig-explorer.vim
+" - stefandtw/quickfix-reflector.vim
+" - tpope/vim-dispatch
+" - tyru/capture.vim
+" - tyru/open-browser-github.vim
+" - tyru/open-browser.vim
+" - z0mbix/vim-shfmt
+" - lambdalisue/vim-backslash
+" - nikvdp/ejs-syntax
+" - kkiyama117/zenn-vim
+" - osyo-manga/vim-brightest
+" - vim-jp/autofmt
+"
+" FileTypes:
+" - markdown
+" - plantuml
+" - json
+" - vuejs
+" - python (pyenv, virtualenv, bps/vim-textobj-python)
+" - Glench/Vim-Jinja2-Syntax
+" - briancollins/vim-jst
+" - cespare/vim-toml
+" - leafgarland/typescript-vim
+" - pangloss/vim-javascript
+" - tell-k/vim-autoflake
+"
+"
+" MyPackages:
+"
+" packadd go-imports
+" let g:goimports = v:true
+" let g:goimports_simplify = v:true
+" packadd go-coverage
+" 
+" packadd my-copy-buffer-name
+" packadd my-git-edit
+" packadd my-popup-info
+" packadd my-quote
+" packadd personal-ft
+" packadd personal-ft-diff
+" packadd personal-ft-go
+" packadd personal-ft-help
 
 " Indents {{{
 set tabstop=2
@@ -205,7 +287,7 @@ set listchars=tab:»\ ,trail:∙,eol:↵,extends:»,precedes:«,nbsp:∙
 
 " Setup Keymaps (for regular functions) {{{
 " Delete search highlight
-nnoremap <ESC><ESC> :<C-u>nohl<CR><ESC>
+nnoremap <C-l> :<C-u>nohlsearch<CR><C-l>
 
 " Quickfix
 nnoremap <Leader>q :<C-u>copen<CR><ESC>
@@ -237,6 +319,43 @@ nnoremap <silent> tv :<C-u>vsp <Bar> terminal<CR>
 
 " }}}
 
+" Auto-off IME {{{
+if executable('ibus')
+  " IM OFF command
+  command! ImeOff silent !ibus engine 'xkb:us::eng'
+
+  " When in insert mode
+  augroup InsertHook
+      autocmd!
+      autocmd InsertLeave * ImeOff
+  augroup END
+elseif executable('fcitx-remote')
+  " IM OFF command
+  command! ImeOff silent !fcitx-remote -c
+
+  " When in insert mode
+  augroup InsertHook
+      autocmd!
+      autocmd InsertLeave * ImeOff
+  augroup END
+endif
+" }}}
+
+" Command-line-mode mappings {{{
+cnoremap <C-A> <Home>
+cnoremap <C-F> <Right>
+cnoremap <C-B> <Left>
+cnoremap <C-D> <Del>
+cnoremap <C-H> <BS>
+"
+" Go back command histories with prefix in the command
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
+
+" enter command-line-window
+set cedit=\<C-Y>
+" }}}
+
 " Other misc settings {{{
 set clipboard=unnamedplus,unnamed
 set hidden              " able to edit without saving
@@ -256,4 +375,106 @@ set sidescrolloff=3
 set formatoptions+=j " Delete comment character when joining commented lines
 set helplang=ja,en
 language messages en_US.UTF-8
+" }}}
+"
+" TODO: Original Functions {{{
+" " ConfigEdit {{{
+" def s:edit_config(bang: string, mods: string)
+"   if exists('g:fzf#vim#buffers')
+"     fzf#vim#files(g:xdg_config_home)
+"   else
+"     var cmd: string
+"     if mods == ''
+"       cmd = 'edit' .. bang
+"     else
+"       cmd = mods .. ' split'
+"     endif
+"     execute cmd .. ' ' .. $MYVIMRC
+"   endif
+" enddef
+" command! -bang -nargs=0 ConfigEdit call s:edit_config('<bang>', '<mods>')
+" nnoremap <Leader><Leader>c :<C-u>ConfigEdit<CR>
+" " }}}
+" 
+" " PlugEdit {{{
+" def s:edit_plug(dir: string, bang: string, mods: string)
+"   if exists('g:fzf#vim#buffers')
+"     fzf#vim#files(dir)
+"   else
+"     var cmd: string
+"     if mods == ''
+"       cmd = 'edit' .. bang
+"     else
+"       cmd = mods .. ' split'
+"     endif
+"     execute cmd .. ' ' .. dir
+"   endif
+" enddef
+" command! -bang -nargs=0 PlugEdit call s:edit_plug(g:plug_dir, '<bang>', '<mods>')
+" nnoremap <Leader><Leader>p :<C-u>PlugEdit<CR>
+" " }}}
+" 
+" " PlugAdd {{{
+" def s:plug_add(name: string)
+"   var cur_file = expand('%:p')
+"   if cur_file != $MYVIMRC
+"     execute ':edit ' .. escape($MYVIMRC, ' ')
+"   endif
+"   if expand('%:p') != $MYVIMRC
+"     return
+"   endif
+"   if &readonly == v:true
+"     if cur_file != $MYVIMRC
+"       execute ':bw'
+"     endif
+"     return
+"   endif
+"   execute ':%s/\n\(\n*call s:plug\.end()\)$/\r  Plug ' .. "'" .. escape(name, '/') .. "'" .. '\r\1/'
+"   execute ':w'
+"   if cur_file != $MYVIMRC
+"     execute ':bw'
+"   endif
+"   source $MYVIMRC
+" enddef
+" command! -nargs=1 PlugAdd call s:plug_add('<args>')
+" " }}}
+" 
+" " Update All {{{
+" def s:update_all()
+"   execute 'terminal ' .. &shell .. ' -c "source ' .. $ZDOTDIR .. '/.zshrc && update"'
+" enddef
+" command! UpdateAll call s:update_all()
+" " }}}
+" 
+" " Manage TODOs {{{
+" def s:grep_todo()
+"   grep! 'TODO\\|UNDONE\\|HACK\\|FIXME'
+" enddef
+" command! Todo call s:grep_todo()
+" command! ToDo call s:grep_todo()
+" command! TODO call s:grep_todo()
+" " }}}
+" 
+" " Function: Switch Branch {{{
+" def s:git_switch(line: string)
+"   var branch = get(split(line), 1, '')
+"   execute '!git switch ' .. branch
+"   lightline#update()
+" enddef
+" 
+" command! SwitchBranch call fzf#run(fzf#wrap({
+"     \ 'source': "git-branches --color !current",
+"     \ 'sink': function('<SID>git_switch'),
+"     \ }))
+" nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
+" " }}}
+" 
+" " Function: Cleanup Branch {{{
+" command! CleanupBranch !git-branches cleanup
+" " }}}
+" 
+" " Function: Quote current filename and content {{{
+" nmap Y <Plug>(quotem-copy)
+" vmap Y <Plug>(quotem-copy)
+" }}}
 " }}}

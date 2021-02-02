@@ -31,3 +31,51 @@
 [submodule "nvim/nvim/pack/personal/opt/gitsigns.nvim"]
 	path = nvim/pack/personal/opt/gitsigns.nvim
 	url = https://github.com/lewis6991/gitsigns.nvim
+[submodule "nvim/pack/personal/opt/nvim-lspconfig"]
+	path = nvim/pack/personal/opt/nvim-lspconfig
+	url = https://github.com/neovim/nvim-lspconfig
+[submodule "nvim/pack/personal/opt/vim-ripgrep"]
+	path = nvim/pack/personal/opt/vim-ripgrep
+	url = https://github.com/jremmen/vim-ripgrep
+[submodule "nvim/pack/personal/opt/vim-textobj-line"]
+	path = nvim/pack/personal/opt/vim-textobj-line
+	url = https://github.com/kana/vim-textobj-line
+[submodule "nvim/pack/personal/opt/vim-operator-user"]
+	path = nvim/pack/personal/opt/vim-operator-user
+	url = https://github.com/kana/vim-operator-user
+[submodule "nvim/pack/personal/opt/vim-textobj-entire"]
+	path = nvim/pack/personal/opt/vim-textobj-entire
+	url = https://github.com/kana/vim-textobj-entire
+[submodule "nvim/pack/personal/opt/vim-textobj-user"]
+	path = nvim/pack/personal/opt/vim-textobj-user
+	url = https://github.com/kana/vim-textobj-user
+[submodule "nvim/pack/personal/opt/vim-operator-replace"]
+	path = nvim/pack/personal/opt/vim-operator-replace
+	url = https://github.com/kana/vim-operator-replace
+[submodule "nvim/pack/personal/opt/vim-textobj-parameter"]
+	path = nvim/pack/personal/opt/vim-textobj-parameter
+	url = https://github.com/sgur/vim-textobj-parameter
+[submodule "nvim/pack/personal/opt/vim-operator-jump_side"]
+	path = nvim/pack/personal/opt/vim-operator-jump_side
+	url = https://github.com/osyo-manga/vim-operator-jump_side
+[submodule "nvim/pack/personal/opt/winresizer"]
+	path = nvim/pack/personal/opt/winresizer
+	url = https://github.com/simeji/winresizer
+[submodule "nvim/pack/personal/opt/vim-sandwich"]
+	path = nvim/pack/personal/opt/vim-sandwich
+	url = https://github.com/machakann/vim-sandwich
+[submodule "nvim/pack/personal/opt/vim-quickrun"]
+	path = nvim/pack/personal/opt/vim-quickrun
+	url = https://github.com/thinca/vim-quickrun
+[submodule "nvim/pack/personal/opt/readablefold.vim"]
+	path = nvim/pack/personal/opt/readablefold.vim
+	url = https://github.com/lambdalisue/readablefold.vim
+[submodule "nvim/pack/personal/opt/vim-swap"]
+	path = nvim/pack/personal/opt/vim-swap
+	url = https://github.com/machakann/vim-swap
+[submodule "nvim/pack/personal/opt/vim-devicons"]
+	path = nvim/pack/personal/opt/vim-devicons
+	url = https://github.com/ryanoasis/vim-devicons
+[submodule "nvim/pack/personal/opt/sudo.vim"]
+	path = nvim/pack/personal/opt/sudo.vim
+	url = https://github.com/vim-scripts/sudo.vim
