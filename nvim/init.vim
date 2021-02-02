@@ -176,10 +176,6 @@ packadd vim-operator-jump_side " {{{
   nmap <Leader>t <Plug>(operator-jump-tail)
 " }}}
 
-packadd winresizer " {{{
-  let g:winresizer_start_key = '<C-W><C-E>'
-" }}}
-
 packadd vim-sandwich " {{{
   " ignore s instead of the cl
   nnoremap s <Nop>
@@ -197,6 +193,7 @@ packadd vim-quickrun " {{{
       \ }
 " }}}
 
+
 packadd vim-swap " {{{
   omap i, <Plug>(swap-textobject-i)
   xmap i, <Plug>(swap-textobject-i)
@@ -209,6 +206,7 @@ packadd vim-devicons
 packadd sudo.vim
 
 " TODO:
+" - winresizer
 " - snippets
 " - vim-test/vim-test
 " - qpkorr/vim-bufkill
