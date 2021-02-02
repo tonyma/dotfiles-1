@@ -28,3 +28,6 @@
 [submodule "nvim/pack/personal/opt/gitgutter"]
 	path = nvim/pack/personal/opt/gitgutter
 	url = https://github.com/airblade/vim-gitgutter
+[submodule "nvim/nvim/pack/personal/opt/gitsigns.nvim"]
+	path = nvim/pack/personal/opt/gitsigns.nvim
+	url = https://github.com/lewis6991/gitsigns.nvim

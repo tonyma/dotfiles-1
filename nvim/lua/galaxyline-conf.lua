@@ -134,7 +134,6 @@ gls.left[3] = {
 gls.left[4] = {
   FileName = {
     provider = 'FileName',
-    separator = "\u{E621} ",
   }
 }
 
@@ -142,9 +141,10 @@ gls.right[1] = { GitBranch    = { provider = 'GitBranch',    icon = ' \u{E0A0} '
 gls.right[2] = { DiffAdd      = { provider = 'DiffAdd',      icon = ' \u{FF631} ' } }
 gls.right[3] = { DiffModified = { provider = 'DiffModified', icon = ' \u{FF915} ' } }
 gls.right[4] = { DiffRemove   = { provider = 'DiffRemove'  , icon = ' \u{FFC89} ' } }
-gls.right[5] = { Space        = { provider = function() return '   ' end          } }
 
--- gls.right[6] = { DiagnosticHint  = { provider = 'DiagnosticHint',  icon = '\u{F059}' } }
--- gls.right[6] = { DiagnosticInfo  = { provider = 'DiagnosticInfo',  icon = '\u{F05A}' } }
--- gls.right[6] = { DiagnosticWarn  = { provider = 'DiagnosticWarn',  icon = '\u{F06A}' } }
--- gls.right[7] = { DiagnosticError = { provider = 'DiagnosticError', icon = '\u{F057}' } }
+-- TODO: show Ahead and Behind in current branch
+
+gls.right[5] = { DiagnosticHint  = { provider = 'DiagnosticHint',  icon = '\u{F059}' } }
+gls.right[6] = { DiagnosticInfo  = { provider = 'DiagnosticInfo',  icon = '\u{F05A}' } }
+gls.right[7] = { DiagnosticWarn  = { provider = 'DiagnosticWarn',  icon = '\u{F06A}' } }
+gls.right[8] = { DiagnosticError = { provider = 'DiagnosticError', icon = '\u{F057}' } }

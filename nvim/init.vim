@@ -107,7 +107,6 @@ let $GIGAMOJI_BG=':space:'
 let $GNUPGHOME=$XDG_CONFIG_HOME . '/gnupg'
 
 " Docker:
-"
 if has('osx')
   let $DOCKER_CONFIG=$XDG_CONFIG_HOME . '/docker-osx'
   let $MACHINE_STORAGE_PATH=$XDG_DATA_HOME . '/docker-machine-osx'
@@ -141,7 +140,11 @@ set termguicolors
 colorscheme momiji
 " }}}
 
-packadd gitgutter " {{{
+packadd gitsigns.nvim " {{{
+lua require('gitsigns').setup()
+" }}}
+
+" packadd gitgutter " {{{
 " }}}
 
 packadd! telescope.nvim " {{{
@@ -209,7 +212,17 @@ nnoremap <Leader>q :<C-u>copen<CR><ESC>
 
 nnoremap Q <Nop>
 nnoremap gQ <Nop>
-augroup TermMap
+" }}}
+
+" Set terminal {{{
+augroup neovim_terminal
+  autocmd!
+  " Enter Terminal-mode (insert) automatically
+  autocmd TermOpen * startinsert
+
+  " Disables number lines on terminal buffers
+  autocmd TermOpen * setlocal nonumber norelativenumber
+
   " ターミナルで
   "   * <C-\><C-n> による job <- -> normal モードの往復を可能にする
   "   * q によるmacro記録を禁止する
@@ -218,9 +231,9 @@ augroup TermMap
   " TODO:     \ nnoremap <buffer> q <Nop>
 augroup END
 
-" TODO: nnoremap <silent> tt :<C-u>terminal<CR>
-" TODO: nnoremap <silent> tx :<C-u>sp | terminal<CR>
-" TODO: nnoremap <silent> tv :<C-u>vsp | terminal<CR>
+nnoremap <silent> tt :<C-u>terminal<CR>
+nnoremap <silent> tx :<C-u>sp <Bar> terminal<CR>
+nnoremap <silent> tv :<C-u>vsp <Bar> terminal<CR>
 
 " }}}
 
@@ -230,7 +243,7 @@ set hidden              " able to edit without saving
 set fixendofline        " <EOL> at the end of file will be restored if missing
 set showcmd             " 
 set textwidth=100         " never limit length of each line
-set ambiwidth=double
+set ambiwidth=single
 set foldmethod=marker
 set backspace=2
 set cursorline   " Highlight cursor line
