@@ -173,80 +173,70 @@ colorscheme momiji
 
 packadd galaxyline.nvim " {{{
 packadd nvim-web-devicons
-lua <<EOF
-local momiji_colors = {
-  black          = vim.api.nvim_get_var('momiji_color_black'),
-  red            = vim.api.nvim_get_var('momiji_color_red'),
-  green          = vim.api.nvim_get_var('momiji_color_green'),
-  yellow         = vim.api.nvim_get_var('momiji_color_yellow'),
-  blue           = vim.api.nvim_get_var('momiji_color_blue'),
-  magenta        = vim.api.nvim_get_var('momiji_color_magenta'),
-  cyan           = vim.api.nvim_get_var('momiji_color_cyan'),
-  white          = vim.api.nvim_get_var('momiji_color_white'),
-  bright_black   = vim.api.nvim_get_var('momiji_color_bright_black'),
-  bright_red     = vim.api.nvim_get_var('momiji_color_bright_red'),
-  bright_green   = vim.api.nvim_get_var('momiji_color_bright_green'),
-  bright_yellow  = vim.api.nvim_get_var('momiji_color_bright_yellow'),
-  bright_blue    = vim.api.nvim_get_var('momiji_color_bright_blue'),
-  bright_magenta = vim.api.nvim_get_var('momiji_color_bright_magenta'),
-  bright_cyan    = vim.api.nvim_get_var('momiji_color_bright_cyan'),
-  bright_white   = vim.api.nvim_get_var('momiji_color_bright_white'),
-  hard_black     = vim.api.nvim_get_var('momiji_color_hard_black'),
-  grayscale1     = vim.api.nvim_get_var('momiji_color_grayscale1'),
-  grayscale2     = vim.api.nvim_get_var('momiji_color_grayscale2'),
-  grayscale3     = vim.api.nvim_get_var('momiji_color_grayscale3'),
-  grayscale4     = vim.api.nvim_get_var('momiji_color_grayscale4'),
-  grayscale5     = vim.api.nvim_get_var('momiji_color_grayscale5'),
-}
-local gl = require('galaxyline')
-local gls = gl.section
+set noshowmode  " galaxyline で表示するので、vim標準のモード表示は隠す
+lua require('galaxyline-conf')
+" }}}
 
-gls.left[1] = {
-  ViMode = {
-    provider = function()
-      -- auto change color according the vim mode
-      local mode_color = {
-        n      = momiji_colors.green,
-        i      = momiji_colors.blue,
-        v      = momiji_colors.yellow,
-        [''] = momiji_colors.yellow,
-        V      = momiji_colors.yellow,
-        c      = momiji_colors.red,
-        no     = momiji_colors.green,
-        s      = momiji_colors.orange,
-        S      = momiji_colors.orange,
-        [''] = momiji_colors.orange,
-        ic     = momiji_colors.yellow,
-        R      = momiji_colors.violet,
-        Rv     = momiji_colors.violet,
-        cv     = momiji_colors.red,
-        ce     = momiji_colors.red,
-        r      = momiji_colors.cyan,
-        rm     = momiji_colors.cyan,
-        ['r?'] = momiji_colors.cyan,
-        ['!']  = momiji_colors.red,
-        t      = momiji_colors.red,
-      }
-      vim.api.nvim_command('hi GalaxyViMode guifg='..mode_color[vim.fn.mode()])
-      return '  '
-    end,
-    highlight = {momiji_colors.red,momiji_colors.white,'bold'},
-  },
-}
-gls.left[2]= {
-  FileSize = {
-    provider = 'FileSize',
-    condition = function()
-      if vim.fn.empty(vim.fn.expand('%:t')) ~= 1 then
-        return true
-      end
-      return false
-      end,
-    icon = '   ',
-    highlight = 'MomijiGreen',
-    separator = '',
-    separator_highlight = 'MomijiGreen',
-  }
-}
-EOF
+" Indents {{{
+set tabstop=2
+set autoindent
+set shiftwidth=2
+set expandtab
+set smarttab
+set nowrap
+" }}}
+
+" Displays {{{
+set number       " Show the line number
+set emoji        " Show emoji characters
+set conceallevel=0
+" }}}
+
+" Show invisibles {{{
+set list
+set listchars=tab:»\ ,trail:∙,eol:↵,extends:»,precedes:«,nbsp:∙
+" }}}
+
+" Setup Keymaps (for regular functions) {{{
+" Delete search highlight
+nnoremap <ESC><ESC> :<C-u>nohl<CR><ESC>
+
+" Quickfix
+nnoremap <Leader>q :<C-u>copen<CR><ESC>
+
+nnoremap Q <Nop>
+nnoremap gQ <Nop>
+augroup TermMap
+  " ターミナルで
+  "   * <C-\><C-n> による job <- -> normal モードの往復を可能にする
+  "   * q によるmacro記録を禁止する
+  " TODO: autocmd! TerminalOpen *
+  " TODO:     \ nnoremap <buffer> <C-\><C-n> i|
+  " TODO:     \ nnoremap <buffer> q <Nop>
+augroup END
+
+" TODO: nnoremap <silent> tt :<C-u>terminal<CR>
+" TODO: nnoremap <silent> tx :<C-u>sp | terminal<CR>
+" TODO: nnoremap <silent> tv :<C-u>vsp | terminal<CR>
+
+" }}}
+" Other misc settings {{{
+set clipboard=unnamedplus,unnamed
+set hidden              " able to edit without saving
+set fixendofline        " <EOL> at the end of file will be restored if missing
+set showcmd             " 
+set textwidth=100         " never limit length of each line
+set ambiwidth=double
+set foldmethod=marker
+set backspace=2
+set cursorline   " Highlight cursor line
+set showtabline=1
+set hlsearch
+set history=1000
+set incsearch
+set scrolloff=3 " Show least &scrolloff lines before/after cursor
+set sidescrolloff=3
+set formatoptions+=j " Delete comment character when joining commented lines
+set helplang=ja,en
+language messages en_US.UTF-8
 " }}}
