@@ -25,3 +25,6 @@
 [submodule "nvim/pack/personal/opt/nvim-web-devicons"]
 	path = nvim/pack/personal/opt/nvim-web-devicons
 	url = https://github.com/kyazdani42/nvim-web-devicons
+[submodule "nvim/pack/personal/opt/gitgutter"]
+	path = nvim/pack/personal/opt/gitgutter
+	url = https://github.com/airblade/vim-gitgutter

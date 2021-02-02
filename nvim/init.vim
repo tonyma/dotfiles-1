@@ -135,6 +135,15 @@ call s:uniquify_paths()
 packadd popup.nvim
 packadd plenary.nvim
 
+packadd momiji " {{{
+syntax enable
+set termguicolors
+colorscheme momiji
+" }}}
+
+packadd gitgutter " {{{
+" }}}
+
 packadd! telescope.nvim " {{{
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
@@ -163,12 +172,6 @@ require('telescope').setup{
   }
 }
 EOF
-" }}}
-
-packadd momiji " {{{
-syntax enable
-set termguicolors
-colorscheme momiji
 " }}}
 
 packadd galaxyline.nvim " {{{
@@ -220,6 +223,7 @@ augroup END
 " TODO: nnoremap <silent> tv :<C-u>vsp | terminal<CR>
 
 " }}}
+
 " Other misc settings {{{
 set clipboard=unnamedplus,unnamed
 set hidden              " able to edit without saving

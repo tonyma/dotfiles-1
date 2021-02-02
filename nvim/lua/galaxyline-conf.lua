@@ -56,8 +56,8 @@ local mode_colors = {
 }
 
 local mode_texts = {
-  n      = "\u{FF707}  ",
-  no     = "\u{FF707}  ",
+  n      = "\u{E7C5}  ",
+  no     = "\u{E7C5}  ",
   i      = "\u{FFAE6}  ",
   ic     = "\u{FFAE6}  ",
   r      = "\u{FF954}  ",
@@ -83,21 +83,36 @@ gls.left[1] = {
     provider = function()
       -- auto change color according the vim mode
       local mode_color = mode_colors[vim.fn.mode()]
-      vim.api.nvim_command('hi GalaxyViMode      guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[1])
-      vim.api.nvim_command('hi ViModeSeparator   guifg=' .. mode_color[1]       ..' guibg=' .. mode_color[2])
-      vim.api.nvim_command('hi GalaxyFileIcon    guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
-      vim.api.nvim_command('hi FileIconSeparator guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
-      vim.api.nvim_command('hi GalaxyFileName    guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
-      vim.api.nvim_command('hi FileNameSeparator guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
+
+      for index, component in next, gls.left do
+        if index == 1 then
+          for key in pairs(component) do
+            vim.api.nvim_command('hi Galaxy' .. key .. '    guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[1])
+            vim.api.nvim_command('hi ' .. key .. 'Separator guifg=' .. mode_color[1]       ..' guibg=' .. mode_color[2])
+          end
+        else
+          for key in pairs(component) do
+            vim.api.nvim_command('hi Galaxy' .. key .. '    guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
+            vim.api.nvim_command('hi ' .. key .. 'Separator guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
+          end
+        end
+      end
+
+      for _, component in next, gls.right do
+        for key in pairs(component) do
+          vim.api.nvim_command('hi Galaxy' .. key .. '    guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
+          vim.api.nvim_command('hi ' .. key .. 'Separator guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
+        end
+      end
+
       return "\u{00A0}" .. mode_texts[vim.fn.mode()]
     end,
     separator = "\u{E0B0}\u{00A0}",
     highlight = {momiji_colors.black,momiji_colors.white,'bold'},
   },
 }
---- TODO: highlightは各コンポーネントでやる: see https://github.com/glepnir/galaxyline.nvim/blob/main/example/spaceline.lua#L39
 
-gls.left[2] ={
+gls.left[2] = {
   FileIcon = {
     provider = 'FileIcon',
     separator = "\u{00A0}\u{E0B1}\u{00A0}",
@@ -105,54 +120,31 @@ gls.left[2] ={
   },
 }
 
-local function file_readonly()
-  if vim.bo.filetype == 'help' then
-    return ''
-  end
-  if vim.bo.readonly == true then
-    return " "
-  end
-  return ''
-end
+-- get current dir
+gls.left[3] = {
+  CWD = {
+    provider = function ()
+      return vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
+    end,
+    separator = "\u{E621} ",
+  }
+}
 
 -- get current file name
-gls.left[3]= {
+gls.left[4] = {
   FileName = {
-    provider = function ()
-      local file = vim.fn.expand('%')
-      if vim.fn.empty(file) == 1 then return '' end
-      if string.len(file_readonly()) ~= 0 then
-        return file .. file_readonly()
-      end
-      if vim.bo.modifiable then
-        if vim.bo.modified then
-          return file .. ' '
-        end
-      end
-      return file .. ' '
-    end,
-    separator = "\u{00A0}",
+    provider = 'FileName',
+    separator = "\u{E621} ",
   }
 }
 
-gls.right[1] = {
-  DiagnosticError = {
-    provider = 'DiagnosticError',
-    icon = '  ',
-    highlight = {momiji_colors.red,momiji_colors.black}
-  }
-}
+gls.right[1] = { GitBranch    = { provider = 'GitBranch',    icon = ' \u{E0A0} '  } }
+gls.right[2] = { DiffAdd      = { provider = 'DiffAdd',      icon = ' \u{FF631} ' } }
+gls.right[3] = { DiffModified = { provider = 'DiffModified', icon = ' \u{FF915} ' } }
+gls.right[4] = { DiffRemove   = { provider = 'DiffRemove'  , icon = ' \u{FFC89} ' } }
+gls.right[5] = { Space        = { provider = function() return '   ' end          } }
 
-gls.right[2] = {
-  Space = {
-    provider = function () return ' ' end
-  }
-}
-
-gls.left[13] = {
-  DiagnosticWarn = {
-    provider = 'DiagnosticWarn',
-    icon = '  ',
-    highlight = {momiji_colors.blue,momiji_colors.black},
-  }
-}
+-- gls.right[6] = { DiagnosticHint  = { provider = 'DiagnosticHint',  icon = '\u{F059}' } }
+-- gls.right[6] = { DiagnosticInfo  = { provider = 'DiagnosticInfo',  icon = '\u{F05A}' } }
+-- gls.right[6] = { DiagnosticWarn  = { provider = 'DiagnosticWarn',  icon = '\u{F06A}' } }
+-- gls.right[7] = { DiagnosticError = { provider = 'DiagnosticError', icon = '\u{F057}' } }
