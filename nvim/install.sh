@@ -7,12 +7,4 @@ function install() {
   echo "packadd ${basename}"
 }
 
-install osyo-manga/vim-operator-jump_side
-install simeji/winresizer
-install machakann/vim-sandwich
-install thinca/vim-quickrun
-install lambdalisue/readablefold.vim
-install machakann/vim-swap
-install ryanoasis/vim-devicons
-install vim-scripts/sudo.vim
-
+install kyoh86/telescope-gogh.nvim

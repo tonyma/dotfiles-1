@@ -148,6 +148,9 @@ packadd gitsigns.nvim " {{{
 
 packadd! telescope.nvim " {{{
   lua require('telescope-conf')
+  packadd telescope-gogh.nvim " {{{
+    lua require('telescope-gogh-conf')
+  " }}}
 " }}}
 
 packadd galaxyline.nvim " {{{
@@ -205,11 +208,22 @@ packadd readablefold.vim
 packadd vim-devicons
 packadd sudo.vim
 
+packadd vim-test " {{{
+  let test#strategy = 'vimterminal'
+  let test#vimterminal#term_position = 'aboveleft'
+" }}}
+
+packadd vim-bufkill " {{{
+  let g:BufKillCreateMappings = 0
+" }}}
+
+packadd vim-brightest " {{{
+  let g:brightest#highlight = { "group" : "BrightestUnderline" }
+" }}}
+
 " TODO:
 " - winresizer
 " - snippets
-" - vim-test/vim-test
-" - qpkorr/vim-bufkill
 " - justinmk/vim-dirvish
 " - tyru/empty-prompt.vim
 " - kyoh86/vim-gogh
@@ -228,10 +242,8 @@ packadd sudo.vim
 " - tyru/open-browser.vim
 " - z0mbix/vim-shfmt
 " - lambdalisue/vim-backslash
-" - nikvdp/ejs-syntax
 " - kkiyama117/zenn-vim
 " - osyo-manga/vim-brightest
-" - vim-jp/autofmt
 "
 " FileTypes:
 " - markdown
@@ -245,23 +257,22 @@ packadd sudo.vim
 " - leafgarland/typescript-vim
 " - pangloss/vim-javascript
 " - tell-k/vim-autoflake
-"
+" - nikvdp/ejs-syntax
 "
 " MyPackages:
-"
-" packadd go-imports
-" let g:goimports = v:true
-" let g:goimports_simplify = v:true
-" packadd go-coverage
-" 
-" packadd my-copy-buffer-name
-" packadd my-git-edit
-" packadd my-popup-info
-" packadd my-quote
-" packadd personal-ft
-" packadd personal-ft-diff
-" packadd personal-ft-go
-" packadd personal-ft-help
+" - packadd go-imports
+"   let g:goimports = v:true
+"   let g:goimports_simplify = v:true
+" - packadd go-coverage
+" - 
+" - packadd my-copy-buffer-name
+" - packadd my-git-edit
+" - packadd my-popup-info
+" - packadd my-quote
+" - packadd personal-ft
+" - packadd personal-ft-diff
+" - packadd personal-ft-go
+" - packadd personal-ft-help
 
 " Indents {{{
 set tabstop=2

@@ -7,11 +7,12 @@ vim.api.nvim_set_keymap('n', '<Leader>fh', '<CMD>lua require("telescope.builtin"
 local transform_mod = require('telescope.actions.mt').transform_mod
 
 local actions = require('telescope.actions')
--- Global remapping
-------------------------------
+
+-- Setup
 require('telescope').setup{
   defaults = {
     set_env = { ['COLORTERM'] = 'truecolor' },
+    -- Global remapping
     mappings = {
       i = {
         ["<CR>"] = actions.goto_file_selection_edit + actions.center,

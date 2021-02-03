@@ -79,3 +79,15 @@
 [submodule "nvim/pack/personal/opt/sudo.vim"]
 	path = nvim/pack/personal/opt/sudo.vim
 	url = https://github.com/vim-scripts/sudo.vim
+[submodule "nvim/pack/personal/opt/vim-test"]
+	path = nvim/pack/personal/opt/vim-test
+	url = https://github.com/vim-test/vim-test
+[submodule "nvim/pack/personal/opt/vim-bufkill"]
+	path = nvim/pack/personal/opt/vim-bufkill
+	url = https://github.com/qpkorr/vim-bufkill
+[submodule "nvim/pack/personal/opt/vim-brightest"]
+	path = nvim/pack/personal/opt/vim-brightest
+	url = https://github.com/osyo-manga/vim-brightest
+[submodule "nvim/pack/personal/opt/telescope-gogh.nvim"]
+	path = nvim/pack/personal/opt/telescope-gogh.nvim
+	url = https://github.com/kyoh86/telescope-gogh.nvim
