@@ -1,26 +1,26 @@
 local momiji_colors = {
-  black          = vim.api.nvim_get_var('momiji_color_black'),
-  red            = vim.api.nvim_get_var('momiji_color_red'),
-  green          = vim.api.nvim_get_var('momiji_color_green'),
-  yellow         = vim.api.nvim_get_var('momiji_color_yellow'),
-  blue           = vim.api.nvim_get_var('momiji_color_blue'),
-  magenta        = vim.api.nvim_get_var('momiji_color_magenta'),
-  cyan           = vim.api.nvim_get_var('momiji_color_cyan'),
-  white          = vim.api.nvim_get_var('momiji_color_white'),
-  bright_black   = vim.api.nvim_get_var('momiji_color_bright_black'),
-  bright_red     = vim.api.nvim_get_var('momiji_color_bright_red'),
-  bright_green   = vim.api.nvim_get_var('momiji_color_bright_green'),
-  bright_yellow  = vim.api.nvim_get_var('momiji_color_bright_yellow'),
-  bright_blue    = vim.api.nvim_get_var('momiji_color_bright_blue'),
-  bright_magenta = vim.api.nvim_get_var('momiji_color_bright_magenta'),
-  bright_cyan    = vim.api.nvim_get_var('momiji_color_bright_cyan'),
-  bright_white   = vim.api.nvim_get_var('momiji_color_bright_white'),
-  hard_black     = vim.api.nvim_get_var('momiji_color_hard_black'),
-  grayscale1     = vim.api.nvim_get_var('momiji_color_grayscale1'),
-  grayscale2     = vim.api.nvim_get_var('momiji_color_grayscale2'),
-  grayscale3     = vim.api.nvim_get_var('momiji_color_grayscale3'),
-  grayscale4     = vim.api.nvim_get_var('momiji_color_grayscale4'),
-  grayscale5     = vim.api.nvim_get_var('momiji_color_grayscale5'),
+  black          = vim.fn['momiji#gui']('black'),
+  red            = vim.fn['momiji#gui']('red'),
+  green          = vim.fn['momiji#gui']('green'),
+  yellow         = vim.fn['momiji#gui']('yellow'),
+  blue           = vim.fn['momiji#gui']('blue'),
+  magenta        = vim.fn['momiji#gui']('magenta'),
+  cyan           = vim.fn['momiji#gui']('cyan'),
+  white          = vim.fn['momiji#gui']('white'),
+  bright_black   = vim.fn['momiji#gui']('bright_black'),
+  bright_red     = vim.fn['momiji#gui']('bright_red'),
+  bright_green   = vim.fn['momiji#gui']('bright_green'),
+  bright_yellow  = vim.fn['momiji#gui']('bright_yellow'),
+  bright_blue    = vim.fn['momiji#gui']('bright_blue'),
+  bright_magenta = vim.fn['momiji#gui']('bright_magenta'),
+  bright_cyan    = vim.fn['momiji#gui']('bright_cyan'),
+  bright_white   = vim.fn['momiji#gui']('bright_white'),
+  hard_black     = vim.fn['momiji#gui']('hard_black'),
+  grayscale1     = vim.fn['momiji#gui']('grayscale1'),
+  grayscale2     = vim.fn['momiji#gui']('grayscale2'),
+  grayscale3     = vim.fn['momiji#gui']('grayscale3'),
+  grayscale4     = vim.fn['momiji#gui']('grayscale4'),
+  grayscale5     = vim.fn['momiji#gui']('grayscale5'),
 }
 local gl = require('galaxyline')
 local gls = gl.section
@@ -148,3 +148,5 @@ gls.right[5] = { DiagnosticHint  = { provider = 'DiagnosticHint',  icon = '\u{F0
 gls.right[6] = { DiagnosticInfo  = { provider = 'DiagnosticInfo',  icon = '\u{F05A}' } }
 gls.right[7] = { DiagnosticWarn  = { provider = 'DiagnosticWarn',  icon = '\u{F06A}' } }
 gls.right[8] = { DiagnosticError = { provider = 'DiagnosticError', icon = '\u{F057}' } }
+
+vim.api.nvim_set_option('showmode', false)  -- galaxyline で表示するので、vim標準のモード表示は隠す

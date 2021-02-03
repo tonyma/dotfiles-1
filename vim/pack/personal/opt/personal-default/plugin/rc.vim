@@ -726,9 +726,6 @@ call s:plug.begin()
   Plug 'dhruvasagar/vim-table-mode'
   Plug 'airblade/vim-gitgutter'
   Plug 'iberianpig/tig-explorer.vim'
-  Plug 'kana/vim-operator-user'
-  Plug 'kana/vim-textobj-entire'
-  Plug 'kana/vim-textobj-user'
   Plug 'previm/previm'
   Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
   Plug 'machakann/vim-swap'
@@ -754,12 +751,15 @@ call s:plug.begin()
   Plug 'vim-jp/vital.vim', {'on': 'Vitalize'}
   Plug 'vim-scripts/sudo.vim'
   Plug 'z0mbix/vim-shfmt'
+  Plug 'lambdalisue/vim-backslash'
+  Plug 'kana/vim-textobj-line'
+  Plug 'kana/vim-operator-user'
+  Plug 'kana/vim-textobj-entire'
+  Plug 'kana/vim-textobj-user'
   Plug 'kana/vim-operator-replace'
   function!s:plug.after.kana__vim__operator__replace()
     map _  <Plug>(operator-replace)
   endfunction
-  Plug 'lambdalisue/vim-backslash'
-  Plug 'kana/vim-textobj-line'
   Plug 'nikvdp/ejs-syntax'
   function!s:plug.after.nikvdp__ejs__syntax()
     autocmd BufNewFile,BufRead *.ejs set filetype=ejs

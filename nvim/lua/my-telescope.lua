@@ -4,8 +4,6 @@ vim.api.nvim_set_keymap('n', '<Leader>fb', '<CMD>lua require("telescope.builtin"
 vim.api.nvim_set_keymap('n', '<Leader>fh', '<CMD>lua require("telescope.builtin").help_tags()<CR>',  { noremap = true, silent = true })
 
 -- Built-in actions
-local transform_mod = require('telescope.actions.mt').transform_mod
-
 local actions = require('telescope.actions')
 
 -- Setup
@@ -24,3 +22,4 @@ require('telescope').setup{
     },
   }
 }
+

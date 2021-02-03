@@ -131,105 +131,14 @@ endfunction
 call s:uniquify_paths()
 " }}}
 
-packadd popup.nvim
-packadd plenary.nvim
-packadd vim-textobj-user
-packadd vim-operator-user
-
-packadd momiji " {{{
-  syntax enable
-  set termguicolors
-  colorscheme momiji
-" }}}
-
-packadd gitsigns.nvim " {{{
-  lua require('gitsigns').setup()
-" }}}
-
-packadd! telescope.nvim " {{{
-  lua require('telescope-conf')
-  packadd telescope-gogh.nvim " {{{
-    lua require('telescope-gogh-conf')
-  " }}}
-" }}}
-
-packadd galaxyline.nvim " {{{
-  packadd nvim-web-devicons
-  set noshowmode  " galaxyline で表示するので、vim標準のモード表示は隠す
-  lua require('galaxyline-conf')
-" }}}
-
-packadd nvim-lspconfig " {{{
-  lua require('nvim-lsp-conf')
-" }}}
-
-packadd vim-ripgrep
-packadd vim-textobj-line
-packadd vim-textobj-entire
-packadd vim-textobj-parameter
-
-packadd vim-operator-replace " {{{
-  nmap _  <Plug>(operator-replace)
-" }}}
-
-packadd vim-operator-jump_side " {{{
-  " textobj の先頭へ移動する
-  nmap <Leader>h <Plug>(operator-jump-head)
-  " textobj の末尾へ移動する
-  nmap <Leader>t <Plug>(operator-jump-tail)
-" }}}
-
-packadd vim-sandwich " {{{
-  " ignore s instead of the cl
-  nnoremap s <Nop>
-  " ignore s instead of the cl
-  xnoremap s <Nop>
-  silent! nmap <unique><silent> sc <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
-  silent! nmap <unique><silent> scb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
-" }}}
-
-packadd vim-quickrun " {{{
-  let g:quickrun_config = {
-      \ '_': {
-      \   'runner': 'terminal'
-      \   }
-      \ }
-" }}}
-
-
-packadd vim-swap " {{{
-  omap i, <Plug>(swap-textobject-i)
-  xmap i, <Plug>(swap-textobject-i)
-  omap a, <Plug>(swap-textobject-a)
-  xmap a, <Plug>(swap-textobject-a)
-" }}}
-"
-packadd readablefold.vim
-packadd vim-devicons
-packadd sudo.vim
-
-packadd vim-test " {{{
-  let test#strategy = 'vimterminal'
-  let test#vimterminal#term_position = 'aboveleft'
-" }}}
-
-packadd vim-bufkill " {{{
-  let g:BufKillCreateMappings = 0
-" }}}
-
-packadd vim-brightest " {{{
-  let g:brightest#highlight = { "group" : "BrightestUnderline" }
-" }}}
+lua require('plugins')
 
 " TODO:
-" - winresizer
 " - snippets
 " - justinmk/vim-dirvish
 " - tyru/empty-prompt.vim
-" - kyoh86/vim-gogh
 " - kyoh86/vim-beedle
 " - kyoh86/vim-wipeout
-" - kyoh86/vim-editerm
 " - direnv/direnv.vim
 " - po3rin/vim-gofmtmd
 " - AndrewRadev/linediff.vim
@@ -243,7 +152,6 @@ packadd vim-brightest " {{{
 " - z0mbix/vim-shfmt
 " - lambdalisue/vim-backslash
 " - kkiyama117/zenn-vim
-" - osyo-manga/vim-brightest
 "
 " FileTypes:
 " - markdown
@@ -273,6 +181,11 @@ packadd vim-brightest " {{{
 " - packadd personal-ft-diff
 " - packadd personal-ft-go
 " - packadd personal-ft-help
+
+" Colors {{{
+  syntax enable
+  colorscheme momiji
+" }}}
 
 " Indents {{{
 set tabstop=2
@@ -326,6 +239,7 @@ nnoremap <silent> tt :<C-u>terminal<CR>
 nnoremap <silent> tx :<C-u>sp <Bar> terminal<CR>
 nnoremap <silent> tv :<C-u>vsp <Bar> terminal<CR>
 
+set termguicolors
 " }}}
 
 " Auto-off IME {{{
