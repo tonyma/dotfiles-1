@@ -22,7 +22,7 @@ require('packer').startup(function()
   }
 
   use {
-    'kyoh86/telescope-gogh.nvim',
+    '~/Projects/github.com/kyoh86/telescope-gogh.nvim',
     requires = {
       'telescope.nvim'
     },
@@ -32,7 +32,13 @@ require('packer').startup(function()
       require('telescope').setup{
         extensions = {
           gogh = {
-            shorten_path = false
+            shorten_path = false,
+            keys = {
+              cd   = 'default',
+              open = '<c-e>',
+              lcd  = nil,
+              tcd  = nil,
+            }
           }
         }
       }
@@ -77,6 +83,7 @@ require('packer').startup(function()
         vim.cmd[[imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>']]
         vim.cmd[[smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>']]
       end,
+      requires = {'golang/vscode-go'},
     }, {
       'hrsh7th/vim-vsnip-integ'
     }},
@@ -123,7 +130,6 @@ require('packer').startup(function()
       -- ignore s instead of the cl
       vim.api.nvim_set_keymap('n', 's', '<Nop>', { noremap = true })
       vim.api.nvim_set_keymap('x', 's', '<Nop>', { noremap = true })
-      vim.api.nvim_set_keymap('n', 'sc', '<Nop>', { noremap = true })
 
       --NOTE: silent! は vim.cmd じゃないと呼べないっぽい
       vim.cmd[[silent! nmap <unique><silent> sc <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)]]
@@ -150,8 +156,6 @@ require('packer').startup(function()
 
   use { 'lambdalisue/readablefold.vim' }
 
-  use { 'ryanoasis/vim-devicons' }
-
   use {
     'vim-test/vim-test',
     config = function()
@@ -171,6 +175,19 @@ require('packer').startup(function()
     'osyo-manga/vim-brightest',
     config = function()
       vim.api.nvim_set_var('brightest#highlight', { group = "BrightestUnderline" })
+    end,
+  }
+
+  use {
+    'kevinhwang91/nvim-hlslens',
+    config = function()
+
+      vim.api.nvim_set_keymap('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR> <Cmd>lua require('hlslens').start()<CR>]], { silent = true, noremap = true })
+      -- vim.api.nvim_set_keymap('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR> <Cmd>lua require('hlslens').start()<CR>]], { silent = true, noremap = true })
+      vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true })
+      vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true })
+      vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true })
+      vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true })
     end,
   }
 

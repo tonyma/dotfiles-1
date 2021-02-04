@@ -27,7 +27,7 @@ zshaddhistory() {
 # プロンプト設定 {{{
 autoload -Uz add-zsh-hook
 
-if [ -z "${VIM_TERMINAL}" ] && which git-prompt > /dev/null 2>&1; then
+if [ -z "${VIM_TERMINAL}" ] && [ -z "${NVIM_TERMINAL}" ] && which git-prompt > /dev/null 2>&1; then
   function _update_git_info() {
     status_string=$(git-prompt -s zsh)
     if [ $? -ne 0 ]; then

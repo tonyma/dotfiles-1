@@ -19,7 +19,6 @@ let g:xdg_cache_home = $XDG_CACHE_HOME
 
 " }}}
 
-
 " Setup Environment Variables {{{
 " ZSHとVIM両方に効かせる環境変数はここで設定する
 " ZSHだけでいい場合は.zshenvで設定すればよい
@@ -131,11 +130,12 @@ endfunction
 call s:uniquify_paths()
 " }}}
 
+let g:fern#disable_default_mappings = 1
 lua require('plugins')
+autocmd BufWritePost plugins.lua PackerCompile
 
 runtime! etc/fern.vim
 " TODO:
-" - snippets
 " - justinmk/vim-dirvish
 " - tyru/empty-prompt.vim
 " - kyoh86/vim-beedle
@@ -241,6 +241,7 @@ nnoremap <silent> tx :<C-u>sp <Bar> terminal<CR>
 nnoremap <silent> tv :<C-u>vsp <Bar> terminal<CR>
 
 set termguicolors
+let $NVIM_TERMINAL = 1
 " }}}
 
 " Auto-off IME {{{
