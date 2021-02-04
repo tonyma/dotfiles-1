@@ -133,6 +133,7 @@ call s:uniquify_paths()
 
 lua require('plugins')
 
+runtime! etc/fern.vim
 " TODO:
 " - snippets
 " - justinmk/vim-dirvish

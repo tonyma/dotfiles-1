@@ -183,4 +183,14 @@ require('packer').startup(function()
 
   use { 'lambdalisue/edita.vim' }
 
+  use {
+    'lambdalisue/fern.vim',
+    -- config is in init.vim
+    requires = {
+      { 'lambdalisue/fern-git-status.vim' }        ,
+      { 'lambdalisue/fern-hijack.vim' }            ,
+      { 'lambdalisue/fern-renderer-nerdfont.vim' } ,
+    }
+  }
+
 end)

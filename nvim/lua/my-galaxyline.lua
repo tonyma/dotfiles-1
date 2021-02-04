@@ -83,6 +83,13 @@ gls.left[1] = {
     provider = function()
       -- auto change color according the vim mode
       local mode_color = mode_colors[vim.fn.mode()]
+      local file_type = vim.api.nvim_buf_get_option(0, 'filetype')
+      if file_type == 'fern' then
+        local fern_mode = vim.api.nvim_buf_get_var(0, 'my_fern_mode')
+        if fern_mode == 'operator' then
+          mode_color = {momiji_colors.blue, momiji_colors.bright_blue}
+        end
+      end
 
       for index, component in next, gls.left do
         if index == 1 then
