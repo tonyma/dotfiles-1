@@ -1,5 +1,3 @@
-echomsg 'init-fern'
-
 function! s:init_fern()
   nmap <nowait> <buffer> !       <Plug>(fern-action-hidden:toggle)
   nmap <nowait> <buffer> /       <Plug>(fern-action-include)
