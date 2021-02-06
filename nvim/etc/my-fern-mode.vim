@@ -14,44 +14,45 @@ function! s:init_fern()
   nmap <nowait> <buffer> y       <Plug>(fern-action-yank:bufname)
   nmap <nowait> <buffer> <C-g>   <Plug>(fern-action-cd)             " hint: 'G'oto dir
 
-  let b:my_fern_mode = 'view'
-  nnoremap <nowait> <buffer> <C-x>      <Cmd>call <SID>fern_mode_toggle()<CR>
+  nnoremap <nowait> <buffer> <C-x>      <cmd>call <SID>fern_mode_toggle()<CR>
 endfunction
 
-function! s:fern_mode_operator()
+function! s:fern_mode_operate()
   if &ft != 'fern'
     return
   endif
-  let b:my_fern_mode = 'operator'
+  let b:my_fern_mode = 'operate'
 
   nmap <nowait> <buffer> <Space>     <Plug>(fern-action-mark:toggle)
   nmap <nowait> <buffer> <C-S-Space> <Plug>(fern-action-mark:clear)
-  nmap <nowait> <buffer> <ESC>       <Plug>(fern-action-cancel)<Plug>(fern-action-mark:clear)<Cmd>call <SID>fern_mode_view()<CR>
+  nmap <nowait> <buffer> <ESC>       <Plug>(fern-action-cancel)<Plug>(fern-action-mark:clear)<cmd>call <SID>fern_mode_view(v:false)<CR>
   nmap <nowait> <buffer> N           <Plug>(fern-action-new-path)
   nmap <nowait> <buffer> C           <Plug>(fern-action-copy)
   nmap <nowait> <buffer> M           <Plug>(fern-action-move)
   nmap <nowait> <buffer> D           <Plug>(fern-action-remove)
 
-  highlight link FernRootSymbol   MomijiBlue
-  highlight link FernRootText     MomijiBlue
-  highlight link FernLeafSymbol   MomijiBlue
-  highlight link FernBranchSymbol MomijiBlue
-  highlight link FernBranchText   MomijiBlue
+  highlight link FernRootSymbol   WarningMsg
+  highlight link FernRootText     WarningMsg
+  highlight link FernLeafSymbol   WarningMsg
+  highlight link FernBranchSymbol WarningMsg
+  highlight link FernBranchText   WarningMsg
 
-  lua require("galaxyline").load_galaxyline()
+  doautocmd User MyFernModeChanged
 endfunction
 
-function! s:fern_mode_view()
+function! s:fern_mode_view(init)
   if &ft != 'fern'
     return
   endif
   let b:my_fern_mode = 'view'
 
-  call fern#action#call('mark:clear')
+  if !a:init
+    call fern#action#call('mark:clear')
+  endif
 
   nmap <nowait> <buffer> <Space>     <Nop>
   nmap <nowait> <buffer> <C-S-Space> <Nop>
-  nmap          <buffer> <ESC>       <Plug>(fern-action-cancel)
+  nmap <nowait> <buffer> <ESC>       <Plug>(fern-action-cancel)
   nmap <nowait> <buffer> N           <Nop>
   nmap <nowait> <buffer> C           <Nop>
   nmap <nowait> <buffer> M           <Nop>
@@ -63,22 +64,21 @@ function! s:fern_mode_view()
   highlight link FernBranchSymbol Directory
   highlight link FernBranchText   Directory
 
-  lua require("galaxyline").load_galaxyline()
+  doautocmd User MyFernModeChanged
 endfunction
 
 function! s:fern_mode_toggle()
   if &ft != 'fern'
     return
   endif
-  if get(b:, 'my_fern_mode') != 'operator'
-    call s:fern_mode_operator()
+  if get(b:, 'my_fern_mode', '') !=# 'operate'
+    call s:fern_mode_operate()
   else
-    call s:fern_mode_view()
+    call s:fern_mode_view(v:false)
   endif
 endfunction
 
-highlight link FernMarkedLine PmenuSel
-augroup my-fern
+augroup fern-mode
   autocmd!
   autocmd FileType fern call s:init_fern()
 augroup END

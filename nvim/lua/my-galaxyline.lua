@@ -83,11 +83,12 @@ gls.left[1] = {
     provider = function()
       -- auto change color according the vim mode
       local mode_color = mode_colors[vim.fn.mode()]
+      -- local file_type = vim.api.nvim_buf_get_option(0, 'filetype')
       local file_type = vim.api.nvim_buf_get_option(0, 'filetype')
       if file_type == 'fern' then
-        local fern_mode = vim.api.nvim_buf_get_var(0, 'my_fern_mode')
-        if fern_mode == 'operator' then
-          mode_color = {momiji_colors.blue, momiji_colors.bright_blue}
+        local fern_mode = vim.b['my_fern_mode']
+        if fern_mode == 'operate' then
+          mode_color = {momiji_colors.red, momiji_colors.bright_red}
         end
       end
 
@@ -157,3 +158,7 @@ gls.right[7] = { DiagnosticWarn  = { provider = 'DiagnosticWarn',  icon = '\u{F0
 gls.right[8] = { DiagnosticError = { provider = 'DiagnosticError', icon = '\u{F057}' } }
 
 vim.api.nvim_set_option('showmode', false)  -- galaxyline で表示するので、vim標準のモード表示は隠す
+
+vim.cmd[[
+  autocmd User MyFernModeChanged lua require("galaxyline").load_galaxyline()
+]]

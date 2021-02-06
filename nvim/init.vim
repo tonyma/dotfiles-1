@@ -134,26 +134,8 @@ let g:fern#disable_default_mappings = 1
 lua require('plugins')
 autocmd BufWritePost plugins.lua PackerCompile
 
-runtime! etc/fern.vim
-" TODO:
-" - justinmk/vim-dirvish
-" - tyru/empty-prompt.vim
-" - kyoh86/vim-beedle
-" - kyoh86/vim-wipeout
-" - direnv/direnv.vim
-" - po3rin/vim-gofmtmd
-" - AndrewRadev/linediff.vim
-" - dhruvasagar/vim-table-mode
-" - iberianpig/tig-explorer.vim
-" - stefandtw/quickfix-reflector.vim
-" - tpope/vim-dispatch
-" - tyru/capture.vim
-" - tyru/open-browser-github.vim
-" - tyru/open-browser.vim
-" - z0mbix/vim-shfmt
-" - lambdalisue/vim-backslash
-" - kkiyama117/zenn-vim
-"
+runtime! etc/my-fern-mode.vim
+runtime! etc/my-fern.vim
 " FileTypes:
 " - markdown
 " - plantuml
@@ -169,19 +151,10 @@ runtime! etc/fern.vim
 " - nikvdp/ejs-syntax
 "
 " MyPackages:
-" - packadd go-imports
-"   let g:goimports = v:true
-"   let g:goimports_simplify = v:true
-" - packadd go-coverage
-" - 
-" - packadd my-copy-buffer-name
-" - packadd my-git-edit
-" - packadd my-popup-info
-" - packadd my-quote
 " - packadd personal-ft
 " - packadd personal-ft-diff
-" - packadd personal-ft-go
 " - packadd personal-ft-help
+" - packadd my-git-edit
 
 " Colors {{{
   syntax enable
@@ -288,7 +261,7 @@ set fixendofline        " <EOL> at the end of file will be restored if missing
 set showcmd             " 
 set textwidth=100         " never limit length of each line
 set ambiwidth=single
-set foldmethod=marker
+set foldmethod=manual
 set backspace=2
 set cursorline   " Highlight cursor line
 set showtabline=1
@@ -301,7 +274,7 @@ set formatoptions+=j " Delete comment character when joining commented lines
 set helplang=ja,en
 language messages en_US.UTF-8
 " }}}
-"
+
 " TODO: Original Functions {{{
 " " ConfigEdit {{{
 " def s:edit_config(bang: string, mods: string)
@@ -403,3 +376,4 @@ language messages en_US.UTF-8
 " vmap Y <Plug>(quotem-copy)
 " }}}
 " }}}
+" vim: foldmethod=marker

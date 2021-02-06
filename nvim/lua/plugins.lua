@@ -1,7 +1,7 @@
 vim.cmd[[packadd packer.nvim]]
 
 require('packer').startup(function()
-  use { 'wbthomason/packer.nvim', opt = true }
+  use { 'wbthomason/packer.nvim' }
 
   use { 'kyoh86/momiji' }
 
@@ -20,6 +20,8 @@ require('packer').startup(function()
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
     config = function() require('my-telescope') end,
   }
+  -- TODO: switch windows with telescope
+  -- TODO: use <C-h> as Backspace, <C-A> as <Home>, ...
 
   use {
     '~/Projects/github.com/kyoh86/telescope-gogh.nvim',
@@ -51,7 +53,7 @@ require('packer').startup(function()
     branch = 'main',
     config = function() require'my-galaxyline' end,
     requires = {
-      {'kyazdani42/nvim-web-devicons', opt = true},
+      {'kyazdani42/nvim-web-devicons'},
       {'kyoh86/momiji'}
     }
   }
@@ -178,18 +180,19 @@ require('packer').startup(function()
     end,
   }
 
-  use {
-    'kevinhwang91/nvim-hlslens',
-    config = function()
-
-      vim.api.nvim_set_keymap('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR> <Cmd>lua require('hlslens').start()<CR>]], { silent = true, noremap = true })
-      -- vim.api.nvim_set_keymap('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR> <Cmd>lua require('hlslens').start()<CR>]], { silent = true, noremap = true })
-      vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true })
-      vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true })
-      vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true })
-      vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true })
-    end,
-  }
+--   use {
+--     'kevinhwang91/nvim-hlslens',
+--     config = function()
+--     vim.cmd [[
+-- noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'n')<CR> <Cmd>lua require('hlslens').start()<CR>
+-- noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'N')<CR> <Cmd>lua require('hlslens').start()<CR>
+-- noremap * *<Cmd>lua require('hlslens').start()<CR>
+-- noremap # #<Cmd>lua require('hlslens').start()<CR>
+-- noremap g* g*<Cmd>lua require('hlslens').start()<CR>
+-- noremap g# g#<Cmd>lua require('hlslens').start()<CR>
+--        ]]
+--     end,
+--  }
 
   use {
     'simeji/winresizer',
@@ -210,4 +213,49 @@ require('packer').startup(function()
     }
   }
 
+  use { 'tyru/capture.vim' }
+  use { 'tyru/empty-prompt.vim' }
+  use {
+    'tyru/open-browser-github.vim',
+    requires = { 'tyru/open-browser.vim' }
+  }
+
+  use { 'kyoh86/vim-beedle' }
+  use { 'kyoh86/vim-wipeout' }
+  use {
+    '~/Projects/github.com/kyoh86/vim-quotem',
+    config = function()
+      vim.api.nvim_set_keymap('v', '<leader>yb', '<plug>(quotem-named)', {})
+      vim.api.nvim_set_keymap('v', '<leader>Yb', '<plug>(quotem-fullnamed)', {})
+      vim.api.nvim_set_keymap('n', '<leader>yb', '<plug>(operator-quotem-named)', {})
+      vim.api.nvim_set_keymap('n', '<leader>Yb', '<plug>(operator-quotem-fullnamed)', {})
+    end,
+  }
+  use {
+    'kyoh86/vim-copy-buffer-name',
+    config = function()
+      vim.api.nvim_set_keymap('n', '<leader>y%', '<plug>(copy-buffer-name)', {})
+      vim.api.nvim_set_keymap('n', '<leader>Y%', '<plug>(copy-buffer-full-name)', {})
+    end,
+  }
+  use {
+    '~/Projects/github.com/kyoh86/vim-cinfo',
+    config = function()
+      vim.api.nvim_set_keymap('n', '<leader>ic', '<plug>(cinfo-show-cursor)', {})
+      vim.api.nvim_set_keymap('n', '<leader>ib', '<plug>(cinfo-show-buffer)', {})
+      vim.api.nvim_set_keymap('n', '<leader>ih', '<plug>(cinfo-show-highlight)', {})
+    end,
+  }
+  use {'~/Projects/github.com/kyoh86/vim-go-filetype'}
+  use {'~/Projects/github.com/kyoh86/vim-go-scaffold'}
+  use {'~/Projects/github.com/kyoh86/vim-go-testfile'}
+  use {'~/Projects/github.com/kyoh86/vim-go-coverage'}
+  use {'mattn/vim-goimports'}
+
+  use { 'dhruvasagar/vim-table-mode' }
+  use { 'iberianpig/tig-explorer.vim' }
+  use { 'stefandtw/quickfix-reflector.vim' }
+  use { 'z0mbix/vim-shfmt' }
+  use { 'lambdalisue/vim-backslash' }
+  use { 'kkiyama117/zenn-vim' }
 end)

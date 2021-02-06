@@ -178,7 +178,9 @@ endif
 " }}}
 
 unlet! skip_defaults_vim
-source $VIMRUNTIME/defaults.vim
+if filereadable($VIMRUNTIME .. '/defaults.vim')
+  source $VIMRUNTIME/defaults.vim
+endif
 
 " Configure Plugins {{{
 " vim-plug global settings
@@ -711,6 +713,26 @@ call s:plug.begin()
   Plug 'kyoh86/vim-beedle', {'on': 'Bdelete', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-beedle'}
   Plug 'kyoh86/vim-wipeout', {'on': 'Wipeout', 'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-wipeout'}
   Plug 'kyoh86/vim-editerm', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-editerm'}
+  Plug 'kyoh86/vim-copy-buffer-name', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-copy-buffer-name'} " {{{
+    nmap <leader>y% <Plug>(copy-buffer-name)
+    nmap <leader>Y% <Plug>(copy-buffer-full-name)
+  " }}}
+  Plug 'kyoh86/vim-cinfo', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-cinfo'}
+  function! s:plug.after.kyoh86__vim__cinfo()
+    nmap <Leader>ic <Plug>(cinfo-show-cursor)
+    nmap <Leader>ib <Plug>(cinfo-show-buffer)
+    nmap <Leader>ih <Plug>(cinfo-show-highlight)
+  endfunction
+  Plug 'kyoh86/vim-quotem', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-quotem'} " {{{
+    vmap <leader>yq <plug>(quotem-named)
+    vmap <leader>Yq <plug>(quotem-fullnamed)
+    nmap <leader>yq <plug>(operator-quotem-named)
+    nmap <leader>Yq <plug>(operator-quotem-fullnamed)
+  " }}}
+  Plug 'kyoh86/vim-go-filetype', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-go-filetype'}
+  Plug 'kyoh86/vim-go-scaffold', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-go-scaffold'}
+  Plug 'kyoh86/vim-go-testfile', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-go-testfile'}
+  Plug 'kyoh86/vim-go-coverage', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-go-coverage'}
   " }}}
 
   if executable('direnv')
@@ -718,6 +740,10 @@ call s:plug.begin()
   endif
 
   Plug 'po3rin/vim-gofmtmd'
+  Plug 'mattn/vim-goimports'
+  let g:goimports = v:true
+  let g:goimports_simplify = v:true
+
   Plug 'AndrewRadev/linediff.vim'
   Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
   Plug 'bps/vim-textobj-python'
@@ -804,106 +830,95 @@ call s:plug.end()
 " }}}
 
 " Configure packages {{{
-packadd go-imports
-let g:goimports = v:true
-let g:goimports_simplify = v:true
-packadd go-coverage
-
-packadd my-copy-buffer-name
 packadd my-git-edit
-packadd my-popup-info
-packadd my-quote
 packadd personal-ft
 packadd personal-ft-diff
-packadd personal-ft-go
 packadd personal-ft-help
 " }}}
 
 " Functions {{{
 
 " ConfigEdit {{{
-def s:edit_config(bang: string, mods: string)
+function! s:edit_config(bang, mods)
   if exists('g:fzf#vim#buffers')
-    fzf#vim#files(g:xdg_config_home)
+    call fzf#vim#files(g:xdg_config_home)
   else
-    var cmd: string
-    if mods == ''
-      cmd = 'edit' .. bang
+    if a:mods == ''
+      let l:cmd = 'edit' .. a:bang
     else
-      cmd = mods .. ' split'
+      let l:cmd = a:mods .. ' split'
     endif
-    execute cmd .. ' ' .. $MYVIMRC
+    execute l:cmd .. ' ' .. $MYVIMRC
   endif
-enddef
+endfunction
 command! -bang -nargs=0 ConfigEdit call s:edit_config('<bang>', '<mods>')
 nnoremap <Leader><Leader>c :<C-u>ConfigEdit<CR>
 " }}}
 
 " PlugEdit {{{
-def s:edit_plug(dir: string, bang: string, mods: string)
+function! s:edit_plug(dir, bang, mods)
   if exists('g:fzf#vim#buffers')
-    fzf#vim#files(dir)
+    call fzf#vim#files(a:dir)
   else
-    var cmd: string
-    if mods == ''
-      cmd = 'edit' .. bang
+    if a:mods == ''
+      let l:cmd = 'edit' .. a:bang
     else
-      cmd = mods .. ' split'
+      let l:cmd = a:mods .. ' split'
     endif
-    execute cmd .. ' ' .. dir
+    execute l:cmd .. ' ' .. a:dir
   endif
-enddef
+endfunction
 command! -bang -nargs=0 PlugEdit call s:edit_plug(g:plug_dir, '<bang>', '<mods>')
 nnoremap <Leader><Leader>p :<C-u>PlugEdit<CR>
 " }}}
 
 " PlugAdd {{{
-def s:plug_add(name: string)
-  var cur_file = expand('%:p')
-  if cur_file != $MYVIMRC
+function! s:plug_add(name)
+  let l:cur_file = expand('%:p')
+  if l:cur_file != $MYVIMRC
     execute ':edit ' .. escape($MYVIMRC, ' ')
   endif
   if expand('%:p') != $MYVIMRC
     return
   endif
   if &readonly == v:true
-    if cur_file != $MYVIMRC
+    if l:cur_file != $MYVIMRC
       execute ':bw'
     endif
     return
   endif
-  execute ':%s/\n\(\n*call s:plug\.end()\)$/\r  Plug ' .. "'" .. escape(name, '/') .. "'" .. '\r\1/'
+  execute ':%s/\n\(\n*call s:plug\.end()\)$/\r  Plug ' .. "'" .. escape(a:name, '/') .. "'" .. '\r\1/'
   execute ':w'
-  if cur_file != $MYVIMRC
+  if l:cur_file != $MYVIMRC
     execute ':bw'
   endif
   source $MYVIMRC
-enddef
+endfunction
 command! -nargs=1 PlugAdd call s:plug_add('<args>')
 " }}}
 
 " Update All {{{
-def s:update_all()
+function! s:update_all()
   execute 'terminal ' .. &shell .. ' -c "source ' .. $ZDOTDIR .. '/.zshrc && update"'
-enddef
+endfunction
 command! UpdateAll call s:update_all()
 " }}}
 
 " Manage TODOs {{{
-def s:grep_todo()
+function! s:grep_todo()
   grep! 'TODO\\|UNDONE\\|HACK\\|FIXME'
-enddef
+endfunction
 command! Todo call s:grep_todo()
 command! ToDo call s:grep_todo()
 command! TODO call s:grep_todo()
 " }}}
 
 " Function: Switch Branch {{{
-def s:git_switch(line: string)
-  var branch = get(split(line), 1, '')
-  execute '!git switch ' .. branch
-  lightline#update()
-enddef
+function! s:git_switch(line)
+  let l:branch = get(split(a:line), 1, '')
+  execute '!git switch ' .. l:branch
+  call lightline#update()
+endfunction
 
 command! SwitchBranch call fzf#run(fzf#wrap({
     \ 'source': "git-branches --color !current",
@@ -926,9 +941,6 @@ vmap Y <Plug>(quotem-copy)
 " Command aliases & map {{{
 command! Ghf OpenGithubFile
 nmap <Leader>gd <Plug>(git-edit)
-nmap <Leader>ic <Plug>(pinfo-show-cursor)
-nmap <Leader>ib <Plug>(pinfo-show-buffer)
-nmap <Leader>ih <Plug>(pinfo-show-highlight)
 " }}}
 
 " Settings {{{
@@ -997,7 +1009,7 @@ set fixendofline        " <EOL> at the end of file will be restored if missing
 set showcmd             " 
 set textwidth=120         " never limit length of each line
 set ambiwidth=double
-set foldmethod=marker
+set foldmethod=manual
 set backspace=2
 set cursorline   " Highlight cursor line
 set showtabline=1
@@ -1152,3 +1164,4 @@ set cedit=\<C-Y>
 " }}}
 
 " }}}
+" vim: foldmethod=marker
