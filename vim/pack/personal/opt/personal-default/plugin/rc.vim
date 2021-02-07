@@ -232,10 +232,9 @@ call s:plug.begin()
 
   function! s:plug.after.junegunn__fzf__vim()
     let g:fzf_command_prefix = 'Fzf'
-    nnoremap <Leader>f  :<C-u>FzfFiles<CR>
-    nnoremap <Leader>c  :<C-u>FzfCommands<CR>
-    nnoremap <Leader>w  :<C-u>FzfWindows<CR>
-    nnoremap <Leader>bb :<C-u>FzfBuffers<CR>
+    nnoremap <Leader>ff :<C-u>FzfFiles<CR>
+    nnoremap <Leader>fw :<C-u>FzfWindows<CR>
+    nnoremap <Leader>fb :<C-u>FzfBuffers<CR>
     nnoremap <Leader>r  :<C-u>FZFMru<CR>
     nnoremap <Leader>:  :<C-u>FzfHistory :<CR> 
     nnoremap <Leader>/  :<C-u>FzfHistory /<CR>
@@ -704,7 +703,7 @@ call s:plug.begin()
   Plug 'kyoh86/vim-gogh', {'dir': $GO_PROJECT_ROOT.'/github.com/kyoh86/vim-gogh'}
   function! s:plug.after.kyoh86__vim__gogh()
     nmap <Leader>ge <Plug>(gogh-edit-project)
-    nmap <Leader>gp <Plug>(gogh-switch-project)
+    nmap <Leader>fp <Plug>(gogh-switch-project)
     nmap <Leader>gg <Plug>(gogh-get-repository)
     call gogh#ui#fzf#use()
   endfunction
@@ -924,7 +923,7 @@ command! SwitchBranch call fzf#run(fzf#wrap({
     \ 'source': "git-branches --color !current",
     \ 'sink': function('<SID>git_switch'),
     \ }))
-nnoremap <Leader>gb :<C-u>SwitchBranch<CR>
+nnoremap <Leader>fb :<C-u>SwitchBranch<CR>
 " }}}
 
 " Function: Cleanup Branch {{{
@@ -1028,7 +1027,7 @@ let g:html_indent_autotags='html,body,head,tbody,theadk' " seealso :help ft-html
 
 " Setup Keymaps (for regular functions) {{{
 " Delete search highlight
-nnoremap <ESC><ESC> :<C-u>nohl<CR><ESC>
+nnoremap <C-l> :<C-u>nohlsearch<CR><C-l>
 
 " Quickfix
 nnoremap <Leader>q :<C-u>copen<CR><ESC>

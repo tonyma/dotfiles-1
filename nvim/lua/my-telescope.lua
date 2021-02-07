@@ -1,9 +1,28 @@
+local finders = require('telescope.finders')
+local make_entry = require('telescope.make_entry')
+local pickers = require('telescope.pickers')
+local utils = require('telescope.utils')
+
+local conf = require('telescope.config').values
+
 vim.api.nvim_set_keymap('n', '<Leader>ff', '<CMD>lua require("telescope.builtin").find_files()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fb', '<CMD>lua require("telescope.builtin").buffers()<CR>',    { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>fw', '<CMD>lua require("telescope.builtin").windows()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>f:', '<CMD>lua require("telescope.builtin").command_history()<CR>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fgs', '<CMD>lua require("telescope.builtin").git_status()<CR>',    { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>fgr', '<CMD>lua require("my-telescope").git_recents()<CR>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fgb', '<CMD>lua require("telescope.builtin").git_branches()<CR>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fgc', '<CMD>lua require("telescope.builtin").git_commits()<CR>',    { noremap = true, silent = true })
--- TODO: git-edit
+
+vim.cmd[[
+  command! ConfigEdit lua require("telescope.builtin").git_files({cwd = "~/.config"})
+]]
+vim.api.nvim_set_keymap('n', '<leader><leader>c', '<cmd>lua require("telescope.builtin").git_files({cwd = "~/.config"})<cr>', { noremap = true, silent = true })
+
+vim.cmd[[
+  command! PackerEdit lua require("telescope.builtin").find_files({search_dirs = {"~/.local/share/nvim/site/pack/packer"}})
+]]
+vim.api.nvim_set_keymap('n', '<leader><leader>p', '<cmd>lua require("telescope.builtin").find_files({search_dirs = {"~/.local/share/nvim/site/pack/packer"}})<cr>', { noremap = true, silent = true })
 
 -- Built-in actions
 local actions = require('telescope.actions')
@@ -16,7 +35,6 @@ require('telescope').setup{
     mappings = {
       i = {
         ["<CR>"] = actions.goto_file_selection_edit + actions.center,
-        ["<esc>"] = actions.close,
       },
       n = {
         ["<esc>"] = actions.close,
@@ -25,3 +43,26 @@ require('telescope').setup{
   }
 }
 
+local my = {}
+my.git_recents = function(opts)
+  local opts = opts or {}
+  local depth = utils.get_default(opts.depth, 5)
+
+  if opts.cwd then
+    opts.cwd = vim.fn.expand(opts.cwd)
+  end
+
+  opts.entry_maker = opts.entry_maker or make_entry.gen_from_file(opts)
+
+  pickers.new(opts, {
+    prompt_title = 'Git Recents',
+    finder = finders.new_oneshot_job(
+      {'git', 'diff', '--name-only', depth and 'HEAD~' .. depth or 'HEAD'},
+      opts
+    ),
+    previewer = conf.file_previewer(opts),
+    sorter = conf.file_sorter(opts),
+  }):find()
+end
+
+return my

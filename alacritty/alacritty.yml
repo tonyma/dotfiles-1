@@ -407,11 +407,11 @@ cursor:
 #   - (macOS) /bin/bash --login
 #   - (Linux/BSD) user login shell
 #   - (Windows) powershell
-#shell:
-#  program: /usr/bin/zsh
-#  args:
-#    - -c
-#    - vim
+shell:
+  program: /usr/bin/zsh
+  args:
+    - -c
+    - nvim
 
 # Startup directory
 #

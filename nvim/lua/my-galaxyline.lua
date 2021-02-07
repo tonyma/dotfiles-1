@@ -92,24 +92,23 @@ gls.left[1] = {
         end
       end
 
-      for index, component in next, gls.left do
-        if index == 1 then
-          for key in pairs(component) do
-            vim.api.nvim_command('hi Galaxy' .. key .. '    guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[1])
-            vim.api.nvim_command('hi ' .. key .. 'Separator guifg=' .. mode_color[1]       ..' guibg=' .. mode_color[2])
+      for _, side in ipairs({gls.left, gls.right}) do
+        for index, components in pairs(side) do
+          if index == 1 then
+            for key in pairs(components) do
+              vim.api.nvim_command('hi Galaxy' .. key .. '    guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[1])
+              vim.api.nvim_command('hi ' .. key .. 'Separator guifg=' .. mode_color[1]       ..' guibg=' .. mode_color[2])
+            end
+          else
+            for key, component in pairs(components) do
+              if component.highlight == nil then
+                vim.api.nvim_command('hi Galaxy' .. key .. '    guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
+              else
+                vim.api.nvim_command('hi Galaxy' .. key .. '    guifg=' .. component.highlight[1] ..  ' guibg=' .. component.highlight[2])
+              end
+              vim.api.nvim_command('hi ' .. key .. 'Separator guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
+            end
           end
-        else
-          for key in pairs(component) do
-            vim.api.nvim_command('hi Galaxy' .. key .. '    guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
-            vim.api.nvim_command('hi ' .. key .. 'Separator guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
-          end
-        end
-      end
-
-      for _, component in next, gls.right do
-        for key in pairs(component) do
-          vim.api.nvim_command('hi Galaxy' .. key .. '    guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
-          vim.api.nvim_command('hi ' .. key .. 'Separator guifg=' .. momiji_colors.black ..' guibg=' .. mode_color[2])
         end
       end
 
@@ -145,20 +144,144 @@ gls.left[4] = {
   }
 }
 
-gls.right[1] = { GitBranch    = { provider = 'GitBranch',    icon = ' \u{E0A0} '  } }
-gls.right[2] = { DiffAdd      = { provider = 'DiffAdd',      icon = ' \u{FF631} ' } }
-gls.right[3] = { DiffModified = { provider = 'DiffModified', icon = ' \u{FF915} ' } }
-gls.right[4] = { DiffRemove   = { provider = 'DiffRemove'  , icon = ' \u{FFC89} ' } }
+gls.left[5] = {
+  DiffAdd      = {
+    provider = 'DiffAdd',
+    icon = '   ',
+    highlight = { momiji_colors.blue, momiji_colors.grayscale1 },
+  }
+}
+gls.left[6] = {
+  DiffModified = {
+    provider = 'DiffModified',
+    icon = '   ',
+    highlight = { momiji_colors.yellow, momiji_colors.grayscale1 },
+  }
+}
+gls.left[7] = {
+  DiffRemove   = {
+    provider = 'DiffRemove',
+    icon = '   ',
+    highlight = { momiji_colors.red, momiji_colors.grayscale1 },
+  }
+}
+gls.left[8] = { LeftEdge  = { provider = function() return '' end } }
 
--- TODO: show Ahead and Behind in current branch
+gls.right[1] = { RightEdge  = { provider = function() return '' end } }
+gls.right[4] = { DiagnosticHint  = { provider = 'DiagnosticHint',  icon = '\u{F059}' } }
+gls.right[5] = { DiagnosticInfo  = { provider = 'DiagnosticInfo',  icon = '\u{F05A}' } }
+gls.right[6] = { DiagnosticWarn  = { provider = 'DiagnosticWarn',  icon = '\u{F06A}' } }
+gls.right[7] = { DiagnosticError = { provider = 'DiagnosticError', icon = '\u{F057}' } }
 
-gls.right[5] = { DiagnosticHint  = { provider = 'DiagnosticHint',  icon = '\u{F059}' } }
-gls.right[6] = { DiagnosticInfo  = { provider = 'DiagnosticInfo',  icon = '\u{F05A}' } }
-gls.right[7] = { DiagnosticWarn  = { provider = 'DiagnosticWarn',  icon = '\u{F06A}' } }
-gls.right[8] = { DiagnosticError = { provider = 'DiagnosticError', icon = '\u{F057}' } }
+gls.right[3] = {
+  GitBranch    = {
+    provider = 'GitBranch',
+    icon = '  \u{E0A0} '
+  }
+}
+
+gls.right[3] = {
+  GitBranch    = {
+    provider = 'GitBranch',
+    icon = '  \u{E0A0} '
+  }
+}
+
+local function with_prefix(prefix, value)
+  if not value or value == 0 then
+    return ''
+  end
+  return prefix .. ' ' .. value
+end
+
+local function get_git_status(path)
+  -- TODO: see
+  -- https://git-scm.com/docs/git-status#_porcelain_format_version_2 and
+  -- use porcelain v2
+  local res = vim.fn.system("git -C '" .. path .. "' status --porcelain --branch --ahead-behind --untracked-files --renames")
+  if string.sub(res, 1, 7) == 'fatal: ' then
+    return nil
+  end
+  local info = { ahead = 0, behind = 0, sync = '', unmerged = 0, untracked = 0, staged = 0, unstaged = 0 }
+  local file
+  for _, file in next, vim.fn.split(res, "\n") do
+    if string.sub(file, 1, 2) == '##' then
+      -- ブランチ名を取得する
+      local words = vim.fn.split(file, '\\.\\.\\.\\|[ \\[\\],]')
+      if #words == 2 then
+        info.local_branch = words[2] .. '?'
+        info.sync = "\u{F12A}"
+      else
+        info.local_branch = words[2]
+        info.remote_branch = words[3]
+        if #words > 3 then
+          remain = words[{{4, #words}}]
+          local key = ''
+          local i = ''
+          local r = ''
+          for i, r in next, remain do
+            if key ~= '' then
+              info[key] = r
+              key = ''
+            else
+              key = r
+            end
+          end
+        end
+      end
+    elseif file[1] == 'U' or file[2] == 'U' or string.sub(file, 1, 2) == 'AA' or string.sub(file, 1, 2) == 'DD' then
+      info.unmerged = info.unmerged + 1
+    elseif string.sub(file, 1, 2) == '??'  then
+      info.untracked = info.untracked + 1
+    else
+      if file[1] ~= ' ' then
+        info.staged = info.staged + 1
+      end
+      if file[2] ~= ' ' then
+        info.unstaged = info.unstaged + 1
+      end
+    end
+  end
+  return info
+end
+
+gls.right[2] = {
+  GitStat = {
+    provider = function()
+      if vim.bo.buftype == 'terminal' then
+        return '' -- TODO: get title and parse it as path
+      end
+
+      local location = vim.fn.getcwd()
+      local stat = get_git_status(location)
+      if stat == nil then
+        return ''
+      end
+
+      local output = vim.fn.trim(vim.fn.join({
+        with_prefix("\u{FF55D}", stat.ahead),
+        with_prefix("\u{FF545}", stat.behind),
+        stat.sync,
+        with_prefix('Unmerged:', stat.unmerged),
+        with_prefix("\u{FF631}", stat.staged),
+        with_prefix("\u{FF915}", stat.unstaged),
+        with_prefix("\u{FFC89}", stat.untracked),
+      }))
+      if output == '' then
+        return output
+      else
+        return ' ' .. output .. ' '
+      end
+    end,
+    highlight = { momiji_colors.yellow, momiji_colors.grayscale1 },
+    separator = ' ',
+  }
+}
 
 vim.api.nvim_set_option('showmode', false)  -- galaxyline で表示するので、vim標準のモード表示は隠す
 
 vim.cmd[[
   autocmd User MyFernModeChanged lua require("galaxyline").load_galaxyline()
 ]]
+
+gl.load_galaxyline()

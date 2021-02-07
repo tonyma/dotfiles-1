@@ -3,6 +3,8 @@ vim.cmd[[packadd packer.nvim]]
 require('packer').startup(function()
   use { 'wbthomason/packer.nvim' }
 
+  -- Visuals                 ==================================================
+
   use { 'kyoh86/momiji' }
 
   use {
@@ -16,17 +18,46 @@ require('packer').startup(function()
   }
 
   use {
-    'nvim-telescope/telescope.nvim',
+    'glepnir/galaxyline.nvim',
+    branch = 'main',
+    config = function() require'my-galaxyline' end,
+    requires = {
+      {'kyazdani42/nvim-web-devicons'},
+      {'lewis6991/gitsigns.nvim'},
+      {'kyoh86/momiji'}
+    }
+  }
+
+  use { 'lambdalisue/readablefold.vim' }
+
+  use {
+    'osyo-manga/vim-brightest',
+    config = function()
+      vim.api.nvim_set_var('brightest#highlight', { group = "BrightestUnderline" })
+    end,
+  }
+
+  use {
+    '~/Projects/github.com/kyoh86/vim-cinfo',
+    config = function()
+      vim.api.nvim_set_keymap('n', '<leader>ic', '<plug>(cinfo-show-cursor)', {})
+      vim.api.nvim_set_keymap('n', '<leader>ib', '<plug>(cinfo-show-buffer)', {})
+      vim.api.nvim_set_keymap('n', '<leader>ih', '<plug>(cinfo-show-highlight)', {})
+    end,
+  }
+
+  -- Fuzzy finder            ==================================================
+
+  use {
+    '~/Projects/github.com/nvim-telescope/telescope.nvim',
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
     config = function() require('my-telescope') end,
   }
-  -- TODO: switch windows with telescope
-  -- TODO: use <C-h> as Backspace, <C-A> as <Home>, ...
 
   use {
     '~/Projects/github.com/kyoh86/telescope-gogh.nvim',
     requires = {
-      'telescope.nvim'
+      '~/Projects/github.com/nvim-telescope/telescope.nvim'
     },
     config = function()
       vim.api.nvim_set_keymap('n', '<Leader>fp', '<CMD>lua require("telescope").extensions.gogh.list()<CR>',  { noremap = true, silent = true })
@@ -49,14 +80,17 @@ require('packer').startup(function()
   }
 
   use {
-    'glepnir/galaxyline.nvim',
-    branch = 'main',
-    config = function() require'my-galaxyline' end,
+    "nvim-telescope/telescope-frecency.nvim",
     requires = {
-      {'kyazdani42/nvim-web-devicons'},
-      {'kyoh86/momiji'}
-    }
+      'tami5/sql.nvim',
+    },
+    config = function()
+      require"telescope".load_extension("frecency")
+      vim.api.nvim_set_keymap('n', '<Leader>fm', "<Cmd>lua require('telescope').extensions.frecency.frecency()<CR>", {noremap = true, silent = true})
+    end
   }
+
+  -- LSP                     ==================================================
 
   use {
     'neovim/nvim-lspconfig',
@@ -92,7 +126,9 @@ require('packer').startup(function()
     config = function() require 'my-lsp' end,
   }
 
-  use { 'jremmen/vim-ripgrep', cmd = 'Rg' }
+  use { 'mattn/vim-lsp-settings' }
+
+  -- Text handlers           ==================================================
 
   use {
     'kana/vim-textobj-line',
@@ -140,13 +176,6 @@ require('packer').startup(function()
   }
 
   use {
-    'thinca/vim-quickrun',
-    config = function()
-      vim.api.nvim_set_var('quickrun_config', { _ = { runner = 'terminal' } })
-    end,
-  }
-
-  use {
     'machakann/vim-swap',
     config = function()
       vim.api.nvim_set_keymap('o', 'i,', '<Plug>(swap-textobject-i)', {})
@@ -156,7 +185,17 @@ require('packer').startup(function()
     end,
   }
 
-  use { 'lambdalisue/readablefold.vim' }
+  -- Integrations            ==================================================
+
+  use { 'jremmen/vim-ripgrep', cmd = 'Rg' }
+  use { 'stefandtw/quickfix-reflector.vim' }
+
+  use {
+    'thinca/vim-quickrun',
+    config = function()
+      vim.api.nvim_set_var('quickrun_config', { _ = { runner = 'terminal' } })
+    end,
+  }
 
   use {
     'vim-test/vim-test',
@@ -165,63 +204,7 @@ require('packer').startup(function()
       vim.api.nvim_set_var('test#vimterminal#term_position', 'aboveleft')
     end,
   }
-  
-  use {
-    'qpkorr/vim-bufkill',
-    setup = function()
-      vim.api.nvim_set_var('BufKillCreateMappings', 0)
-    end,
-  }
 
-  use {
-    'osyo-manga/vim-brightest',
-    config = function()
-      vim.api.nvim_set_var('brightest#highlight', { group = "BrightestUnderline" })
-    end,
-  }
-
---   use {
---     'kevinhwang91/nvim-hlslens',
---     config = function()
---     vim.cmd [[
--- noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'n')<CR> <Cmd>lua require('hlslens').start()<CR>
--- noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'N')<CR> <Cmd>lua require('hlslens').start()<CR>
--- noremap * *<Cmd>lua require('hlslens').start()<CR>
--- noremap # #<Cmd>lua require('hlslens').start()<CR>
--- noremap g* g*<Cmd>lua require('hlslens').start()<CR>
--- noremap g# g#<Cmd>lua require('hlslens').start()<CR>
---        ]]
---     end,
---  }
-
-  use {
-    'simeji/winresizer',
-    setup = function()
-      vim.api.nvim_set_var('winresizer_start_key', '<C-w><C-e>')
-    end,
-  }
-
-  use { 'lambdalisue/edita.vim' }
-
-  use {
-    'lambdalisue/fern.vim',
-    -- config is in init.vim
-    requires = {
-      { 'lambdalisue/fern-git-status.vim' }        ,
-      { 'lambdalisue/fern-hijack.vim' }            ,
-      { 'lambdalisue/fern-renderer-nerdfont.vim' } ,
-    }
-  }
-
-  use { 'tyru/capture.vim' }
-  use { 'tyru/empty-prompt.vim' }
-  use {
-    'tyru/open-browser-github.vim',
-    requires = { 'tyru/open-browser.vim' }
-  }
-
-  use { 'kyoh86/vim-beedle' }
-  use { 'kyoh86/vim-wipeout' }
   use {
     '~/Projects/github.com/kyoh86/vim-quotem',
     config = function()
@@ -231,6 +214,7 @@ require('packer').startup(function()
       vim.api.nvim_set_keymap('n', '<leader>Yb', '<plug>(operator-quotem-fullnamed)', {})
     end,
   }
+
   use {
     'kyoh86/vim-copy-buffer-name',
     config = function()
@@ -238,24 +222,83 @@ require('packer').startup(function()
       vim.api.nvim_set_keymap('n', '<leader>Y%', '<plug>(copy-buffer-full-name)', {})
     end,
   }
+
+  use { 'iberianpig/tig-explorer.vim' }
+
+  use { 'kkiyama117/zenn-vim' }
+
   use {
-    '~/Projects/github.com/kyoh86/vim-cinfo',
-    config = function()
-      vim.api.nvim_set_keymap('n', '<leader>ic', '<plug>(cinfo-show-cursor)', {})
-      vim.api.nvim_set_keymap('n', '<leader>ib', '<plug>(cinfo-show-buffer)', {})
-      vim.api.nvim_set_keymap('n', '<leader>ih', '<plug>(cinfo-show-highlight)', {})
+    'tyru/open-browser-github.vim',
+    requires = { 'tyru/open-browser.vim' }
+  }
+
+  -- Manipulate vim          ==================================================
+
+  use {
+    'qpkorr/vim-bufkill',
+    setup = function()
+      vim.api.nvim_set_var('BufKillCreateMappings', 0)
     end,
   }
+
+  use {
+    'simeji/winresizer',
+    setup = function()
+      vim.api.nvim_set_var('winresizer_start_key', '<C-w><C-e>')
+    end,
+  }
+
+  use { 'lambdalisue/edita.vim' }
+  use { 'tyru/empty-prompt.vim' }
+
+  use {
+    'lambdalisue/fern.vim',
+    -- config is in init.vim
+    requires = {
+      { 'lambdalisue/fern-git-status.vim' }        ,
+      { 'lambdalisue/fern-hijack.vim' }            ,
+      { 'lambdalisue/fern-renderer-nerdfont.vim' } ,
+    },
+    setup = function()
+      vim.api.nvim_set_var('fern#disable_default_mappings', 1)
+    end,
+    config = function()
+      vim.cmd[[
+        runtime! etc/my-fern-mode.vim
+        runtime! etc/my-fern.vim
+      ]]
+    end,
+  }
+
+  use { 'tyru/capture.vim' }
+
+  use { 'kyoh86/vim-beedle' }
+  use { 'kyoh86/vim-wipeout' }
+
+  -- Languages               ==================================================
+
+  -- - go
   use {'~/Projects/github.com/kyoh86/vim-go-filetype'}
   use {'~/Projects/github.com/kyoh86/vim-go-scaffold'}
   use {'~/Projects/github.com/kyoh86/vim-go-testfile'}
   use {'~/Projects/github.com/kyoh86/vim-go-coverage'}
   use {'mattn/vim-goimports'}
 
+  -- - markdown
+  use {
+    'iamcco/markdown-preview.nvim',
+    run = 'cd app && yarn install'
+  }
   use { 'dhruvasagar/vim-table-mode' }
-  use { 'iberianpig/tig-explorer.vim' }
-  use { 'stefandtw/quickfix-reflector.vim' }
+
+  -- - others
   use { 'z0mbix/vim-shfmt' }
   use { 'lambdalisue/vim-backslash' }
-  use { 'kkiyama117/zenn-vim' }
+  use { 'glench/vim-jinja2-syntax' }
+  use { 'briancollins/vim-jst' }
+  use { 'nikvdp/ejs-syntax' }
+  use { 'cespare/vim-toml' }
+  use { 'leafgarland/typescript-vim' }
+  use { 'pangloss/vim-javascript' }
+
 end)
