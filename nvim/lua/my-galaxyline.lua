@@ -168,19 +168,13 @@ gls.left[7] = {
 gls.left[8] = { LeftEdge  = { provider = function() return '' end } }
 
 gls.right[1] = { RightEdge  = { provider = function() return '' end } }
-gls.right[4] = { DiagnosticHint  = { provider = 'DiagnosticHint',  icon = '\u{F059}' } }
-gls.right[5] = { DiagnosticInfo  = { provider = 'DiagnosticInfo',  icon = '\u{F05A}' } }
-gls.right[6] = { DiagnosticWarn  = { provider = 'DiagnosticWarn',  icon = '\u{F06A}' } }
-gls.right[7] = { DiagnosticError = { provider = 'DiagnosticError', icon = '\u{F057}' } }
 
-gls.right[3] = {
-  GitBranch    = {
-    provider = 'GitBranch',
-    icon = '  \u{E0A0} '
-  }
-}
+gls.right[3] = { DiagnosticHint  = { provider = 'DiagnosticHint',  icon = '\u{F059}' } }
+gls.right[4] = { DiagnosticInfo  = { provider = 'DiagnosticInfo',  icon = '\u{F05A}' } }
+gls.right[5] = { DiagnosticWarn  = { provider = 'DiagnosticWarn',  icon = '\u{F06A}' } }
+gls.right[6] = { DiagnosticError = { provider = 'DiagnosticError', icon = '\u{F057}' } }
 
-gls.right[3] = {
+gls.right[7] = {
   GitBranch    = {
     provider = 'GitBranch',
     icon = '  \u{E0A0} '
@@ -205,7 +199,10 @@ local function get_git_status(path)
   local info = { ahead = 0, behind = 0, sync = '', unmerged = 0, untracked = 0, staged = 0, unstaged = 0 }
   local file
   for _, file in next, vim.fn.split(res, "\n") do
-    if string.sub(file, 1, 2) == '##' then
+    local staged = string.sub(file, 1, 1)
+    local unstaged = string.sub(file, 2, 2)
+    local changed = string.sub(file, 1, 2)
+    if changed == '##' then
       -- ブランチ名を取得する
       local words = vim.fn.split(file, '\\.\\.\\.\\|[ \\[\\],]')
       if #words == 2 then
@@ -230,15 +227,15 @@ local function get_git_status(path)
           end
         end
       end
-    elseif file[1] == 'U' or file[2] == 'U' or string.sub(file, 1, 2) == 'AA' or string.sub(file, 1, 2) == 'DD' then
+    elseif staged == 'U' or unstaged == 'U' or changed == 'AA' or changed == 'DD' then
       info.unmerged = info.unmerged + 1
-    elseif string.sub(file, 1, 2) == '??'  then
+    elseif changed == '??'  then
       info.untracked = info.untracked + 1
     else
-      if file[1] ~= ' ' then
+      if staged ~= ' ' then
         info.staged = info.staged + 1
       end
-      if file[2] ~= ' ' then
+      if unstaged ~= ' ' then
         info.unstaged = info.unstaged + 1
       end
     end
@@ -259,15 +256,17 @@ gls.right[2] = {
         return ''
       end
 
-      local output = vim.fn.trim(vim.fn.join({
-        with_prefix("\u{FF55D}", stat.ahead),
-        with_prefix("\u{FF545}", stat.behind),
+      local output = vim.fn.trim(vim.fn.join(vim.tbl_filter(function(w)
+        return w ~= nil and w ~= ''
+      end, {
+        with_prefix("\u{FF55D}", stat.ahead),     -- 󿕝 .
+        with_prefix("\u{FF545}", stat.behind),    -- 󿕅 .
         stat.sync,
-        with_prefix('Unmerged:', stat.unmerged),
-        with_prefix("\u{FF631}", stat.staged),
-        with_prefix("\u{FF915}", stat.unstaged),
-        with_prefix("\u{FFC89}", stat.untracked),
-      }))
+        with_prefix('\u{FFBC2}', stat.unmerged),  -- 󿯂 .
+        with_prefix("\u{FF62B}", stat.staged),    -- 󿘫 .
+        with_prefix("\u{FF914}", stat.unstaged),  -- 󿤔 .
+        with_prefix("\u{FF7D5}", stat.untracked), -- 󿟕 .
+      })))
       if output == '' then
         return output
       else
