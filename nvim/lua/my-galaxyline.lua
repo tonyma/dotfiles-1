@@ -215,16 +215,17 @@ local function get_git_status(path)
         info.local_branch = words[2]
         info.remote_branch = words[3]
         if #words > 3 then
-          remain = words[{{4, #words}}]
           local key = ''
           local i = ''
           local r = ''
-          for i, r in next, remain do
-            if key ~= '' then
-              info[key] = r
-              key = ''
-            else
-              key = r
+          for i, r in ipairs(words) do
+            if i > 3 then
+              if key ~= '' then
+                info[key] = r
+                key = ''
+              else
+                key = r
+              end
             end
           end
         end
