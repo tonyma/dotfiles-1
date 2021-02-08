@@ -5,6 +5,37 @@ local utils = require('telescope.utils')
 
 local conf = require('telescope.config').values
 
+-- Built-in actions
+local actions = require('telescope.actions')
+
+-- Setup    =================================================================================
+require('telescope').setup{
+  defaults = {
+    set_env = { ['COLORTERM'] = 'truecolor' },
+    -- Global remapping
+    mappings = {
+      i = {
+        ["<CR>"] = actions.goto_file_selection_edit + actions.center,
+      },
+      n = {
+        ["<esc>"] = actions.close,
+      },
+    },
+  }
+}
+
+-- Styles   =================================================================================
+
+if vim.g.momiji_loaded then
+  local palette = vim.fn['momiji#palette']
+  local highlight = vim.fn['momiji#highlight']
+  highlight('TelescopeSelection', {fg = palette('black'), bg = palette('blue')})
+  highlight('TelescopeMultiSelection', {fg = palette('black'), bg = palette('bright_blue')})
+  highlight('TelescopeMatching', {fg = palette('bright_yellow')})
+end
+
+-- Commands =================================================================================
+
 vim.api.nvim_set_keymap('n', '<Leader>ff', '<CMD>lua require("telescope.builtin").find_files()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fb', '<CMD>lua require("telescope.builtin").buffers()<CR>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fw', '<CMD>lua require("telescope.builtin").windows()<CR>', { noremap = true, silent = true })
@@ -23,25 +54,6 @@ vim.cmd[[
   command! PackerEdit lua require("telescope.builtin").find_files({search_dirs = {"~/.local/share/nvim/site/pack/packer"}})
 ]]
 vim.api.nvim_set_keymap('n', '<leader><leader>p', '<cmd>lua require("telescope.builtin").find_files({search_dirs = {"~/.local/share/nvim/site/pack/packer"}})<cr>', { noremap = true, silent = true })
-
--- Built-in actions
-local actions = require('telescope.actions')
-
--- Setup
-require('telescope').setup{
-  defaults = {
-    set_env = { ['COLORTERM'] = 'truecolor' },
-    -- Global remapping
-    mappings = {
-      i = {
-        ["<CR>"] = actions.goto_file_selection_edit + actions.center,
-      },
-      n = {
-        ["<esc>"] = actions.close,
-      },
-    },
-  }
-}
 
 local my = {}
 my.git_recents = function(opts)

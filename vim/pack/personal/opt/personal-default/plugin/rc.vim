@@ -743,6 +743,7 @@ call s:plug.begin()
   let g:goimports = v:true
   let g:goimports_simplify = v:true
 
+  Plug 'amadeus/vim-convert-color-to'
   Plug 'AndrewRadev/linediff.vim'
   Plug 'Glench/Vim-Jinja2-Syntax', {'for': 'jinja'}
   Plug 'bps/vim-textobj-python'

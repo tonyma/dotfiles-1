@@ -185,6 +185,8 @@ require('packer').startup(function()
     end,
   }
 
+  use { 'amadeus/vim-convert-color-to' }
+
   -- Integrations            ==================================================
 
   use { 'jremmen/vim-ripgrep', cmd = 'Rg' }
