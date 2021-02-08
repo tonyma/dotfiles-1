@@ -37,6 +37,7 @@
 !/setup
 !/setup_Darwin
 !/setup_GNOME
+!/setup_GNOME_terminal
 !/setup_Linux
 !/setup_pacman
 !/setup_vim
