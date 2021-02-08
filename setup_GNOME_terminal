@@ -60,13 +60,18 @@ set_default_profile_id() {
   dconf write "$dconfdir/default" "'$profile_id'"
 }
 
+palette="['rgb(20,12,12)' ,'rgb(218,87,116)' ,'rgb(52,140,78)' ,'rgb(231,168,43)' ,'rgb(72,132,210)' ,'rgb(165,90,170)' ,'rgb(31,144,168)' ,'rgb(160,153,153)' ,'rgb(90,78,78)' ,'rgb(245,135,91)' ,'rgb(154,190,134)' ,'rgb(255,215,145)' ,'rgb(137,183,225)' ,'rgb(238,161,209)' ,'rgb(105,178,172)' ,'rgb(230,227,227)' ,'rgb(8,8,8)' ,'rgb(55,42,42)' ,'rgb(90,78,78)' ,'rgb(125,115,115)' ,'rgb(160,153,153)' ,'rgb(195,190,190)']"
 setup_vim_profile() {
   local profile_id="$(get_or_new_profile vim)"
   set_profile_option "${profile_id}" default-size-columns 120
   set_profile_option "${profile_id}" default-size-rows 40
+  set_profile_option "${profile_id}" scrollbar-policy "'never'"
 
   set_profile_option "${profile_id}" use-system-font "false"
-  set_profile_option "${profile_id}" font "'Cica 11'"
+  set_profile_option "${profile_id}" font "'Cica 10.5'"
+
+  set_profile_option "${profile_id}" use-theme-colors "false"
+  set_profile_option "${profile_id}" palette "${palette}"
 
   set_profile_option "${profile_id}" use-custom-command "true"
   set_profile_option "${profile_id}" custom-command "'vim'"
@@ -78,9 +83,13 @@ setup_neovim_profile() {
   local profile_id="$(get_or_new_profile neovim)"
   set_profile_option "${profile_id}" default-size-columns 120
   set_profile_option "${profile_id}" default-size-rows 40
+  set_profile_option "${profile_id}" scrollbar-policy "'never'"
 
   set_profile_option "${profile_id}" use-system-font "false"
-  set_profile_option "${profile_id}" font "'Cica 11'"
+  set_profile_option "${profile_id}" font "'Cica 10.5'"
+
+  set_profile_option "${profile_id}" use-theme-colors "false"
+  set_profile_option "${profile_id}" palette "${palette}"
 
   set_profile_option "${profile_id}" use-custom-command "true"
   set_profile_option "${profile_id}" custom-command "'nvim'"
@@ -92,9 +101,13 @@ setup_default_profile() {
   local profile_id="$(get_or_new_profile default)"
   set_profile_option "${profile_id}" default-size-columns 120
   set_profile_option "${profile_id}" default-size-rows 40
+  set_profile_option "${profile_id}" scrollbar-policy "'never'"
 
   set_profile_option "${profile_id}" use-system-font "false"
-  set_profile_option "${profile_id}" font "'Cica 11'"
+  set_profile_option "${profile_id}" font "'Cica 10.5'"
+
+  set_profile_option "${profile_id}" use-theme-colors "false"
+  set_profile_option "${profile_id}" palette "${palette}"
 
   set_default_profile_id "${profile_id}"
 }

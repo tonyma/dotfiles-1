@@ -1,4 +1,5 @@
 local M = {}
+
 M.setupGalaxyline = function()
   local momiji_colors = {
     black          = vim.fn['momiji#gui']('black'),
@@ -289,10 +290,10 @@ M.setupGalaxyline = function()
   gl.load_galaxyline()
 end
 
-if vim.g.momiji_loaded then
+if vim.g.colors_name == 'momiji' then
   M.setupGalaxyline()
 else
-  vim.cmd[[autocmd User MomijiLoaded lua require('my-galaxyline').setupGalaxyline()]]
+  vim.cmd[[ autocmd ColorScheme momiji ++once lua require('my-galaxyline').setupGalaxyline() ]]
 end
 
 return M

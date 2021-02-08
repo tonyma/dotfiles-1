@@ -138,10 +138,7 @@ autocmd BufWritePost plugins.lua PackerCompile
 
 " Colors {{{
   syntax enable
-  augroup user-color-scheme
-    au!
-    autocmd User MomijiLoaded colorscheme momiji
-  augroup END
+  colorscheme momiji
 " }}}
 
 " Indents {{{

@@ -26,13 +26,22 @@ require('telescope').setup{
 
 -- Styles   =================================================================================
 
-if vim.g.momiji_loaded then
+local M = {}
+
+M.setupTelescopeHighlight = function()
   local palette = vim.fn['momiji#palette']
   local highlight = vim.fn['momiji#highlight']
   highlight('TelescopeSelection', {fg = palette('black'), bg = palette('blue')})
   highlight('TelescopeMultiSelection', {fg = palette('black'), bg = palette('bright_blue')})
   highlight('TelescopeMatching', {fg = palette('bright_yellow')})
 end
+
+if vim.g.colors_name == 'momiji' then
+  M.setupTelescopeHighlight()
+else
+  vim.cmd[[ autocmd ColorScheme momiji ++once lua require('my-galaxyline').setupTelescopeHighlight() ]]
+end
+
 
 -- Commands =================================================================================
 
