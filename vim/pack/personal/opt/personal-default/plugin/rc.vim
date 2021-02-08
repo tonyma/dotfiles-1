@@ -830,8 +830,6 @@ call s:plug.end()
 
 " Configure packages {{{
 packadd my-git-edit
-packadd personal-ft
-packadd personal-ft-diff
 packadd personal-ft-help
 " }}}
 

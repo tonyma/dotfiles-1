@@ -38,7 +38,7 @@ require('packer').startup(function()
   }
 
   use {
-    '~/Projects/github.com/kyoh86/vim-cinfo',
+    'kyoh86/vim-cinfo',
     config = function()
       vim.api.nvim_set_keymap('n', '<leader>ic', '<plug>(cinfo-show-cursor)', {})
       vim.api.nvim_set_keymap('n', '<leader>ib', '<plug>(cinfo-show-buffer)', {})
@@ -55,7 +55,7 @@ require('packer').startup(function()
   }
 
   use {
-    '~/Projects/github.com/kyoh86/telescope-gogh.nvim',
+    'kyoh86/telescope-gogh.nvim',
     requires = {
       '~/Projects/github.com/nvim-telescope/telescope.nvim'
     },
@@ -206,7 +206,7 @@ require('packer').startup(function()
   }
 
   use {
-    '~/Projects/github.com/kyoh86/vim-quotem',
+    'kyoh86/vim-quotem',
     config = function()
       vim.api.nvim_set_keymap('v', '<leader>yb', '<plug>(quotem-named)', {})
       vim.api.nvim_set_keymap('v', '<leader>Yb', '<plug>(quotem-fullnamed)', {})
@@ -278,10 +278,10 @@ require('packer').startup(function()
   -- Languages               ==================================================
 
   -- - go
-  use {'~/Projects/github.com/kyoh86/vim-go-filetype'}
-  use {'~/Projects/github.com/kyoh86/vim-go-scaffold'}
-  use {'~/Projects/github.com/kyoh86/vim-go-testfile'}
-  use {'~/Projects/github.com/kyoh86/vim-go-coverage'}
+  use {'kyoh86/vim-go-filetype'}
+  use {'kyoh86/vim-go-scaffold'}
+  use {'kyoh86/vim-go-testfile'}
+  use {'kyoh86/vim-go-coverage'}
   use {'mattn/vim-goimports'}
 
   -- - markdown

@@ -91,6 +91,8 @@ brew "hugo"
 brew "influxdb"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
+# Just-In-Time Compiler (JIT) for the Lua programming language
+brew "luajit", args: ["HEAD"]
 # Mac App Store command-line interface
 brew "mas"
 # Yet another part-of-speech and morphological analyzer
@@ -102,7 +104,7 @@ brew "moreutils"
 # Open source relational database management system
 brew "mysql"
 # Ambitious Vim-fork focused on extensibility and agility
-brew "neovim"
+brew "neovim", args: ["HEAD"]
 # Network Kanji code conversion Filter (NKF)
 brew "nkf"
 # Manage multiple NodeJS versions
@@ -246,6 +248,7 @@ mas "Keynote", id: 409183694
 mas "LINE", id: 539883307
 mas "Magnet", id: 441258766
 mas "Markoff", id: 1084713122
+mas "Microsoft Remote Desktop", id: 1295203466
 mas "Movist", id: 461788075
 mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
