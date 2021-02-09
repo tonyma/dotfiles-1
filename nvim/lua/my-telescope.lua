@@ -29,11 +29,11 @@ require('telescope').setup{
 local M = {}
 
 M.setupTelescopeHighlight = function()
-  local palette = vim.fn['momiji#palette']
-  local highlight = vim.fn['momiji#highlight']
-  highlight('TelescopeSelection', {fg = palette('black'), bg = palette('blue')})
-  highlight('TelescopeMultiSelection', {fg = palette('black'), bg = palette('bright_blue')})
-  highlight('TelescopeMatching', {fg = palette('bright_yellow')})
+  local palette = vim.g.momiji_palette
+  local highlight = vim.fn['MomijiHighlight']
+  highlight('TelescopeSelection', {fg = palette.black, bg = palette.blue})
+  highlight('TelescopeMultiSelection', {fg = palette.black, bg = palette.lightblue})
+  highlight('TelescopeMatching', {fg = palette.lightyellow})
 end
 
 if vim.g.colors_name == 'momiji' then

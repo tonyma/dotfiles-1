@@ -5,7 +5,7 @@ require('packer').startup(function()
 
   -- Visuals                 ==================================================
 
-  use { 'kyoh86/momiji' }
+  use { '~/Projects/github.com/kyoh86/momiji' }
 
   use {
     'lewis6991/gitsigns.nvim',
@@ -24,7 +24,7 @@ require('packer').startup(function()
     requires = {
       {'kyazdani42/nvim-web-devicons'},
       {'lewis6991/gitsigns.nvim'},
-      {'kyoh86/momiji'}
+      {'~/Projects/github.com/kyoh86/momiji'}
     }
   }
 
