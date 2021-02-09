@@ -49,7 +49,7 @@ require('packer').startup(function()
   -- Fuzzy finder            ==================================================
 
   use {
-    '~/Projects/github.com/nvim-telescope/telescope.nvim',
+    'nvim-telescope/telescope.nvim',
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
     config = function() require('my-telescope') end,
   }
@@ -57,7 +57,7 @@ require('packer').startup(function()
   use {
     'kyoh86/telescope-gogh.nvim',
     requires = {
-      '~/Projects/github.com/nvim-telescope/telescope.nvim'
+      'nvim-telescope/telescope.nvim'
     },
     config = function()
       vim.api.nvim_set_keymap('n', '<Leader>fp', '<CMD>lua require("telescope").extensions.gogh.list()<CR>',  { noremap = true, silent = true })
@@ -125,8 +125,6 @@ require('packer').startup(function()
     }},
     config = function() require 'my-lsp' end,
   }
-
-  use { 'mattn/vim-lsp-settings' }
 
   -- Text handlers           ==================================================
 
