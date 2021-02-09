@@ -245,13 +245,15 @@ autocmd BufWritePost plugins.lua PackerCompile
   set sidescrolloff=3
   set formatoptions+=j " Delete comment character when joining commented lines
   set helplang=ja,en
+  set grepprg=rg\ --vimgrep\ --no-heading
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
   language messages en_US.UTF-8
 " }}}
 
 " Original Functions {{{
   " Manage TODOs {{{
     function s:grep_todo()
-      silent! grep! 'TODO\\|UNDONE\\|HACK\\|FIXME'
+      silent! grep! -i 'TODO\|UNDONE\|HACK\|FIXME' | copen
     endfunction
     command! Todo call s:grep_todo()
     command! ToDo call s:grep_todo()
