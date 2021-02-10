@@ -779,6 +779,7 @@ call s:plug.begin()
   Plug 'z0mbix/vim-shfmt'
   Plug 'lambdalisue/vim-backslash'
   Plug 'kana/vim-textobj-line'
+  Plug 'whatyouhide/vim-textobj-xmlattr'
   Plug 'kana/vim-operator-user'
   Plug 'kana/vim-textobj-entire'
   Plug 'kana/vim-textobj-user'

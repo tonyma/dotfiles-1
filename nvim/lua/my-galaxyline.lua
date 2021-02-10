@@ -235,22 +235,26 @@ M.setup = function(newPalette)
 
   table.insert(gls.right, { DiagnosticHint  = {
     provider = 'DiagnosticHint',
-    icon = '\u{F059}'
+    icon = '\u{F059}\u{00A0}',
+    highlight           = { palette.lightred, palette.black },
   }})
 
   table.insert(gls.right, { DiagnosticInfo  = {
     provider = 'DiagnosticInfo',
-    icon = '\u{F05A}'
+    icon = '\u{F05A}\u{00A0}',
+    highlight           = { palette.lightred, palette.black },
   }})
 
   table.insert(gls.right, { DiagnosticWarn  = {
     provider = 'DiagnosticWarn',
-    icon = '\u{F06A}'
+    icon = '\u{F06A}\u{00A0}',
+    highlight           = { palette.lightred, palette.black },
   }})
 
   table.insert(gls.right, { DiagnosticError = {
     provider = 'DiagnosticError',
-    icon = '\u{F057}'
+    icon = '\u{F057}\u{00A0}',
+    highlight           = { palette.lightred, palette.black },
   }})
 
   gls.short_line_left = {

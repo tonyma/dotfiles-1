@@ -144,6 +144,11 @@ require('packer').startup(function()
   }
 
   use {
+    'whatyouhide/vim-textobj-xmlattr',
+    requires = {'kana/vim-textobj-user', opt = true}
+  }
+
+  use {
     'kana/vim-operator-replace',
     requires = {'kana/vim-operator-user', opt = true}
   }
@@ -281,7 +286,7 @@ require('packer').startup(function()
   use {'kyoh86/vim-go-filetype'}
   use {'kyoh86/vim-go-scaffold'}
   use {'kyoh86/vim-go-testfile'}
-  use {'kyoh86/vim-go-coverage'}
+  -- use {'kyoh86/vim-go-coverage'}
   use {'mattn/vim-goimports'}
 
   -- - markdown

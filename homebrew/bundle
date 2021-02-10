@@ -209,7 +209,6 @@ cask "google-chrome-canary"
 # Set of tools to manage resources and applications hosted on Google Cloud
 cask "google-cloud-sdk"
 cask "google-japanese-ime"
-cask "gyazo"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"
 cask "java"
