@@ -98,7 +98,8 @@ local function bufferHasFile()
 end
 
 -- 現在のディレクトリのGit Statusを取得するProvider
-local function gitStatProvider()
+
+local gitStatProvider = require('my-throttle')(2*1000, function ()
   if vim.bo.buftype == 'terminal' then
     return '' -- TODO: get title and parse it as path
   end
@@ -132,7 +133,7 @@ local function gitStatProvider()
   else
     return ' ' .. output .. ' '
   end
-end
+end) -- 10秒のthrottleをかける。defaultは空文字列
 
 local M = {}
 
