@@ -14,27 +14,19 @@ local custom_lsp_attach = function(client)
   require('completion').on_attach()
 end
 
-
-lspconfig.gopls.setup {
-  on_attach = custom_lsp_attach,
-  cmd = {"gopls", "serve"},
-  settings = {
-    gopls = {
-      analyses = {
-        unusedparams = true,
-      },
-      staticcheck = true,
-    },
-  },
-}
-
-lspconfig.tsserver.setup{
-  on_attach = custom_lsp_attach,
-}
-lspconfig.angularls.setup{
-  on_attach = custom_lsp_attach,
-}
-
-lspconfig.pyls.setup{
-  on_attach = custom_lsp_attach,
-}
+lspconfig.angularls.setup{ on_attach = custom_lsp_attach }
+lspconfig.bashls.setup{ on_attach = custom_lsp_attach }
+lspconfig.cssls.setup{ on_attach = custom_lsp_attach }
+lspconfig.denols.setup{ on_attach = custom_lsp_attach }
+lspconfig.dockerls.setup{ on_attach = custom_lsp_attach }
+lspconfig.efm.setup{ on_attach = custom_lsp_attach }
+lspconfig.gopls.setup { on_attach = custom_lsp_attach }
+lspconfig.html.setup{ on_attach = custom_lsp_attach }
+lspconfig.jsonls.setup{ on_attach = custom_lsp_attach }
+lspconfig.perlls.setup{ on_attach = custom_lsp_attach }
+lspconfig.pyls.setup{ on_attach = custom_lsp_attach }
+lspconfig.rust_analyzer.setup{ on_attach = custom_lsp_attach }
+lspconfig.terraformls.setup{ on_attach = custom_lsp_attach }
+lspconfig.tsserver.setup{ on_attach = custom_lsp_attach }
+lspconfig.vimls.setup{ on_attach = custom_lsp_attach }
+lspconfig.yamlls.setup{ on_attach = custom_lsp_attach }

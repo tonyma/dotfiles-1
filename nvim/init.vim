@@ -168,6 +168,11 @@ autocmd BufWritePost plugins.lua PackerCompile
   " Quickfix
   nnoremap <Leader>q :<C-u>copen<CR><ESC>
 
+  " Luafile
+  augroup my-lua-file
+    autocmd!
+    autocmd FileType lua nnoremap <buffer> <leader>r <cmd>w<bar>luafile %<cr>
+  augroup END
   nnoremap Q <Nop>
   nnoremap gQ <Nop>
 " }}}
@@ -258,6 +263,13 @@ autocmd BufWritePost plugins.lua PackerCompile
     command! Todo call s:grep_todo()
     command! ToDo call s:grep_todo()
     command! TODO call s:grep_todo()
+  " }}}
+
+  " Show Keymaps {{{
+    command! Nmaps lua require('keymaps').show_keymaps('n')
+    command! Imaps lua require('keymaps').show_keymaps('i')
+    command! Vmaps lua require('keymaps').show_keymaps('v')
+    command! Omaps lua require('keymaps').show_keymaps('o')
   " }}}
 
   " Update All {{{

@@ -1,7 +1,7 @@
 vim.cmd[[packadd packer.nvim]]
 
 require('packer').startup(function()
-  use { 'wbthomason/packer.nvim' }
+  use { 'wbthomason/packer.nvim', opt = true }
 
   -- Visuals                 ==================================================
 
@@ -94,36 +94,45 @@ require('packer').startup(function()
 
   use {
     'neovim/nvim-lspconfig',
-    requires = {{
-      'nvim-lua/completion-nvim',
-      setup = function()
-        vim.api.nvim_set_var('completion_enable_auto_popup', 0)
-      end,
-      config = function()
-        vim.api.nvim_set_var('completion_enable_snippet', 'vim-vsnip')
-        --  map <C-p> to manually trigger completion
-        vim.api.nvim_set_keymap('i', '<C-p>', '<Plug>(completion_trigger)', {silent = true})
-        vim.api.nvim_set_option('completeopt', 'menuone,noinsert,noselect')
-        vim.api.nvim_set_option('shortmess', vim.api.nvim_get_option('shortmess') .. 'c')
-      end,
-    }, {
-      'hrsh7th/vim-vsnip',
-      config = function()
-        -- Expand
-        vim.cmd[[imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>']]
-        vim.cmd[[smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>']]
-
-        -- Jump forward or backward
-        vim.cmd[[imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>']]
-        vim.cmd[[smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>']]
-        vim.cmd[[imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>']]
-        vim.cmd[[smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>']]
-      end,
-      requires = {'golang/vscode-go'},
-    }, {
-      'hrsh7th/vim-vsnip-integ'
-    }},
     config = function() require 'my-lsp' end,
+  }
+  use {
+    'alexaandru/nvim-lspupdate'
+  }
+
+  -- Snippet                 ==================================================
+
+  use {
+    'nvim-lua/completion-nvim',
+    setup = function()
+      vim.api.nvim_set_var('completion_enable_auto_popup', 0)
+    end,
+    config = function()
+      vim.api.nvim_set_var('completion_enable_snippet', 'vim-vsnip')
+      --  map <C-p> to manually trigger completion
+      vim.api.nvim_set_keymap('i', '<C-x><C-s>', '<Plug>(completion_trigger)', {})
+      vim.api.nvim_set_option('completeopt', 'menuone,noinsert')
+      vim.api.nvim_set_option('shortmess', vim.api.nvim_get_option('shortmess') .. 'c')
+    end,
+  }
+  use {
+    'hrsh7th/vim-vsnip',
+    config = function()
+      -- Expand
+      vim.cmd[[imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>']]
+      vim.cmd[[smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>']]
+
+      -- Jump forward or backward
+      vim.cmd[[imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>']]
+      vim.cmd[[smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>']]
+      vim.cmd[[imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>']]
+      vim.cmd[[smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>']]
+    end,
+    requires = {
+      'golang/vscode-go',
+      opt = true,
+      ft = {'go'},
+    },
   }
 
   -- Text handlers           ==================================================
@@ -197,8 +206,12 @@ require('packer').startup(function()
 
   use {
     'thinca/vim-quickrun',
+    setup = function()
+      vim.g.quickrun_no_default_key_mappings = 1
+    end,
     config = function()
-      vim.api.nvim_set_var('quickrun_config', { _ = { runner = 'terminal' } })
+      vim.api.nvim_set_keymap('n', '<leader>r', '<plug>QuickRun -mode n<cr>', {silent = true, noremap = true })
+      vim.api.nvim_set_keymap('v', '<leader>r', '<plug>QuickRun -mode v<cr>', {silent = true, noremap = true })
     end,
   }
 
@@ -283,11 +296,13 @@ require('packer').startup(function()
   -- Languages               ==================================================
 
   -- - go
-  use {'kyoh86/vim-go-filetype'}
-  use {'kyoh86/vim-go-scaffold'}
-  use {'kyoh86/vim-go-testfile'}
-  -- use {'kyoh86/vim-go-coverage'}
-  use {'mattn/vim-goimports'}
+  use {
+    {'kyoh86/vim-go-filetype'},
+    {'kyoh86/vim-go-scaffold'},
+    {'kyoh86/vim-go-testfile'},
+    -- {'kyoh86/vim-go-coverage'},
+    {'mattn/vim-goimports'},
+  }
 
   -- - markdown
   use {
