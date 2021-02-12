@@ -1,27 +1,36 @@
 #!/bin/bash
 
-dconfdir=/org/gnome/terminal/legacy/profiles:
-
 set -e
 
+dconf_dir=/org/gnome/terminal/legacy
+
+dconf write "$dconf_dir/headerbar" '@mb false'
+dconf write "$dconf_dir/default-show-menubar" false
+
+dconf_profile_dir="$dconf_dir/profiles:"
+
 create_new_profile() {
-  local profile_name="$1"
-  local profile_ids_old="$(dconf read "$dconfdir"/list | tr -d "]")"
-  local profile_id="$(uuidgen)"
+  local profile_name
+  local profile_ids_old
+  local profile_id
+
+  profile_name="$1"
+  profile_id="$(uuidgen)"
+  profile_ids_old="$(dconf read "$dconf_profile_dir"/list | tr -d "]")"
 
   [ -z "$profile_ids_old" ]     && local profile_ids_old="["  # if there's no `list` key
   [ "$profile_ids_old" != "[" ]  && local delimiter=,          # if the list is empty
-  dconf write "$dconfdir/list" "${profile_ids_old}${delimiter} '$profile_id']"
-  dconf write "$dconfdir/:$profile_id/visible-name" "'$profile_name'"
+  dconf write "$dconf_profile_dir/list" "${profile_ids_old}${delimiter} '$profile_id']"
+  dconf write "$dconf_profile_dir/:$profile_id/visible-name" "'$profile_name'"
   echo "$profile_id"
 }
 
 get_profile_uuid() {
   # Print the UUID linked to the profile name sent in parameter
-  local profile_ids=($(dconf list $dconfdir/ | grep ^: | sed 's/\///g' | sed 's/://g'))
+  local profile_ids=($(dconf list $dconf_profile_dir/ | grep ^: | sed 's/\///g' | sed 's/://g'))
   local profile_name="$1"
   for i in ${!profile_ids[*]}; do
-    if [ "$(dconf read "$dconfdir/:${profile_ids[i]}/visible-name")" == "'$profile_name'" ]; then
+    if [ "$(dconf read "$dconf_profile_dir/:${profile_ids[i]}/visible-name")" == "'$profile_name'" ]; then
       echo "${profile_ids[i]}"
       return 0
     fi
@@ -29,8 +38,12 @@ get_profile_uuid() {
 }
 
 get_or_new_profile() {
-  local profile_name="$1"
-  local profile_id="$(get_profile_uuid "$profile_name")"
+  local profile_name
+  local profile_id
+
+  profile_name="$1"
+  profile_id="$(get_profile_uuid "$profile_name")"
+
   if [ -n "$profile_id" ]; then
     echo "$profile_id"
     return 0
@@ -43,12 +56,16 @@ set_profile_option() {
   local option_key="$2"
   local option_value="$3"
 
-  dconf write "$dconfdir/:${profile_id}/${option_key}" "${option_value}"
+  dconf write "$dconf_profile_dir/:${profile_id}/${option_key}" "${option_value}"
 }
 
 set_default_profile_name() {
-  local profile_name="$1"
-  local profile_id="$(get_profile_uuid "$profile_name")"
+  local profile_name
+  local profile_id
+
+  profile_name="$1"
+  profile_id="$(get_profile_uuid "$profile_name")"
+
   set_default_profile_id "${profile_id}"
 }
 
@@ -57,12 +74,13 @@ set_default_profile_id() {
   if [ -z "$profile_id" ]; then
     return
   fi
-  dconf write "$dconfdir/default" "'$profile_id'"
+  dconf write "$dconf_profile_dir/default" "'$profile_id'"
 }
 
 palette="['rgb(20,12,12)' ,'rgb(218,87,116)' ,'rgb(52,140,78)' ,'rgb(231,168,43)' ,'rgb(72,132,210)' ,'rgb(165,90,170)' ,'rgb(31,144,168)' ,'rgb(160,153,153)' ,'rgb(90,78,78)' ,'rgb(245,135,91)' ,'rgb(154,190,134)' ,'rgb(255,215,145)' ,'rgb(137,183,225)' ,'rgb(238,161,209)' ,'rgb(105,178,172)' ,'rgb(230,227,227)' ,'rgb(8,8,8)' ,'rgb(55,42,42)' ,'rgb(90,78,78)' ,'rgb(125,115,115)' ,'rgb(160,153,153)' ,'rgb(195,190,190)']"
 setup_vim_profile() {
-  local profile_id="$(get_or_new_profile vim)"
+  local profile_id
+  profile_id="$(get_or_new_profile vim)"
   set_profile_option "${profile_id}" default-size-columns 120
   set_profile_option "${profile_id}" default-size-rows 40
   set_profile_option "${profile_id}" scrollbar-policy "'never'"
@@ -80,7 +98,8 @@ setup_vim_profile() {
 setup_vim_profile
 
 setup_neovim_profile() {
-  local profile_id="$(get_or_new_profile neovim)"
+  local profile_id
+  profile_id="$(get_or_new_profile neovim)"
   set_profile_option "${profile_id}" default-size-columns 120
   set_profile_option "${profile_id}" default-size-rows 40
   set_profile_option "${profile_id}" scrollbar-policy "'never'"
@@ -98,7 +117,8 @@ setup_neovim_profile() {
 setup_neovim_profile
 
 setup_default_profile() {
-  local profile_id="$(get_or_new_profile default)"
+  local profile_id
+  profile_id="$(get_or_new_profile default)"
   set_profile_option "${profile_id}" default-size-columns 120
   set_profile_option "${profile_id}" default-size-rows 40
   set_profile_option "${profile_id}" scrollbar-policy "'never'"
