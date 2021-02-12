@@ -173,6 +173,13 @@ autocmd BufWritePost plugins.lua PackerCompile
     autocmd!
     autocmd FileType lua nnoremap <buffer> <leader>r <cmd>w<bar>luafile %<cr>
   augroup END
+
+  " Vimfile
+  augroup my-vim-file
+    autocmd!
+    autocmd FileType vim nnoremap <buffer> <leader>r <cmd>w<bar>so %<cr>
+  augroup END
+
   nnoremap Q <Nop>
   nnoremap gQ <Nop>
 " }}}
@@ -180,16 +187,51 @@ autocmd BufWritePost plugins.lua PackerCompile
 " Set terminal {{{
   augroup neovim_terminal
     autocmd!
-    " Enter Terminal-mode (insert) automatically
-    autocmd TermOpen * startinsert
-
     " Disables number lines on terminal buffers
     autocmd TermOpen * setlocal nonumber norelativenumber
   augroup END
 
-  nnoremap <silent> tt :<C-u>terminal<CR>
-  nnoremap <silent> tx :<C-u>sp <Bar> terminal<CR>
-  nnoremap <silent> tv :<C-u>vsp <Bar> terminal<CR>
+  " <C-w>でウィンドウの移動を始める
+  tnoremap <C-w> <C-\><C-n><C-w>
+
+  function! s:termopen_volatile() abort
+    " 終了時に正常終了であればバッファを消すterminalを開く
+    call termopen($SHELL, {'on_exit': function('<SID>close_success_term')})
+    " 最初から挿入モード
+    startinsert
+  endfunction
+  function! s:close_success_term(job_id, code, event) dict
+    if a:code == 0
+      call feedkeys("\<CR>")
+    end
+  endfun
+
+  function! s:split_termopen_volatile(size, mods) abort
+    " 指定方向に画面分割
+    execute a:mods .. ' ' .. 'new'
+    call s:termopen_volatile()
+    " 指定方向にresize
+    let l:size = v:count
+    if l:size == 0
+      let l:size = a:size
+    end
+    if l:size != 0
+      execute a:mods .. ' resize ' . l:size
+    end
+  endfun
+
+  " Terminal: terminalを開く
+  "   - 新しいWindowで:   :NewTerminal
+  "   - 指定のWindowSize: :30NewTerminal
+  "   - 指定の位置:       :vertical NewTerminal  /  :botright 15NewTerminal
+  command! Terminal :call s:termopen_volatile()
+  command! -count NewTerminal :call s:split_termopen_volatile(<count>, <q-mods>)
+
+  " ターミナルをさっと開く
+  "   サイズ指定付き: 80tx 15tv
+  nnoremap <silent> tt <Cmd><C-u>Terminal<CR>
+  nnoremap <silent> tx <Cmd><C-u>NewTerminal<CR>
+  nnoremap <silent> tv <Cmd><C-u>vertical NewTerminal<CR>
 
   set termguicolors
   let $NVIM_TERMINAL = 1
@@ -270,6 +312,7 @@ autocmd BufWritePost plugins.lua PackerCompile
     command! Imaps lua require('keymaps').show_keymaps('i')
     command! Vmaps lua require('keymaps').show_keymaps('v')
     command! Omaps lua require('keymaps').show_keymaps('o')
+    command! Tmaps lua require('keymaps').show_keymaps('t')
   " }}}
 
   " Update All {{{

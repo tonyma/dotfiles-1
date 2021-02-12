@@ -104,6 +104,7 @@ M.show_keymaps = function(...)
 
   local buf = vim.api.nvim_create_buf(false, true)
   vim.bo[buf].filetype='vim'
+  vim.bo[buf].buffertype='keymaps'
   vim.api.nvim_buf_set_keymap(buf, 'n', '<ESC>', '<cmd>q!<cr>', {noremap=true})
   vim.api.nvim_buf_set_keymap(buf, 'n', 'q', '<cmd>q!<cr>', {noremap=true})
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
@@ -117,7 +118,7 @@ M.show_keymaps = function(...)
     focusable = true,
     style = 'minimal'
   })
-  vim.wo[win].winhighlight = 'Normal:Normal,NormalNC:NormalNC'
+  vim.wo[win].winhighlight = ''
 end
 
 -- M.show_keymaps('n','o')
