@@ -191,8 +191,71 @@ autocmd BufWritePost plugins.lua PackerCompile
     autocmd TermOpen * setlocal nonumber norelativenumber
   augroup END
 
-  " <C-w>でウィンドウの移動を始める
-  tnoremap <C-w> <C-\><C-n><C-w>
+  " <C-w>で使えるウィンドウの管理系をマップする
+  tnoremap <C-W>n       <C-\><C-n><C-W>n
+  tnoremap <C-W><C-N>   <C-\><C-n><C-W><C-N>
+  tnoremap <C-W>ge      <C-\><C-n><C-W>ge
+  tnoremap <C-W>q       <C-\><C-n><C-W>q
+  tnoremap <C-W><C-Q>   <C-\><C-n><C-W><C-Q>
+  tnoremap <C-W>c       <C-\><C-n><C-W>c
+  tnoremap <C-W>o       <C-\><C-n><C-W>o
+  tnoremap <C-W><C-O>   <C-\><C-n><C-W><C-O>
+  tnoremap <C-W><Down>  <C-\><C-n><C-W><Down>
+  tnoremap <C-W><C-J>   <C-\><C-n><C-W><C-J>
+  tnoremap <C-W>j       <C-\><C-n><C-W>j
+  tnoremap <C-W><Up>    <C-\><C-n><C-W><Up>
+  tnoremap <C-W><C-K>   <C-\><C-n><C-W><C-K>
+  tnoremap <C-W>k       <C-\><C-n><C-W>k
+  tnoremap <C-W><Left>  <C-\><C-n><C-W><Left>
+  tnoremap <C-W><C-H>   <C-\><C-n><C-W><C-H>
+  tnoremap <C-W><BS>    <C-\><C-n><C-W><BS>
+  tnoremap <C-W>h       <C-\><C-n><C-W>h
+  tnoremap <C-W><Right> <C-\><C-n><C-W><Right>
+  tnoremap <C-W><C-L>   <C-\><C-n><C-W><C-L>
+  tnoremap <C-W>l       <C-\><C-n><C-W>l
+  tnoremap <C-W>w       <C-\><C-n><C-W>w
+  tnoremap <C-W><C-W>   <C-\><C-n><C-W><C-W>
+  tnoremap <C-W>W       <C-\><C-n><C-W>W
+  tnoremap <C-W>t       <C-\><C-n><C-W>t
+  tnoremap <C-W><C-T>   <C-\><C-n><C-W><C-T>
+  tnoremap <C-W>b       <C-\><C-n><C-W>b
+  tnoremap <C-W><C-B>   <C-\><C-n><C-W><C-B>
+  tnoremap <C-W>p       <C-\><C-n><C-W>p
+  tnoremap <C-W><C-P>   <C-\><C-n><C-W><C-P>
+  tnoremap <C-W>P       <C-\><C-n><C-W>P
+  tnoremap <C-W>r       <C-\><C-n><C-W>r
+  tnoremap <C-W><C-R>   <C-\><C-n><C-W><C-R>
+  tnoremap <C-W>R       <C-\><C-n><C-W>R
+  tnoremap <C-W>x       <C-\><C-n><C-W>x
+  tnoremap <C-W><C-X>   <C-\><C-n><C-W><C-X>
+  tnoremap <C-W>K       <C-\><C-n><C-W>K
+  tnoremap <C-W>J       <C-\><C-n><C-W>J
+  tnoremap <C-W>H       <C-\><C-n><C-W>H
+  tnoremap <C-W>L       <C-\><C-n><C-W>L
+  tnoremap <C-W>T       <C-\><C-n><C-W>T
+  tnoremap <C-W>=       <C-\><C-n><C-W>=
+  tnoremap <C-W>-       <C-\><C-n><C-W>-
+  tnoremap <C-W>+       <C-\><C-n><C-W>+
+  tnoremap <C-W><C-_>   <C-\><C-n><C-W><C-_>
+  tnoremap <C-W>_       <C-\><C-n><C-W>_
+  tnoremap <C-W><lt>    <C-\><C-n><C-W><lt>
+  tnoremap <C-W>>       <C-\><C-n><C-W>>
+  " tnoremap <C-W>\|      <C-\><C-n><C-W>\|
+  tnoremap <C-W>]       <C-\><C-n><C-W>]
+  tnoremap <C-W><C-]>   <C-\><C-n><C-W><C-]>
+  tnoremap <C-W>g]      <C-\><C-n><C-W>g]
+  tnoremap <C-W>g<C-]>  <C-\><C-n><C-W>g<C-]>
+  tnoremap <C-W>f       <C-\><C-n><C-W>f
+  tnoremap <C-W><C-F>   <C-\><C-n><C-W><C-F>
+  tnoremap <C-W>F       <C-\><C-n><C-W>F
+  tnoremap <C-W>gf      <C-\><C-n><C-W>gf
+  tnoremap <C-W>gF      <C-\><C-n><C-W>gF
+  tnoremap <C-W>gt      <C-\><C-n><C-W>gt
+  tnoremap <C-W>gT      <C-\><C-n><C-W>gT
+  tnoremap <C-W>z       <C-\><C-n><C-W>z
+  tnoremap <C-W><C-Z>   <C-\><C-n><C-W><C-Z>
+  tnoremap <C-W>}       <C-\><C-n><C-W>}
+  tnoremap <C-W>g}      <C-\><C-n><C-W>g}
 
   function! s:termopen_volatile() abort
     " 終了時に正常終了であればバッファを消すterminalを開く
@@ -229,9 +292,9 @@ autocmd BufWritePost plugins.lua PackerCompile
 
   " ターミナルをさっと開く
   "   サイズ指定付き: 80tx 15tv
-  nnoremap <silent> tt <Cmd><C-u>Terminal<CR>
-  nnoremap <silent> tx <Cmd><C-u>NewTerminal<CR>
-  nnoremap <silent> tv <Cmd><C-u>vertical NewTerminal<CR>
+  nnoremap <silent> tt <Cmd>Terminal<CR>
+  nnoremap <silent> tx <Cmd>NewTerminal<CR>
+  nnoremap <silent> tv <Cmd>vertical NewTerminal<CR>
 
   set termguicolors
   let $NVIM_TERMINAL = 1
