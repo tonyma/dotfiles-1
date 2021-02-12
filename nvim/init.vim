@@ -134,8 +134,6 @@ autocmd BufWritePost plugins.lua PackerCompile
 " TODO: FileTypes:
 " - python (pyenv, virtualenv, bps/vim-textobj-python, tell-k/vim-autoflake)
 
-" TODO: Setup LSP and set keymap for them
-
 " Colors {{{
   syntax enable
   colorscheme momiji

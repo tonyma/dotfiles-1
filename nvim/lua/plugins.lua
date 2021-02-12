@@ -202,7 +202,13 @@ require('packer').startup(function()
   -- Integrations            ==================================================
 
   use { 'jremmen/vim-ripgrep', cmd = 'Rg' }
-  use { 'stefandtw/quickfix-reflector.vim' }
+  use {
+    'gabrielpoca/replacer.nvim'
+    config = function()
+      api.nvim_set_keymap('n', '<Leader>h', ':lua require("replacer").run()<cr>', { nowait = true, noremap = true, silent = true })
+    end,
+  }
+  -- use { 'stefandtw/quickfix-reflector.vim' }
 
   use {
     'thinca/vim-quickrun',
@@ -297,28 +303,29 @@ require('packer').startup(function()
 
   -- - go
   use {
-    {'kyoh86/vim-go-filetype'},
-    {'kyoh86/vim-go-scaffold'},
-    {'kyoh86/vim-go-testfile'},
-    -- {'kyoh86/vim-go-coverage'},
-    {'mattn/vim-goimports'},
+    {'kyoh86/vim-go-filetype', ft = {'go', 'gosum', 'gomod'}},
+    {'kyoh86/vim-go-scaffold', ft = 'go'},
+    {'kyoh86/vim-go-testfile', ft = 'go'},
+    {'kyoh86/vim-go-coverage', ft = 'go', disable = true},
+    {'mattn/vim-goimports', ft = 'go'},
   }
 
   -- - markdown
   use {
     'iamcco/markdown-preview.nvim',
-    run = 'cd app && yarn install'
+    run = 'cd app && yarn install',
+    ft = 'markdown',
   }
-  use { 'dhruvasagar/vim-table-mode' }
+  use { 'dhruvasagar/vim-table-mode', ft = 'markdown' }
 
   -- - others
-  use { 'z0mbix/vim-shfmt' }
-  use { 'lambdalisue/vim-backslash' }
-  use { 'glench/vim-jinja2-syntax' }
-  use { 'briancollins/vim-jst' }
-  use { 'nikvdp/ejs-syntax' }
-  use { 'cespare/vim-toml' }
-  use { 'leafgarland/typescript-vim' }
-  use { 'pangloss/vim-javascript' }
+  use { 'z0mbix/vim-shfmt', ft = {'sh', 'bash', 'zsh'} }
+  use { 'lambdalisue/vim-backslash', ft = 'vim' }
+  use { 'glench/vim-jinja2-syntax', ft = {'jinja', 'jinja.html' } }
+  use { 'briancollins/vim-jst', ft = 'jst' }
+  use { 'nikvdp/ejs-syntax', ft = 'ejs' }
+  use { 'cespare/vim-toml', ft = 'toml' }
+  use { 'leafgarland/typescript-vim', ft = 'typescript' }
+  use { 'pangloss/vim-javascript', ft = 'javascript' }
 
 end)
