@@ -203,9 +203,9 @@ require('packer').startup(function()
 
   use { 'jremmen/vim-ripgrep', cmd = 'Rg' }
   use {
-    'gabrielpoca/replacer.nvim'
+    'gabrielpoca/replacer.nvim',
     config = function()
-      api.nvim_set_keymap('n', '<Leader>h', ':lua require("replacer").run()<cr>', { nowait = true, noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<Leader>h', '<cmd>lua require("replacer").run()<cr>', { nowait = true, noremap = true, silent = true })
     end,
   }
   -- use { 'stefandtw/quickfix-reflector.vim' }
@@ -216,8 +216,8 @@ require('packer').startup(function()
       vim.g.quickrun_no_default_key_mappings = 1
     end,
     config = function()
-      vim.api.nvim_set_keymap('n', '<leader>r', '<plug>QuickRun -mode n<cr>', {silent = true, noremap = true })
-      vim.api.nvim_set_keymap('v', '<leader>r', '<plug>QuickRun -mode v<cr>', {silent = true, noremap = true })
+      vim.api.nvim_set_keymap('n', '<leader>r', '<plug>QuickRun -mode n<cr>', { silent = true, noremap = true })
+      vim.api.nvim_set_keymap('v', '<leader>r', '<plug>QuickRun -mode v<cr>', { silent = true, noremap = true })
     end,
   }
 
@@ -306,7 +306,7 @@ require('packer').startup(function()
     {'kyoh86/vim-go-filetype', ft = {'go', 'gosum', 'gomod'}},
     {'kyoh86/vim-go-scaffold', ft = 'go'},
     {'kyoh86/vim-go-testfile', ft = 'go'},
-    {'kyoh86/vim-go-coverage', ft = 'go', disable = true},
+    {'~/Projects/github.com/kyoh86/vim-go-coverage', ft = 'go'},
     {'mattn/vim-goimports', ft = 'go'},
   }
 
@@ -327,5 +327,24 @@ require('packer').startup(function()
   use { 'cespare/vim-toml', ft = 'toml' }
   use { 'leafgarland/typescript-vim', ft = 'typescript' }
   use { 'pangloss/vim-javascript', ft = 'javascript' }
+
+  use {
+    'vim-jp/autofmt',
+    ft = 'help',
+    config = function()
+    end,
+  }
+
+  -- Plugin Development      ==================================================
+  use { 'prabirshrestha/async.vim', cmd = 'AsyncEmbed' }
+  use { 'lambdalisue/vital-Whisky' }
+  use { 'vim-jp/vital.vim' }
+  use {
+    'thinca/vim-themis',
+    config = function()
+      local path = packer_plugins['vim-themis'].path
+      vim.env.PATH = vim.env.PATH .. ':' .. path .. '/bin'
+    end,
+  }
 
 end)

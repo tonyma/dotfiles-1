@@ -7,6 +7,3 @@
 [submodule "vim/pack/vim-pack-go/opt/go-imports"]
 	path = vim/pack/vim-pack-go/opt/go-imports
 	url = https://github.com/mattn/vim-goimports
-[submodule "nvim/pack/packer/opt/packer.nvim"]
-	path = nvim/pack/packer/opt/packer.nvim
-	url = https://github.com/wbthomason/packer.nvim

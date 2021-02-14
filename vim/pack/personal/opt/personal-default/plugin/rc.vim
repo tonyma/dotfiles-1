@@ -235,7 +235,7 @@ call s:plug.begin()
     nnoremap <Leader>ff :<C-u>FzfFiles<CR>
     nnoremap <Leader>fw :<C-u>FzfWindows<CR>
     nnoremap <Leader>fb :<C-u>FzfBuffers<CR>
-    nnoremap <Leader>r  :<C-u>FZFMru<CR>
+    nnoremap <Leader>fr  :<C-u>FZFMru<CR>
     nnoremap <Leader>:  :<C-u>FzfHistory :<CR> 
     nnoremap <Leader>/  :<C-u>FzfHistory /<CR>
 
@@ -923,7 +923,7 @@ command! SwitchBranch call fzf#run(fzf#wrap({
     \ 'source': "git-branches --color !current",
     \ 'sink': function('<SID>git_switch'),
     \ }))
-nnoremap <Leader>fb :<C-u>SwitchBranch<CR>
+nnoremap <Leader>fgb :<C-u>SwitchBranch<CR>
 " }}}
 
 " Function: Cleanup Branch {{{
@@ -1031,6 +1031,11 @@ nnoremap <C-l> :<C-u>nohlsearch<CR><C-l>
 
 " Quickfix
 nnoremap <Leader>q :<C-u>copen<CR><ESC>
+
+augroup my-vim-file
+  autocmd!
+  autocmd FileType vim nnoremap <buffer> <leader>r <cmd>w<bar>so %<cr>
+augroup END
 
 nnoremap Q <Nop>
 nnoremap gQ <Nop>

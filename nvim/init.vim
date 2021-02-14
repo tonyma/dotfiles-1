@@ -128,6 +128,18 @@ scriptencoding utf-8
   call s:uniquify_paths()
 " }}}
 
+lua <<EOL
+local execute = vim.api.nvim_command
+local fn = vim.fn
+
+local install_path = fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
+
+if fn.empty(fn.glob(install_path)) > 0 then
+  execute('!git clone https://github.com/wbthomason/packer.nvim '..install_path)
+  execute 'packadd packer.nvim'
+end
+EOL
+
 lua require('plugins')
 autocmd BufWritePost plugins.lua PackerCompile
 
@@ -379,6 +391,7 @@ autocmd BufWritePost plugins.lua PackerCompile
   " Update All {{{
     function! s:update_all()
       execute 'terminal ' .. &shell .. ' -c "source ' .. $ZDOTDIR .. '/.zshrc && update"'
+      startinsert
     endfunction
     command! UpdateAll call s:update_all()
   " }}}

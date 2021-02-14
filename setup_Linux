@@ -8,6 +8,7 @@ if command -v gsettings > /dev/null 2>&1 ; then
   source "${DOTFILES}/setup_GNOME"
 fi
 
+npm config set prefix ~/.local
 yarn global add \
           markdownlint \
           yo \
