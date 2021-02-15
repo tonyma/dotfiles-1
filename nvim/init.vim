@@ -268,15 +268,13 @@ autocmd BufWritePost plugins.lua PackerCompile
   tnoremap <C-W>g}      <C-\><C-n><C-W>g}
 
   function! s:termopen_volatile() abort
-    " 終了時に正常終了であればバッファを消すterminalを開く
+    " 終了時にバッファを消すterminalを開く
     call termopen($SHELL, {'on_exit': function('<SID>close_success_term')})
     " 最初から挿入モード
     startinsert
   endfunction
   function! s:close_success_term(job_id, code, event) dict
-    if a:code == 0
-      call feedkeys("\<CR>")
-    end
+    call feedkeys("\<CR>")
   endfun
 
   function! s:split_termopen_volatile(size, mods) abort
