@@ -269,7 +269,7 @@ autocmd BufWritePost plugins.lua PackerCompile
 
   function! s:termopen_volatile() abort
     " 終了時にバッファを消すterminalを開く
-    call termopen($SHELL, {'on_exit': function('<SID>close_success_term')})
+    call termopen(&shell, {'on_exit': function('<SID>close_success_term')})
     " 最初から挿入モード
     startinsert
   endfunction
@@ -388,7 +388,8 @@ autocmd BufWritePost plugins.lua PackerCompile
 
   " Update All {{{
     function! s:update_all()
-      execute 'terminal ' .. &shell .. ' -c "source ' .. $ZDOTDIR .. '/.zshrc && update"'
+      topleft new
+      call termopen(&shell .. ' -c "source ' .. $ZDOTDIR .. '/.zshrc && update"', {'on_exit': {-> execute("PackerUpdate")}})
       startinsert
     endfunction
     command! UpdateAll call s:update_all()
