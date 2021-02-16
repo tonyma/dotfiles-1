@@ -99,7 +99,7 @@ end
 
 -- 現在のディレクトリのGit Statusを取得するProvider
 
-local gitStatProvider = require('my-throttle')(2*1000, function ()
+local gitStatProvider = require('my-throttle')(5*1000, function ()
   if vim.bo.buftype == 'terminal' then
     return '' -- TODO: get title and parse it as path
   end

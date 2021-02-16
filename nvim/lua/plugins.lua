@@ -25,7 +25,7 @@ require('packer').startup(function()
       {'kyazdani42/nvim-web-devicons'},
       {'lewis6991/gitsigns.nvim'},
       {'kyoh86/momiji'}
-    }
+    },
   }
 
   use { 'lambdalisue/readablefold.vim' }
