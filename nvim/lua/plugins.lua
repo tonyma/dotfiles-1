@@ -298,6 +298,19 @@ require('packer').startup(function()
 
   use { 'kyoh86/vim-beedle' }
 
+  use {
+    'tkmpypy/chowcho.nvim',
+    config = function()
+      require('chowcho').setup {
+        text_color = '#FFFFFF',
+        bg_color = '#555555',
+        active_border_color = '#0A8BFF',
+        border_style = 'default' -- 'default', 'rounded',
+      }
+      vim.api.nvim_set_keymap('n', '<leader>w', '<cmd>lua require("chowcho").run()<cr>', {noremap = true})
+    end,
+  }
+
   -- Languages               ==================================================
 
   -- - go
@@ -320,21 +333,18 @@ require('packer').startup(function()
   -- - others
   use { 'z0mbix/vim-shfmt', ft = {'sh', 'bash', 'zsh'} }
   use { 'lambdalisue/vim-backslash', ft = 'vim' }
-  use { 'glench/vim-jinja2-syntax', ft = {'jinja', 'jinja.html' } }
-  use { 'briancollins/vim-jst', ft = 'jst' }
-  use { 'nikvdp/ejs-syntax', ft = 'ejs' }
-  use { 'cespare/vim-toml', ft = 'toml' }
-  use { 'leafgarland/typescript-vim', ft = 'typescript' }
-  use { 'pangloss/vim-javascript', ft = 'javascript' }
+  use { 'glench/vim-jinja2-syntax' }
+  use { 'briancollins/vim-jst' }
+  use { 'nikvdp/ejs-syntax' }
+  use { 'cespare/vim-toml' }
+  use { 'leafgarland/typescript-vim' }
+  use { 'prettier/vim-prettier' }
+  use { 'pangloss/vim-javascript' }
 
-  use {
-    'vim-jp/autofmt',
-    ft = 'help',
-    config = function()
-    end,
-  }
+  use { 'vim-jp/autofmt', ft = 'help' }
 
   -- Plugin Development      ==================================================
+
   use { 'prabirshrestha/async.vim', cmd = 'AsyncEmbed' }
   use { 'lambdalisue/vital-Whisky' }
   use { 'vim-jp/vital.vim' }

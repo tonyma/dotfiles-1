@@ -28,6 +28,13 @@ lspconfig.perlls.setup{ on_attach = custom_lsp_attach }
 lspconfig.pyls.setup{ on_attach = custom_lsp_attach }
 lspconfig.rust_analyzer.setup{ on_attach = custom_lsp_attach }
 lspconfig.terraformls.setup{ on_attach = custom_lsp_attach }
-lspconfig.tsserver.setup{ on_attach = custom_lsp_attach }
+lspconfig.tsserver.setup{
+  on_attach = custom_lsp_attach,
+  settings = {
+    typescript = {
+      importModuleSpecifier = 'relative'
+    }
+  }
+}
 lspconfig.vimls.setup{ on_attach = custom_lsp_attach }
 lspconfig.yamlls.setup{ on_attach = custom_lsp_attach }
