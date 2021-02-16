@@ -297,7 +297,6 @@ require('packer').startup(function()
   use { 'tyru/capture.vim' }
 
   use { 'kyoh86/vim-beedle' }
-  use { 'kyoh86/vim-wipeout' }
 
   -- Languages               ==================================================
 

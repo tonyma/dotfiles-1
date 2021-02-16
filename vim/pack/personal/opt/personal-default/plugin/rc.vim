@@ -827,6 +827,8 @@ call s:plug.begin()
   set formatoptions+=mB     " または mM
   set smartindent
 
+  Plug 'thinca/vim-themis'
+  let $PATH = $PATH .. ':' .. g:plug_dir .. '/vim-themis/bin'
 call s:plug.end()
 " }}}
 

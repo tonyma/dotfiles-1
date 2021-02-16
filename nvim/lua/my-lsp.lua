@@ -4,6 +4,7 @@ local custom_lsp_attach = function(client)
   -- See `:help nvim_buf_set_keymap()` for more information
   vim.api.nvim_buf_set_keymap(0, 'n', '<leader>lh', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true})
   vim.api.nvim_buf_set_keymap(0, 'n', '<leader>ld', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true})
+  vim.api.nvim_buf_set_keymap(0, 'n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', {noremap = true})
   -- ... and other keymappings for LSP
 
   -- Use LSP as the handler for omnifunc.
