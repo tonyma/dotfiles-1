@@ -338,7 +338,10 @@ require('packer').startup(function()
   use { 'nikvdp/ejs-syntax' }
   use { 'cespare/vim-toml' }
   use { 'leafgarland/typescript-vim' }
-  use { 'prettier/vim-prettier' }
+  use {
+    'prettier/vim-prettier',
+    run = 'yarn install'
+  }
   use { 'pangloss/vim-javascript' }
 
   use { 'vim-jp/autofmt', ft = 'help' }

@@ -5,6 +5,8 @@ local custom_lsp_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lh', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true})
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true})
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', {noremap = true})
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ln', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', {noremap = true})
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lp', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', {noremap = true})
   -- ... and other keymappings for LSP
 
   -- Use LSP as the handler for omnifunc.
@@ -18,7 +20,7 @@ end
 lspconfig.angularls.setup{ on_attach = custom_lsp_attach }
 lspconfig.bashls.setup{ on_attach = custom_lsp_attach }
 lspconfig.cssls.setup{ on_attach = custom_lsp_attach }
-lspconfig.denols.setup{ on_attach = custom_lsp_attach }
+-- lspconfig.denols.setup{ on_attach = custom_lsp_attach }
 lspconfig.dockerls.setup{ on_attach = custom_lsp_attach }
 lspconfig.efm.setup{ on_attach = custom_lsp_attach }
 lspconfig.gopls.setup { on_attach = custom_lsp_attach }
