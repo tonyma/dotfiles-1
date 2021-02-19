@@ -39,7 +39,7 @@ local function modeProvider()
   if fileType == 'fern' then
     local fernMode = vim.b.my_fern_mode
     if fernMode == 'operate' then
-      modeColor = {palette.magenta, palette.lightmagenta}
+      modeColor = {deep = palette.magenta, light = palette.lightmagenta}
     end
   end
 
