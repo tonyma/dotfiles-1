@@ -1,6 +1,9 @@
 local gl = require('galaxyline')
 local provider_vcs = require('galaxyline.provider_vcs')
 local gls = gl.section
+local debounce = require('my-debounce')
+
+local reload = debounce.throttle_trailing(require("galaxyline").load_galaxyline, 1 * 1000, true)
 
 local modeTexts = {
   n      = "\u{E7C5}  ",
@@ -98,8 +101,7 @@ local function bufferHasFile()
 end
 
 -- 現在のディレクトリのGit Statusを取得するProvider
-
-local gitStatProvider = require('my-throttle')(5*1000, function ()
+local getGitStat = function ()
   if vim.bo.buftype == 'terminal' then
     return '' -- TODO: get title and parse it as path
   end
@@ -133,7 +135,46 @@ local gitStatProvider = require('my-throttle')(5*1000, function ()
   else
     return ' ' .. output .. ' '
   end
-end) -- 10秒のthrottleをかける。defaultは空文字列
+end
+local gitStat = ''
+local updateGitStat = debounce.throttle_trailing(function()
+  local nextGitStat = getGitStat()
+  if gitStat ~= nextGitStat then
+    reload()
+  end
+  gitStat = nextGitStat
+end, 5*1000, true)
+local gitStatProvider = function()
+  updateGitStat()
+  return gitStat
+end
+
+
+-- パス名を短縮するutil
+-- source: https://github.com/nvim-telescope/telescope.nvim/blob/1c5e42a6a5a6d29be8fbf8dcefb0d8da535eac9a/lua/telescope/path.lua#L23
+local path_shorten = (function()
+  if jit then
+    local ffi = require('ffi')
+    ffi.cdef [[
+    typedef unsigned char char_u;
+    char_u *shorten_dir(char_u *str);
+    ]]
+
+    return function(filepath)
+      if not filepath then
+        return filepath
+      end
+
+      local c_str = ffi.new("char[?]", #filepath + 1)
+      ffi.copy(c_str, filepath)
+      return ffi.string(ffi.C.shorten_dir(c_str))
+    end
+  else
+    return function(filepath)
+      return filepath
+    end
+  end
+end)()
 
 local M = {}
 
@@ -209,7 +250,19 @@ M.setup = function(newPalette)
   -- show current file name
   table.insert(gls.left, {
     FileName = {
-      provider = 'FileName',
+      provider = function ()
+        local file = path_shorten(vim.fn.expand('%'))
+        if vim.fn.empty(file) == 1 then return '' end
+        -- if string.len(file_readonly()) ~= 0 then
+        --   return file .. file_readonly()
+        -- end
+        if vim.bo.modifiable then
+          if vim.bo.modified then
+            return file .. '   '
+          end
+        end
+        return file .. ' '
+      end,
       highlight = 'GalaxyLight',
     }
   })
