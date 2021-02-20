@@ -12,6 +12,7 @@ local custom_lsp_attach = function(client, bufnr)
   -- Use LSP as the handler for omnifunc.
   --    See `:help omnifunc` and `:help ins-completion` for more information.
   vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+  vim.cmd[[command! -buffer LspStop lua vim.lsp.stop_client(vim.lsp.get_active_clients())]]
 
   -- For plugins with an `on_attach` callback, call them here. For example:
   require('completion').on_attach()
