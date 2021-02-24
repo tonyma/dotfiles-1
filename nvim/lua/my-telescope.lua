@@ -15,7 +15,7 @@ require('telescope').setup{
     -- Global remapping
     mappings = {
       i = {
-        ["<CR>"] = actions.goto_file_selection_edit + actions.center,
+        ["<CR>"] = actions.select_default + actions.center,
         ["<esc>"] = actions.close,
       },
       n = {
