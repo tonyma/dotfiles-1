@@ -283,7 +283,7 @@ M.setup = function(newPalette)
   table.insert(gls.right, { GitStat = {
     provider  = gitStatProvider,
     separator = ' ',
-    highlight           = { palette.lightred, palette.black },
+    highlight           = { palette.black, palette.red },
     separator_highlight = 'GalaxyLightSep'
   }})
 

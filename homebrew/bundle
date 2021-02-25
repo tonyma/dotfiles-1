@@ -186,8 +186,6 @@ brew "kyoh86/tap/zshist"
 brew "mongodb/brew/mongodb-community-shell"
 # Collection of apps and services for photography, design, video, web, and UX
 cask "adobe-creative-cloud"
-# GPU-accelerated terminal emulator
-cask "alacritty"
 # Application launcher and productivity software
 cask "alfred"
 # Menu bar icon organizer

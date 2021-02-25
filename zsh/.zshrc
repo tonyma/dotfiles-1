@@ -484,7 +484,7 @@ function update-brew {
   echo updating brew
   pushd ~
   if command -v brew >/dev/null 2>&1 ; then
-    brew upgrade
+    brew upgrade --fetch-HEAD
   fi
   popd
 }

@@ -311,6 +311,13 @@ require('packer').startup(function()
     end,
   }
 
+  use { 'bfredl/nvim-miniyank',
+    config = function()
+      vim.api.nvim_set_keymap('', 'p', '<plug>(miniyank-autoput)', {})
+      vim.api.nvim_set_keymap('', 'P', '<plug>(miniyank-autoPut)', {})
+    end,
+  }
+
   -- Languages               ==================================================
 
   -- - go
