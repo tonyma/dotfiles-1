@@ -1,6 +1,5 @@
 function! s:init_fern()
   nmap <nowait> <buffer> !       <Plug>(fern-action-hidden:toggle)
-  nmap <nowait> <buffer> /       <Plug>(fern-action-include)
   nmap <nowait> <buffer> <C-r>   <Plug>(fern-action-reload:cursor)
   nmap <nowait> <buffer> <C-S-r> <Plug>(fern-action-reload:all)
   nmap <nowait> <buffer> >       <Plug>(fern-action-expand:in)
