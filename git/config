@@ -33,26 +33,6 @@
 	prune = true
 [http "https://gopkg.in"]
 	followRedirects = true
-[color "diff"]
-	context = dim
-	meta = white bold
-	frag = white black
-	old = red normal ul bold
-	new = green normal ul bold
-	commit = magenta
-	whitespace = normal normal
-[color "decorate"]
-	branch = green
-	remoteBranch = red
-	tag = red
-	stash = yellow
-[color "grep"]
-	filename = blue
-[color "status"]
-	added = green
-	changed = red
-	untracked = blue
-	unmerged = yellow
 [diff]
 	compactionHeuristic = true
 
