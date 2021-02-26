@@ -267,9 +267,10 @@ autocmd BufWritePost plugins.lua PackerCompile
   tnoremap <C-W>}       <C-\><C-n><C-W>}
   tnoremap <C-W>g}      <C-\><C-n><C-W>g}
 
-  function! s:termopen_volatile() abort
+  function! s:termopen_volatile(opts) abort
+    let l:opts = extend(deepcopy(a:opts), {'on_exit': function('<SID>close_success_term')}, 'force')
     " 終了時にバッファを消すterminalを開く
-    call termopen(&shell, {'on_exit': function('<SID>close_success_term')})
+    call termopen(&shell, l:opts)
     " 最初から挿入モード
     startinsert
   endfunction
@@ -277,10 +278,10 @@ autocmd BufWritePost plugins.lua PackerCompile
     call feedkeys("\<CR>")
   endfun
 
-  function! s:split_termopen_volatile(size, mods) abort
+  function! s:split_termopen_volatile(size, mods, opts) abort
     " 指定方向に画面分割
     execute a:mods .. ' ' .. 'new'
-    call s:termopen_volatile()
+    call s:termopen_volatile(a:opts)
     " 指定方向にresize
     let l:size = v:count
     if l:size == 0
@@ -295,14 +296,19 @@ autocmd BufWritePost plugins.lua PackerCompile
   "   - 新しいWindowで:   :NewTerminal
   "   - 指定のWindowSize: :30NewTerminal
   "   - 指定の位置:       :vertical NewTerminal  /  :botright 15NewTerminal
-  command! Terminal :call s:termopen_volatile()
-  command! -count NewTerminal :call s:split_termopen_volatile(<count>, <q-mods>)
+  command! Terminal :call s:termopen_volatile({})
+  command! -count NewTerminal :call s:split_termopen_volatile(<count>, <q-mods>, {})
+  command! TerminalFromCurrentBuffer :call s:termopen_volatile({'cwd': expand('%:p:h')})
+  command! -count NewTerminalFromCurrentBuffer :call s:split_termopen_volatile(<count>, <q-mods>, {'cwd': expand('%:p:h')})
 
   " ターミナルをさっと開く
   "   サイズ指定付き: 80tx 15tv
   nnoremap <silent> tt <Cmd>Terminal<CR>
   nnoremap <silent> tx <Cmd>NewTerminal<CR>
   nnoremap <silent> tv <Cmd>vertical NewTerminal<CR>
+  nnoremap <silent> tct <Cmd>TerminalFromCurrentBuffer<CR>
+  nnoremap <silent> tcx <Cmd>NewTerminalFromCurrentBuffer<CR>
+  nnoremap <silent> tcv <Cmd>vertical NewTerminalFromCurrentBuffer<CR>
 
   set termguicolors
   let $NVIM_TERMINAL = 1
