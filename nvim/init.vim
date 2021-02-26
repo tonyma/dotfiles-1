@@ -268,14 +268,20 @@ autocmd BufWritePost plugins.lua PackerCompile
   tnoremap <C-W>g}      <C-\><C-n><C-W>g}
 
   function! s:termopen_volatile(opts) abort
-    let l:opts = extend(deepcopy(a:opts), {'on_exit': function('<SID>close_success_term')}, 'force')
+    if &buftype !=# ''
+      enew
+    endif
+    let l:bufnr = bufnr()
+    let l:opts = extend(deepcopy(a:opts), {'on_exit': function('<SID>close_successed_term', [l:bufnr])}, 'force')
     " 終了時にバッファを消すterminalを開く
     call termopen(&shell, l:opts)
     " 最初から挿入モード
     startinsert
   endfunction
-  function! s:close_success_term(job_id, code, event) dict
-    call feedkeys("\<CR>")
+  function! s:close_successed_term(bufnr, job_id, code, event) dict
+    if a:code is 0
+      call execute('bdelete! ' .. a:bufnr)
+    endif
   endfun
 
   function! s:split_termopen_volatile(size, mods, opts) abort
@@ -393,9 +399,18 @@ autocmd BufWritePost plugins.lua PackerCompile
   " }}}
 
   " Update All {{{
+    function! s:updated_all(bufnr, job_id, code, event)
+      PackerUpdate
+      if a:code is 0
+        call execute('bdelete! ' .. a:bufnr)
+      endif
+    endfun
     function! s:update_all()
       topleft new
-      call termopen(&shell .. ' -c "source ' .. $ZDOTDIR .. '/.zshrc && update"', {'on_exit': {-> execute("PackerUpdate")}})
+      let l:bufnr = bufnr()
+      call termopen(
+            \ &shell .. ' -c "source ' .. $ZDOTDIR .. '/.zshrc && update"',
+            \ {'on_exit': function('<SID>updated_all', [l:bufnr])})
       startinsert
     endfunction
     command! UpdateAll call s:update_all()
