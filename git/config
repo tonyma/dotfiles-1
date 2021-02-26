@@ -26,6 +26,11 @@
 	status = auto
 	branch = auto
 	ui = auto
+[color "status"]
+	added = green
+	changed = red
+	untracked = blue
+	unmerged = yellow
 [merge]
 	ff = false
 	tool = vimdiff
