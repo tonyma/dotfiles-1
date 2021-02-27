@@ -171,12 +171,6 @@ function java() {
 
 # }}}
 
-# gogh {{{
-if command -v gogh >/dev/null 2>&1; then
-  eval "$(gogh init)"
-fi
-# }}}
-
 # vimとの連携設定 {{{
 # 現在のパスをタイトルとして渡す
 if [[ -n "${VIM_TERMINAL}" ]]; then
