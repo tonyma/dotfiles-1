@@ -32,6 +32,19 @@
 	changed = red
 	untracked = blue
 	unmerged = yellow
+	branch = cyan
+  localBranch = cyan
+  remoteBranch = red
+  nobranch = magenta
+[color "diff"]
+	meta = blue
+  frag = brightblack
+  func = cyan
+[color "remote"]
+  hint = white
+  warning = yellow
+  success = blue
+  error = red
 [merge]
 	ff = false
 	tool = vimdiff
