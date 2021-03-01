@@ -8,6 +8,7 @@
 	precomposeunicode = true
 	pager = less -r
 	commentChar = %
+	untrackedCache = true
 [user]
 	name = Kyoichiro Yamada
 	email = me@kyoh86.dev
