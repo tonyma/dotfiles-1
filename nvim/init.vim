@@ -195,10 +195,21 @@ autocmd BufWritePost plugins.lua PackerCompile
 " }}}
 
 " Set terminal {{{
+  function s:term_setting()
+    if &buftype ==# 'terminal'
+      " 行番号を表示しない
+      setlocal nonumber norelativenumber
+      " ノーマルモード、<Up>で一つ前のプロンプトに戻る
+      nnoremap <buffer> <silent> <Up>   ?^\(\(([^)]\+) \)\=\$ .\+\)\@=<CR>
+      " ノーマルモード、<Down>で一つ後のプロンプトに戻る
+      nnoremap <buffer> <silent> <Down> /^\(\(([^)]\+) \)\=\$ .\+\)\@=<CR>
+    endif
+  endfunction
+
   augroup neovim_terminal
     autocmd!
     " Disables number lines on terminal buffers
-    autocmd TermOpen * setlocal nonumber norelativenumber
+    autocmd TermOpen * call s:term_setting()
   augroup END
 
   " <C-w>で使えるウィンドウの管理系をマップする
