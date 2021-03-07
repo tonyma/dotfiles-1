@@ -265,7 +265,12 @@ require('packer').startup(function()
     end,
   }
 
-  use { 'lambdalisue/edita.vim' }
+  use {
+    'lambdalisue/edita.vim',
+    config = function()
+      vim.g['edita#opener'] = 'new'
+    end,
+  }
   use { 'tyru/empty-prompt.vim' }
 
   use {

@@ -102,10 +102,6 @@ end
 
 -- 現在のディレクトリのGit Statusを取得するProvider
 local getGitStat = function ()
-  if vim.bo.buftype == 'terminal' then
-    return '' -- TODO: get title and parse it as path
-  end
-
   local location = vim.fn.getcwd()
   local stat = require('my-gitstate').get_git_status(location)
   if stat == nil then
