@@ -60,7 +60,7 @@ require('packer').startup(function()
       'nvim-telescope/telescope.nvim'
     },
     config = function()
-      vim.api.nvim_set_keymap('n', '<Leader>fp', '<CMD>lua require("telescope").extensions.gogh.list()<CR>',  { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>fp', '<cmd>lua require("telescope").extensions.gogh.list()<cr>',  { noremap = true, silent = true })
 
       require('telescope').setup{
         extensions = {
@@ -86,7 +86,7 @@ require('packer').startup(function()
     },
     config = function()
       require"telescope".load_extension("frecency")
-      vim.api.nvim_set_keymap('n', '<Leader>fm', "<Cmd>lua require('telescope').extensions.frecency.frecency()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('n', '<leader>fm', "<cmd>lua require('telescope').extensions.frecency.frecency()<cr>", {noremap = true, silent = true})
     end
   }
 
@@ -109,8 +109,8 @@ require('packer').startup(function()
     end,
     config = function()
       vim.api.nvim_set_var('completion_enable_snippet', 'vim-vsnip')
-      --  map <C-p> to manually trigger completion
-      vim.api.nvim_set_keymap('i', '<C-x><C-s>', '<Plug>(completion_trigger)', {})
+      --  map <c-p> to manually trigger completion
+      vim.api.nvim_set_keymap('i', '<c-x><c-s>', '<plug>(completion_trigger)', {})
       vim.api.nvim_set_option('completeopt', 'menuone,noinsert')
       vim.api.nvim_set_option('shortmess', vim.api.nvim_get_option('shortmess') .. 'c')
     end,
@@ -119,14 +119,14 @@ require('packer').startup(function()
     'hrsh7th/vim-vsnip',
     config = function()
       -- Expand
-      vim.cmd[[imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>']]
-      vim.cmd[[smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>']]
+      vim.cmd[[imap <expr> <c-j>   vsnip#expandable()  ? '<plug>(vsnip-expand)'         : '<c-j>']]
+      vim.cmd[[smap <expr> <c-j>   vsnip#expandable()  ? '<plug>(vsnip-expand)'         : '<c-j>']]
 
       -- Jump forward or backward
-      vim.cmd[[imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>']]
-      vim.cmd[[smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>']]
-      vim.cmd[[imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>']]
-      vim.cmd[[smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>']]
+      vim.cmd[[imap <expr> <tab>   vsnip#jumpable(1)   ? '<plug>(vsnip-jump-next)'      : '<tab>']]
+      vim.cmd[[smap <expr> <tab>   vsnip#jumpable(1)   ? '<plug>(vsnip-jump-next)'      : '<tab>']]
+      vim.cmd[[imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<plug>(vsnip-jump-prev)'      : '<S-Tab>']]
+      vim.cmd[[smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<plug>(vsnip-jump-prev)'      : '<S-Tab>']]
     end,
     requires = {
       'golang/vscode-go',
@@ -168,9 +168,9 @@ require('packer').startup(function()
     requires = {'kana/vim-operator-user', opt = true},
     config = function()
       -- textobj の先頭へ移動する
-      vim.api.nvim_set_keymap('n', '<Leader>h', '<Plug>(operator-jump-head)', {})
+      vim.api.nvim_set_keymap('n', '<leader>h', '<plug>(operator-jump-head)', {})
       -- textobj の末尾へ移動する
-      vim.api.nvim_set_keymap('n', '<Leader>t', '<Plug>(operator-jump-tail)', {})
+      vim.api.nvim_set_keymap('n', '<leader>t', '<plug>(operator-jump-tail)', {})
     end,
   }
 
@@ -178,22 +178,22 @@ require('packer').startup(function()
     'machakann/vim-sandwich',
     config = function()
       -- ignore s instead of the cl
-      vim.api.nvim_set_keymap('n', 's', '<Nop>', { noremap = true })
-      vim.api.nvim_set_keymap('x', 's', '<Nop>', { noremap = true })
+      vim.api.nvim_set_keymap('n', 's', '<nop>', { noremap = true })
+      vim.api.nvim_set_keymap('x', 's', '<nop>', { noremap = true })
 
       --NOTE: silent! は vim.cmd じゃないと呼べないっぽい
-      vim.cmd[[silent! nmap <unique><silent> sc <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)]]
-      vim.cmd[[silent! nmap <unique><silent> scb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)]]
+      vim.cmd[[silent! nmap <unique><silent> sc <plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)]]
+      vim.cmd[[silent! nmap <unique><silent> scb <plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)]]
     end,
   }
 
   use {
     'machakann/vim-swap',
     config = function()
-      vim.api.nvim_set_keymap('o', 'i,', '<Plug>(swap-textobject-i)', {})
-      vim.api.nvim_set_keymap('x', 'i,', '<Plug>(swap-textobject-i)', {})
-      vim.api.nvim_set_keymap('o', 'a,', '<Plug>(swap-textobject-a)', {})
-      vim.api.nvim_set_keymap('x', 'a,', '<Plug>(swap-textobject-a)', {})
+      vim.api.nvim_set_keymap('o', 'i,', '<plug>(swap-textobject-i)', {})
+      vim.api.nvim_set_keymap('x', 'i,', '<plug>(swap-textobject-i)', {})
+      vim.api.nvim_set_keymap('o', 'a,', '<plug>(swap-textobject-a)', {})
+      vim.api.nvim_set_keymap('x', 'a,', '<plug>(swap-textobject-a)', {})
     end,
   }
 
@@ -205,7 +205,7 @@ require('packer').startup(function()
   use {
     'gabrielpoca/replacer.nvim',
     config = function()
-      vim.api.nvim_set_keymap('n', '<Leader>h', '<cmd>lua require("replacer").run()<cr>', { nowait = true, noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>h', '<cmd>lua require("replacer").run()<cr>', { nowait = true, noremap = true, silent = true })
     end,
   }
   -- use { 'stefandtw/quickfix-reflector.vim' }
@@ -268,7 +268,7 @@ require('packer').startup(function()
   use {
     'simeji/winresizer',
     setup = function()
-      vim.api.nvim_set_var('winresizer_start_key', '<C-w><C-e>')
+      vim.api.nvim_set_var('winresizer_start_key', '<c-w><c-e>')
     end,
   }
 
@@ -307,7 +307,14 @@ require('packer').startup(function()
         active_border_color = '#0A8BFF',
         border_style = 'default' -- 'default', 'rounded',
       }
-      vim.api.nvim_set_keymap('n', '<leader>w', '<cmd>lua require("chowcho").run()<cr>', {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>wf', '<cmd>lua require("chowcho").run()<cr>', {noremap = true})
+    end,
+  }
+
+  use {
+    'kyoh86/curtain.nvim',
+    config = function()
+      vim.api.nvim_set_keymap('n', '<leader>wr', '<plug>(curtain-start)', {})
     end,
   }
 
