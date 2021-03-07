@@ -265,13 +265,6 @@ require('packer').startup(function()
     end,
   }
 
-  use {
-    'simeji/winresizer',
-    setup = function()
-      vim.api.nvim_set_var('winresizer_start_key', '<c-w><c-e>')
-    end,
-  }
-
   use { 'lambdalisue/edita.vim' }
   use { 'tyru/empty-prompt.vim' }
 
