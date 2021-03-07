@@ -5,6 +5,8 @@ local utils = require('telescope.utils')
 
 local conf = require('telescope.config').values
 
+local my = {}
+
 -- Built-in actions
 local actions = require('telescope.actions')
 
@@ -28,9 +30,7 @@ require('telescope').setup{
 
 -- Styles   =================================================================================
 
-local M = {}
-
-M.setupTelescopeHighlight = function()
+my.setup_highlight = function()
   local palette = vim.g.momiji_palette
   local highlight = vim.fn['MomijiHighlight']
   highlight('TelescopeSelection', {fg = palette.black, bg = palette.blue})
@@ -39,9 +39,9 @@ M.setupTelescopeHighlight = function()
 end
 
 if vim.g.colors_name == 'momiji' then
-  M.setupTelescopeHighlight()
+  my.setup_highlight()
 else
-  vim.cmd[[ autocmd ColorScheme momiji ++once lua require('my-galaxyline').setupTelescopeHighlight() ]]
+  vim.cmd[[ autocmd ColorScheme momiji ++once lua require('my-telescope').setup_highlight() ]]
 end
 
 -- Commands =================================================================================
@@ -70,7 +70,6 @@ local recent_cmd = [[lua require("my-telescope").git_recent()]]
 vim.cmd('command! EditRecent ' .. recent_cmd)
 vim.api.nvim_set_keymap('n', '<leader>fgr', '<cmd>' .. recent_cmd .. '<cr>',    { noremap = true, silent = true })
 
-local my = {}
 my.git_recent = function(opts)
   local opts = opts or {}
   local depth = utils.get_default(opts.depth, 5)
@@ -105,4 +104,5 @@ end
 my.config = function()
   require("telescope.builtin").git_files({cwd = "~/.config"})
 end
+
 return my
