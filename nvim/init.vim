@@ -206,10 +206,12 @@ autocmd BufWritePost plugins.lua PackerCompile
     endif
   endfunction
 
-  augroup neovim_terminal
+  augroup my-neovim-terminal
     autocmd!
     " Disables number lines on terminal buffers
     autocmd TermOpen * call s:term_setting()
+    " 最初から挿入モード
+    autocmd BufEnter term://* startinsert
   augroup END
 
   " <C-w>で使えるウィンドウの管理系をマップする
@@ -337,7 +339,7 @@ autocmd BufWritePost plugins.lua PackerCompile
     command! ImeOff silent !ibus engine 'xkb:us::eng'
 
     " When in insert mode
-    augroup InsertHook
+    augroup my-insert-hook
         autocmd!
         autocmd InsertLeave * ImeOff
     augroup END
@@ -346,7 +348,7 @@ autocmd BufWritePost plugins.lua PackerCompile
     command! ImeOff silent !fcitx-remote -c
 
     " When in insert mode
-    augroup InsertHook
+    augroup my-insert-hook
         autocmd!
         autocmd InsertLeave * ImeOff
     augroup END
