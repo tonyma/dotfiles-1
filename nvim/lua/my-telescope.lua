@@ -44,15 +44,12 @@ else
   vim.cmd[[ autocmd ColorScheme momiji ++once lua require('my-galaxyline').setupTelescopeHighlight() ]]
 end
 
-
 -- Commands =================================================================================
 
 vim.api.nvim_set_keymap('n', '<leader>ff',  '<cmd>lua require("telescope.builtin").find_files()<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fb',  '<cmd>lua require("telescope.builtin").buffers()<cr>',    { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fw',  '<cmd>lua require("telescope.builtin").windows()<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>f:',  '<cmd>lua require("telescope.builtin").command_history()<cr>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fgs', '<cmd>lua require("telescope.builtin").git_status()<cr>',    { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fgr', '<cmd>lua require("my-telescope").git_recents()<cr>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fgb', '<cmd>lua require("telescope.builtin").git_branches()<cr>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fgc', '<cmd>lua require("telescope.builtin").git_commits()<cr>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>flr', '<cmd>lua require("telescope.builtin").lsp_references()<cr>', { noremap = true, silent = true })
@@ -61,18 +58,20 @@ vim.api.nvim_set_keymap('n', '<leader>flw', '<cmd>lua require("telescope.builtin
 vim.api.nvim_set_keymap('n', '<leader>fla', '<cmd>lua require("telescope.builtin").lsp_code_actions()<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<leader>fla', '<cmd>lua require("telescope.builtin").lsp_range_code_actions()<cr>', { noremap = true, silent = true })
 
-vim.cmd[[
-  command! ConfigEdit lua require("telescope.builtin").git_files({cwd = "~/.config"})
-]]
-vim.api.nvim_set_keymap('n', '<leader><leader>c', '<cmd>lua require("telescope.builtin").git_files({cwd = "~/.config"})<cr>', { noremap = true, silent = true })
+local config_cmd = [[lua require("my-telescope").config()]]
+vim.cmd('command! EditConfig ' .. config_cmd)
+vim.api.nvim_set_keymap('n', '<leader><leader>c', '<cmd>' .. config_cmd .. '<cr>', { noremap = true, silent = true })
 
-vim.cmd[[
-  command! PackerEdit lua require("telescope.builtin").find_files({search_dirs = {"~/.local/share/nvim/site/pack/packer"}})
-]]
-vim.api.nvim_set_keymap('n', '<leader><leader>p', '<cmd>lua require("telescope.builtin").find_files({search_dirs = {"~/.local/share/nvim/site/pack/packer"}})<cr>', { noremap = true, silent = true })
+local packer_cmd = [[lua require("my-telescope").packer()]]
+vim.cmd('command! EditPacker ' .. packer_cmd)
+vim.api.nvim_set_keymap('n', '<leader><leader>p', '<cmd>' .. packer_cmd .. '<cr>', { noremap = true, silent = true })
+
+local recent_cmd = [[lua require("my-telescope").git_recent()]]
+vim.cmd('command! EditRecent ' .. recent_cmd)
+vim.api.nvim_set_keymap('n', '<leader>fgr', '<cmd>' .. recent_cmd .. '<cr>',    { noremap = true, silent = true })
 
 local my = {}
-my.git_recents = function(opts)
+my.git_recent = function(opts)
   local opts = opts or {}
   local depth = utils.get_default(opts.depth, 5)
 
@@ -83,7 +82,7 @@ my.git_recents = function(opts)
   opts.entry_maker = opts.entry_maker or make_entry.gen_from_file(opts)
 
   pickers.new(opts, {
-    prompt_title = 'Git Recents',
+    prompt_title = 'Git Recent',
     finder = finders.new_oneshot_job(
       {'git', 'diff', '--name-only', depth and 'HEAD~' .. depth or 'HEAD'},
       opts
@@ -93,4 +92,17 @@ my.git_recents = function(opts)
   }):find()
 end
 
+my.packer = function()
+require("telescope.builtin").find_files({
+  search_dirs = {
+    "~/.local/share/nvim/site/pack/packer/opt",
+    "~/.local/share/nvim/site/pack/packer/start",
+  },
+  cwd = "~/.local/share/nvim/site/pack/packer",
+})
+end
+
+my.config = function()
+  require("telescope.builtin").git_files({cwd = "~/.config"})
+end
 return my
