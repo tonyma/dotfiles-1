@@ -55,6 +55,17 @@ require('packer').startup(function()
   }
 
   use {
+    'nvim-telescope/telescope-github.nvim',
+    requires = {
+      'nvim-telescope/telescope.nvim'
+    },
+    config = function()
+      vim.api.nvim_set_keymap('n', '<leader>fgi', '<cmd>lua require("telescope").extensions.gh.issues()<cr>',  { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>fgp', '<cmd>lua require("telescope").extensions.gh.pull_request()<cr>',  { noremap = true, silent = true })
+    end
+  }
+
+  use {
     'kyoh86/telescope-gogh.nvim',
     requires = {
       'nvim-telescope/telescope.nvim'
