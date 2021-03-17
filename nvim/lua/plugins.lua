@@ -345,11 +345,11 @@ require('packer').startup(function()
 
   -- - go
   use {
-    {'kyoh86/vim-go-filetype', ft = {'go', 'gosum', 'gomod'}},
-    {'kyoh86/vim-go-scaffold', ft = 'go'},
-    {'kyoh86/vim-go-testfile', ft = 'go'},
-    {'~/Projects/github.com/kyoh86/vim-go-coverage', ft = 'go'},
-    {'mattn/vim-goimports', ft = 'go'},
+    {'kyoh86/vim-go-filetype'},
+    {'kyoh86/vim-go-scaffold'},
+    {'kyoh86/vim-go-testfile'},
+    {'kyoh86/vim-go-coverage'},
+    {'mattn/vim-goimports'},
   }
 
   -- - markdown
