@@ -100,52 +100,6 @@ local function bufferHasFile()
   return false
 end
 
--- 現在のディレクトリのGit Statusを取得するProvider
-local getGitStat = function ()
-  local location = vim.fn.getcwd()
-  local stat = require('my-gitstate').get_git_status(location)
-  if stat == nil then
-    return ''
-  end
-
-  local function withPrefix(prefix, value)
-    if not value or value == 0 then
-      return ''
-    end
-    return prefix .. ' ' .. value
-  end
-
-  local output = vim.fn.trim(vim.fn.join(vim.tbl_filter(function(w)
-    return w ~= nil and w ~= ''
-  end, {
-    withPrefix("\u{FF55D}", stat.ahead),     -- 󿕝 .
-    withPrefix("\u{FF545}", stat.behind),    -- 󿕅 .
-    stat.sync,
-    withPrefix('\u{FFBC2}', stat.unmerged),  -- 󿯂 .
-    withPrefix("\u{FF62B}", stat.staged),    -- 󿘫 .
-    withPrefix("\u{FF914}", stat.unstaged),  -- 󿤔 .
-    withPrefix("\u{FF7D5}", stat.untracked), -- 󿟕 .
-  })))
-  if output == '' then
-    return output
-  else
-    return ' ' .. output .. ' '
-  end
-end
-local gitStat = ''
-local updateGitStat = debounce.throttle_trailing(function()
-  local nextGitStat = getGitStat()
-  if gitStat ~= nextGitStat then
-    reload()
-  end
-  gitStat = nextGitStat
-end, 5*1000, true)
-local gitStatProvider = function()
-  updateGitStat()
-  return gitStat
-end
-
-
 -- パス名を短縮するutil
 -- source: https://github.com/nvim-telescope/telescope.nvim/blob/1c5e42a6a5a6d29be8fbf8dcefb0d8da535eac9a/lua/telescope/path.lua#L23
 local path_shorten = (function()
@@ -275,14 +229,6 @@ M.setup = function(newPalette)
     highlight = 'GalaxyLight',
   }})
 
-  -- show git stat
-  table.insert(gls.right, { GitStat = {
-    provider  = gitStatProvider,
-    separator = ' ',
-    highlight           = { palette.black, palette.red },
-    separator_highlight = 'GalaxyLightSep'
-  }})
-
   table.insert(gls.right, { DiagnosticHint  = {
     provider = 'DiagnosticHint',
     icon = '\u{F059}\u{00A0}',
@@ -318,12 +264,6 @@ M.setup = function(newPalette)
     { ShortRightEdge = {
       provider = emptyProvider,
       highlight = { palette.lightblack, palette.lightblack }
-    }},
-    { RightGitStat = {
-      provider  = gitStatProvider,
-      separator = ' ',
-      highlight           = { palette.lightred, palette.black },
-      separator_highlight = 'GalaxyLightSep'
     }}
   }
 

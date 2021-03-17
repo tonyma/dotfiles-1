@@ -28,6 +28,13 @@ require('packer').startup(function()
     },
   }
 
+  use {
+    'kyoh86/gitstat.nvim',
+    config = function()
+      require 'gitstat'.show()
+    end
+  }
+
   use { 'lambdalisue/readablefold.vim' }
 
   use {
