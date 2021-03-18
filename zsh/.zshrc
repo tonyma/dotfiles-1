@@ -233,62 +233,6 @@ function mailarch() {
 }
 # }}}
 
-# プロジェクト管理 {{{
-function cd-project() {
-  local selected
-  local project
-  selected=$( gogh list | fzf )
-  if [[ ${?} -ne 0 || -z "${selected}" ]]; then
-    zle accept-line
-    zle -R -c
-    echo ${selected}
-    return
-  fi
-  project=$(gogh where ${selected})
-  BUFFER="cd ${project}"
-  zle accept-line
-  # redisplay the command line
-  zle -R -c
-}
-zle -N cd-project
-bindkey '^xgp' cd-project
-bindkey '^xg^p' cd-project
-bindkey '^x^gp' cd-project
-bindkey '^x^g^p' cd-project
-
-function new-project() {
-  local project_name
-  autoload -Uz read-from-minibuffer
-  # vared -i '' -f '' -p "${fg_bold[blue]}PROJECT OWNER/NAME? > ${reset_color}" -c project_name
-  echo -n "${fg_bold[blue]}"
-  read-from-minibuffer "PROJECT OWNER/NAME? > "
-  zle -I
-  echo -n "${reset_color}"
-  project_name=${REPLY}
-  if [[ -z "${project_name}" ]]; then
-    return
-  fi
-
-  local project_dir
-  project_dir="$(gogh root)/github.com/${project_name}"
-  if [[ -d ${project_dir} ]]; then
-    echo "${fg[red]}The project already exists${reset_color}"
-    return
-  fi
-  if [[ -e ${project_dir} ]]; then
-    echo "${fg[red]}An object already exists"
-    ls -lad --color=never "${project_dir}"
-    echo -n "${reset_color}"
-    return
-  fi
-  BUFFER="mkdir -p '${project_dir}' && cd '${project_dir}' && git init && hub create ${owner}/${project_name}"
-  zle accept-line
-  # redisplay the command line
-  zle -R -c
-}
-zle -N new-project
-bindkey '^xn' new-project
-bindkey '^x^n' new-project
 # }}}
 
 # ブランチ切り替え {{{
@@ -448,7 +392,7 @@ function update-go {
       go get -u "${pkg}" || :
     fi
   done
-  gogh list --primary --format full | while read project; do
+  gogh list --primary --format full-file-path | while read project; do
     cd "${project}"
     echo "$(go list -f "${fmt}" ./... 2>/dev/null || :)" | while read line ; do
       local pkg="${line##* }"
