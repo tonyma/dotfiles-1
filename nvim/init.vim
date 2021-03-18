@@ -375,7 +375,7 @@ autocmd BufWritePost plugins.lua PackerCompile
   set hidden              " able to edit without saving
   set fixendofline        " <EOL> at the end of file will be restored if missing
   set showcmd             " 
-  set textwidth=100         " never limit length of each line
+  set textwidth=0         " never limit length of each line
   set ambiwidth=single
   set foldmethod=manual
   set backspace=2

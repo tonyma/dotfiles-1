@@ -371,6 +371,10 @@
 	<true/>
 	<key>IRMemory</key>
 	<integer>4</integer>
+	<key>NeverWarnAboutShortLivedSessions_3D80E937-D724-4EF6-B0DD-A4CA11370222</key>
+	<true/>
+	<key>NeverWarnAboutShortLivedSessions_3D80E937-D724-4EF6-B0DD-A4CA11370222_selection</key>
+	<integer>0</integer>
 	<key>NeverWarnAboutShortLivedSessions_6D7813AA-0F7D-4166-89CD-57A50746304C</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_6D7813AA-0F7D-4166-89CD-57A50746304C_selection</key>
@@ -2634,7 +2638,7 @@
 	<key>OpenBookmark</key>
 	<false/>
 	<key>OpenNoWindowsAtStartup</key>
-	<false/>
+	<true/>
 	<key>PointerActions</key>
 	<dict>
 		<key>Button,1,1,,</key>
