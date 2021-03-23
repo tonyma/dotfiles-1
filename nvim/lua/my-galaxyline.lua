@@ -70,28 +70,6 @@ local function cwdProvider ()
   return vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
 end
 
--- 現在のディレクトリのGit Branchを取得するProvider
-function gitBranchProvider()
-  local cwd = vim.fn.getcwd()
-  local gitDir = provider_vcs.get_git_dir(cwd)
-  if not gitDir then return end
-
-  -- If git directory not found then we're probably outside of repo or
-  -- something went wrong. The same is when headFile is nil
-  local headFile = io.open(gitDir..'/HEAD')
-  if not headFile then return end
-
-  local HEAD = headFile:read()
-  headFile:close()
-
-  -- If HEAD matches branch expression, then we're on named branch
-  -- otherwise it is a detached commit
-  local branchName = HEAD:match('ref: refs/heads/(.+)')
-  if branchName == nil then return  end
-
-  return branchName .. ' '
-end
---
 -- バッファがファイルを開いているかどうか
 local function bufferHasFile()
   if vim.fn.empty(vim.fn.expand('%:t')) ~= 1 then
@@ -168,18 +146,6 @@ M.setup = function(newPalette)
     CWD = {
       provider  = cwdProvider,
       separator = "\u{00A0}\u{E0B1}\u{00A0}",
-      highlight           = 'GalaxyLight',
-      separator_highlight = 'GalaxyLightSep',
-    }
-  })
-
-  -- show current branch
-  table.insert(gls.left, {
-    GitBranch = {
-      condition = isinGitDir,
-      icon = '\u{E0A0} ',
-      provider  = gitBranchProvider,
-      separator = "\u{E0B1}\u{00A0}",
       highlight           = 'GalaxyLight',
       separator_highlight = 'GalaxyLightSep',
     }
