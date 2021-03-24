@@ -312,7 +312,12 @@ require('packer').startup(function()
 
   use { 'tyru/capture.vim' }
 
-  use { 'kyoh86/vim-beedle' }
+  use {
+    'Asheq/close-buffers.vim',
+    config = function()
+      vim.api.nvim_set_keymap('n', '<C-q>', '<cmd>Bdelete menu<cr>', {noremap = true, silent = true})
+    end
+  }
 
   use {
     'tkmpypy/chowcho.nvim',

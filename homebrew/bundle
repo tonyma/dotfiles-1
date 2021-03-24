@@ -91,7 +91,7 @@ brew "influxdb"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Just-In-Time Compiler (JIT) for the Lua programming language
-brew "luajit", args: ["HEAD"]
+brew "luajit", args: ["HEAD"], link: false
 # Mac App Store command-line interface
 brew "mas"
 # Yet another part-of-speech and morphological analyzer
@@ -213,6 +213,7 @@ cask "wkhtmltopdf"
 cask "yt-music"
 mas "1Password 7", id: 1333542190
 mas "AnyMP4 4K Converter", id: 1013790008
+mas "Apple Configurator 2", id: 1037126344
 mas "com.iwaxx.Debookee-Tools", id: 1110355801
 mas "Cyberduck", id: 409222199
 mas "Display Menu", id: 549083868
