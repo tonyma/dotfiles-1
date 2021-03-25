@@ -31,6 +31,19 @@ require('packer').startup(function()
   use {
     'kyoh86/gitstat.nvim',
     config = function()
+
+      vim.g['gitstat#parts'] = 'branch,ahead,behind,sync,unmerged,staged,unstaged,untracked'
+      vim.g['gitstat#blend'] = 10
+      vim.cmd('highlight! GitStatWindow    guibg=' .. vim.g.momiji_colors.green  .. ' guifg=' .. vim.g.momiji_colors.black)
+      vim.cmd('highlight! GitStatBranch    guibg=' .. vim.g.momiji_colors.green  .. ' guifg=' .. vim.g.momiji_colors.black)
+      vim.cmd('highlight! GitStatRemote    guibg=' .. vim.g.momiji_colors.green  .. ' guifg=' .. vim.g.momiji_colors.black)
+      vim.cmd('highlight! GitStatAhead     guibg=' .. vim.g.momiji_colors.yellow .. ' guifg=' .. vim.g.momiji_colors.black)
+      vim.cmd('highlight! GitStatBehind    guibg=' .. vim.g.momiji_colors.yellow .. ' guifg=' .. vim.g.momiji_colors.black)
+      vim.cmd('highlight! GitStatSync      guibg=' .. vim.g.momiji_colors.yellow .. ' guifg=' .. vim.g.momiji_colors.black)
+      vim.cmd('highlight! GitStatUnmerged  guibg=' .. vim.g.momiji_colors.yellow .. ' guifg=' .. vim.g.momiji_colors.black)
+      vim.cmd('highlight! GitStatStaged    guibg=' .. vim.g.momiji_colors.yellow .. ' guifg=' .. vim.g.momiji_colors.black)
+      vim.cmd('highlight! GitStatUnstaged  guibg=' .. vim.g.momiji_colors.yellow .. ' guifg=' .. vim.g.momiji_colors.black)
+      vim.cmd('highlight! GitStatUntracked guibg=' .. vim.g.momiji_colors.yellow .. ' guifg=' .. vim.g.momiji_colors.black)
       require 'gitstat'.show()
     end
   }
