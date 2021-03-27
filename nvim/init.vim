@@ -293,7 +293,7 @@ autocmd BufWritePost plugins.lua PackerCompile
   endfunction
   function! s:close_successed_term(bufnr, job_id, code, event) dict
     if a:code is 0
-      call execute('bdelete! ' .. a:bufnr)
+      call execute('silent! bdelete! ' .. a:bufnr)
     endif
   endfun
 
