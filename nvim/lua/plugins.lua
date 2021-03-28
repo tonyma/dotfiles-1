@@ -66,69 +66,97 @@ require('packer').startup(function()
     end,
   }
 
+  -- zenn.dev                ==================================================
+  use {
+    'kyoh86/vim-zenn-autocmd',
+    config = function()
+      vim.fn['zenn_autocmd#enable']()
+    end
+  }
+
+  use {
+    'kkiyama117/zenn-vim',
+    requires = { 'kyoh86/vim-zenn-autocmd' },
+    config = function()
+      vim.g["zenn#article#edit_new_cmd"] = "edit"
+      vim.cmd[[command! -nargs=0 ZennUpdate call zenn#update()]]
+      vim.cmd[[command! -nargs=* ZennPreview call zenn#preview(<f-args>)]]
+      vim.cmd[[command! -nargs=0 ZennStopPreview call zenn#stop_preview()]]
+      vim.cmd[[command! -nargs=* ZennNewArticle call zenn#new_article(<f-args>)]]
+      vim.cmd[[command! -nargs=* ZennNewBook call zenn#new_book(<f-args>)]]
+      vim.cmd[[augroup my-zenn-vim-autocmd]]
+      vim.cmd[[autocmd!]]
+      vim.cmd[[autocmd User ZennEnter nnoremap <silent> <leader>zna <cmd>ZennNewArticle<cr>]]
+      vim.cmd[[autocmd User ZennLeave silent! unnmap! <leader>zna]]
+      vim.cmd[[augroup end]]
+    end,
+  }
+
   -- Fuzzy finder            ==================================================
 
   use {
-    'nvim-telescope/telescope.nvim',
-    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
-    config = function() require('my-telescope') end,
-  }
-
-  use {
-    'kyoh86/telescope-windows.nvim',
+    '~/Projects/github.com/nvim-telescope/telescope.nvim',
     requires = {
-      'nvim-telescope/telescope.nvim'
-    },
-    config = function()
-      require('telescope').load_extension('windows')
-    end
-  }
-
-  use {
-    'nvim-telescope/telescope-github.nvim',
-    requires = {
-      'nvim-telescope/telescope.nvim'
-    },
-    config = function()
-      require('telescope').load_extension('gh')
-      vim.api.nvim_set_keymap('n', '<leader>fgi', '<cmd>lua require("telescope").extensions.gh.issues()<cr>',  { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<leader>fgp', '<cmd>lua require("telescope").extensions.gh.pull_request()<cr>',  { noremap = true, silent = true })
-    end
-  }
-
-  use {
-    'kyoh86/telescope-gogh.nvim',
-    requires = {
-      'nvim-telescope/telescope.nvim',
-    },
-    config = function()
-      vim.api.nvim_set_keymap('n', '<leader>fp', '<cmd>lua require("telescope").extensions.gogh.list()<cr>',  { noremap = true, silent = true })
-      require('telescope').setup{
-        extensions = {
-          gogh = {
-            shorten_path = false,
-            keys = {
-              cd   = 'default',
-              open = '<c-e>',
-              lcd  = nil,
-              tcd  = nil,
+      {'nvim-lua/popup.nvim'},
+      {'nvim-lua/plenary.nvim'},
+      {
+        'kyoh86/telescope-windows.nvim',
+        config = function()
+          require('telescope').load_extension('windows')
+        end
+      },
+      {
+        'nvim-telescope/telescope-github.nvim',
+        config = function()
+          require('telescope').load_extension('gh')
+          vim.api.nvim_set_keymap('n', '<leader>fgi', '<cmd>lua require("telescope").extensions.gh.issues()<cr>',  { noremap = true, silent = true })
+          vim.api.nvim_set_keymap('n', '<leader>fgp', '<cmd>lua require("telescope").extensions.gh.pull_request()<cr>',  { noremap = true, silent = true })
+        end
+      },
+      {
+        'kyoh86/telescope-gogh.nvim',
+        config = function()
+          vim.api.nvim_set_keymap('n', '<leader>fp', '<cmd>lua require("telescope").extensions.gogh.list()<cr>',  { noremap = true, silent = true })
+          require('telescope').setup{
+            extensions = {
+              gogh = {
+                shorten_path = false,
+                keys = {
+                  cd   = 'default',
+                  open = '<c-e>',
+                  lcd  = nil,
+                  tcd  = nil,
+                }
+              },
             }
-          },
-        }
+          }
+          require('telescope').load_extension('gogh')
+        end
+      },
+      {
+        "nvim-telescope/telescope-frecency.nvim",
+        requires = {
+          'tami5/sql.nvim',
+        },
+        config = function()
+          require"telescope".load_extension("frecency")
+          vim.api.nvim_set_keymap('n', '<leader>fm', "<cmd>lua require('telescope').extensions.frecency.frecency()<cr>", {noremap = true, silent = true})
+        end
+      },
+      {
+        'kyoh86/telescope-zenn.nvim',
+        requires = { 'kyoh86/vim-zenn-autocmd' },
+        config = function()
+          require('telescope').load_extension('zenn')
+          vim.cmd[[augroup my-telescope-zenn-autocmd]]
+          vim.cmd[[autocmd!]]
+          vim.cmd[[autocmd User ZennEnter nnoremap <silent> <leader>zfa <cmd>Telescope zenn articles<cr>]]
+          vim.cmd[[autocmd User ZennLeave silent! unnmap! <leader>zfa]]
+          vim.cmd[[augroup end]]
+        end
       }
-      require('telescope').load_extension('gogh')
-    end
-  }
-
-  use {
-    "nvim-telescope/telescope-frecency.nvim",
-    requires = {
-      'tami5/sql.nvim',
     },
-    config = function()
-      require"telescope".load_extension("frecency")
-      vim.api.nvim_set_keymap('n', '<leader>fm', "<cmd>lua require('telescope').extensions.frecency.frecency()<cr>", {noremap = true, silent = true})
-    end
+    config = function() require('my-telescope') end,
   }
 
   -- LSP                     ==================================================
@@ -239,52 +267,6 @@ require('packer').startup(function()
   }
 
   use { 'amadeus/vim-convert-color-to' }
-
-  -- zenn.dev                ==================================================
-
-
-  use {
-    {
-      'kyoh86/vim-zenn-autocmd',
-      config = function()
-        vim.fn['zenn_autocmd#enable']()
-      end
-    },
-    {
-      'kkiyama117/zenn-vim',
-      requires = {
-        'kyoh86/vim-zenn-autocmd',
-      },
-      config = function()
-        vim.g["zenn#article#edit_new_cmd"] = "edit"
-        vim.cmd[[command! -nargs=0 ZennUpdate call zenn#update()]]
-        vim.cmd[[command! -nargs=* ZennPreview call zenn#preview(<f-args>)]]
-        vim.cmd[[command! -nargs=0 ZennStopPreview call zenn#stop_preview()]]
-        vim.cmd[[command! -nargs=* ZennNewArticle call zenn#new_article(<f-args>)]]
-        vim.cmd[[command! -nargs=* ZennNewBook call zenn#new_book(<f-args>)]]
-        vim.cmd[[augroup my-zenn-vim-autocmd]]
-        vim.cmd[[autocmd!]]
-        vim.cmd[[autocmd User ZennEnter nnoremap <silent> <leader>zna <cmd>ZennNewArticle<cr>]]
-        vim.cmd[[autocmd User ZennLeave silent! unnmap! <leader>zna]]
-        vim.cmd[[augroup end]]
-      end,
-    },
-    {
-      'kyoh86/telescope-zenn.nvim',
-      requires = {
-        'nvim-telescope/telescope.nvim',
-        'kyoh86/vim-zenn-autocmd',
-      },
-      config = function()
-        require('telescope').load_extension('zenn')
-        vim.cmd[[augroup my-telescope-zenn-autocmd]]
-        vim.cmd[[autocmd!]]
-        vim.cmd[[autocmd User ZennEnter nnoremap <silent> <leader>zfa <cmd>Telescope zenn articles<cr>]]
-        vim.cmd[[autocmd User ZennLeave silent! unnmap! <leader>zfa]]
-        vim.cmd[[augroup end]]
-      end
-    }
-  }
 
   -- Integrations            ==================================================
 
