@@ -1,4 +1,4 @@
-local custom_lsp_attach = function(client, bufnr)
+local custom_lsp_attach = function(_, bufnr) -- function(client, bufnr)
   -- See `:help nvim_buf_set_keymap()` for more information
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lh', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true})
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true})
@@ -16,18 +16,67 @@ local custom_lsp_attach = function(client, bufnr)
   require('completion').on_attach()
 end
 
+local function merge_config(base, ext)
+  local table = {}
+  -- copy base
+  for key, value in next, base do
+    table[key] = value
+  end
+
+  if not ext then
+    return table
+  end
+
+  for key, value in next, ext do
+    old = table[key]
+    if type(old) == 'table' and type(value) == 'table' then
+      table[key] = merge_config(old, value)
+    else
+      table[key] = value
+    end
+  end
+
+  return table
+end
+
+local additional_config = {
+  typescript = {
+    settings = {
+      typescript = {
+        importModuleSpecifier = 'relative'
+      }
+    }
+  },
+  lua = {
+    settings = {
+      Lua = {
+        completion = {
+          keywordSnippet = "Disable",
+        },
+        diagnostics = {
+          globals = {"vim", "use"},
+          disable = {"lowercase-global"}
+        },
+        runtime = {
+          version = "LuaJIT",
+          path = vim.split(package.path, ";"),
+        },
+        workspace = {
+          library = {
+            [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+            [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+          },
+        },
+      },
+    },
+  }
+}
+
 local function setup_servers()
   require'lspinstall'.setup()
   local servers = require'lspinstall'.installed_servers()
   for _, server in pairs(servers) do
-    local config = { on_attach = custom_lsp_attach }
-    if server == 'typescript' then
-      config.settings = {
-        typescript = {
-          importModuleSpecifier = 'relative'
-        }
-      }
-    end
+    local config = merge_config({ on_attach = custom_lsp_attach }, additional_config[server])
     require("lspconfig")[server].setup(config)
   end
 end
