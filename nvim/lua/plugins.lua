@@ -124,11 +124,11 @@ require('packer').startup(function()
   -- LSP                     ==================================================
 
   use {
-    'neovim/nvim-lspconfig',
-    config = function() require 'my-lsp' end,
-  }
-  use {
-    'alexaandru/nvim-lspupdate'
+    'kabouzeid/nvim-lspinstall',
+    requires = {
+      'neovim/nvim-lspconfig',
+      config = function() require 'my-lsp' end,
+    }
   }
 
   -- Snippet                 ==================================================
