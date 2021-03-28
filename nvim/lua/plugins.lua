@@ -75,6 +75,16 @@ require('packer').startup(function()
   }
 
   use {
+    'kyoh86/telescope-windows.nvim',
+    requires = {
+      'nvim-telescope/telescope.nvim'
+    },
+    config = function()
+      require('telescope').load_extension('windows')
+    end
+  }
+
+  use {
     'nvim-telescope/telescope-github.nvim',
     requires = {
       'nvim-telescope/telescope.nvim'
@@ -235,7 +245,7 @@ require('packer').startup(function()
 
   use {
     {
-      '~/Projects/github.com/kyoh86/vim-zenn-autocmd',
+      'kyoh86/vim-zenn-autocmd',
       config = function()
         vim.fn['zenn_autocmd#enable']()
       end
@@ -243,7 +253,7 @@ require('packer').startup(function()
     {
       'kkiyama117/zenn-vim',
       requires = {
-        '~/Projects/github.com/kyoh86/vim-zenn-autocmd',
+        'kyoh86/vim-zenn-autocmd',
       },
       config = function()
         vim.g["zenn#article#edit_new_cmd"] = "edit"
@@ -263,7 +273,7 @@ require('packer').startup(function()
       'kyoh86/telescope-zenn.nvim',
       requires = {
         'nvim-telescope/telescope.nvim',
-        '~/Projects/github.com/kyoh86/vim-zenn-autocmd',
+        'kyoh86/vim-zenn-autocmd',
       },
       config = function()
         require('telescope').load_extension('zenn')
