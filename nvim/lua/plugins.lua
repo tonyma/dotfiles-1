@@ -116,6 +116,7 @@ require('packer').startup(function()
     },
     config = function()
       require('telescope').load_extension('zenn')
+      require('telescope.zenn.keymap').articles('<leader>fza')
     end
   }
 
