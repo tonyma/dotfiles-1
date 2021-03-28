@@ -1,5 +1,3 @@
-lspconfig = require "lspconfig"
-
 local custom_lsp_attach = function(client, bufnr)
   -- See `:help nvim_buf_set_keymap()` for more information
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lh', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true})
@@ -18,16 +16,26 @@ local custom_lsp_attach = function(client, bufnr)
   require('completion').on_attach()
 end
 
-require'lspinstall'.setup() -- important
-local servers = require'lspinstall'.installed_servers()
-for _, server in pairs(servers) do
-  local config = { on_attach = custom_lsp_attach }
-  if server == 'typescript' then
-    config.settings = {
-      typescript = {
-        importModuleSpecifier = 'relative'
+local function setup_servers()
+  require'lspinstall'.setup()
+  local servers = require'lspinstall'.installed_servers()
+  for _, server in pairs(servers) do
+    local config = { on_attach = custom_lsp_attach }
+    if server == 'typescript' then
+      config.settings = {
+        typescript = {
+          importModuleSpecifier = 'relative'
+        }
       }
-    }
+    end
+    require("lspconfig")[server].setup(config)
   end
-  lspconfig[server].setup(config)
+end
+
+setup_servers()
+
+-- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
+require'lspinstall'.post_install_hook = function ()
+  setup_servers() -- reload installed servers
+  vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
 end
