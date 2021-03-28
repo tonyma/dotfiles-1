@@ -88,11 +88,10 @@ require('packer').startup(function()
   use {
     'kyoh86/telescope-gogh.nvim',
     requires = {
-      'nvim-telescope/telescope.nvim'
+      'nvim-telescope/telescope.nvim',
     },
     config = function()
       vim.api.nvim_set_keymap('n', '<leader>fp', '<cmd>lua require("telescope").extensions.gogh.list()<cr>',  { noremap = true, silent = true })
-
       require('telescope').setup{
         extensions = {
           gogh = {
@@ -103,10 +102,20 @@ require('packer').startup(function()
               lcd  = nil,
               tcd  = nil,
             }
-          }
+          },
         }
       }
       require('telescope').load_extension('gogh')
+    end
+  }
+
+  use {
+    'kyoh86/telescope-zenn.nvim',
+    requires = {
+      'nvim-telescope/telescope.nvim',
+    },
+    config = function()
+      require('telescope').load_extension('zenn')
     end
   }
 
