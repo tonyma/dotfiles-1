@@ -13,7 +13,7 @@ sudo pacman -S --noconfirm \
   git github-cli tig \
   sqlite postgresql mysql \
   deno yarn go python python-pip python-language-server python-poetry luarocks nodejs npm \
-  autoconf automake bison fakeroot flex gcc gettext make ninja \
+  autoconf automake bison fakeroot flex gcc gettext make ninja pkg-config \
   man-db \
   man-pages \
   shellcheck \
@@ -83,5 +83,5 @@ yay -S --noconfirm \
   seahorse \
   slack-desktop \
   testdisk \
-  ulauncher \
+  ulauncher wmctrl \
   ufraw-thumbnailer

@@ -1,6 +1,7 @@
 " Setup encodings
 set encoding=utf-8
 scriptencoding utf-8
+set shell=/bin/zsh
 
 " Setup XDG Home directory paths. {{{
   let s:config_home = stdpath("config") " ${xdg-CONFIG-home}/nvim

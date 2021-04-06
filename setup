@@ -4,12 +4,13 @@ set -ex
 
 ## DotFiles:
 DOTFILES=${HOME}/.config
+DOTPROJECT=${HOME}/Projects/github.com/kyoh86/dotfiles
+DOTTMP=${HOME}/dotfiles-main
 
 # get dot files
 if [[ -f ${DOTFILES}/setup ]]; then
   :
 else
-  DOTTMP=${HOME}/dotfiles-main
   rm -rf ${DOTTMP}
   curl -L https://github.com/kyoh86/dotfiles/archive/main.tar.gz | tar xvz
 
@@ -42,8 +43,10 @@ yarn global add \
           typescript-language-server \
           vim-language-server
 
+GOBIN="${HOME}/.local/bin/" go get github.com/kyoh86/gordon
+gordon restore "${DOTFILES}/gordon/bundle"
+
 # replace dotfiles
-DOTPROJECT=${HOME}/Projects/github.com/kyoh86/dotfiles
 if [[ -d ${DOTFILES}/.git ]]; then
   git -C ${DOTFILES} pull
 else
