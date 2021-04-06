@@ -12,41 +12,74 @@ yay -S \
 
 # シェルを便利にしたい群
 yay -S \
-  zsh-syntax-highlighting zsh-completions \
+  zsh zsh-syntax-highlighting zsh-completions \
   diff-so-fancy
 
 # CLI人権ツール群
 yay -S \
   wget \
   ripgrep \
-  gvim
+  neovim-nightly-bin
 
 # 開発でよく使うツール、言語系
 yay -S \
   inotify-tools \
   jq httpie asciinema \
-  git hub tig \
+  dialog \
+  direnv \
+  openssh \
+  git github-cli tig \
   sqlite postgresql mysql \
-  yarn go python python-pip python-language-server python-poetry \
+  deno yarn go python python-pip python-language-server python-poetry luarocks \
+  nodenv nodenv-node-build npm \
+  autoconf automake bison fakeroot flex gcc gettext make ninja \
+  man-db \
+  man-pages \
   shellcheck \
+  teensy-loader-cli \
+  tidy \
   docker aws-cli docker-compose
+
+# Libraries
+yay -S \
+  libnotify \
+  libgnome-keyring \
+  libtool \
+  lib32-glibc \
 
 # Bash CLIツール群
 yay -S \
-  libnotify \
-  coreutils \
+  bash \
   binutils \
+  coreutils \
   diffutils \
   findutils \
-  bash
+  patch \
+  sed \
+  which
 
 # その他
 yay -S \
-  noto-fonts-all \
+  asciinema \
+  bluez-utils \
   chrome-gnome-shell \
-  chromium \
-  seahorse \
+  darktable \
+  discord \
+  downgrader-git \
+  fwupd \
+  gimp \
+  gimp-nufraw \
+  google-chrome \
+  gstreamer gst-plugins-ugly \
   gyazo \
-  slack-desktop \
+  nordic-theme \
+  ibus-mozc \
+  inkscape \
+  noto-fonts-all \
   peek \
-  gstreamer gst-plugins-ugly
+  screenkey \
+  seahorse \
+  slack-desktop \
+  testdisk \
+  ulauncher
+  ufraw-thumbnailer

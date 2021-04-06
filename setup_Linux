@@ -19,10 +19,11 @@ GO111MODULE=on go get golang.org/x/tools/gopls@latest
 go get github.com/mattn/efm-langserver
 
 # start bluetooth service
-modprobe btusb
-systemctl start bluetooth
-systemctl enable bluetooth
-sudo gpasswd --add "${USER}" lp
+#TODO: if bluetooth exists
+# modprobe btusb
+# systemctl start bluetooth
+# systemctl enable bluetooth
+# sudo gpasswd --add "${USER}" lp
 
 # link configurations
 rm -rf "${HOME}/.vim"
