@@ -83,5 +83,6 @@ yay -S --noconfirm \
   seahorse \
   slack-desktop \
   testdisk \
+  gnome-tweaks \
   ulauncher wmctrl \
   ufraw-thumbnailer

@@ -21,3 +21,5 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/or
 gsettings set org.gnome.mutter.keybindings toggle-tiled-right "['<Ctrl><Shift>Right']"
 gsettings set org.gnome.mutter.keybindings toggle-tiled-left "['<Ctrl><Shift>Left']"
 gsettings set org.gnome.desktop.wm.keybindings toggle-maximized "['<Ctrl><Shift>Up']"
+
+gsettings set org.gnome.desktop.interface gtk-theme "'Nordic'"
