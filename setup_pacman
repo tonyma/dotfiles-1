@@ -36,7 +36,7 @@ fi
 yay -S --noconfirm \
   zsh zsh-syntax-highlighting zsh-completions \
   diff-so-fancy
-  direnv \
+  direnv-bin \
 
 # CLI人権ツール群
 yay -S --noconfirm \
