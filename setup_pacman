@@ -35,8 +35,8 @@ fi
 # シェルを便利にしたい群
 yay -S --noconfirm \
   zsh zsh-syntax-highlighting zsh-completions \
-  diff-so-fancy
-  direnv-bin \
+  diff-so-fancy \
+  direnv-bin
 
 # CLI人権ツール群
 yay -S --noconfirm \
@@ -49,7 +49,7 @@ yay -S --noconfirm \
   libnotify \
   libgnome-keyring \
   libtool \
-  lib32-glibc \
+  lib32-glibc
 
 # Bash CLIツール群
 yay -S --noconfirm \
@@ -85,5 +85,5 @@ yay -S --noconfirm \
   seahorse \
   slack-desktop \
   testdisk \
-  ulauncher--noconfirm 
+  ulauncher--noconfirm \
   ufraw-thumbnailer
