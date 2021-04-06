@@ -13,7 +13,7 @@ sudo pacman -S \
   openssh \
   git github-cli tig \
   sqlite postgresql mysql \
-  deno yarn go python python-pip python-language-server python-poetry luarocks npm \
+  deno yarn go python python-pip python-language-server python-poetry luarocks nodejs npm \
   autoconf automake bison fakeroot flex gcc gettext make ninja \
   man-db \
   man-pages \
