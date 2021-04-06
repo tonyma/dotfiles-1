@@ -9,7 +9,6 @@ sudo pacman -S \
   inotify-tools \
   jq httpie asciinema \
   dialog \
-  direnv \
   openssh \
   git github-cli tig \
   sqlite postgresql mysql \
@@ -37,6 +36,7 @@ fi
 yay -S \
   zsh zsh-syntax-highlighting zsh-completions \
   diff-so-fancy
+  direnv \
 
 # CLI人権ツール群
 yay -S \
