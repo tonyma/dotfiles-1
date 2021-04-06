@@ -30,7 +30,7 @@ rm -rf "${HOME}/.vim"
 ln -s "${DOTFILES}/vim" "${HOME}/.vim"
 
 # setup Cica font
-sudo cp "${DOTFILES}/fonts/*.ttf" /usr/share/fonts
+sudo cp "${DOTFILES}/fonts/"*.ttf /usr/share/fonts
 
 # register userjobs
 mkdir -p ~/.local/share/systemd/user/
