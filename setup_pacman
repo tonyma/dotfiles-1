@@ -1,31 +1,8 @@
 #!/bin/zsh
 
-sudo pacman -S autoconf automake bison fakeroot gcc gettext make
-
-if [ command -v yay >/dev/null ]; then
-  : # noop
-else
-  git clone https://aur.archlinux.org/yay.git
-  cd yay
-  makepkg -si
-  cd -
-  rm -rf ./yay
-fi
-
 # inuxのヘッダファイル群。makeするときに何やかや出番が多い
-yay -S \
+sudo pacman -S \
   linux-headers
-
-# シェルを便利にしたい群
-yay -S \
-  zsh zsh-syntax-highlighting zsh-completions \
-  diff-so-fancy
-
-# CLI人権ツール群
-yay -S \
-  wget \
-  ripgrep \
-  neovim-nightly-bin
 
 # 開発でよく使うツール、言語系
 yay -S \
@@ -37,14 +14,36 @@ yay -S \
   git github-cli tig \
   sqlite postgresql mysql \
   deno yarn go python python-pip python-language-server python-poetry luarocks \
-  flex ninja \
   nodenv nodenv-node-build npm \
+  autoconf automake bison fakeroot flex gcc gettext make ninja \
   man-db \
   man-pages \
   shellcheck \
   teensy-loader-cli \
   tidy \
   docker aws-cli docker-compose
+
+if [ command -v yay >/dev/null ]; then
+  : # noop
+else
+  rm -rf ./yay
+  git clone https://aur.archlinux.org/yay.git
+  cd yay
+  makepkg -si
+  cd -
+  rm -rf ./yay
+fi
+
+# シェルを便利にしたい群
+yay -S \
+  zsh zsh-syntax-highlighting zsh-completions \
+  diff-so-fancy
+
+# CLI人権ツール群
+yay -S \
+  wget \
+  ripgrep \
+  neovim-nightly-bin
 
 # Libraries
 yay -S \
