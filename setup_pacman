@@ -5,7 +5,7 @@ sudo pacman -S \
   linux-headers
 
 # 開発でよく使うツール、言語系
-yay -S \
+sudo pacman -S \
   inotify-tools \
   jq httpie asciinema \
   dialog \
