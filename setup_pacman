@@ -79,11 +79,10 @@ yay -S --noconfirm \
   nordic-theme \
   ibus-mozc \
   inkscape \
-  noto-fonts-all \
   peek \
   screenkey \
   seahorse \
   slack-desktop \
   testdisk \
-  ulauncher--noconfirm \
+  ulauncher \
   ufraw-thumbnailer
