@@ -43,11 +43,15 @@ yarn global add \
           vim-language-server
 
 # replace dotfiles
+DOTPROJECT=${HOME}/Projects/github.com/kyoh86/dotfiles
 if [[ -d ${DOTFILES}/.git ]]; then
   git -C ${DOTFILES} pull
 else
+  rm -rf "${DOTPROJECT}"
+  git clone https://github.com/kyoh86/dotfiles "${DOTPROJECT}"
+  cp -r "${DOTFILES}"/* "${DOTPROJECT}"
   rm -rf ${DOTFILES}
-  git clone https://github.com/kyoh86/dotfiles ${DOTFILES}
+  ln -sf "${DOTPROJECT}" "${DOTFILES}"
 fi
 
 echo "DONE🍺"
