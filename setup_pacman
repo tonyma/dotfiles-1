@@ -1,11 +1,11 @@
 #!/bin/zsh
 
 # inuxのヘッダファイル群。makeするときに何やかや出番が多い
-sudo pacman -S \
+sudo pacman -S --noconfirm \
   linux-headers
 
 # 開発でよく使うツール、言語系
-sudo pacman -S \
+sudo pacman -S --noconfirm \
   inotify-tools \
   jq httpie asciinema \
   dialog \
@@ -33,26 +33,26 @@ else
 fi
 
 # シェルを便利にしたい群
-yay --noconfirm --noprogressbar -S \
+yay -S --noconfirm \
   zsh zsh-syntax-highlighting zsh-completions \
   diff-so-fancy
   direnv \
 
 # CLI人権ツール群
-yay --noconfirm --noprogressbar -S \
+yay -S --noconfirm \
   wget \
   ripgrep \
   neovim-nightly-bin
 
 # Libraries
-yay --noconfirm --noprogressbar -S \
+yay -S --noconfirm \
   libnotify \
   libgnome-keyring \
   libtool \
   lib32-glibc \
 
 # Bash CLIツール群
-yay --noconfirm --noprogressbar -S \
+yay -S --noconfirm \
   bash \
   binutils \
   coreutils \
@@ -63,7 +63,7 @@ yay --noconfirm --noprogressbar -S \
   which
 
 # その他
-yay --noconfirm --noprogressbar -S \
+yay -S --noconfirm \
   asciinema \
   bluez-utils \
   chrome-gnome-shell \
@@ -85,5 +85,5 @@ yay --noconfirm --noprogressbar -S \
   seahorse \
   slack-desktop \
   testdisk \
-  ulauncher
+  ulauncher--noconfirm 
   ufraw-thumbnailer
