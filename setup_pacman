@@ -33,26 +33,26 @@ else
 fi
 
 # シェルを便利にしたい群
-yay -S \
+yay --noconfirm --noprogressbar -S \
   zsh zsh-syntax-highlighting zsh-completions \
   diff-so-fancy
   direnv \
 
 # CLI人権ツール群
-yay -S \
+yay --noconfirm --noprogressbar -S \
   wget \
   ripgrep \
   neovim-nightly-bin
 
 # Libraries
-yay -S \
+yay --noconfirm --noprogressbar -S \
   libnotify \
   libgnome-keyring \
   libtool \
   lib32-glibc \
 
 # Bash CLIツール群
-yay -S \
+yay --noconfirm --noprogressbar -S \
   bash \
   binutils \
   coreutils \
@@ -63,7 +63,7 @@ yay -S \
   which
 
 # その他
-yay -S \
+yay --noconfirm --noprogressbar -S \
   asciinema \
   bluez-utils \
   chrome-gnome-shell \
