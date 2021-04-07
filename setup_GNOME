@@ -4,7 +4,8 @@ gsettings set org.gnome.desktop.peripherals.keyboard repeat true
 gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 30
 gsettings set org.gnome.desktop.peripherals.keyboard delay 200
 
-gsettings set org.gnome.desktop.wm.keybindings activate-window-menu "[]"
+gsettings set org.gnome.desktop.peripherals.mouse speed 1
+
 gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings \
   "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', \
     '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', \
@@ -16,11 +17,19 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/or
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding 'Hangul_Hanja'
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command 'ibus engine "xkb:us::eng"'
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ name 'ulauncher-toggle'
+
+gsettings set org.gnome.desktop.wm.keybindings activate-window-menu "[]"
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ binding '<Alt>space'
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ command 'ulauncher-toggle'
+
 gsettings set org.gnome.mutter.keybindings toggle-tiled-right "['<Ctrl><Shift>Right']"
 gsettings set org.gnome.mutter.keybindings toggle-tiled-left "['<Ctrl><Shift>Left']"
 gsettings set org.gnome.desktop.wm.keybindings toggle-maximized "['<Ctrl><Shift>Up']"
+
+gsettings set org.gnome.desktop.wm.keybindings switch-applications "[]"
+gsettings set org.gnome.desktop.wm.keybindings switch-applications-backword "[]"
+gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Super>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Super>Tab']"
 
 gsettings set org.gnome.desktop.interface gtk-theme "'Nordic'"
 gsettings set org.gnome.desktop.interface enable-animations "false"
