@@ -23,3 +23,4 @@ gsettings set org.gnome.mutter.keybindings toggle-tiled-left "['<Ctrl><Shift>Lef
 gsettings set org.gnome.desktop.wm.keybindings toggle-maximized "['<Ctrl><Shift>Up']"
 
 gsettings set org.gnome.desktop.interface gtk-theme "'Nordic'"
+gsettings set org.gnome.desktop.interface enable-animations "false"
