@@ -214,15 +214,10 @@ cask "yt-music"
 mas "1Password 7", id: 1333542190
 mas "AnyMP4 4K Converter", id: 1013790008
 mas "Apple Configurator 2", id: 1037126344
-mas "com.iwaxx.Debookee-Tools", id: 1110355801
-mas "Cyberduck", id: 409222199
-mas "Display Menu", id: 549083868
-mas "EasyRes", id: 688211836
 mas "Fantastical", id: 975937182
 mas "GarageBand", id: 682658836
 mas "iMage Tools", id: 493949693
 mas "Keynote", id: 409183694
-mas "LINE", id: 539883307
 mas "Magnet", id: 441258766
 mas "Markoff", id: 1084713122
 mas "Microsoft Remote Desktop", id: 1295203466
@@ -232,7 +227,6 @@ mas "Pages", id: 409201541
 mas "Pixel Perfect", id: 916097243
 mas "Slack", id: 803453959
 mas "The Unarchiver", id: 425424353
-mas "TweetDeck", id: 485812721
 mas "Xcode", id: 497799835
 mas "Yoink", id: 457622435
 mas "タイピスト", id: 415166115
