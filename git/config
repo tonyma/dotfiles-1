@@ -68,9 +68,10 @@
 	rebase = true
 [gpg]
 	program = gpg
-
+[commit]
+	gpgsign = true
 [include]
-	path = config_os
+	path = config_host
 [init]
 	defaultBranch = main
 [url "git@github.com:"]

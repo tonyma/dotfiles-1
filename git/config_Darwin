@@ -1,7 +1,3 @@
-[user]
-	signingkey = E99AB508CD0EBEC4
-[commit]
-	gpgsign = true
 [credential]
 	helper = osxkeychain
 [pager]

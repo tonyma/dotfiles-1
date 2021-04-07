@@ -1,7 +1,3 @@
-[user]
-	signingkey = F94D388BF762AE88
-[commit]
-	gpgsign = true
 [credential]
 	helper = /usr/lib/git-core/git-credential-gnome-keyring
 [pager]
