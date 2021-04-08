@@ -286,16 +286,16 @@ autocmd BufWritePost plugins.lua PackerCompile
       enew
     endif
     let l:bufnr = bufnr()
-    let l:opts = extend(deepcopy(a:opts), {'on_exit': function('<SID>close_successed_term', [l:bufnr])}, 'force')
+    let l:opts = extend(deepcopy(a:opts), {'on_exit': function('<SID>close_exited_term', [l:bufnr])}, 'force')
     " 終了時にバッファを消すterminalを開く
     call termopen(&shell, l:opts)
     " 最初から挿入モード
     startinsert
   endfunction
-  function! s:close_successed_term(bufnr, job_id, code, event) dict
-    if a:code is 0
+  function! s:close_exited_term(bufnr, job_id, code, event) dict
+    " if a:code is 0
       call execute('silent! bdelete! ' .. a:bufnr)
-    endif
+    " endif
   endfun
 
   function! s:split_termopen_volatile(size, mods, opts) abort
