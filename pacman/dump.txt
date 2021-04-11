@@ -2,7 +2,7 @@ amd-ucode 20210315.3568f96-1
 asciinema 2.0.2-5
 autoconf 2.71-1
 automake 1.16.3-1
-aws-cli 1.19.33-1
+aws-cli 1.19.49-1
 baobab 40.0-1
 base 2-2
 bison 3.7.6-1
@@ -58,7 +58,7 @@ gnome-screenshot 40.0-2
 gnome-session 40beta+4+gd44888fb-1
 gnome-settings-daemon 40.0-1
 gnome-shell 1:40.0-1
-gnome-shell-extensions 40.0-1
+gnome-shell-extensions 40.0-2
 gnome-software 40.0-1
 gnome-system-monitor 40.0-2
 gnome-terminal 3.40.0-1
@@ -90,9 +90,9 @@ jack2 1.9.17-2
 jq 1.6-4
 lib32-glibc 2.33-4
 libgnome-keyring 3.12.0+13+g4f8ab73-3
-linux 5.11.12.arch1-1
+linux 5.11.13.arch1-1
 linux-firmware 20210315.3568f96-1
-linux-headers 5.11.12.arch1-1
+linux-headers 5.11.13.arch1-1
 luarocks 3.5.0-1
 make 4.3-3
 man-db 2.9.4-1
@@ -107,8 +107,8 @@ nodejs 15.14.0-1
 nordic-theme 1.9.0-1
 noto-fonts 20201226-2
 noto-fonts-emoji 20200916-1
-npm 7.8.0-1
-nvidia 460.67-6
+npm 7.9.0-1
+nvidia 460.67-7
 nvidia-settings 460.67-1
 nvidia-utils 460.67-1
 orca 40.0-1
