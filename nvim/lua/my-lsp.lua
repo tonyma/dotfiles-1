@@ -20,11 +20,11 @@ local custom_lsp_attach = function(client, bufnr) -- function(client, bufnr)
     buf_set_keymap("v", "<leader>lf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", {noremap = true})
   end
 
-  if vim.bo[bufnr].filetype ~= 'lua' and client.resolved_capabilities.document_formatting then
+  if client.resolved_capabilities.document_formatting then
     vim.api.nvim_exec([[
       augroup lsp_auto_format
         autocmd! * <buffer>
-        autocmd BufWritePre <buffer> * lua vim.lsp.buf.formatting_sync(nil, 1000)
+        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
       augroup END
     ]], false)
   end

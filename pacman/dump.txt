@@ -16,7 +16,7 @@ diff-so-fancy 1.3.0-1
 direnv-bin 2.28.0-1
 discord 0.0.14-1
 docker 1:20.10.5-1
-docker-compose 1.28.6-1
+docker-compose 1.29.0-1
 dosfstools 4.2-1
 efibootmgr 17-2
 eog 40.0-1
@@ -90,9 +90,9 @@ jack2 1.9.17-2
 jq 1.6-4
 lib32-glibc 2.33-4
 libgnome-keyring 3.12.0+13+g4f8ab73-3
-linux 5.11.11.arch1-1
+linux 5.11.12.arch1-1
 linux-firmware 20210315.3568f96-1
-linux-headers 5.11.11.arch1-1
+linux-headers 5.11.12.arch1-1
 luarocks 3.5.0-1
 make 4.3-3
 man-db 2.9.4-1
@@ -108,7 +108,8 @@ nordic-theme 1.9.0-1
 noto-fonts 20201226-2
 noto-fonts-emoji 20200916-1
 npm 7.8.0-1
-nvidia 460.67-5
+nvidia 460.67-6
+nvidia-settings 460.67-1
 nvidia-utils 460.67-1
 orca 40.0-1
 os-prober 1.78-1
@@ -123,7 +124,7 @@ ripgrep 12.1.1-1
 rygel 1:0.40.1-1
 screenkey 1.4-1
 seahorse 1:3.38.1-1
-shellcheck 0.7.1-357
+shellcheck 0.7.1-358
 simple-scan 40.0-1
 slack-desktop 4.14.0-1
 sudo 1.9.6.p1-1
