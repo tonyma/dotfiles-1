@@ -97,7 +97,7 @@ require('packer').startup(function()
   -- Fuzzy finder            ==================================================
 
   use {
-    '~/Projects/github.com/nvim-telescope/telescope.nvim',
+    'nvim-telescope/telescope.nvim',
     requires = {
       {'nvim-lua/popup.nvim'},
       {'nvim-lua/plenary.nvim'},
