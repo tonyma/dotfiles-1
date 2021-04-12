@@ -79,7 +79,7 @@ require('packer').startup(function()
     requires = { 'kyoh86/vim-zenn-autocmd' },
     config = function()
       vim.g["zenn#article#edit_new_cmd"] = "edit"
-      vim.api.nvim_exec[[
+      vim.api.nvim_exec([[
         command! -nargs=0 ZennUpdate call zenn#update()
         command! -nargs=* ZennPreview call zenn#preview(<f-args>)
         command! -nargs=0 ZennStopPreview call zenn#stop_preview()
@@ -90,7 +90,7 @@ require('packer').startup(function()
           autocmd User ZennEnter nnoremap <silent> <leader>zna <cmd>ZennNewArticle<cr>
           autocmd User ZennLeave silent! unnmap! <leader>zna
         augroup end
-      ]]
+      ]], false)
     end,
   }
 
@@ -150,13 +150,13 @@ require('packer').startup(function()
         requires = { 'kyoh86/vim-zenn-autocmd' },
         config = function()
           require('telescope').load_extension('zenn')
-          vim.api.nvim_exec[[
+          vim.api.nvim_exec([[
             augroup my-telescope-zenn-autocmd
               autocmd!
               autocmd User ZennEnter nnoremap <silent> <leader>zfa <cmd>Telescope zenn articles<cr>
               autocmd User ZennLeave silent! unnmap! <leader>zfa
             augroup end
-          ]]
+          ]],false)
         end
       }
     },
