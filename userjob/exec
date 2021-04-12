@@ -16,6 +16,11 @@ source ${HOME}/.config/zsh/.zshenv
 
 error=""
 
+# Fetch all gogh manged projects
+if command -v gogh >/dev/null 2>&1 ; then
+  gogh list --format full-file-path | xargs -t -P10 -I{} git -C {} fetch || error="1"
+fi
+
 # Bundle brew:
 if [ -x /usr/local/bin/brew ]; then
   PATH="/usr/local/bin/:${PATH}" /usr/local/bin/brew bundle dump --force --file=${HOME}/.config/homebrew/bundle --describe || error="1"
