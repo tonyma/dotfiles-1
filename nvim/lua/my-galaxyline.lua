@@ -235,8 +235,14 @@ M.setup = function(newPalette)
 
   vim.api.nvim_set_option('showmode', false)  -- galaxyline で表示するので、vim標準のモード表示は隠す
 
-  vim.cmd[[ autocmd DirChanged global lua require("galaxyline").load_galaxyline()]]
-  vim.cmd[[ autocmd User MyFernModeChanged lua require("galaxyline").load_galaxyline()]]
+  vim.api.nvim_exec[[
+    augroup my-galaxyline
+      autocmd!
+      autocmd DirChanged global lua require("galaxyline").load_galaxyline()
+      autocmd User MyFernModeChanged lua require("galaxyline").load_galaxyline()
+    augroup END
+  ]]
+
 
   gl.load_galaxyline()
 end

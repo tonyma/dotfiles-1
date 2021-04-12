@@ -50,12 +50,12 @@ require('packer').startup(function()
 
   use { 'lambdalisue/readablefold.vim' }
 
-  use {
-    'osyo-manga/vim-brightest',
-    config = function()
-      vim.api.nvim_set_var('brightest#highlight', { group = "BrightestUnderline" })
-    end,
-  }
+  -- use {
+  --   'osyo-manga/vim-brightest',
+  --   config = function()
+  --     vim.api.nvim_set_var('brightest#highlight', { group = "BrightestUnderline" })
+  --   end,
+  -- }
 
   use {
     'kyoh86/vim-cinfo',
@@ -79,16 +79,18 @@ require('packer').startup(function()
     requires = { 'kyoh86/vim-zenn-autocmd' },
     config = function()
       vim.g["zenn#article#edit_new_cmd"] = "edit"
-      vim.cmd[[command! -nargs=0 ZennUpdate call zenn#update()]]
-      vim.cmd[[command! -nargs=* ZennPreview call zenn#preview(<f-args>)]]
-      vim.cmd[[command! -nargs=0 ZennStopPreview call zenn#stop_preview()]]
-      vim.cmd[[command! -nargs=* ZennNewArticle call zenn#new_article(<f-args>)]]
-      vim.cmd[[command! -nargs=* ZennNewBook call zenn#new_book(<f-args>)]]
-      vim.cmd[[augroup my-zenn-vim-autocmd]]
-      vim.cmd[[autocmd!]]
-      vim.cmd[[autocmd User ZennEnter nnoremap <silent> <leader>zna <cmd>ZennNewArticle<cr>]]
-      vim.cmd[[autocmd User ZennLeave silent! unnmap! <leader>zna]]
-      vim.cmd[[augroup end]]
+      vim.api.nvim_exec[[
+        command! -nargs=0 ZennUpdate call zenn#update()
+        command! -nargs=* ZennPreview call zenn#preview(<f-args>)
+        command! -nargs=0 ZennStopPreview call zenn#stop_preview()
+        command! -nargs=* ZennNewArticle call zenn#new_article(<f-args>)
+        command! -nargs=* ZennNewBook call zenn#new_book(<f-args>)
+        augroup my-zenn-vim-autocmd
+          autocmd!
+          autocmd User ZennEnter nnoremap <silent> <leader>zna <cmd>ZennNewArticle<cr>
+          autocmd User ZennLeave silent! unnmap! <leader>zna
+        augroup end
+      ]]
     end,
   }
 
@@ -148,11 +150,13 @@ require('packer').startup(function()
         requires = { 'kyoh86/vim-zenn-autocmd' },
         config = function()
           require('telescope').load_extension('zenn')
-          vim.cmd[[augroup my-telescope-zenn-autocmd]]
-          vim.cmd[[autocmd!]]
-          vim.cmd[[autocmd User ZennEnter nnoremap <silent> <leader>zfa <cmd>Telescope zenn articles<cr>]]
-          vim.cmd[[autocmd User ZennLeave silent! unnmap! <leader>zfa]]
-          vim.cmd[[augroup end]]
+          vim.api.nvim_exec[[
+            augroup my-telescope-zenn-autocmd
+              autocmd!
+              autocmd User ZennEnter nnoremap <silent> <leader>zfa <cmd>Telescope zenn articles<cr>
+              autocmd User ZennLeave silent! unnmap! <leader>zfa
+            augroup end
+          ]]
         end
       }
     },
