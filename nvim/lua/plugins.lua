@@ -7,15 +7,15 @@ require('packer').startup(function()
 
   use { 'kyoh86/momiji' }
 
-  use {
-    'lewis6991/gitsigns.nvim',
-    requires = {
-      'nvim-lua/plenary.nvim'
-    },
-    config = function()
-      require('gitsigns').setup()
-    end
-  }
+  -- use {
+  --   'lewis6991/gitsigns.nvim',
+  --   requires = {
+  --     'nvim-lua/plenary.nvim'
+  --   },
+  --   config = function()
+  --     require('gitsigns').setup()
+  --   end
+  -- }
 
   use {
     'glepnir/galaxyline.nvim',
@@ -23,7 +23,7 @@ require('packer').startup(function()
     config = function() require'my-galaxyline' end,
     requires = {
       {'kyazdani42/nvim-web-devicons'},
-      {'lewis6991/gitsigns.nvim'},
+      -- {'lewis6991/gitsigns.nvim'},
       {'kyoh86/momiji'}
     },
   }
