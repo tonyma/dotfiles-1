@@ -188,7 +188,7 @@ require('packer').startup(function()
       vim.api.nvim_set_option('shortmess', vim.api.nvim_get_option('shortmess') .. 'c')
     end,
   }
-  use {
+  use {{
     'hrsh7th/vim-vsnip',
     config = function()
       -- Expand
@@ -206,7 +206,9 @@ require('packer').startup(function()
       opt = true,
       ft = {'go'},
     },
-  }
+  }, {
+    'hrsh7th/vim-vsnip-integ',
+  }}
 
   -- Text handlers           ==================================================
 
@@ -326,6 +328,8 @@ require('packer').startup(function()
     'tyru/open-browser-github.vim',
     requires = { 'tyru/open-browser.vim' }
   }
+
+  use 'diepm/vim-rest-console'
 
   -- Manipulate vim          ==================================================
 
