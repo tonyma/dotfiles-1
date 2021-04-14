@@ -4,3 +4,5 @@
 	log = diff-so-fancy | less
 	show = diff-so-fancy | less
 	diff = diff-so-fancy | less
+[alias]
+	copy = !printf "$1" | xclip

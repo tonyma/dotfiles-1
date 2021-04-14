@@ -6,5 +6,5 @@ set main-view = id:width=12 date author commit-title:graph=yes,refs=yes
 # 水平分割したウィンドウの下画面サイズを % で指定（行数指定も可）
 set split-view-height = 80%
 
-bind main C !@git pbcopy %(commit)
+bind main C !@git copy %(commit)
 bind main R !git rebase -i %(commit)

@@ -16,7 +16,6 @@
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
 [alias]
-	pbcopy = !printf "$1" | pbcopy
 	conflicts = !git ls-files -u | cut -f 2 | sort -u
 [filter "lfs"]
 	clean = git lfs clean %f
