@@ -32,7 +32,7 @@ local custom_lsp_attach = function(client, bufnr) -- function(client, bufnr)
     vim.api.nvim_exec([[
       augroup lsp_auto_format
         autocmd! * <buffer>
-        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
+        autocmd BufWritePre <buffer> silent! lua vim.lsp.buf.formatting_sync(nil, 1000)
       augroup END
     ]], false)
   end
