@@ -5,4 +5,4 @@
 	show = diff-so-fancy | less
 	diff = diff-so-fancy | less
 [alias]
-	copy = !printf "$1" | xclip
+	copy = !xclip -selection clipboard

@@ -6,5 +6,7 @@ set main-view = id:width=12 date author commit-title:graph=yes,refs=yes
 # 水平分割したウィンドウの下画面サイズを % で指定（行数指定も可）
 set split-view-height = 80%
 
-bind main C !@git copy %(commit)
+# コミットハッシュをクリップボードにコピー（git/config_XXXを参照）
+bind main C @sh -c "echo %(commit) | git copy"
+# rebase -i を起動
 bind main R !git rebase -i %(commit)
