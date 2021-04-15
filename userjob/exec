@@ -14,11 +14,15 @@ fi
 [ -f /etc/zshenv ] && source /etc/zshenv
 source ${HOME}/.config/zsh/.zshenv
 
+export PATH="${HOME}/.local/bin:${PATH}"
+
 error=""
 
 # Fetch all gogh manged projects
 if command -v gogh >/dev/null 2>&1 ; then
   gogh list --format full-file-path | xargs -t -P10 -I{} git -C {} fetch || error="1"
+else
+  echo no gogh
 fi
 
 # Bundle brew:
