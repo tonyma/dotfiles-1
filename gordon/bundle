@@ -9,7 +9,7 @@ kyoh86/git-branches@v0.0.15
 kyoh86/git-prompt@v0.0.8
 kyoh86/git-statuses@v1.0.4
 kyoh86/git-vertag@v2.0.4
-kyoh86/gogh@v2.0.8
+kyoh86/gogh@v2.1.3
 kyoh86/gordon@v0.1.16
 kyoh86/looppointer@v0.1.7
 kyoh86/notifail@v0.0.2
@@ -20,5 +20,5 @@ kyoh86/zshist@v0.0.7
 mithrandie/csvq@v1.15.0
 nametake/golangci-lint-langserver@v0.0.5
 nektos/act@v0.2.21
-ogham/exa@v0.9.0
+ogham/exa@v0.10.1
 wacul/ichigo@v1.0.2
