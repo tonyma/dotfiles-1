@@ -25,12 +25,13 @@ else
   echo no brew
 fi
 
-# # Fetch all gogh manged projects
-# if command -v gogh >/dev/null 2>&1 ; then
-#   gogh list --format full-file-path | xargs -t -P10 -I{} git -C {} fetch || error="1"
-# else
-#   echo no gogh
-# fi
+# Fetch all gogh manged projects
+if command -v gogh >/dev/null 2>&1 ; then
+  gogh list --format full-file-path | xargs -t -P10 -I{} git -C {} fetch || error="1"
+else
+  echo no gogh
+fi
+
 # # Bundle gordon:
 # if command -v gordon >/dev/null 2>&1 ; then
 #   gordon dump ${HOME}/.config/gordon/bundle || error="1"
