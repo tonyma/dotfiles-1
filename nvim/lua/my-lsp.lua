@@ -1,3 +1,10 @@
+-- =========== snippet
+local nvim_lsp = require('lspconfig')
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true;
+
+-- =========== attach
+
 local custom_lsp_attach = function(client, bufnr) -- function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
 
@@ -115,8 +122,11 @@ local function setup_servers()
   require'lspinstall'.setup()
   local servers = require'lspinstall'.installed_servers()
   for _, server in ipairs(servers) do
-    local config = merge_config({ on_attach = custom_lsp_attach }, additional_config[server])
-    require("lspconfig")[server].setup(config)
+    local config = merge_config({
+      on_attach = custom_lsp_attach,
+      capabilities = capabilities,
+    }, additional_config[server])
+    nvim_lsp[server].setup(config)
   end
 end
 
