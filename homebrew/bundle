@@ -189,6 +189,8 @@ cask "google-japanese-ime"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"
 cask "java"
+# Keyboard customizer
+cask "karabiner-elements"
 # Tool to prevent the system from going into sleep mode
 cask "keepingyouawake"
 # Record keystroke for screencast
@@ -212,7 +214,6 @@ cask "wkhtmltopdf"
 # App wrapper for music.youtube.com
 cask "yt-music"
 mas "1Password 7", id: 1333542190
-mas "AnyMP4 4K Converter", id: 1013790008
 mas "Apple Configurator 2", id: 1037126344
 mas "Fantastical", id: 975937182
 mas "GarageBand", id: 682658836
