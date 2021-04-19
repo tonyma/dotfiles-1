@@ -188,6 +188,7 @@ require('packer').startup(function()
       vim.api.nvim_set_option('shortmess', vim.api.nvim_get_option('shortmess') .. 'c')
     end,
   }
+  use 'ncm2/float-preview.nvim'
   use {{
     'hrsh7th/vim-vsnip',
     config = function()

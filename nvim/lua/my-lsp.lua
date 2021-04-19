@@ -92,6 +92,35 @@ local additional_config = {
       }
     }
   },
+  efm = {
+    init_options = {documentFormatting = true},
+    settings = {
+      rootMarkers = {".git/"},
+      languages = {
+      }
+    }
+  },
+  go = {
+    init_options = {
+      gofumpt = true,
+      usePlaceholders = true,
+      semanticTokens = true,
+      staticcheck = true,
+      experimentalPostfixCompletions = true,
+      hoverKind = 'Structured',
+      analyses = {
+        nilness = true,
+        shadow = true,
+        unusedparams = true,
+        unusedwrite = true,
+        fieldalignment = true
+      },
+      codelenses = {
+        gc_details = true,
+        tidy = true
+      },
+    }
+  },
   lua = {
     settings = {
       Lua = {
@@ -121,7 +150,7 @@ local additional_config = {
 local function setup_servers()
   require'lspinstall'.setup()
   local servers = require'lspinstall'.installed_servers()
-  for _, server in ipairs(servers) do
+  for _, server in pairs(servers) do
     local config = merge_config({
       on_attach = custom_lsp_attach,
       capabilities = capabilities,
