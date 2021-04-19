@@ -175,19 +175,6 @@ require('packer').startup(function()
 
   -- Snippet                 ==================================================
 
-  use {
-    'nvim-lua/completion-nvim',
-    setup = function()
-      vim.api.nvim_set_var('completion_enable_auto_popup', 0)
-    end,
-    config = function()
-      vim.api.nvim_set_var('completion_enable_snippet', 'vim-vsnip')
-      --  map <c-p> to manually trigger completion
-      vim.api.nvim_set_keymap('i', '<c-x><c-s>', '<plug>(completion_trigger)', {})
-      vim.api.nvim_set_option('completeopt', 'menuone,noinsert')
-      vim.api.nvim_set_option('shortmess', vim.api.nvim_get_option('shortmess') .. 'c')
-    end,
-  }
   use 'ncm2/float-preview.nvim'
   use {{
     'hrsh7th/vim-vsnip',
