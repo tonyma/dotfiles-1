@@ -18,13 +18,6 @@ export PATH="${HOME}/.local/bin:${PATH}"
 
 error=""
 
-# Fetch all gogh manged projects
-if command -v gogh >/dev/null 2>&1 ; then
-  gogh list --format full-file-path | xargs -t -P10 -I{} git -C {} fetch || error="1"
-else
-  echo no gogh
-fi
-
 # Bundle brew:
 if [ -x /usr/local/bin/brew ]; then
   PATH="/usr/local/bin/:${PATH}" /usr/local/bin/brew bundle dump --force --file=${HOME}/.config/homebrew/bundle --describe || error="1"
@@ -32,19 +25,25 @@ else
   echo no brew
 fi
 
-# Bundle gordon:
-if command -v gordon >/dev/null 2>&1 ; then
-  gordon dump ${HOME}/.config/gordon/bundle || error="1"
-else
-  echo no gordon
-fi
-
-# dump pacman
-if [ -x /usr/bin/pacman ]; then
-  /usr/bin/pacman -Qe > ${HOME}/.config/pacman/dump.txt || error="1"
-else
-  echo no pacman
-fi
+# # Fetch all gogh manged projects
+# if command -v gogh >/dev/null 2>&1 ; then
+#   gogh list --format full-file-path | xargs -t -P10 -I{} git -C {} fetch || error="1"
+# else
+#   echo no gogh
+# fi
+# # Bundle gordon:
+# if command -v gordon >/dev/null 2>&1 ; then
+#   gordon dump ${HOME}/.config/gordon/bundle || error="1"
+# else
+#   echo no gordon
+# fi
+# 
+# # dump pacman
+# if [ -x /usr/bin/pacman ]; then
+#   /usr/bin/pacman -Qe > ${HOME}/.config/pacman/dump.txt || error="1"
+# else
+#   echo no pacman
+# fi
 
 if [[ -n ${error} ]]; then
   if command -v osascript >/dev/null 2>&1 ; then
