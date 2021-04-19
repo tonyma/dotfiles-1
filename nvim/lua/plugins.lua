@@ -423,6 +423,7 @@ require('packer').startup(function()
   use { 'dhruvasagar/vim-table-mode', ft = 'markdown' }
 
   -- - others
+  use { 'jparise/vim-graphql' }
   use { 'z0mbix/vim-shfmt', ft = {'sh', 'bash', 'zsh'} }
   use { 'lambdalisue/vim-backslash', ft = 'vim' }
   use { 'glench/vim-jinja2-syntax' }

@@ -51,6 +51,7 @@ local custom_lsp_attach = function(client, bufnr) -- function(client, bufnr)
     ]], false)
   end
   vim.api.nvim_buf_set_var(bufnr, 'lsp_autoformat', true)
+  require'completion'.on_attach(client, bufnr)
 end
 
 local function merge_config(base, ext)
