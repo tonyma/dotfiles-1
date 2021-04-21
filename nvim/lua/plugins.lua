@@ -7,16 +7,6 @@ require('packer').startup(function()
 
   use { 'kyoh86/momiji' }
 
-  -- use {
-  --   'lewis6991/gitsigns.nvim',
-  --   requires = {
-  --     'nvim-lua/plenary.nvim'
-  --   },
-  --   config = function()
-  --     require('gitsigns').setup()
-  --   end
-  -- }
-
   use {
     'glepnir/galaxyline.nvim',
     branch = 'main',
@@ -49,13 +39,6 @@ require('packer').startup(function()
   }
 
   use { 'lambdalisue/readablefold.vim' }
-
-  -- use {
-  --   'osyo-manga/vim-brightest',
-  --   config = function()
-  --     vim.api.nvim_set_var('brightest#highlight', { group = "BrightestUnderline" })
-  --   end,
-  -- }
 
   use {
     'kyoh86/vim-cinfo',
@@ -202,40 +185,41 @@ require('packer').startup(function()
 
   use {
     'kana/vim-textobj-line',
-    requires = {'kana/vim-textobj-user', opt = true}
+    requires = {'kana/vim-textobj-user'}
   }
 
   use {
     'kana/vim-textobj-entire',
-    requires = {'kana/vim-textobj-user', opt = true}
+    requires = {'kana/vim-textobj-user'}
   }
 
   use {
     'sgur/vim-textobj-parameter',
-    requires = {'kana/vim-textobj-user', opt = true}
+    requires = {'kana/vim-textobj-user'}
   }
 
-  use {
-    'whatyouhide/vim-textobj-xmlattr',
-    requires = {'kana/vim-textobj-user', opt = true}
-  }
+  use {'kana/vim-operator-user'}
 
-  use {
-    'kana/vim-operator-replace',
-    requires = {'kana/vim-operator-user', opt = true}
-  }
+  -- use {
+  --   'whatyouhide/vim-textobj-xmlattr',
+  --   requires = {'kana/vim-textobj-user', opt = true}
+  -- }
 
-  use {
-    disable = true,
-    'osyo-manga/vim-operator-jump_side',
-    requires = {'kana/vim-operator-user', opt = true},
-    config = function()
-      -- textobj の先頭へ移動する
-      vim.api.nvim_set_keymap('n', '<leader>h', '<plug>(operator-jump-head)', {})
-      -- textobj の末尾へ移動する
-      vim.api.nvim_set_keymap('n', '<leader>t', '<plug>(operator-jump-tail)', {})
-    end,
-  }
+  -- use {
+  --   'kana/vim-operator-replace',
+  --   requires = {'kana/vim-operator-user', opt = true}
+  -- }
+
+  -- use {
+  --   disable = true,
+  --   'osyo-manga/vim-operator-jump_side',
+  --   config = function()
+  --     -- textobj の先頭へ移動する
+  --     vim.api.nvim_set_keymap('n', '<leader>h', '<plug>(operator-jump-head)', {})
+  --     -- textobj の末尾へ移動する
+  --     vim.api.nvim_set_keymap('n', '<leader>t', '<plug>(operator-jump-tail)', {})
+  --   end,
+  -- }
 
   use {
     'machakann/vim-sandwich',
@@ -260,18 +244,9 @@ require('packer').startup(function()
     end,
   }
 
-  use { 'amadeus/vim-convert-color-to' }
-
   -- Integrations            ==================================================
 
   use { 'jremmen/vim-ripgrep', cmd = 'Rg' }
-  use {
-    'gabrielpoca/replacer.nvim',
-    config = function()
-      vim.api.nvim_set_keymap('n', '<leader>h', '<cmd>lua require("replacer").run()<cr>', { nowait = true, noremap = true, silent = true })
-    end,
-  }
-  -- use { 'stefandtw/quickfix-reflector.vim' }
 
   use {
     'thinca/vim-quickrun',
@@ -284,13 +259,13 @@ require('packer').startup(function()
     end,
   }
 
-  use {
-    'vim-test/vim-test',
-    config = function()
-      vim.api.nvim_set_var('test#strategy', 'vimterminal')
-      vim.api.nvim_set_var('test#vimterminal#term_position', 'aboveleft')
-    end,
-  }
+  -- use {
+  --   'vim-test/vim-test',
+  --   config = function()
+  --     vim.api.nvim_set_var('test#strategy', 'vimterminal')
+  --     vim.api.nvim_set_var('test#vimterminal#term_position', 'aboveleft')
+  --   end,
+  -- }
 
   use {
     'kyoh86/vim-quotem',
