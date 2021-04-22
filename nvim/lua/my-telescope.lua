@@ -24,7 +24,7 @@ require('telescope').setup{
         ["<esc>"] = actions.close,
       },
     },
-    shorten_path = true,
+    shorten_path = false,
   }
 }
 

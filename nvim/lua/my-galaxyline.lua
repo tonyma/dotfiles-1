@@ -81,27 +81,27 @@ end
 -- パス名を短縮するutil
 -- source: https://github.com/nvim-telescope/telescope.nvim/blob/1c5e42a6a5a6d29be8fbf8dcefb0d8da535eac9a/lua/telescope/path.lua#L23
 local path_shorten = (function()
-  if jit then
-    local ffi = require('ffi')
-    ffi.cdef [[
-    typedef unsigned char char_u;
-    char_u *shorten_dir(char_u *str);
-    ]]
+  -- if jit then
+  --   local ffi = require('ffi')
+  --   ffi.cdef [[
+  --   typedef unsigned char char_u;
+  --   char_u *shorten_dir(char_u *str);
+  --   ]]
 
-    return function(filepath)
-      if not filepath then
-        return filepath
-      end
+  --   return function(filepath)
+  --     if not filepath then
+  --       return filepath
+  --     end
 
-      local c_str = ffi.new("char[?]", #filepath + 1)
-      ffi.copy(c_str, filepath)
-      return ffi.string(ffi.C.shorten_dir(c_str))
-    end
-  else
+  --     local c_str = ffi.new("char[?]", #filepath + 1)
+  --     ffi.copy(c_str, filepath)
+  --     return ffi.string(ffi.C.shorten_dir(c_str))
+  --   end
+  -- else
     return function(filepath)
       return filepath
     end
-  end
+  -- end
 end)()
 
 local M = {}
