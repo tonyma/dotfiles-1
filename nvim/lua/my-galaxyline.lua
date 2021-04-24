@@ -198,7 +198,7 @@ M.setup = function(newPalette)
   table.insert(gls.right, { DiagnosticHint  = {
     provider = 'DiagnosticHint',
     icon = '\u{F059}\u{00A0}',
-    highlight           = { palette.lightred, palette.black },
+    highlight           = { palette.blue, palette.black },
   }})
 
   table.insert(gls.right, { DiagnosticInfo  = {
