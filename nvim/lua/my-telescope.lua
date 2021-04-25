@@ -17,11 +17,15 @@ require('telescope').setup{
     -- Global remapping
     mappings = {
       i = {
-        ["<CR>"] = actions.select_default + actions.center,
+        ["<cr>"] = actions.select_default + actions.center,
+        ["<c-space>"] = actions.toggle_selection,
         ["<esc>"] = actions.close,
       },
       n = {
+        ["<c-p>"] = actions.move_selection_previous,
+        ["<c-n>"] = actions.move_selection_next,
         ["<esc>"] = actions.close,
+        ["<space>"] = actions.toggle_selection,
       },
     },
     shorten_path = false,
@@ -44,10 +48,9 @@ else
   vim.cmd[[ autocmd ColorScheme momiji ++once lua require('my-telescope').setup_highlight() ]]
 end
 
--- Commands =================================================================================
+-- Keymaps =================================================================================
 
 vim.api.nvim_set_keymap('n', '<leader>ff',  '<cmd>lua require("telescope.builtin").find_files()<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fb',  '<cmd>lua require("telescope.builtin").buffers()<cr>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>f:',  '<cmd>lua require("telescope.builtin").command_history()<cr>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fgs', '<cmd>lua require("telescope.builtin").git_status()<cr>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fgb', '<cmd>lua require("telescope.builtin").git_branches()<cr>',    { noremap = true, silent = true })
@@ -70,6 +73,10 @@ local recent_cmd = [[lua require("my-telescope").git_recent()]]
 vim.cmd('command! EditRecent ' .. recent_cmd)
 vim.api.nvim_set_keymap('n', '<leader>fgr', '<cmd>' .. recent_cmd .. '<cr>',    { noremap = true, silent = true })
 
+local buffers_cmd = [[lua require("my-telescope").buffers()]]
+vim.api.nvim_set_keymap('n', '<leader>fb', '<cmd>' .. buffers_cmd .. '<cr>',    { noremap = true, silent = true })
+
+-- Pickers ==================================================================================
 my.git_recent = function(opts)
   local opts = opts or {}
   local depth = utils.get_default(opts.depth, 5)
@@ -89,6 +96,35 @@ my.git_recent = function(opts)
     previewer = conf.file_previewer(opts),
     sorter = conf.file_sorter(opts),
   }):find()
+end
+
+my.buffers = function(opts)
+  local action_state = require('telescope.actions.state')
+  opts = opts or {}
+  -- opts.previewer = false
+  -- opts.sort_lastused = true
+  -- opts.show_all_buffers = true
+  -- opts.shorten_path = false
+  opts.attach_mappings = function(prompt_bufnr, map)
+    local delete_buf = function()
+      local current_picker = action_state.get_current_picker(prompt_bufnr)
+      local multi_selections = current_picker:get_multi_selection()
+
+      if next(multi_selections) == nil then
+        local selection = action_state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        vim.api.nvim_buf_delete(selection.bufnr, {force = true})
+      else
+        actions.close(prompt_bufnr)
+        for _, selection in ipairs(multi_selections) do
+          vim.api.nvim_buf_delete(selection.bufnr, {force = true})
+        end
+      end
+    end
+    map('i', '<c-d>', delete_buf)
+    return true
+  end
+  require('telescope.builtin').buffers(opts)
 end
 
 my.packer = function()

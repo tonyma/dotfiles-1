@@ -219,26 +219,26 @@ require('packer').startup(function()
 
   use {'kana/vim-operator-user'}
 
-  -- use {
-  --   'whatyouhide/vim-textobj-xmlattr',
-  --   requires = {'kana/vim-textobj-user', opt = true}
-  -- }
+  use {
+    'whatyouhide/vim-textobj-xmlattr',
+    requires = {'kana/vim-textobj-user', opt = true}
+  }
 
-  -- use {
-  --   'kana/vim-operator-replace',
-  --   requires = {'kana/vim-operator-user', opt = true}
-  -- }
+  use {
+    'kana/vim-operator-replace',
+    requires = {'kana/vim-operator-user', opt = true}
+  }
 
-  -- use {
-  --   disable = true,
-  --   'osyo-manga/vim-operator-jump_side',
-  --   config = function()
-  --     -- textobj の先頭へ移動する
-  --     vim.api.nvim_set_keymap('n', '<leader>h', '<plug>(operator-jump-head)', {})
-  --     -- textobj の末尾へ移動する
-  --     vim.api.nvim_set_keymap('n', '<leader>t', '<plug>(operator-jump-tail)', {})
-  --   end,
-  -- }
+  use {
+    disable = true,
+    'osyo-manga/vim-operator-jump_side',
+    config = function()
+      -- textobj の先頭へ移動する
+      vim.api.nvim_set_keymap('n', '<leader>h', '<plug>(operator-jump-head)', {})
+      -- textobj の末尾へ移動する
+      vim.api.nvim_set_keymap('n', '<leader>t', '<plug>(operator-jump-tail)', {})
+    end,
+  }
 
   use {
     'machakann/vim-sandwich',
@@ -278,13 +278,13 @@ require('packer').startup(function()
     end,
   }
 
-  -- use {
-  --   'vim-test/vim-test',
-  --   config = function()
-  --     vim.api.nvim_set_var('test#strategy', 'vimterminal')
-  --     vim.api.nvim_set_var('test#vimterminal#term_position', 'aboveleft')
-  --   end,
-  -- }
+  use {
+    'vim-test/vim-test',
+    config = function()
+      vim.api.nvim_set_var('test#strategy', 'neovim')
+      vim.api.nvim_set_var('test#vimterminal#term_position', 'aboveleft')
+    end,
+  }
 
   use {
     'kyoh86/vim-quotem',
