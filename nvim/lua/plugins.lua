@@ -158,29 +158,45 @@ require('packer').startup(function()
 
   -- Snippet                 ==================================================
 
-  use 'ncm2/float-preview.nvim'
-
-  use {
-    'nvim-lua/completion-nvim',
-    setup = function()
-      vim.api.nvim_set_var('completion_enable_auto_popup', 0)
-    end,
-    config = function()
-      vim.api.nvim_set_var('completion_enable_snippet', 'vim-vsnip')
-      --  map <c-x><c-s> to manually trigger completion
-      vim.api.nvim_set_keymap('i', '<c-x><c-s>', '<plug>(completion_trigger)', {})
-      vim.api.nvim_set_option('completeopt', 'menuone,noinsert')
-      vim.api.nvim_set_option('shortmess', vim.api.nvim_get_option('shortmess') .. 'c')
-    end,
-  }
+  -- use 'ncm2/float-preview.nvim'
 
   use {{
+    'hrsh7th/nvim-compe',
+    config = function()
+      vim.cmd[[inoremap <silent><expr> <c-x><c-s> compe#complete()]]
+      vim.cmd[[inoremap <silent><expr> <cr>       compe#confirm('<cr>')]]
+      vim.cmd[[inoremap <silent><expr> <c-e>      compe#close('<c-e>')]]
+      vim.o.shortmess = vim.o.shortmess .. 'c'
+      vim.o.completeopt = "menuone,noinsert,noselect"
+      require'compe'.setup {
+        enabled = true;
+        autocomplete = true;
+        debug = false;
+        min_length = 1;
+        preselect = 'enable';
+        throttle_time = 80;
+        source_timeout = 200;
+        incomplete_delay = 400;
+        max_abbr_width = 100;
+        max_kind_width = 100;
+        max_menu_width = 100;
+        documentation = true;
+
+        source = {
+          path = true;
+          calc = true;
+          vsnip = true;
+
+          nvim_lsp = true;
+          nvim_lua = true;
+          buffer = false;
+          omni = false;
+        };
+      }
+    end,
+  }, {
     'hrsh7th/vim-vsnip',
     config = function()
-      -- Expand
-      vim.cmd[[imap <expr> <c-j>   vsnip#expandable()  ? '<plug>(vsnip-expand)'         : '<c-j>']]
-      vim.cmd[[smap <expr> <c-j>   vsnip#expandable()  ? '<plug>(vsnip-expand)'         : '<c-j>']]
-
       -- Expand or jump
       vim.cmd[[imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>']]
       vim.cmd[[smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>']]

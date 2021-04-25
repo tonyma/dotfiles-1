@@ -391,7 +391,7 @@ autocmd BufWritePost plugins.lua PackerCompile
   set helplang=ja,en
   set grepprg=rg\ --vimgrep\ --no-heading
   set grepformat=%f:%l:%c:%m,%f:%l:%m
-  set completeopt=menuone,noinsert,noselect
+  set completeopt=menuone,noinsert
 
   language messages en_US.UTF-8
 " }}}
