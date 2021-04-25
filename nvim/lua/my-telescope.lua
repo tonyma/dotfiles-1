@@ -53,7 +53,6 @@ end
 vim.api.nvim_set_keymap('n', '<leader>ff',  '<cmd>lua require("telescope.builtin").find_files()<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>f:',  '<cmd>lua require("telescope.builtin").command_history()<cr>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fgs', '<cmd>lua require("telescope.builtin").git_status()<cr>',    { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fgb', '<cmd>lua require("telescope.builtin").git_branches()<cr>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fgc', '<cmd>lua require("telescope.builtin").git_commits()<cr>',    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>flr', '<cmd>lua require("telescope.builtin").lsp_references()<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fld', '<cmd>lua require("telescope.builtin").lsp_document_symbols()<cr>', { noremap = true, silent = true })
@@ -76,6 +75,9 @@ vim.api.nvim_set_keymap('n', '<leader>fgr', '<cmd>' .. recent_cmd .. '<cr>',    
 local buffers_cmd = [[lua require("my-telescope").buffers()]]
 vim.api.nvim_set_keymap('n', '<leader>fb', '<cmd>' .. buffers_cmd .. '<cr>',    { noremap = true, silent = true })
 
+local git_branches_cmd = [[lua require("my-telescope").git_branches()]]
+vim.api.nvim_set_keymap('n', '<leader>fgb', '<cmd>' .. git_branches_cmd .. '<cr>',    { noremap = true, silent = true })
+
 -- Pickers ==================================================================================
 my.git_recent = function(opts)
   local opts = opts or {}
@@ -96,6 +98,50 @@ my.git_recent = function(opts)
     previewer = conf.file_previewer(opts),
     sorter = conf.file_sorter(opts),
   }):find()
+end
+
+my.git_branches = function()
+    local action_state = require('telescope.actions.state')
+    --- Switch to git branch
+    ---@param prompt_bufnr number: The prompt bufnr
+    local git_switch = function(prompt_bufnr)
+      local cwd = action_state.get_current_picker(prompt_bufnr).cwd
+      local selection = action_state.get_selected_entry()
+      actions.close(prompt_bufnr)
+      local pattern = '^refs/remotes/%w+/'
+      local branch = selection.value
+      if string.match(selection.refname, pattern) then
+        branch = string.gsub(selection.refname, pattern, '')
+      end
+      local _, ret, stderr = utils.get_os_command_output({ 'git', 'switch', branch }, cwd)
+      if ret == 0 then
+        print("Switched to: " .. branch)
+      else
+        print(string.format(
+          'Error when switching to: %s. Git returned: "%s"',
+          selection.value,
+          table.concat(stderr, '  ')
+        ))
+      end
+    end
+    require'telescope.builtin'.git_branches({ attach_mappings = function(_, map)
+      actions.select_default:replace(git_switch)
+      map('i', '<c-x>', actions.git_checkout)
+      map('n', '<c-x>', actions.git_checkout)
+
+      map('i', '<c-t>', actions.git_track_branch)
+      map('n', '<c-t>', actions.git_track_branch)
+
+      map('i', '<c-r>', actions.git_rebase_branch)
+      map('n', '<c-r>', actions.git_rebase_branch)
+
+      map('i', '<c-a>', actions.git_create_branch)
+      map('n', '<c-a>', actions.git_create_branch)
+
+      map('i', '<c-d>', actions.git_delete_branch)
+      map('n', '<c-d>', actions.git_delete_branch)
+      return true
+    end})
 end
 
 my.buffers = function(opts)
