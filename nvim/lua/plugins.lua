@@ -13,7 +13,20 @@ require('packer').startup(function()
     config = function() require'my-galaxyline' end,
     requires = {
       {'kyazdani42/nvim-web-devicons'},
-      -- {'lewis6991/gitsigns.nvim'},
+      {
+        'lewis6991/gitsigns.nvim',
+        requires = {
+          'nvim-lua/plenary.nvim'
+        },
+        config = function()
+          require('gitsigns').setup({
+            keymaps = {
+              ['n ]g'] = { expr = true, "&diff ? ']c' : '<cmd>lua require\"gitsigns\".next_hunk()<CR>'"},
+              ['n [g'] = { expr = true, "&diff ? '[c' : '<cmd>lua require\"gitsigns\".prev_hunk()<CR>'"},
+            }
+          })
+        end
+      },
       {'kyoh86/momiji'}
     },
   }
