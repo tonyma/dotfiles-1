@@ -58,9 +58,8 @@ local custom_lsp_attach = function(client, bufnr) -- function(client, bufnr)
   end
   vim.api.nvim_buf_set_var(bufnr, 'lsp_autoformat', true)
 
-  -- NOTE: Use completion nvim instead of omnifunc
-  -- vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
-  require'completion'.on_attach(client, bufnr)
+  vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+  -- require'completion'.on_attach(client, bufnr)
 end
 
 local function merge_config(base, ext)

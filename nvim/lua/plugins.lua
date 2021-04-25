@@ -168,7 +168,7 @@ require('packer').startup(function()
     config = function()
       vim.api.nvim_set_var('completion_enable_snippet', 'vim-vsnip')
       --  map <c-x><c-s> to manually trigger completion
-      vim.api.nvim_set_keymap('i', '<c-x><c-o>', '<plug>(completion_trigger)', {})
+      vim.api.nvim_set_keymap('i', '<c-x><c-s>', '<plug>(completion_trigger)', {})
       vim.api.nvim_set_option('completeopt', 'menuone,noinsert')
       vim.api.nvim_set_option('shortmess', vim.api.nvim_get_option('shortmess') .. 'c')
     end,
