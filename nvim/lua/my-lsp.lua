@@ -29,6 +29,10 @@ local custom_lsp_attach = function(client, bufnr) -- function(client, bufnr)
   buf_set_keymap('n', '<leader>llC', '<cmd>lua vim.lsp.buf.outgoing_calls()<CR>', opts)
   buf_set_keymap('n', '<leader>lld', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
+  -- Use LSP as the handler for omnifunc.
+  --    See `:help omnifunc` and `:help ins-completion` for more information.
+  vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
   -- Set some keybinds conditional on server capabilities
   if client.resolved_capabilities.document_formatting then
     buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", {noremap = true})
@@ -57,10 +61,6 @@ local custom_lsp_attach = function(client, bufnr) -- function(client, bufnr)
     ]], false)
   end
   vim.api.nvim_buf_set_var(bufnr, 'lsp_autoformat', true)
-
-  -- NOTE: Use completion nvim instead of omnifunc
-  -- vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
-  require'completion'.on_attach(client, bufnr)
 end
 
 local function merge_config(base, ext)
