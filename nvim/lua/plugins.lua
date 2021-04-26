@@ -2,7 +2,7 @@ vim.cmd[[packadd packer.nvim]]
 
 local packer = require'packer'
 packer.init({
-  max_jobs=50,
+  max_jobs=70,
 })
 packer.startup(function()
   use { 'wbthomason/packer.nvim', opt = true }
