@@ -167,7 +167,7 @@ M.setup = function(newPalette)
   table.insert(gls.left, {
     FileName = {
       provider = function ()
-        local file = path_shorten(vim.fn.expand('%'))
+        local file = path_shorten(vim.fn.expand('%:.'))
         if vim.fn.empty(file) == 1 then return '' end
         -- if string.len(file_readonly()) ~= 0 then
         --   return file .. file_readonly()
