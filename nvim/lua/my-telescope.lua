@@ -79,8 +79,8 @@ local git_branches_cmd = [[lua require("my-telescope").git_branches()]]
 vim.api.nvim_set_keymap('n', '<leader>fgb', '<cmd>' .. git_branches_cmd .. '<cr>',    { noremap = true, silent = true })
 
 -- Pickers ==================================================================================
-my.git_recent = function(opts)
-  local opts = opts or {}
+my.git_recent = function(o)
+  local opts = o or {}
   local depth = utils.get_default(opts.depth, 5)
 
   if opts.cwd then
