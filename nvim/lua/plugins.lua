@@ -311,10 +311,10 @@ packer.startup(function()
     end,
   }
 
-  use {
+  use {{
     'vim-test/vim-test',
     config = function()
-      vim.api.nvim_set_var('test#strategy', 'neovim')
+      vim.api.nvim_set_var('test#strategy', 'dispatch')
       vim.api.nvim_set_var('test#vimterminal#term_position', 'aboveleft')
       vim.api.nvim_set_keymap('n','<leader>tg', '<cmd>TestVisit<cr>',   { silent = true, noremap = true })
       vim.api.nvim_set_keymap('n','<leader>tt', '<cmd>TestNearest<cr>', { silent = true, noremap = true })
@@ -322,7 +322,9 @@ packer.startup(function()
       vim.api.nvim_set_keymap('n','<leader>ta', '<cmd>TestSuite<cr>',   { silent = true, noremap = true })
       vim.api.nvim_set_keymap('n','<leader>tl', '<cmd>TestLast<cr>',    { silent = true, noremap = true })
     end,
-  }
+  }, {
+    '/tpope/vim-dispatch'
+  }}
 
   use {
     'kyoh86/vim-quotem',
