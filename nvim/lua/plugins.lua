@@ -323,7 +323,7 @@ packer.startup(function()
       vim.api.nvim_set_keymap('n','<leader>tl', '<cmd>TestLast<cr>',    { silent = true, noremap = true })
     end,
   }, {
-    '/tpope/vim-dispatch'
+    'tpope/vim-dispatch'
   }}
 
   use {
