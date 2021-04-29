@@ -10,7 +10,8 @@
 curl "https://raw.githubusercontent.com/kyoh86/dotfiles/main/setup" | zsh
 ```
 
-and create a `${DOTFILES}/git/config_host` like below.
+4. register GPG key
+5. create a `${DOTFILES}/git/config_host` like below.
 
 ```
 [user]
@@ -22,4 +23,5 @@ and create a `${DOTFILES}/git/config_host` like below.
 ## my Ergodox layout
 
 https://configure.ergodox-ez.com/ergodox-ez/layouts/MZajL/latest/0
+
 :memo: if you want to change layout, login and edit it.
