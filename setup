@@ -23,22 +23,6 @@ source ${DOTFILES}/zsh/.zshenv
 # OS別のセットアップ
 [ -f ${DOTFILES}/setup_`uname` ] && source ${DOTFILES}/setup_`uname`
 
-# OS別のgitconfig
-function link_os() {
-  local prefix="$1"
-  if [ -z "${prefix}" ]; then
-    return
-  fi
-  local dest="${prefix}_$(uname)"
-  local link="${prefix}_os"
-  if [ -f "${dest}" ]; then
-    ln -s "${dest}" "${link}"
-  else
-    touch "${link}"
-  fi
-}
-link_os "${DOTFILES}/git/config"
-
 yarn global add \
           typescript-language-server \
           vim-language-server

@@ -29,6 +29,7 @@
 !/locale.conf
 !/mypy
 !/nvim
+!/nvidia
 !/pacman
 !/plist
 !/pycodestyle
