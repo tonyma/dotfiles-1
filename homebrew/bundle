@@ -197,8 +197,6 @@ cask "keepingyouawake"
 cask "keycast"
 # Open-source keystroke visualizer
 cask "keycastr"
-# Interface for reading and syncing eBooks
-cask "kindle"
 # Reverse proxy, secure introspectable tunnels to localhost
 cask "ngrok"
 cask "nosqlbooster-for-mongodb"
@@ -211,8 +209,6 @@ cask "visual-studio-code"
 # Multimedia player
 cask "vlc"
 cask "wkhtmltopdf"
-# App wrapper for music.youtube.com
-cask "yt-music"
 mas "1Password 7", id: 1333542190
 mas "Apple Configurator 2", id: 1037126344
 mas "Fantastical", id: 975937182
