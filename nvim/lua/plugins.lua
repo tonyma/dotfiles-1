@@ -38,7 +38,6 @@ packer.startup(function()
   use {
     'kyoh86/gitstat.nvim',
     config = function()
-
       vim.g['gitstat#parts'] = 'branch,ahead,behind,sync,unmerged,staged,unstaged,untracked'
       vim.g['gitstat#blend'] = 10
       vim.cmd('highlight! GitStatWindow    guibg=' .. vim.g.momiji_colors.green  .. ' guifg=' .. vim.g.momiji_colors.black)
@@ -399,18 +398,11 @@ packer.startup(function()
   }
 
   use {
-    'tkmpypy/chowcho.nvim',
+    't9md/vim-choosewin',
     config = function()
-      require('chowcho').setup {
-        text_color = '#FFFFFF',
-        bg_color = '#555555',
-        active_border_color = '#0A8BFF',
-        border_style = 'default' -- 'default', 'rounded',
-      }
-      vim.api.nvim_set_keymap('n', '<leader>wf', '<cmd>lua require("chowcho").run()<cr>', {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>wf', '<plug>(choosewin)', {})
     end,
   }
-
   use {
     'kyoh86/curtain.nvim',
     config = function()
