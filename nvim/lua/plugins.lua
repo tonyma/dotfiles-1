@@ -435,6 +435,17 @@ packer.startup(function()
     ft = 'markdown',
   }
   use { 'dhruvasagar/vim-table-mode', ft = 'markdown' }
+  use {
+    'kyoh86/imgup.nvim',
+    rocks = {
+      'net-url',
+      'nanoid',
+    },
+    config = function()
+      vim.api.nvim_set_keymap('n', '<leader>mir', [[<cmd>lua require('imgup').replace(require('imgup.gcloud').new('post.kyoh86.dev', 'post', 'post.kyoh86.dev', 'image'))<cr>]], {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>mip', [[<cmd>lua require('imgup').put(require('imgup.gcloud').new('post.kyoh86.dev', 'post', 'post.kyoh86.dev', 'image'))<cr>]], {noremap = true})
+    end,
+  }
 
   -- - others
   use { 'jparise/vim-graphql' }
