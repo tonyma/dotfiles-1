@@ -183,7 +183,7 @@ packer.startup(function()
       vim.cmd[[inoremap <silent><expr> <cr>       compe#confirm('<cr>')]]
       vim.cmd[[inoremap <silent><expr> <c-e>      compe#close('<c-e>')]]
       vim.o.shortmess = vim.o.shortmess .. 'c'
-      vim.o.completeopt = "menuone,noinsert,noselect"
+      vim.o.completeopt = "menuone,noselect"
       require'compe'.setup {
         enabled = true;
         autocomplete = true;
@@ -213,6 +213,8 @@ packer.startup(function()
   }, {
     'hrsh7th/vim-vsnip',
     config = function()
+      vim.g.vsnip_snippet_dir = vim.fn.expand('~/.config/nvim/vsnip')
+
       -- Expand or jump
       vim.cmd[[imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>']]
       vim.cmd[[smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>']]
@@ -262,13 +264,12 @@ packer.startup(function()
   }
 
   use {
-    disable = true,
     'osyo-manga/vim-operator-jump_side',
     config = function()
       -- textobj の先頭へ移動する
-      vim.api.nvim_set_keymap('n', '<leader>h', '<plug>(operator-jump-head)', {})
+      vim.api.nvim_set_keymap('n', '<leader>[', '<plug>(operator-jump-head)', {})
       -- textobj の末尾へ移動する
-      vim.api.nvim_set_keymap('n', '<leader>t', '<plug>(operator-jump-tail)', {})
+      vim.api.nvim_set_keymap('n', '<leader>]', '<plug>(operator-jump-tail)', {})
     end,
   }
 
@@ -436,14 +437,14 @@ packer.startup(function()
   }
   use { 'dhruvasagar/vim-table-mode', ft = 'markdown' }
   use {
-    'kyoh86/imgup.nvim',
+    '~/Projects/github.com/kyoh86/markdown-image.nvim',
     rocks = {
       'net-url',
       'nanoid',
     },
     config = function()
-      vim.api.nvim_set_keymap('n', '<leader>mir', [[<cmd>lua require('imgup').replace(require('imgup.gcloud').new('post.kyoh86.dev', 'post', 'post.kyoh86.dev', 'image'))<cr>]], {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>mip', [[<cmd>lua require('imgup').put(require('imgup.gcloud').new('post.kyoh86.dev', 'post', 'post.kyoh86.dev', 'image'))<cr>]], {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>mir', [[<cmd>lua require('markdown-image').replace(require('markdown-image.gcloud').new('post.kyoh86.dev', 'post', 'post.kyoh86.dev', 'image'))<cr>]], {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>mip', [[<cmd>lua require('markdown-image').put(require('markdown-image.gcloud').new('post.kyoh86.dev', 'post', 'post.kyoh86.dev', 'image'))<cr>]], {noremap = true})
     end,
   }
 
