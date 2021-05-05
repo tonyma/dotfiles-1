@@ -199,6 +199,7 @@ cask "keycast"
 cask "keycastr"
 # Reverse proxy, secure introspectable tunnels to localhost
 cask "ngrok"
+# GUI tool and IDE for MongoDB
 cask "nosqlbooster-for-mongodb"
 # Collaboration platform for API development
 cask "postman"
