@@ -437,11 +437,7 @@ packer.startup(function()
   }
   use { 'dhruvasagar/vim-table-mode', ft = 'markdown' }
   use {
-    '~/Projects/github.com/kyoh86/markdown-image.nvim',
-    rocks = {
-      'net-url',
-      'nanoid',
-    },
+    'kyoh86/markdown-image.nvim',
     config = function()
       vim.api.nvim_set_keymap('n', '<leader>mir', [[<cmd>lua require('markdown-image').replace(require('markdown-image.gcloud').new('post.kyoh86.dev', 'post', 'post.kyoh86.dev', 'image'))<cr>]], {noremap = true})
       vim.api.nvim_set_keymap('n', '<leader>mip', [[<cmd>lua require('markdown-image').put(require('markdown-image.gcloud').new('post.kyoh86.dev', 'post', 'post.kyoh86.dev', 'image'))<cr>]], {noremap = true})
