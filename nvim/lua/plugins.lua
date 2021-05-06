@@ -7,6 +7,14 @@ packer.init({
 packer.startup(function()
   use { 'wbthomason/packer.nvim', opt = true }
 
+  -- Base                   ======================================================
+
+  use {
+    'nvim-lua/plenary.nvim',
+    'nvim-lua/popup.nvim',
+    'kyazdani42/nvim-web-devicons',
+  }
+
   -- Visuals                 ==================================================
 
   use 'kyoh86/momiji'
