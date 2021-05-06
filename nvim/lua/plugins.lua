@@ -117,6 +117,7 @@ packer.startup(function()
       {
         'kyoh86/telescope-gogh.nvim',
         config = function()
+          vim.api.nvim_set_keymap('n', '<leader>fp', '<cmd>lua require("telescope").extensions.gogh.list()<cr>',  { noremap = true, silent = true })
           vim.api.nvim_set_keymap('n', '<leader>fpl', '<cmd>lua require("telescope").extensions.gogh.list()<cr>',  { noremap = true, silent = true })
           vim.api.nvim_set_keymap('n', '<leader>fpr', '<cmd>lua require("telescope").extensions.gogh.repos()<cr>',  { noremap = true, silent = true })
           require('telescope').setup{
