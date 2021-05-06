@@ -117,16 +117,23 @@ packer.startup(function()
       {
         'kyoh86/telescope-gogh.nvim',
         config = function()
-          vim.api.nvim_set_keymap('n', '<leader>fp', '<cmd>lua require("telescope").extensions.gogh.list()<cr>',  { noremap = true, silent = true })
+          vim.api.nvim_set_keymap('n', '<leader>fpl', '<cmd>lua require("telescope").extensions.gogh.list()<cr>',  { noremap = true, silent = true })
+          vim.api.nvim_set_keymap('n', '<leader>fpr', '<cmd>lua require("telescope").extensions.gogh.repos()<cr>',  { noremap = true, silent = true })
           require('telescope').setup{
             extensions = {
               gogh = {
                 shorten_path = false,
                 keys = {
-                  cd   = 'default',
-                  open = '<c-e>',
-                  lcd  = nil,
-                  tcd  = nil,
+                  list = {
+                    cd   = 'default',
+                    open = '<c-e>',
+                    lcd  = nil,
+                    tcd  = nil,
+                  },
+                  repos = {
+                    get = '<cr>',
+                    browse = '<c-o>',
+                  },
                 }
               },
             }
