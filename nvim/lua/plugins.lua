@@ -268,9 +268,9 @@ packer.startup(function()
       requires = {'kana/vim-operator-user'},
       config = function()
         -- textobj の先頭へ移動する
-        vim.api.nvim_set_keymap('n', '<leader>[', '<plug>(operator-jump-head)', {})
+        vim.api.nvim_set_keymap('n', '[<leader>', '<plug>(operator-jump-head)', {})
         -- textobj の末尾へ移動する
-        vim.api.nvim_set_keymap('n', '<leader>]', '<plug>(operator-jump-tail)', {})
+        vim.api.nvim_set_keymap('n', ']<leader>', '<plug>(operator-jump-tail)', {})
       end,
     }
   }
