@@ -153,9 +153,11 @@ local additional_config = {
   }
 }
 
+local lspinstall = require('lspinstall')
+
 local function setup_servers()
-  require'lspinstall'.setup()
-  local servers = require'lspinstall'.installed_servers()
+  lspinstall.setup()
+  local servers = lspinstall.installed_servers()
   for _, server in pairs(servers) do
     local config = merge_config({
       on_attach = custom_lsp_attach,
@@ -168,7 +170,9 @@ end
 setup_servers()
 
 -- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
-require'lspinstall'.post_install_hook = function ()
+lspinstall.post_install_hook = function ()
   setup_servers() -- reload installed servers
   vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
 end
+
+vim.cmd[[ command! -nargs=0 LspUpdateAll lua require('my-lsp-update').update() ]]
