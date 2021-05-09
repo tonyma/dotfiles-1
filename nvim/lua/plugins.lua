@@ -232,7 +232,7 @@ packer.startup(function()
   -- Text handlers           ==================================================
 
   use {
-    {'kana/vim-textobj-user', opt = true},
+    {'kana/vim-textobj-user'},
     {
       'kana/vim-textobj-line',
       requires = {'kana/vim-textobj-user'}
@@ -257,7 +257,6 @@ packer.startup(function()
   use {
     {
       'kana/vim-operator-user',
-      opt = true,
     },
     {
       'kana/vim-operator-replace',
