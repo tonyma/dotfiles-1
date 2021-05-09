@@ -1,6 +1,7 @@
 local gl = require('galaxyline')
 local provider_vcs = require('galaxyline.provider_vcs')
 local gls = gl.section
+local debounce = require('my-debounce')
 
 local reload = debounce.throttle_trailing(require("galaxyline").load_galaxyline, 1 * 1000, true)
 
