@@ -124,6 +124,10 @@ alias zln='zmv -L'
 _source_if ~/.fzf.zsh
 # }}}
 
+# asdf {{{
+_source_if /opt/asdf-vm/asdf.sh
+# }}}
+
 # anyenv {{{
 
 if [[ -f ${DOTFILES}/lazyenv/lazyenv.bash ]]; then
