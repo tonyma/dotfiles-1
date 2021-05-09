@@ -1,7 +1,6 @@
 local gl = require('galaxyline')
 local provider_vcs = require('galaxyline.provider_vcs')
 local gls = gl.section
-local debounce = require('my-debounce')
 
 local reload = debounce.throttle_trailing(require("galaxyline").load_galaxyline, 1 * 1000, true)
 
@@ -78,32 +77,6 @@ local function bufferHasFile()
   return false
 end
 
--- パス名を短縮するutil
--- source: https://github.com/nvim-telescope/telescope.nvim/blob/1c5e42a6a5a6d29be8fbf8dcefb0d8da535eac9a/lua/telescope/path.lua#L23
-local path_shorten = (function()
-  -- if jit then
-  --   local ffi = require('ffi')
-  --   ffi.cdef [[
-  --   typedef unsigned char char_u;
-  --   char_u *shorten_dir(char_u *str);
-  --   ]]
-
-  --   return function(filepath)
-  --     if not filepath then
-  --       return filepath
-  --     end
-
-  --     local c_str = ffi.new("char[?]", #filepath + 1)
-  --     ffi.copy(c_str, filepath)
-  --     return ffi.string(ffi.C.shorten_dir(c_str))
-  --   end
-  -- else
-    return function(filepath)
-      return filepath
-    end
-  -- end
-end)()
-
 local M = {}
 
 M.setup = function(newPalette)
@@ -167,7 +140,7 @@ M.setup = function(newPalette)
   table.insert(gls.left, {
     FileName = {
       provider = function ()
-        local file = path_shorten(vim.fn.expand('%:.'))
+        local file = vim.fn.expand('%:.')
         if vim.fn.empty(file) == 1 then return '' end
         -- if string.len(file_readonly()) ~= 0 then
         --   return file .. file_readonly()
