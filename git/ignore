@@ -2,6 +2,10 @@
 .envrc
 ###
 
+### asdf
+.tool-versions
+###
+
 ### vim directory local ###
 .vimrc.local
 ### end of vim directory local ###
