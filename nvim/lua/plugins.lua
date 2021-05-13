@@ -177,7 +177,7 @@ packer.startup(function()
         vim.o.completeopt = "menuone,noselect"
         require'compe'.setup {
           enabled = true;
-          autocomplete = true;
+          autocomplete = false;
           debug = false;
           min_length = 1;
           preselect = 'enable';
@@ -207,11 +207,19 @@ packer.startup(function()
       opt = true,
       ft = {'go'},
     },
+    {
+      'deerawan/vscode-elasticsearch-snippets',
+      opt = true,
+      ft = {'rest'},
+    },
     'hrsh7th/vim-vsnip-integ',
     {
       'hrsh7th/vim-vsnip',
       config = function()
-        vim.g.vsnip_snippet_dir = vim.fn.expand('~/.config/nvim/vsnip')
+        vim.g.vsnip_snippet_dirs = {
+          vim.fn.expand('~/.config/nvim/vsnip'),
+          vim.fn.expand('~/.config/aia/vsnip'),
+        }
 
         -- Expand or jump
         vim.cmd[[imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>']]
@@ -393,7 +401,15 @@ packer.startup(function()
     requires = { 'tyru/open-browser.vim' }
   }
 
-  use 'diepm/vim-rest-console'
+  use {
+    'diepm/vim-rest-console',
+    config = function()
+      local option = {}
+      option['--connect-timeout'] = 10
+      option['--silent'] = ''
+      vim.g.vrc_curl_opts = option
+    end
+  }
 
   -- Manipulate vim          ==================================================
 

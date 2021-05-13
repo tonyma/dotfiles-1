@@ -22,6 +22,12 @@ brew "xz"
 brew "asciinema"
 # Automatic configure script builder
 brew "autoconf"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Generic library support script
+brew "libtool"
+# Extendable version manager with support for Ruby, Node.js, Erlang & more
+brew "asdf"
 # Official Amazon AWS command-line interface
 brew "awscli"
 # Simple command-line tool to read AWS CloudWatch logs
@@ -34,16 +40,12 @@ brew "fontconfig"
 brew "circleci"
 # Cross-platform make
 brew "cmake"
-# GNU File, Shell, and Text utilities
-brew "coreutils"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Load/unload environment variables based on $PWD
 brew "direnv"
 # Zip password cracker
 brew "fcrackzip"
-# Generic library support script
-brew "libtool"
 # Play, record, convert, and stream audio and video
 brew "ffmpeg"
 # Banner-like program prints strings as ASCII art
@@ -86,8 +88,6 @@ brew "httpie"
 brew "hub"
 # Configurable static site generator
 brew "hugo"
-# Time series, events, and metrics database
-brew "influxdb"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Just-In-Time Compiler (JIT) for the Lua programming language
