@@ -19,41 +19,42 @@ sudo pacman -S --noconfirm \
   shellcheck \
   teensy-loader-cli \
   tidy \
+  base-devel \
   docker aws-cli docker-compose
 
-if [ command -v yay >/dev/null ]; then
+if [ command -v paru >/dev/null ]; then
   : # noop
 else
-  rm -rf ./yay
-  git clone https://aur.archlinux.org/yay.git
-  cd yay
+  rm -rf ./paru
+  git clone https://aur.archlinux.org/paru.git
+  cd paru
   makepkg -si
   cd -
-  rm -rf ./yay
+  rm -rf ./paru
 fi
 
 # シェルを便利にしたい群
-yay -S --noconfirm \
+paru -S --noconfirm \
   zsh zsh-syntax-highlighting zsh-completions \
   diff-so-fancy \
   direnv-bin
 
 # CLI人権ツール群
-yay -S --noconfirm \
+paru -S --noconfirm \
   wget \
   ripgrep \
   luajit-2.1 \
   neovim-git
 
 # Libraries
-yay -S --noconfirm \
+paru -S --noconfirm \
   libnotify \
   libgnome-keyring \
   libtool \
   lib32-glibc
 
 # Bash CLIツール群
-yay -S --noconfirm \
+paru -S --noconfirm \
   bash \
   binutils \
   coreutils \
@@ -64,7 +65,7 @@ yay -S --noconfirm \
   which
 
 # その他
-yay -S --noconfirm \
+paru -S --noconfirm \
   asciinema \
   bluez-utils \
   chrome-gnome-shell \

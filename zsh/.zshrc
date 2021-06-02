@@ -344,7 +344,7 @@ update() {
       shift
     done
   else
-    update-yay
+    update-paru
     update-pip
     update-go
     update-yarn
@@ -433,11 +433,11 @@ function update-brew {
 # }}}
 
 # update pacman {{{
-function update-yay {
-  echo updating yay
+function update-paru {
+  echo updating paru
   pushd ~
-  if command -v pacman >/dev/null 2>&1 ; then
-    yay -Syyu --answerclean All --answerdiff None --answerupgrade '' --noconfirm
+  if command -v paru >/dev/null 2>&1 ; then
+    paru
   fi
   popd
 }
