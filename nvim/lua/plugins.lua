@@ -537,6 +537,7 @@ packer.startup(function()
     run = 'yarn install'
   }
   use 'pangloss/vim-javascript'
+  use 'delphinus/vim-firestore'
 
   use { 'vim-jp/autofmt', ft = 'help' }
 
