@@ -1,6 +1,6 @@
-local lspinstall = require('lspinstall')
+local lspinstall = require("lspinstall")
 
-local M = {};
+local M = {}
 M.update = function()
   for _, server in pairs(lspinstall.installed_servers()) do
     lspinstall.install_server(server)

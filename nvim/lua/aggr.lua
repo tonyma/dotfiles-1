@@ -3,7 +3,7 @@ local M = {
   filter = vim.tbl_filter,
   assign = vim.fn.extend,
   join = vim.fn.join,
-  empty = vim.empty_dict,
+  empty = vim.empty_dict
 }
 
 M.fold = function(fn, list, init)

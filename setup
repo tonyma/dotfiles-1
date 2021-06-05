@@ -24,6 +24,7 @@ source ${DOTFILES}/zsh/.zshenv
 [ -f ${DOTFILES}/setup_`uname` ] && source ${DOTFILES}/setup_`uname`
 
 yarn global add \
+          lua-fmt \
           typescript-language-server \
           vim-language-server
 
