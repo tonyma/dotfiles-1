@@ -502,7 +502,6 @@ packer.startup(function()
     'kyoh86/vim-go-scaffold',
     'kyoh86/vim-go-testfile',
     'kyoh86/vim-go-coverage',
-    'mattn/vim-goimports',
   }
 
   -- - markdown
@@ -523,6 +522,13 @@ packer.startup(function()
     },
   }
 
+  use {
+    'rust-lang/rust.vim',
+    config = function()
+      vim.g.rustfmt_autosave = true
+    end,
+  }
+
   -- - others
   use 'jparise/vim-graphql'
   use { 'z0mbix/vim-shfmt', ft = {'sh', 'bash', 'zsh'} }
@@ -533,8 +539,63 @@ packer.startup(function()
   use 'cespare/vim-toml'
   use 'leafgarland/typescript-vim'
   use {
-    'prettier/vim-prettier',
-    run = 'yarn install'
+    'mhartington/formatter.nvim',
+    config = function()
+      vim.api.nvim_exec([[
+      augroup FormatAutogroup
+        autocmd!
+        autocmd BufWritePost *.js,*.ts,*.rs,*.lua,*.go FormatWrite
+      augroup END
+      ]], true)
+      local configuration = {
+        logging = false,
+        filetype = {
+          go = {
+            -- gofumpt
+            function()
+              return {
+                exe = "gofumpt",
+                args = {"-w", "-l"},
+              }
+            end,
+          },
+          javascript = {
+              -- eslint
+             function()
+               return {
+                 exe = "eslint",
+                 args = {"--fix", "--stdin-filename", vim.api.nvim_buf_get_name(0)},
+                 stdin = true
+               }
+             end
+          },
+          rust = {
+            -- Rustfmt
+            function()
+              return {
+                exe = "rustfmt",
+                args = {"--emit=stdout"},
+                stdin = true
+              }
+            end
+          },
+          lua = {
+              -- luafmt
+              function()
+                return {
+                  exe = "luafmt",
+                  args = {"--indent-count", 2, "--stdin"},
+                  stdin = true
+                }
+              end
+            }
+        }
+      }
+      configuration['filetype']['typescript'] = configuration['filetype']['javascript']
+      require('formatter').setup(configuration)
+      -- Provided by setup function
+      vim.api.nvim_set_keymap('n', '<leader>f', ':Format<CR>', {noremap = true, silent = true})
+    end,
   }
   use 'pangloss/vim-javascript'
   use 'delphinus/vim-firestore'
