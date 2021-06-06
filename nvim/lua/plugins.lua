@@ -610,11 +610,11 @@ packer.startup(
       config = function()
         vim.api.nvim_exec(
           [[
-      augroup FormatAutogroup
-        autocmd!
-        autocmd BufWritePost *.js,*.ts,*.rs,*.lua,*.go FormatWrite
-      augroup END
-      ]],
+            augroup FormatAutogroup
+              autocmd!
+              autocmd BufWritePost *.js,*.ts,*.rs,*.lua,*.go FormatWrite
+            augroup END
+          ]],
           true
         )
         local configuration = {
@@ -625,7 +625,8 @@ packer.startup(
               function()
                 return {
                   exe = "gofumpt",
-                  args = {"-w", "-l"}
+                  args = {"-w", "-l"},
+                  stdin = false
                 }
               end
             },
