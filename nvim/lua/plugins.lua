@@ -486,12 +486,7 @@ packer.startup(
       end
     }
 
-    use {
-      "qpkorr/vim-bufkill",
-      setup = function()
-        vim.api.nvim_set_var("BufKillCreateMappings", 0)
-      end
-    }
+    use "kyoh86/vim-bufkill"
 
     use {
       "lambdalisue/edita.vim",
