@@ -1,3 +1,8 @@
+let s:secrets_file = expand('<sfile>:p:h') . '/secrets.vim'
+if filereadable(s:secrets_file)
+  execute 'source ' .. s:secrets_file
+endif
+
 " Setup encodings
 set encoding=utf-8
 scriptencoding utf-8

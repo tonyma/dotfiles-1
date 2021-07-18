@@ -571,13 +571,13 @@ packer.startup(
           vim.api.nvim_set_keymap(
             "n",
             "<leader>mir",
-            [[<cmd>lua require('markdown-image').replace(require('markdown-image.gcloud').new('post.kyoh86.dev', 'post', 'post.kyoh86.dev', 'image'))<cr>]],
+            [[<cmd>lua require('markdown-image').replace(require('markdown-image.gyazo').new(vim.g.my_gyazo_token))<cr>]],
             {noremap = true}
           )
           vim.api.nvim_set_keymap(
             "n",
             "<leader>mip",
-            [[<cmd>lua require('markdown-image').put(require('markdown-image.gcloud').new('post.kyoh86.dev', 'post', 'post.kyoh86.dev', 'image'))<cr>]],
+            [[<cmd>lua require('markdown-image').put(require('markdown-image.gyazo').new(vim.g.my_gyazo_token))<cr>]],
             {noremap = true}
           )
         end
