@@ -371,6 +371,14 @@ packer.startup(
     }
 
     use {
+      "thinca/vim-qfreplace",
+      cmd = "Qfreplace",
+      setup = function()
+        vim.cmd [[autocmd BufWinEnter * if &buftype == 'quickfix' | nnoremap <buffer> <nowait> <silent> <leader>r <cmd>Qfreplace<cr> | endif]]
+      end
+    }
+
+    use {
       {
         "kyoh86/vim-zenn-autocmd",
         config = function()
@@ -553,7 +561,8 @@ packer.startup(
       "kyoh86/vim-go-filetype",
       "kyoh86/vim-go-scaffold",
       "kyoh86/vim-go-testfile",
-      "kyoh86/vim-go-coverage"
+      "kyoh86/vim-go-coverage",
+      "mattn/vim-goimports"
     }
 
     -- - markdown
@@ -607,7 +616,7 @@ packer.startup(
           [[
             augroup FormatAutogroup
               autocmd!
-              autocmd BufWritePost *.js,*.ts,*.rs,*.lua,*.go FormatWrite
+              autocmd BufWritePost *.js,*.ts,*.lua FormatWrite
             augroup END
           ]],
           true
@@ -615,36 +624,18 @@ packer.startup(
         local configuration = {
           logging = false,
           filetype = {
-            go = {
-              -- gofumpt
-              function()
-                return {
-                  exe = "gofumpt",
-                  args = {"-w", "-l"},
-                  stdin = false
-                }
-              end
-            },
+            -- go = format with mattn/vim-goimports
             javascript = {
               -- eslint
               function()
                 return {
                   exe = "eslint",
-                  args = {"--fix", "--stdin-filename", vim.api.nvim_buf_get_name(0)},
+                  args = {"--fix-dry-run", "--stdin", "--stdin-filename", vim.api.nvim_buf_get_name(0)},
                   stdin = true
                 }
               end
             },
-            rust = {
-              -- Rustfmt
-              function()
-                return {
-                  exe = "rustfmt",
-                  args = {"--emit=stdout"},
-                  stdin = true
-                }
-              end
-            },
+            -- rust = format with lsp
             lua = {
               -- luafmt
               function()

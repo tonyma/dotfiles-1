@@ -41,13 +41,18 @@ local custom_lsp_attach = function(client, bufnr) -- function(client, bufnr)
   -- Set some keybinds conditional on server capabilities
   client.resolved_capabilities.document_formatting = false
   -- if client.resolved_capabilities.document_formatting then
+  --   print("enable formatter")
   --   buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", {noremap = true})
-  --   vim.api.nvim_exec([[
-  --     augroup lsp_auto_format
+  --   vim.api.nvim_exec(
+  --     [[
+  --       augroup lsp_auto_format
   --       autocmd! * <buffer>
-  --       autocmd BufWritePre <buffer> silent! lua vim.lsp.buf.formatting_sync(nil, 1000)
-  --     augroup END
-  --   ]], false)
+
+  --       autocmd BufWritePre *.go,*.rs,*.py lua vim.lsp.buf.formatting_sync(nil, 1000)
+  --       augroup END
+  --     ]],
+  --     false
+  --   )
   -- end
   if client.resolved_capabilities.document_range_formatting then
     buf_set_keymap("v", "<leader>lf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", {noremap = true})
@@ -113,7 +118,6 @@ local additional_config = {
   },
   go = {
     init_options = {
-      gofumpt = true,
       usePlaceholders = true,
       semanticTokens = true,
       staticcheck = true,
