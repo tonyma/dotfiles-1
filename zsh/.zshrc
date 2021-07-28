@@ -437,7 +437,7 @@ function update-paru {
   echo updating paru
   pushd ~
   if command -v paru >/dev/null 2>&1 ; then
-    paru
+    paru -Suuyy --cleanafter --rebuild --redownload --noconfirm
   fi
   popd
 }
