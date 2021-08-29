@@ -122,6 +122,7 @@ packer.startup(
         },
         config = function()
           require("telescope").load_extension("windows")
+          vim.api.nvim_set_keymap("n", "<leader>fw", "<cmd>Telescope windows<cr>", {})
         end
       },
       {
