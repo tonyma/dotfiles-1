@@ -630,8 +630,8 @@ packer.startup(
               -- eslint
               function()
                 return {
-                  exe = "eslint",
-                  args = {"--fix-dry-run", "--stdin", "--stdin-filename", vim.api.nvim_buf_get_name(0)},
+                  exe = "eslint_d",
+                  args = {"--stdin", "--stdin-filename", vim.api.nvim_buf_get_name(0), "--fix-to-stdout"},
                   stdin = true
                 }
               end

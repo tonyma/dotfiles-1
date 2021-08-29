@@ -12,6 +12,7 @@ npm config set prefix ~/.local
 yarn global add \
           markdownlint \
           yo \
+          eslint_d \
           generator-go-project
 
 cat "${DOTFILES}/pyenv/default-packages" | xargs pip install -U --user
