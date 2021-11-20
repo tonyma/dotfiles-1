@@ -608,7 +608,7 @@ packer.startup(
     use "glench/vim-jinja2-syntax"
     use "briancollins/vim-jst"
     use "nikvdp/ejs-syntax"
-    use "cespare/vim-toml"
+    use {"cespare/vim-toml", branch = "main"}
     use "leafgarland/typescript-vim"
     use {
       "mhartington/formatter.nvim",

@@ -43,8 +43,15 @@ paru -S --noconfirm \
 paru -S --noconfirm \
   wget \
   ripgrep \
-  luajit-2.1 \
-  neovim-git
+  luajit-2.1
+
+# Neovim
+nvim_tmpdir="$(mktemp -d)"
+trap "rm -rfv $nvim_tmpdir" EXIT
+git clone https://github.com/neovim/neovim "$nvim_tmpdir/neovim"
+pushd "$nvim_tmpdir/neovim" && make -j4
+sudo make install
+popd
 
 # Libraries
 paru -S --noconfirm \

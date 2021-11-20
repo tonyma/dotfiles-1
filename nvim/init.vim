@@ -221,6 +221,7 @@ autocmd BufWritePost plugins.lua PackerCompile
   augroup END
 
   " <C-w>で使えるウィンドウの管理系をマップする
+  tnoremap <ESC>        <C-\><C-n>
   tnoremap <C-W>n       <C-\><C-n><C-W>n
   tnoremap <C-W><C-N>   <C-\><C-n><C-W><C-N>
   tnoremap <C-W>ge      <C-\><C-n><C-W>ge

@@ -438,6 +438,16 @@ function update-paru {
   pushd ~
   if command -v paru >/dev/null 2>&1 ; then
     paru -Suuyy --cleanafter --rebuild --redownload --noconfirm
+    if paru -Q neovim-nightly-bin >/dev/null 2>&1; then
+      echo "neovim will be updated by paru if necessary"
+    else
+      tmpdir="$(mktemp -d)"
+      trap "rm -rfv $tmpdir" EXIT
+      git clone https://github.com/neovim/neovim "$tmpdir/neovim"
+      pushd "$tmpdir/neovim" && make -j4
+      sudo make install
+      popd
+    fi
   fi
   popd
 }
