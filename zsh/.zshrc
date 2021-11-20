@@ -446,6 +446,7 @@ function update-paru {
       git clone https://github.com/neovim/neovim "$tmpdir/neovim"
       pushd "$tmpdir/neovim" && make -j4
       sudo make install
+      sudo cp ./runtime/nvim.desktop /usr/share/applications
       popd
     fi
   fi

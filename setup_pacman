@@ -51,6 +51,7 @@ trap "rm -rfv $nvim_tmpdir" EXIT
 git clone https://github.com/neovim/neovim "$nvim_tmpdir/neovim"
 pushd "$nvim_tmpdir/neovim" && make -j4
 sudo make install
+sudo cp ./runtime/nvim.desktop /usr/share/applications
 popd
 
 # Libraries
