@@ -440,13 +440,16 @@ function update-paru {
     paru -Suuyy --cleanafter --rebuild --redownload --noconfirm
     if paru -Q neovim-nightly-bin >/dev/null 2>&1; then
       echo "neovim will be updated by paru if necessary"
-    else
-      tmpdir="$(mktemp -d)"
-      trap "rm -rfv $tmpdir" EXIT
-      git clone https://github.com/neovim/neovim "$tmpdir/neovim"
-      pushd "$tmpdir/neovim" && make -j4
-      sudo make install
-      sudo cp ./runtime/nvim.desktop /usr/share/applications
+    else 
+      nvim_tmpdir="$(mktemp -d)"
+      trap "rm -rfv $nvim_tmpdir" EXIT
+      git clone --depth 1 -b nightly https://github.com/neovim/neovim "$nvim_tmpdir/neovim"
+      pushd "$nvim_tmpdir/neovim"
+      if [ "$(find "$(command -v nvim)" -mtime +1 | wc -l)" != "0" ]; then
+        make -j4
+        sudo make install
+        sudo cp ./runtime/nvim.desktop /usr/share/applications
+      fi
       popd
     fi
   fi
